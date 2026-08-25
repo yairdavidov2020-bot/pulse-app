@@ -18,18 +18,18 @@
 
 <style>
   :root{
-    --bg:#120505; --bg-soft:#1A0808; --card:rgba(27, 14, 14, 0.82); --card-2:rgba(38, 18, 18, 0.9);
-    --border:rgba(255,100,100,0.15); --text:#F3F5F8; --text-dim:#C49B9B; --text-faint:#8A6363;
+    --bg:#05070B; --bg-soft:#090D14; --card:rgba(14, 18, 27, 0.75); --card-2:rgba(19, 24, 36, 0.85);
+    --border:rgba(255,255,255,0.1); --text:#F3F5F8; --text-dim:#8C93A0; --text-faint:#565E6C;
     --mint:#7FE8C6; --mint-bg:rgba(127,232,198,0.13);
     --coral:#FF8D82; --coral-bg:rgba(255,141,130,0.13);
     --glow-safe:#2EB88A; --glow-danger:#FF6E6E; --glow:var(--glow-safe);
-    --shadow-ambient:0 30px 60px -20px rgba(80,0,0,0.8);
+    --shadow-ambient:0 30px 60px -20px rgba(0,0,0,0.8);
   }
   html.light{
-    --bg:#F7F3F3; --bg-soft:#EFEBEB; --card:rgba(255, 255, 255, 0.85); --card-2:rgba(250, 245, 245, 0.9);
-    --border:rgba(180,30,30,0.12); --text:#1C1212; --text-dim:#7A5555; --text-faint:#A87A7A;
+    --bg:#F3F4F7; --bg-soft:#EAEBEF; --card:rgba(255, 255, 255, 0.85); --card-2:rgba(247, 248, 250, 0.9);
+    --border:rgba(10,12,17,0.1); --text:#12141A; --text-dim:#6B7280; --text-faint:#9AA1AC;
     --mint-bg:rgba(46,184,138,0.12); --coral-bg:rgba(230,90,80,0.10);
-    --shadow-ambient:0 30px 60px -25px rgba(120,20,20,0.18);
+    --shadow-ambient:0 30px 60px -25px rgba(20,20,30,0.18);
   }
   *{ box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
   html,body{ min-height:100%; width: 100%; overflow-x: hidden; position: relative; }
@@ -47,19 +47,19 @@
   @keyframes fadeIn{ from{ opacity:0; transform:translateY(4px);} to{ opacity:1; transform:translateY(0);} }
 
   .gradient-text {
-    background: linear-gradient(135deg, #FF9F9F 0%, #FFB88B 50%, #FF8DA1 100%);
+    background: linear-gradient(135deg, #7FE8C6 0%, #8FB8FF 50%, #FF9FD1 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
   .glow-wrap{ position:relative; display:flex; justify-content:center; padding:6px 0 4px; }
-  .glow-halo{ position:absolute; inset:-40px 8% auto 8%; height:200px; border-radius:50%; filter:blur(38px); background:radial-gradient(circle, rgba(255,70,70,0.35) 0%, transparent 68%); opacity:.6; transition:background 1s ease; }
+  .glow-halo{ position:absolute; inset:-40px 8% auto 8%; height:200px; border-radius:50%; filter:blur(38px); background:radial-gradient(circle, var(--glow) 0%, transparent 68%); opacity:.5; transition:background 1s ease; }
   
-  .balance-card{ position:relative; width:100%; border:1px solid var(--border); background:linear-gradient(180deg, var(--card) 0%, var(--card-2) 100%); border-radius:28px; padding:24px 20px 20px; text-align:center; z-index:1; box-shadow:inset 0 1px 0 rgba(255,255,255,0.06); }
-  .balance-card::before{ content:""; position:absolute; inset:0; border-radius:28px; padding:1px; background:linear-gradient(135deg, rgba(255,100,100,0.5) 0%, transparent 45%, transparent 55%, rgba(255,100,100,0.5) 100%); opacity:.45; -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; transition:background 1s ease; pointer-events:none; }
+  .balance-card{ position:relative; width:100%; border:1px solid var(--border); background:linear-gradient(180deg, var(--card) 0%, var(--card-2) 100%); border-radius:28px; padding:24px 20px 20px; text-align:center; z-index:1; box-shadow:inset 0 1px 0 rgba(255,255,255,0.04); }
+  .balance-card::before{ content:""; position:absolute; inset:0; border-radius:28px; padding:1px; background:linear-gradient(135deg, var(--glow) 0%, transparent 45%, transparent 55%, var(--glow) 100%); opacity:.45; -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; transition:background 1s ease; pointer-events:none; }
   
   .ecg-line{ width:100%; height:32px; margin-top:4px; overflow:hidden; }
-  .ecg-line path{ stroke: #FF6E6E; stroke-dasharray:340; animation:ecg-sweep 2s linear infinite; }
+  .ecg-line path{ stroke: #2EB88A; stroke-dasharray:340; animation:ecg-sweep 2s linear infinite; }
   @keyframes ecg-sweep{ from{stroke-dashoffset:340;} to{stroke-dashoffset:0;} }
 
   .summary-card{ border:1px solid var(--border); background:var(--card); border-radius:20px; backdrop-filter:blur(12px); }
@@ -68,13 +68,13 @@
   .seg-thumb{ position:absolute; top:4px; bottom:4px; width:calc(50% - 4px); border-radius:12px; transition:transform .28s cubic-bezier(.4,0,.2,1), background .3s ease; }
 
   .category-selector-btn { display: flex; align-items: center; justify-content: space-between; width: 100%; background: var(--card-2); border: 1px solid var(--border); border-radius: 18px; padding: 12px 16px; cursor: pointer; transition: 0.2s; }
-  .category-selector-btn:hover { border-color: #FF8D82; }
+  .category-selector-btn:hover { border-color: var(--mint); }
 
   .date-container { display: flex; align-items: center; gap: 6px; }
   .date-squares-row { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 6px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; flex: 1; }
   .date-squares-row::-webkit-scrollbar { display: none; }
   .date-square { min-width: 54px; height: 58px; border-radius: 14px; background: var(--card-2); border: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; flex-shrink: 0; color: var(--text-dim); }
-  .date-square.selected { border-color: transparent; color: #120505; font-weight: 700; transform: scale(1.03); }
+  .date-square.selected { border-color: transparent; color: #0A0C11; font-weight: 700; transform: scale(1.03); }
   .date-square .day-num { font-size: 16px; font-weight: 700; line-height: 1.1; }
   .date-square .day-name { font-size: 10px; font-weight: 500; opacity: 0.8; }
 
@@ -82,8 +82,8 @@
   input[type="text"], select { font-size: 16px !important; }
   input[type="tel"], input[type="number"] { font-size: 16px !important; }
 
-  .field-shell{ background:rgba(30, 10, 10, 0.85); border:1px solid rgba(255,100,100,0.2); border-radius:18px; transition: border-color 0.2s; backdrop-filter:blur(10px); }
-  .field-shell:focus-within{ border-color: var(--accent, #FF8D82); }
+  .field-shell{ background:rgba(15, 20, 30, 0.85); border:1px solid rgba(255,255,255,0.15); border-radius:18px; transition: border-color 0.2s; backdrop-filter:blur(10px); }
+  .field-shell:focus-within{ border-color: var(--accent, var(--mint)); }
 
   #colorPalette, #settingsColorPalette {
     display: grid;
@@ -116,31 +116,31 @@
   .color-swatch:hover { transform: scale(1.1); }
   .color-swatch.selected { border-color: #ffffff; box-shadow: 0 0 8px rgba(255,255,255,0.5); transform: scale(1.15); }
 
-  .ai-voice-box { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 16px; display: flex; align-items: center; gap: 14px; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.4); }
+  .ai-voice-box { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 16px; display: flex; align-items: center; gap: 14px; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.3); }
   .mic-btn{ width:48px; height:48px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; background:var(--card-2); border: 1px solid var(--border); color:var(--text); position:relative; cursor:pointer; transition: transform 0.2s, background 0.2s; }
   .mic-btn:active { transform: scale(0.94); }
-  .mic-ring{ position:absolute; inset:-6px; border-radius:50%; border:2px solid #FF8D82; opacity:0; pointer-events:none; }
+  .mic-ring{ position:absolute; inset:-6px; border-radius:50%; border:2px solid var(--mint); opacity:0; pointer-events:none; }
   .mic-btn.listening .mic-ring{ animation:ring-out 1.4s ease-out infinite; }
   .mic-btn.listening .mic-ring.d2{ animation-delay:.5s; }
   @keyframes ring-out{ 0%{opacity:.6;transform:scale(.9);} 100%{opacity:0;transform:scale(1.5);} }
-  .mic-btn.listening{ animation:mic-pulse 1s ease-in-out infinite; background: rgba(255,141,130,0.15); color: #FF8D82; border-color: #FF8D82; }
+  .mic-btn.listening{ animation:mic-pulse 1s ease-in-out infinite; background: var(--mint-bg); color: var(--mint); border-color: var(--mint); }
   @keyframes mic-pulse{ 0%,100%{transform:scale(1);} 50%{transform:scale(1.08);} }
 
-  .save-btn{ background: rgba(220, 50, 50, 0.92); color: #fff; border: 1px solid rgba(255, 100, 100, 0.5); transition:all .2s ease; cursor:pointer; }
-  .save-btn:hover{ background: rgba(200, 30, 30, 1); border-color: #FF8D82; }
+  .save-btn{ background: rgba(16, 185, 129, 0.92); color: #fff; border: 1px solid rgba(52, 211, 153, 0.5); transition:all .2s ease; cursor:pointer; }
+  .save-btn:hover{ background: rgba(5, 150, 105, 1); border-color: var(--mint); }
   .save-btn:active{ transform:scale(.97); }
   
   .icon-btn{ width:38px; height:38px; border-radius:12px; display:flex; align-items:center; justify-content:center; background:var(--card-2); border:1px solid var(--border); color:var(--text-dim); cursor:pointer; transition: 0.2s; }
-  .icon-btn:hover { border-color: #FF8D82; color: var(--text); }
+  .icon-btn:hover { border-color: var(--mint); color: var(--text); }
 
-  .modal-overlay { position:fixed; inset:0; z-index:50; background:rgba(20,5,5,0.95); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:16px; transition: opacity .25s ease; }
+  .modal-overlay { position:fixed; inset:0; z-index:50; background:rgba(10,12,17,0.95); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:16px; transition: opacity .25s ease; }
   .modal-overlay.hidden { display:none !important; }
 
   .full-page-onboarding {
     position: fixed;
     inset: 0;
     z-index: 99999;
-    background: #120505;
+    background: #05070B;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -206,7 +206,7 @@
   .bottom-nav{ position:sticky; bottom:0; left:0; right:0; display:flex; justify-content:space-around; align-items:center; padding:10px 12px calc(10px + env(safe-area-inset-bottom)); background:var(--card); border-top:1px solid var(--border); z-index:20; margin-top:auto; }
   .nav-item{ display:flex; flex-direction:column; align-items:center; gap:3px; color:var(--text-faint); background:none; border:none; font-size:11px; font-weight:500; padding:4px 18px; border-radius:12px; transition:.2s; cursor:pointer; }
   .nav-item.active{ color:var(--text); }
-  .nav-item.active svg{ stroke:#FF8D82; }
+  .nav-item.active svg{ stroke:var(--mint); }
 
   .donut{ width:160px; height:160px; border-radius:50%; position:relative; margin:0 auto; }
   .donut::after{ content:""; position:absolute; inset:22px; border-radius:50%; background:var(--card); }
@@ -233,31 +233,31 @@
         <svg class="w-full h-full" viewBox="0 0 400 800" preserveAspectRatio="none">
             <defs>
                 <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#120505"/>
-                    <stop offset="50%" stop-color="#1F0A0A"/>
-                    <stop offset="100%" stop-color="#301010"/>
+                    <stop offset="0%" stop-color="#030508"/>
+                    <stop offset="50%" stop-color="#080E18"/>
+                    <stop offset="100%" stop-color="#102035"/>
                 </linearGradient>
                 <linearGradient id="roadSurface" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#FF6E6E" stop-opacity="0.15"/>
-                    <stop offset="50%" stop-color="#FF4D4D" stop-opacity="0.55"/>
-                    <stop offset="100%" stop-color="#FF8D82" stop-opacity="0.95"/>
+                    <stop offset="0%" stop-color="#2EB88A" stop-opacity="0.15"/>
+                    <stop offset="50%" stop-color="#10B981" stop-opacity="0.55"/>
+                    <stop offset="100%" stop-color="#7FE8C6" stop-opacity="0.95"/>
                 </linearGradient>
                 <radialGradient id="horizonGlow" cx="50%" cy="40%" r="40%">
-                    <stop offset="0%" stop-color="#FF8D82" stop-opacity="0.45"/>
-                    <stop offset="100%" stop-color="#120505" stop-opacity="0"/>
+                    <stop offset="0%" stop-color="#7FE8C6" stop-opacity="0.45"/>
+                    <stop offset="100%" stop-color="#030508" stop-opacity="0"/>
                 </radialGradient>
             </defs>
             <rect width="400" height="800" fill="url(#skyGrad)"/>
             <ellipse cx="200" cy="320" rx="180" ry="60" fill="url(#horizonGlow)"/>
-            <path d="M360,800 L360,520 L400,480 L400,800 Z" fill="#1A0707"/>
-            <path d="M310,800 L310,420 L370,370 L370,800 Z" fill="#240D0D"/>
-            <path d="M260,800 L260,300 L320,250 L320,800 Z" fill="#2E1212"/>
-            <path d="M230,800 L230,190 L270,150 L270,800 Z" fill="#3B1818"/>
-            <path d="M40,800 L40,500 L0,460 L0,800 Z" fill="#1A0707"/>
-            <path d="M30,800 L30,400 L90,350 L90,800 Z" fill="#240D0D"/>
-            <path d="M80,800 L80,280 L140,230 L140,800 Z" fill="#2E1212"/>
-            <path d="M130,800 L130,170 L170,130 L170,800 Z" fill="#3B1818"/>
-            <g class="bldg-window" fill="#FF8D82" opacity="0.6">
+            <path d="M360,800 L360,520 L400,480 L400,800 Z" fill="#0A0E17"/>
+            <path d="M310,800 L310,420 L370,370 L370,800 Z" fill="#0F1624"/>
+            <path d="M260,800 L260,300 L320,250 L320,800 Z" fill="#141D2E"/>
+            <path d="M230,800 L230,190 L270,150 L270,800 Z" fill="#18243A"/>
+            <path d="M40,800 L40,500 L0,460 L0,800 Z" fill="#0A0E17"/>
+            <path d="M30,800 L30,400 L90,350 L90,800 Z" fill="#0F1624"/>
+            <path d="M80,800 L80,280 L140,230 L140,800 Z" fill="#141D2E"/>
+            <path d="M130,800 L130,170 L170,130 L170,800 Z" fill="#18243A"/>
+            <g class="bldg-window" fill="#7FE8C6" opacity="0.6">
                 <rect x="325" y="450" width="4" height="6" rx="1"/>
                 <rect x="340" y="430" width="4" height="6" rx="1"/>
                 <rect x="280" y="340" width="5" height="7" rx="1"/>
@@ -268,18 +268,18 @@
                 <rect x="115" y="270" width="5" height="7" rx="1"/>
             </g>
             <polygon points="110,800 290,800 210,320 190,320" fill="url(#roadSurface)"/>
-            <line x1="200" y1="320" x2="200" y2="800" stroke="#FF8D82" stroke-width="4" stroke-dasharray="16,12" class="moving-road-lines" opacity="0.95"/>
-            <line x1="188" y1="320" x2="140" y2="800" stroke="#FF6E6E" stroke-width="2" opacity="0.5"/>
-            <line x1="212" y1="320" x2="260" y2="800" stroke="#FF6E6E" stroke-width="2" opacity="0.5"/>
+            <line x1="200" y1="320" x2="200" y2="800" stroke="#7FE8C6" stroke-width="4" stroke-dasharray="16,12" class="moving-road-lines" opacity="0.95"/>
+            <line x1="188" y1="320" x2="140" y2="800" stroke="#2EB88A" stroke-width="2" opacity="0.5"/>
+            <line x1="212" y1="320" x2="260" y2="800" stroke="#2EB88A" stroke-width="2" opacity="0.5"/>
         </svg>
     </div>
 
     <div class="onboarding-content-box text-right">
-        <div class="mx-auto w-fit px-4 py-1.5 rounded-full bg-rose-500/15 border border-rose-400/30 backdrop-blur-md text-rose-300 text-[11px] font-bold shadow-lg flex items-center gap-2 floating-element">
+        <div class="mx-auto w-fit px-4 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-400/30 backdrop-blur-md text-emerald-300 text-[11px] font-bold shadow-lg flex items-center gap-2 floating-element">
             <span>✨ היעד שלך: חופש כלכלי בנסיעה בטוחה</span>
         </div>
         <div class="space-y-2 text-center py-2 floating-element" style="animation-delay: 0.2s;">
-            <h1 class="text-3xl font-black tracking-tight gradient-text drop-shadow-[0_10px_20px_rgba(255,141,130,0.3)]">ברוכים הבאים</h1>
+            <h1 class="text-3xl font-black tracking-tight gradient-text drop-shadow-[0_10px_20px_rgba(127,232,198,0.3)]">ברוכים הבאים</h1>
             <p class="text-sm font-bold text-slate-100">אל הדרך אל החופש הכלכלי</p>
             <p class="text-[11px] text-slate-300">צא למסע עם <span class="gradient-text font-bold">Pulse</span> ושלוט בעתיד שלך</p>
         </div>
@@ -288,11 +288,11 @@
                 <input id="userNameInput" type="text" placeholder="איך לקרוא לך? (הכנס שם)..." class="amount-input text-center font-bold text-sm" />
             </div>
             <div class="field-shell flex items-center px-4 py-3">
-                <span class="text-base font-bold ml-2 text-rose-400">₪</span>
+                <span class="text-base font-bold ml-2 text-emerald-400">₪</span>
                 <input id="initialBalanceInput" type="tel" inputmode="decimal" placeholder="יתרה התחלתית בעו״ש..." class="amount-input text-center text-sm" />
             </div>
         </div>
-        <button onclick="saveInitialSetup()" class="w-full py-3.5 px-5 rounded-2xl font-bold text-sm shadow-xl cursor-pointer bg-gradient-to-l from-rose-600 to-red-700 text-white hover:opacity-95 transition flex items-center justify-between group border border-rose-400/30 shadow-[0_10px_25px_rgba(220,50,50,0.3)]">
+        <button onclick="saveInitialSetup()" class="w-full py-3.5 px-5 rounded-2xl font-bold text-sm shadow-xl cursor-pointer bg-gradient-to-l from-emerald-500 to-teal-600 text-white hover:opacity-95 transition flex items-center justify-between group border border-emerald-400/30 shadow-[0_10px_25px_rgba(46,184,138,0.3)]">
             <span class="text-[11px] opacity-90 font-medium">מוכן לצאת לדרך</span>
             <span class="flex items-center gap-2">
                 <span>הכנס ל-Pulse</span>
@@ -306,14 +306,14 @@
 <div id="voiceHelpModal" class="modal-overlay hidden">
     <div class="summary-card p-5 max-w-xs w-full space-y-3 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-            <h3 class="text-xs font-bold text-rose-400"><i class="fa-solid fa-microphone ml-1"></i> מדריך עוזר קולי</h3>
+            <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-microphone ml-1"></i> מדריך עוזר קולי</h3>
             <button onclick="closeVoiceHelpModal()" class="icon-btn" style="width:28px;height:28px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
         <div class="space-y-2 text-[11px] leading-relaxed text-slate-300">
             <p>העוזר מזהה <span class="text-white font-semibold">תאריכים במילים</span>, <span class="text-white font-semibold">סכום</span> ו<span class="text-white font-semibold">קטגוריה</span>.</p>
-            <p>לאחר הדיבור, תוקפץ חלונית שבה תוכל להזין את <span class="text-rose-400 font-bold">התיאור</span> של התנועה!</p>
+            <p>לאחר הדיבור, תוקפץ חלונית שבה תוכל להזין את <span class="text-emerald-400 font-bold">התיאור</span> של התנועה!</p>
             <div class="bg-[var(--card-2)] p-2.5 rounded-xl border border-[var(--border)] space-y-1">
-                <p class="font-bold text-rose-400">דוגמאות:</p>
+                <p class="font-bold text-emerald-400">דוגמאות:</p>
                 <p>• <span class="text-white font-medium">"ב-22 לאוגוסט 50 קניות"</span></p>
                 <p>• <span class="text-white font-medium">"אתמול 150 קיוסק/מכולת"</span></p>
             </div>
@@ -326,7 +326,7 @@
 <div id="voiceDescModal" class="modal-overlay hidden">
     <div class="summary-card p-5 max-w-xs w-full space-y-3 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-            <h3 class="text-xs font-bold text-rose-400"><i class="fa-solid fa-pen-nib ml-1"></i> הוסף תיאור לתנועה</h3>
+            <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-pen-nib ml-1"></i> הוסף תיאור לתנועה</h3>
         </div>
         <div class="space-y-2 text-[11px]">
             <p id="voiceParsedInfo" class="font-bold text-slate-300"></p>
@@ -355,13 +355,13 @@
         </div>
 
         <div class="border-t border-[var(--border)] pt-2 space-y-1.5">
-            <p class="text-[9px] font-semibold text-rose-400">הוסף קטגוריה חדשה</p>
+            <p class="text-[9px] font-semibold text-emerald-400">הוסף קטגוריה חדשה</p>
             <div class="grid grid-cols-2 gap-1.5">
                 <div class="field-shell px-2.5 py-1 flex items-center">
                     <input id="newCatNameInput" placeholder="שם חדש..." class="w-full bg-transparent outline-none font-bold text-[11px]" style="color:var(--text)" />
                 </div>
                 <div class="flex items-center gap-1.5 justify-end">
-                    <input type="color" id="freeColorPicker" value="#FF8D82" onchange="selectedNewCatColor = this.value; document.querySelectorAll('#colorPalette .color-swatch').forEach(s=>s.classList.remove('selected'));" class="w-9 h-7 rounded-lg bg-transparent cursor-pointer border border-[var(--border)] flex-shrink-0" />
+                    <input type="color" id="freeColorPicker" value="#7FE8C6" onchange="selectedNewCatColor = this.value; document.querySelectorAll('#colorPalette .color-swatch').forEach(s=>s.classList.remove('selected'));" class="w-9 h-7 rounded-lg bg-transparent cursor-pointer border border-[var(--border)] flex-shrink-0" />
                     <button onclick="addNewCategoryFromModal()" class="save-btn px-3 py-1.5 rounded-lg font-bold text-[10px] flex-1">הוסף</button>
                 </div>
             </div>
@@ -411,7 +411,7 @@
         </div>
         <div class="py-1 space-y-3 text-right">
             <div>
-                <p class="text-[10px] font-semibold text-rose-400 mb-0.5">שינוי שם</p>
+                <p class="text-[10px] font-semibold text-emerald-400 mb-0.5">שינוי שם</p>
                 <div class="field-shell flex items-center px-2 py-1.5 mb-1">
                     <input id="editUserNameInput" type="text" placeholder="שם חדש..." class="w-full bg-transparent outline-none font-bold" style="color:var(--text)" />
                 </div>
@@ -419,7 +419,7 @@
             </div>
 
             <div>
-                <p class="text-[10px] font-semibold text-rose-400 mb-0.5">עדכון יתרה בעו״ש (₪)</p>
+                <p class="text-[10px] font-semibold text-emerald-400 mb-0.5">עדכון יתרה בעו״ש (₪)</p>
                 <div class="field-shell flex items-center px-2 py-1.5 mb-1">
                     <input id="editBaselineInput" type="tel" inputmode="decimal" placeholder="יתרה בעו״ש..." class="w-full bg-transparent outline-none font-bold tabular" style="color:var(--text)" />
                 </div>
@@ -427,7 +427,7 @@
             </div>
 
             <div>
-                <p class="text-[10px] font-semibold text-rose-400 mb-0.5">יעד חיסכון (₪)</p>
+                <p class="text-[10px] font-semibold text-emerald-400 mb-0.5">יעד חיסכון (₪)</p>
                 <div class="field-shell flex items-center px-2 py-1.5 mb-1">
                     <input id="editSavingsGoal" type="tel" inputmode="decimal" placeholder="יעד חיסכון..." class="w-full bg-transparent outline-none font-bold tabular" style="color:var(--text)" />
                 </div>
@@ -435,7 +435,7 @@
             </div>
 
             <div class="border-t border-[var(--border)] pt-2 space-y-2">
-                <p class="text-[10px] font-semibold text-rose-400">ניהול קטגוריות והוספה מהגדרות</p>
+                <p class="text-[10px] font-semibold text-emerald-400">ניהול קטגוריות והוספה מהגדרות</p>
                 <div class="flex gap-1">
                     <select id="settingsCatType" class="field-shell px-1 py-1 text-[10px] font-bold bg-transparent outline-none" style="color:var(--text)">
                         <option value="expense">הוצאה</option>
@@ -447,11 +447,11 @@
                     <p class="text-[9px] mb-1 text-slate-400">בחר צבע לקטגוריה:</p>
                     <div id="settingsColorPalette"></div>
                 </div>
-                <button onclick="addCategoryFromSettings()" class="w-full py-1.5 rounded-lg bg-[var(--card-2)] border border-[var(--border)] text-rose-400 text-[11px] font-bold transition cursor-pointer">הוסף קטגוריה חדשה</button>
+                <button onclick="addCategoryFromSettings()" class="w-full py-1.5 rounded-lg bg-[var(--card-2)] border border-[var(--border)] text-emerald-400 text-[11px] font-bold transition cursor-pointer">הוסף קטגוריה חדשה</button>
             </div>
 
             <div class="border-t border-[var(--border)] pt-2 space-y-1.5">
-                <button onclick="exportToCSV()" class="w-full py-2 rounded-lg bg-[var(--card-2)] border border-[var(--border)] text-rose-400 text-[11px] font-bold transition cursor-pointer">ייצוא לאקסל (CSV)</button>
+                <button onclick="exportToCSV()" class="w-full py-2 rounded-lg bg-[var(--card-2)] border border-[var(--border)] text-emerald-400 text-[11px] font-bold transition cursor-pointer">ייצוא לאקסל (CSV)</button>
                 <button onclick="factoryReset()" class="w-full py-2 rounded-lg bg-[var(--card-2)] border border-[var(--border)] text-rose-400 text-[11px] font-bold transition cursor-pointer">איפוס מלא</button>
             </div>
         </div>
@@ -460,10 +460,10 @@
 
 <div class="app-frame">
 
-  <!-- HEADER -->
+  <!-- HEADER עם מרווח בטוח למעלה כדי שלא יוסתר ע״י הסטטוס בר של הטלפון -->
   <div class="flex items-center justify-between px-5 pt-7 pb-3" id="headerHome">
     <div class="flex items-center gap-2">
-      <svg width="24" height="24" viewBox="0 0 26 26" fill="none"><circle cx="13" cy="13" r="12" stroke="#FF8D82" stroke-width="1.6" opacity=".5"/><path d="M4 13H9L11 7L15 19L17 13H22" stroke="#FF8D82" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg width="24" height="24" viewBox="0 0 26 26" fill="none"><circle cx="13" cy="13" r="12" stroke="var(--mint)" stroke-width="1.6" opacity=".5"/><path d="M4 13H9L11 7L15 19L17 13H22" stroke="var(--mint)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span class="text-lg font-bold tracking-tight gradient-text">Pulse</span>
     </div>
     <div class="flex items-center gap-2">
@@ -518,10 +518,10 @@
             <span class="text-sm">🎯</span>
             <span class="text-[13px] font-semibold">יעד חיסכון חודשי</span>
           </div>
-          <button onclick="promptSavingsGoal()" class="text-[11px] font-bold text-rose-400 bg-[var(--card-2)] hover:bg-[var(--card)] px-2.5 py-1 rounded-lg border border-[var(--border)] transition cursor-pointer">שנה יעד</button>
+          <button onclick="promptSavingsGoal()" class="text-[11px] font-bold text-emerald-400 bg-[var(--card-2)] hover:bg-[var(--card)] px-2.5 py-1 rounded-lg border border-[var(--border)] transition cursor-pointer">שנה יעד</button>
         </div>
         <div class="w-full bg-[var(--card-2)] h-2.5 rounded-full overflow-hidden border border-[var(--border)] mb-1.5">
-          <div id="savingsProgressBar" class="bg-rose-500 h-full transition-all duration-500" style="width: 0%"></div>
+          <div id="savingsProgressBar" class="bg-emerald-400 h-full transition-all duration-500" style="width: 0%"></div>
         </div>
         <div class="flex justify-between text-[11px]" style="color:var(--text-dim)">
           <span id="savingsCurrentStatus">חסכת ₪0 החודש</span>
@@ -535,7 +535,7 @@
             <span class="text-sm">📅</span>
             <span class="text-[13px] font-semibold">בחר את החודש הפיננסי שלך</span>
           </div>
-          <button onclick="showFinancialHelp()" class="w-5 h-5 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[11px] font-bold flex items-center justify-center text-rose-400 cursor-pointer">?</button>
+          <button onclick="showFinancialHelp()" class="w-5 h-5 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[11px] font-bold flex items-center justify-center text-emerald-400 cursor-pointer">?</button>
         </div>
         <p class="text-[11px] mb-3" style="color:var(--text-dim)">יום בחודש שבו מתחיל מחזור החיובים וההוצאות שלך</p>
         <div class="field-shell flex items-center px-3 py-2">
@@ -548,7 +548,7 @@
       <section class="mt-2">
         <div class="flex items-center justify-between mb-2.5">
           <h2 class="text-[14px] font-semibold">הוספת תנועה</h2>
-          <button onclick="openRecurringModal()" class="text-[11px] font-semibold px-3 py-1.5 rounded-xl bg-[var(--card)] border border-[var(--border)] text-rose-400 hover:opacity-80 transition flex items-center gap-1.5 shadow-sm cursor-pointer">
+          <button onclick="openRecurringModal()" class="text-[11px] font-semibold px-3 py-1.5 rounded-xl bg-[var(--card)] border border-[var(--border)] text-emerald-400 hover:opacity-80 transition flex items-center gap-1.5 shadow-sm cursor-pointer">
             <i class="fa-solid fa-repeat"></i> הוראות קבע
           </button>
         </div>
@@ -562,9 +562,9 @@
             <div class="flex items-center justify-between">
               <h4 class="text-[13px] font-bold flex items-center gap-1.5">
                 <span>עוזר קולי חכם</span>
-                <span class="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse"></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
               </h4>
-              <button onclick="openVoiceHelpModal()" class="w-5 h-5 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[10px] font-bold flex items-center justify-center text-rose-400 hover:bg-[var(--card)] transition cursor-pointer" title="איך לדבר עם העוזר הקולי?">?</button>
+              <button onclick="openVoiceHelpModal()" class="w-5 h-5 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[10px] font-bold flex items-center justify-center text-emerald-400 hover:bg-[var(--card)] transition cursor-pointer" title="איך לדבר עם העוזר הקולי?">?</button>
             </div>
             <p id="micStatus" class="text-[11px] mt-0.5 leading-relaxed" style="color:var(--text-dim)">אמר סכום, קטגוריה ותאריך</p>
           </div>
@@ -579,7 +579,7 @@
         <div class="mb-2.5">
           <div class="flex items-center justify-between mb-1">
             <span class="text-xs" style="color:var(--text-dim)">בחר תאריך במחזור הפיננסי</span>
-            <span id="selectedDateLabel" class="text-[11px] font-semibold text-rose-400"></span>
+            <span id="selectedDateLabel" class="text-[11px] font-semibold text-emerald-400"></span>
           </div>
           <div class="date-container">
             <button onclick="scrollDates('right')" class="icon-btn flex-shrink-0" title="גלול ימינה"><i class="fa-solid fa-chevron-right text-xs"></i></button>
@@ -597,7 +597,7 @@
         <div class="mb-2.5">
           <div class="flex items-center justify-between mb-1">
             <span class="text-xs" style="color:var(--text-dim)">קטגוריה נבחרת</span>
-            <span class="text-[11px] text-rose-400 font-semibold cursor-pointer" onclick="openCategoriesModal()">ניהול והוספה +</span>
+            <span class="text-[11px] text-emerald-400 font-semibold cursor-pointer" onclick="openCategoriesModal()">ניהול והוספה +</span>
           </div>
           <button type="button" onclick="openCategoriesModal()" class="category-selector-btn">
             <div class="flex items-center gap-2.5">
@@ -617,7 +617,7 @@
 
       <section class="summary-card p-4 mt-4 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-[var(--card-2)] text-rose-400 border border-[var(--border)] flex items-center justify-center text-lg">
+          <div class="w-10 h-10 rounded-2xl bg-[var(--card-2)] text-emerald-400 border border-[var(--border)] flex items-center justify-center text-lg">
             <i class="fa-solid fa-mobile-screen-button"></i>
           </div>
           <div>
@@ -625,7 +625,7 @@
             <p class="text-[11px]" style="color:var(--text-dim)">הוסף למסך הבית לגישה מהירה בלחיצה אחת</p>
           </div>
         </div>
-        <button onclick="showPwaHelp()" class="text-xs font-semibold px-3.5 py-2 rounded-xl bg-[var(--card-2)] border border-[var(--border)] text-rose-400 hover:bg-[var(--card)] transition cursor-pointer">הסבר</button>
+        <button onclick="showPwaHelp()" class="text-xs font-semibold px-3.5 py-2 rounded-xl bg-[var(--card-2)] border border-[var(--border)] text-emerald-400 hover:bg-[var(--card)] transition cursor-pointer">הסבר</button>
       </section>
 
     </main>
@@ -710,8 +710,8 @@ let state = {
 let mode = 'expense';
 let selectedCategoryName = '';
 let selectedDateStr = getLocalDateString(new Date());
-let selectedNewCatColor = '#FF8D82';
-let settingsSelectedColor = '#FF8D82';
+let selectedNewCatColor = '#7FE8C6';
+let settingsSelectedColor = '#7FE8C6';
 let pendingVoiceTx = null;
 let activeRecognition = null;
 let speechResultProcessed = false;
@@ -927,12 +927,12 @@ function promptSavingsGoal() {
     <div id="savingsPromptModal" class="modal-overlay">
       <div class="summary-card p-5 max-w-xs w-full space-y-3 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-          <h3 class="text-xs font-bold text-rose-400">שינוי יעד חיסכון חודשי</h3>
+          <h3 class="text-xs font-bold text-emerald-400">שינוי יעד חיסכון חודשי</h3>
           <button onclick="document.getElementById('savingsPromptModal').remove()" class="icon-btn" style="width:28px;height:28px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
         <p class="text-[11px]" style="color:var(--text-dim)">הכנס יעד חיסכון חודשי חדש (₪):</p>
         <div class="field-shell flex items-center px-3 py-2">
-          <span class="text-sm font-bold ml-1 text-rose-400">₪</span>
+          <span class="text-sm font-bold ml-1 text-emerald-400">₪</span>
           <input id="promptSavingsInput" type="tel" inputmode="decimal" value="${currentGoal}" class="amount-input text-center font-bold" />
         </div>
         <button onclick="saveSavingsGoalFromPrompt()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs">שמור יעד חדש</button>
@@ -1080,7 +1080,7 @@ function renderDateSquares() {
     const sq = document.createElement('div');
     sq.className = 'date-square' + (dateStr === selectedDateStr ? ' selected' : '');
     if(dateStr === selectedDateStr) {
-      sq.style.background = mode === 'expense' ? 'var(--coral)' : '#7FE8C6';
+      sq.style.background = mode === 'expense' ? 'var(--coral)' : 'var(--mint)';
     }
 
     const dayName = daysHeb[d.getDay() % 7];
@@ -1140,12 +1140,12 @@ function updateSelectedCategoryDisplay() {
 
 function setMode(m){
   mode = m;
-  const accent = m==='expense' ? 'var(--coral)' : '#7FE8C6';
-  const accentBg = m==='expense' ? 'var(--coral-bg)' : 'rgba(127,232,198,0.13)';
+  const accent = m==='expense' ? 'var(--coral)' : 'var(--mint)';
+  const accentBg = m==='expense' ? 'var(--coral-bg)' : 'var(--mint-bg)';
   segThumb.style.transform = m==='expense' ? 'translateX(0%)' : 'translateX(-100%)';
   segThumb.style.background = accentBg;
   tabExpense.style.color = m==='expense' ? 'var(--coral)' : 'var(--text-dim)';
-  tabIncome.style.color = m==='income' ? '#7FE8C6' : 'var(--text-dim)';
+  tabIncome.style.color = m==='income' ? 'var(--mint)' : 'var(--text-dim)';
   currencySign.style.color = accent;
   amountShell.style.setProperty('--accent', accent);
   document.getElementById('modalModeTitle').textContent = m === 'expense' ? 'הוצאה' : 'הכנסה';
@@ -1176,12 +1176,12 @@ function renderModalCategoryList(){
   cats.forEach((c, idx) => {
     const isSelected = c.name === selectedCategoryName;
     const row = document.createElement('div');
-    row.className = `flex items-center justify-between px-1.5 py-1 rounded-md border transition cursor-pointer ${isSelected ? 'bg-rose-500/15 border-rose-500/40' : 'bg-[var(--card-2)] border-[var(--border)]'}`;
+    row.className = `flex items-center justify-between px-1.5 py-1 rounded-md border transition cursor-pointer ${isSelected ? 'bg-emerald-500/15 border-emerald-500/40' : 'bg-[var(--card-2)] border-[var(--border)]'}`;
     row.innerHTML = `
       <div class="flex items-center gap-1 flex-1 min-w-0" onclick="selectCategoryFromModal('${c.name.replace(/'/g, "\\'")}')">
         <span class="w-2 h-2 rounded-full shadow-sm flex-shrink-0" style="background:${c.color}"></span>
         <span class="text-[9px] font-bold truncate">${c.name}</span>
-        ${isSelected ? '<span class="text-[8px] text-rose-400 font-semibold mr-auto">✓</span>' : ''}
+        ${isSelected ? '<span class="text-[8px] text-emerald-400 font-semibold mr-auto">✓</span>' : ''}
       </div>
       <button onclick="event.stopPropagation(); deleteCatModal('${mode}', ${idx})" class="text-rose-400 text-[8px] px-1 py-0.2 rounded bg-[var(--card)] border border-[var(--border)] hover:bg-rose-500/10 transition cursor-pointer flex-shrink-0">
         <i class="fa-solid fa-trash"></i>
@@ -1241,7 +1241,7 @@ function renderRecurringList() {
   state.recurringItems.forEach((rec, idx) => {
     const row = document.createElement('div');
     row.className = 'flex items-center justify-between bg-[var(--card-2)] px-2.5 py-1.5 rounded-lg border border-[var(--border)]';
-    const col = rec.type === 'income' ? '#7FE8C6' : 'var(--coral)';
+    const col = rec.type === 'income' ? 'var(--mint)' : 'var(--coral)';
     row.innerHTML = `
       <div>
         <p class="text-[11px] font-semibold">${rec.name}</p>
@@ -1467,7 +1467,7 @@ function parseVoiceCommandForDescModal(text){
     date: dateStr
   };
 
-  document.getElementById('voiceParsedInfo').innerHTML = `זוהה: <span class="text-rose-400 font-bold">${amount} ₪</span> (${matchedCat.name}) בתאריך ${dateStr}`;
+  document.getElementById('voiceParsedInfo').innerHTML = `זוהה: <span class="text-emerald-400 font-bold">${amount} ₪</span> (${matchedCat.name}) בתאריך ${dateStr}`;
   document.getElementById('voiceDescInput').value = '';
   document.getElementById('voiceDescModal').classList.remove('hidden');
   setTimeout(() => { document.getElementById('voiceDescInput').focus(); }, 100);
@@ -1594,7 +1594,7 @@ function renderAnalytics(){
       const row = document.createElement('div');
       row.className = 'tx-row';
       const sign = t.type==='income' ? '+' : '−';
-      const col = t.type==='income' ? '#7FE8C6' : 'var(--coral)';
+      const col = t.type==='income' ? 'var(--mint)' : 'var(--coral)';
       row.innerHTML = `
         <div class="flex items-center gap-2">
           <span class="chip-dot" style="width:8px;height:8px;background:${t.color}"></span>
@@ -1622,7 +1622,7 @@ function renderAnalytics(){
       const row = document.createElement('div');
       row.className = 'tx-row opacity-75';
       const sign = t.type==='income' ? '+' : '−';
-      const col = t.type==='income' ? '#7FE8C6' : 'var(--coral)';
+      const col = t.type==='income' ? 'var(--mint)' : 'var(--coral)';
       row.innerHTML = `
         <div class="flex items-center gap-2">
           <span class="chip-dot" style="width:8px;height:8px;background:${t.color}"></span>

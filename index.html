@@ -383,19 +383,23 @@
         </div>
         <div id="recurringList" class="space-y-1.5" style="max-height: 140px; overflow-y:auto;"></div>
         <div class="border-t border-[var(--border)] pt-2.5 space-y-2">
-            <div class="grid grid-cols-2 gap-1.5">
+            <div class="grid grid-cols-3 gap-1.5">
                 <div class="field-shell px-2 py-1.5">
-                    <select id="recType" class="w-full bg-transparent outline-none font-bold" style="color:var(--text)">
+                    <select id="recType" class="w-full bg-transparent outline-none font-bold text-[11px]" style="color:var(--text)">
                         <option value="expense">הוצאה</option>
                         <option value="income">הכנסה</option>
                     </select>
                 </div>
                 <div class="field-shell px-2 py-1.5">
-                    <input id="recAmount" type="tel" inputmode="decimal" placeholder="סכום ₪" class="w-full bg-transparent outline-none" style="color:var(--text)" />
+                    <input id="recAmount" type="tel" inputmode="decimal" placeholder="סכום ₪" class="w-full bg-transparent outline-none text-[11px]" style="color:var(--text)" />
+                </div>
+                <div class="field-shell px-2 py-1.5">
+                    <select id="recDaySelect" class="w-full bg-transparent outline-none font-bold text-[11px]" style="color:var(--text)">
+                    </select>
                 </div>
             </div>
             <div class="field-shell px-2 py-1.5">
-                <input id="recName" type="text" placeholder="שם (למשל: שכירות)" class="w-full bg-transparent outline-none" style="color:var(--text)" />
+                <input id="recName" type="text" placeholder="שם (למשל: שכירות)" class="w-full bg-transparent outline-none text-[11px]" style="color:var(--text)" />
             </div>
             <button onclick="addRecurringItem()" class="save-btn w-full py-2 rounded-xl font-bold text-[11px]">הוסף קבוע</button>
         </div>
@@ -460,18 +464,23 @@
 
 <div class="app-frame">
 
-  <!-- HEADER עם מרווח בטוח למעלה כדי שלא יוסתר ע״י הסטטוס בר של הטלפון -->
-  <div class="flex items-center justify-between px-5 pt-7 pb-3" id="headerHome">
+  <!-- HEADER -->
+  <div class="flex items-center justify-between px-5 pt-12 pb-3" id="headerHome">
     <div class="flex items-center gap-2">
       <svg width="24" height="24" viewBox="0 0 26 26" fill="none"><circle cx="13" cy="13" r="12" stroke="var(--mint)" stroke-width="1.6" opacity=".5"/><path d="M4 13H9L11 7L15 19L17 13H22" stroke="var(--mint)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span class="text-lg font-bold tracking-tight gradient-text">Pulse</span>
     </div>
-    <div class="flex items-center gap-2">
-      <button onclick="openSettingsModal()" class="icon-btn" title="הגדרות">
-        <i class="fa-solid fa-gear text-sm"></i>
-      </button>
-      <button onclick="document.documentElement.classList.toggle('light')" class="icon-btn" title="מצב תצוגה">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+    <div class="flex flex-col items-end">
+      <div class="flex items-center gap-2">
+        <button onclick="openSettingsModal()" class="icon-btn" title="הגדרות">
+          <i class="fa-solid fa-gear text-sm"></i>
+        </button>
+        <button onclick="document.documentElement.classList.toggle('light')" class="icon-btn" title="מצב תצוגה">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+        </button>
+      </div>
+      <button onclick="showPwaHelp()" class="text-[10px] text-emerald-400 hover:underline mt-1 cursor-pointer font-medium">
+        הוסף למסך הבית
       </button>
     </div>
   </div>
@@ -615,25 +624,12 @@
         <button onclick="saveEntry(event)" class="save-btn w-full h-12 rounded-2xl text-[14px] font-bold py-2.5 mt-2">שמירת תנועה ידנית</button>
       </section>
 
-      <section class="summary-card p-4 mt-4 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-[var(--card-2)] text-emerald-400 border border-[var(--border)] flex items-center justify-center text-lg">
-            <i class="fa-solid fa-mobile-screen-button"></i>
-          </div>
-          <div>
-            <h4 class="text-[13px] font-bold">רוצה את Pulse כמו אפליקציה?</h4>
-            <p class="text-[11px]" style="color:var(--text-dim)">הוסף למסך הבית לגישה מהירה בלחיצה אחת</p>
-          </div>
-        </div>
-        <button onclick="showPwaHelp()" class="text-xs font-semibold px-3.5 py-2 rounded-xl bg-[var(--card-2)] border border-[var(--border)] text-emerald-400 hover:bg-[var(--card)] transition cursor-pointer">הסבר</button>
-      </section>
-
     </main>
   </section>
 
   <!-- SCREEN 2: STATUS -->
   <section id="screen-analytics" class="screen">
-    <div class="flex items-center justify-between px-5 pt-7 pb-3">
+    <div class="flex items-center justify-between px-5 pt-12 pb-3">
       <span class="text-lg font-bold">תמונת מצב</span>
       <div class="flex bg-[var(--card-2)] border border-[var(--border)] rounded-full p-1 gap-1">
         <button class="text-[11px] font-semibold px-3 py-1 rounded-full" style="background:var(--card); color:var(--text)">חודש פיננסי פעיל</button>
@@ -643,6 +639,14 @@
       <section class="summary-card p-4">
         <h3 class="text-[13px] font-semibold mb-2 text-slate-300">השוואה לחודש קודם</h3>
         <div id="monthlyComparisonBox" class="text-xs space-y-1.5" style="color:var(--text-dim)"></div>
+      </section>
+
+      <!-- גרפים היסטוריים לאורך השנה (6 חודשים אחרונים) -->
+      <section class="summary-card p-4">
+        <h3 class="text-[13px] font-semibold mb-3 text-slate-300 flex items-center gap-2">
+          <span>📊</span> מגמה היסטורית (6 חודשים אחרונים)
+        </h3>
+        <div id="historicalChartContainer" class="space-y-3 pt-1"></div>
       </section>
 
       <section class="summary-card p-4">
@@ -696,7 +700,6 @@ let state = {
   financialDay: 1,
   savingsGoal: 1500,
   recurringItems: [],
-  lastAppliedRecurringMonth: '',
   expenseCats: [...defaultCustomExpenseCats],
   incomeCats: [
     {name:'משכורת', color:'#7FE8C6'}, 
@@ -741,6 +744,7 @@ window.onload = function() {
   const saved = localStorage.getItem('pulse_state_v52');
   if(saved) {
     state = JSON.parse(saved);
+    sortTransactions();
   }
   
   if(!state.userName || state.baseline === null || state.baseline === undefined) {
@@ -752,12 +756,61 @@ window.onload = function() {
   checkAndApplyRecurringTransactions();
   setDynamicGreeting();
   buildFinancialDayDropdown();
+  buildRecDayDropdown();
   renderDateSquares();
   buildColorPalette();
   buildSettingsColorPalette();
   setMode('expense');
   renderHome();
+  initSwipeGestures();
 };
+
+function initSwipeGestures() {
+  let touchStartX = 0;
+  let touchStartY = 0;
+  const appFrame = document.querySelector('.app-frame');
+
+  if(appFrame) {
+    appFrame.addEventListener('touchstart', e => {
+      touchStartX = e.changedTouches[0].screenX;
+      touchStartY = e.changedTouches[0].screenY;
+    }, {passive: true});
+
+    appFrame.addEventListener('touchend', e => {
+      const touchEndX = e.changedTouches[0].screenX;
+      const touchEndY = e.changedTouches[0].screenY;
+      const diffX = touchEndX - touchStartX;
+      const diffY = touchEndY - touchStartY;
+
+      if (Math.abs(diffX) > 65 && Math.abs(diffX) > Math.abs(diffY)) {
+        const homeActive = document.getElementById('screen-home').classList.contains('active');
+        if (diffX < 0 && homeActive) {
+          showScreen('analytics');
+        } else if (diffX > 0 && !homeActive) {
+          showScreen('home');
+        }
+      }
+    }, {passive: true});
+  }
+}
+
+function sortTransactions() {
+  if (state.transactions && state.transactions.length > 0) {
+    state.transactions.sort((a, b) => b.date.localeCompare(a.date) || b.id - a.id);
+  }
+}
+
+function buildRecDayDropdown() {
+  const select = document.getElementById('recDaySelect');
+  if(!select) return;
+  select.innerHTML = '';
+  for(let i=1; i<=31; i++) {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = `יום ${i}`;
+    select.appendChild(opt);
+  }
+}
 
 function buildColorPalette() {
   const palette = document.getElementById('colorPalette');
@@ -819,31 +872,39 @@ function addCategoryFromSettings() {
 function checkAndApplyRecurringTransactions() {
   if(!state.recurringItems || state.recurringItems.length === 0) return;
   const now = new Date();
-  const currentMonthKey = `${now.getFullYear()}-${now.getMonth()}`;
-  
-  if(state.lastAppliedRecurringMonth !== currentMonthKey) {
-    const fDay = parseInt(state.financialDay) || 1;
-    let applyDate = new Date(now.getFullYear(), now.getMonth(), fDay);
-    if(applyDate > now) {
-      applyDate = new Date(now.getFullYear(), now.getMonth() - 1, fDay);
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth();
+  const currentDay = now.getDate();
+  const currentMonthKey = `${currentYear}-${currentMonth}`;
+
+  let changed = false;
+  state.recurringItems.forEach(rec => {
+    const targetDay = rec.day || 1;
+    if (currentDay >= targetDay) {
+      if (rec.lastAppliedMonth !== currentMonthKey) {
+        let applyDate = new Date(currentYear, currentMonth, targetDay);
+        const dateStr = getLocalDateString(applyDate);
+        const activeCats = rec.type === 'expense' ? state.expenseCats : state.incomeCats;
+        const catObj = activeCats[0] || {color:'#9AA1AC'};
+        
+        state.transactions.push({
+          id: Date.now() + Math.random(),
+          type: rec.type,
+          amount: rec.amount,
+          cat: rec.name,
+          desc: rec.name,
+          color: catObj.color,
+          date: dateStr
+        });
+
+        rec.lastAppliedMonth = currentMonthKey;
+        changed = true;
+      }
     }
-    const dateStr = getLocalDateString(applyDate);
+  });
 
-    state.recurringItems.forEach(rec => {
-      const activeCats = rec.type === 'expense' ? state.expenseCats : state.incomeCats;
-      const catObj = activeCats[0] || {color:'#9AA1AC'};
-      state.transactions.unshift({
-        id: Date.now() + Math.random(),
-        type: rec.type,
-        amount: rec.amount,
-        cat: rec.name,
-        desc: rec.name,
-        color: catObj.color,
-        date: dateStr
-      });
-    });
-
-    state.lastAppliedRecurringMonth = currentMonthKey;
+  if(changed) {
+    sortTransactions();
     persist();
   }
 }
@@ -853,16 +914,22 @@ function setDynamicGreeting() {
   if(!title) return;
   const hour = new Date().getHours();
   let timeGreeting = "שלום";
+
+  // בוקר טוב: מזריחה (5:00) עד 12:00
+  // צהריים טובים: מ-12:00 עד שקיעה (19:00)
+  // ערב טוב: משקיעה (19:00) עד 12 בלילה (00:00)
+  // לילה טוב: מ-12 בלילה (00:00) ועד 5:00 בבוקר
   if (hour >= 5 && hour < 12) {
     timeGreeting = "בוקר טוב";
-  } else if (hour >= 12 && hour < 17) {
+  } else if (hour >= 12 && hour < 19) {
     timeGreeting = "צהריים טובים";
-  } else if (hour >= 17 && hour < 21) {
-    timeGreeting = "אחה\"צ טובים";
-  } else {
+  } else if (hour >= 19 && hour < 24) {
     timeGreeting = "ערב טוב";
+  } else {
+    timeGreeting = "לילה טוב";
   }
-  title.textContent = `${timeGreeting}, ${state.userName || 'ידידי'} 👋`;
+
+  title.textContent = `${timeGreeting}, ${state.userName || 'דוידי'} 👋`;
 }
 
 function buildFinancialDayDropdown() {
@@ -878,6 +945,7 @@ function buildFinancialDayDropdown() {
 }
 
 function persist() {
+  sortTransactions();
   localStorage.setItem('pulse_state_v52', JSON.stringify(state));
 }
 
@@ -1225,6 +1293,7 @@ function deleteCatModal(kind, idx){
 
 function openRecurringModal() {
   document.getElementById('recurringModal').classList.remove('hidden');
+  buildRecDayDropdown();
   renderRecurringList();
 }
 function closeRecurringModal() {
@@ -1245,7 +1314,7 @@ function renderRecurringList() {
     row.innerHTML = `
       <div>
         <p class="text-[11px] font-semibold">${rec.name}</p>
-        <p class="text-[9px]" style="color:${col}">${rec.type === 'income' ? 'הכנסה' : 'הוצאה'}</p>
+        <p class="text-[9px]" style="color:${col}">${rec.type === 'income' ? 'הכנסה' : 'הוצאה'} • יום ${rec.day || 1} לחודש</p>
       </div>
       <div class="flex items-center gap-2">
         <span class="tabular text-[11px] font-bold" style="color:${col}">${fmt(rec.amount)}</span>
@@ -1259,11 +1328,13 @@ function addRecurringItem() {
   const type = document.getElementById('recType').value;
   const amount = parseFloat(document.getElementById('recAmount').value);
   const name = document.getElementById('recName').value.trim();
+  const day = parseInt(document.getElementById('recDaySelect').value) || 1;
+
   if(!amount || isNaN(amount)) { alert("נא להזין סכום תקין"); return; }
   if(!name) { alert("נא להזין שם לתנועה הקבועה"); return; }
 
   if(!state.recurringItems) state.recurringItems = [];
-  state.recurringItems.push({ type, amount, name });
+  state.recurringItems.push({ type, amount, name, day });
   persist();
   renderRecurringList();
   document.getElementById('recAmount').value = '';
@@ -1482,7 +1553,7 @@ function confirmVoiceTransaction() {
   selectedDateStr = pendingVoiceTx.date;
   selectedCategoryName = pendingVoiceTx.cat;
 
-  state.transactions.unshift({
+  state.transactions.push({
     id: Date.now(),
     ...pendingVoiceTx
   });
@@ -1512,7 +1583,7 @@ function saveEntry(evt){
   const catName = catObj ? catObj.name : 'אחר';
   const finalDesc = desc ? desc : catName;
 
-  state.transactions.unshift({ id: Date.now(), type:mode, amount, cat:catName, desc:finalDesc, color:catObj.color, date: selectedDateStr });
+  state.transactions.push({ id: Date.now(), type:mode, amount, cat:catName, desc:finalDesc, color:catObj.color, date: selectedDateStr });
   persist();
   document.getElementById('amountInput').value = '';
   document.getElementById('descInput').value = '';
@@ -1559,6 +1630,8 @@ function renderAnalytics(){
     `;
   }
   compBox.innerHTML = diffText;
+
+  renderHistoricalChart();
 
   const total = Object.values(spend).reduce((a,b)=>a+b,0) || 1;
   const colorOf = name => {
@@ -1638,6 +1711,70 @@ function renderAnalytics(){
       archiveList.appendChild(row);
     });
   }
+}
+
+function renderHistoricalChart() {
+  const container = document.getElementById('historicalChartContainer');
+  if(!container) return;
+  container.innerHTML = '';
+
+  const monthsHeb = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'];
+  let monthlyData = [];
+
+  for (let i = 5; i >= 0; i--) {
+    const { startPeriod } = getFinancialPeriodDates(-i);
+    const mName = monthsHeb[startPeriod.getMonth()];
+    
+    let mInc = 0;
+    let mExp = 0;
+
+    state.transactions.forEach(t => {
+      if(isWithinFinancialMonth(t.date, -i)) {
+        if(t.type === 'income') mInc += t.amount;
+        else mExp += t.amount;
+      }
+    });
+
+    monthlyData.push({ name: mName, income: mInc, expense: mExp });
+  }
+
+  let maxVal = 100;
+  monthlyData.forEach(d => {
+    if(d.income > maxVal) maxVal = d.income;
+    if(d.expense > maxVal) maxVal = d.expense;
+  });
+
+  monthlyData.forEach(m => {
+    const incPct = Math.min(Math.round((m.income / maxVal) * 100), 100);
+    const expPct = Math.min(Math.round((m.expense / maxVal) * 100), 100);
+
+    const row = document.createElement('div');
+    row.className = 'space-y-1 bg-[var(--card-2)] p-2.5 rounded-xl border border-[var(--border)]';
+    row.innerHTML = `
+      <div class="flex justify-between items-center text-[11px] font-bold">
+        <span>${m.name}</span>
+        <div class="flex gap-3 text-[10px]">
+          <span style="color:var(--mint)">הכנסות: ${fmt(m.income)}</span>
+          <span style="color:var(--coral)">הוצאות: ${fmt(m.expense)}</span>
+        </div>
+      </div>
+      <div class="space-y-1 pt-1">
+        <div class="flex items-center gap-2">
+          <span class="text-[9px] w-10 text-slate-400">הכנסה</span>
+          <div class="flex-1 bg-[var(--card)] h-2 rounded-full overflow-hidden border border-[var(--border)]">
+            <div class="h-full bg-emerald-400 transition-all duration-500" style="width: ${incPct}%"></div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-[9px] w-10 text-slate-400">הוצאה</span>
+          <div class="flex-1 bg-[var(--card)] h-2 rounded-full overflow-hidden border border-[var(--border)]">
+            <div class="h-full bg-rose-400 transition-all duration-500" style="width: ${expPct}%"></div>
+          </div>
+        </div>
+      </div>
+    `;
+    container.appendChild(row);
+  });
 }
 
 function deleteTransaction(id) {

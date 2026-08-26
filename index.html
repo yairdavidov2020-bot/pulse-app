@@ -851,18 +851,7 @@ function checkAndApplyRecurringTransactions() {
 function setDynamicGreeting() {
   const title = document.getElementById('greetingTitle');
   if(!title) return;
-  const hour = new Date().getHours();
-  let timeGreeting = "שלום";
-  if (hour >= 5 && hour < 12) {
-    timeGreeting = "בוקר טוב";
-  } else if (hour >= 12 && hour < 17) {
-    timeGreeting = "צהריים טובים";
-  } else if (hour >= 17 && hour < 21) {
-    timeGreeting = "אחה\"צ טובים";
-  } else {
-    timeGreeting = "ערב טוב";
-  }
-  title.textContent = `${timeGreeting}, ${state.userName || 'ידידי'} 👋`;
+  title.textContent = `שלום, ${state.userName || 'ידידי'} 👋`;
 }
 
 function buildFinancialDayDropdown() {

@@ -43,7 +43,6 @@
   
   .tabular{ font-variant-numeric:tabular-nums; letter-spacing:-0.02em; }
   
-  /* אפקט מעבר עמודים חלק כמו דיפדופ תמונה */
   .screen{ display:none; flex:1; padding-bottom:30px; width: 100%; }
   .screen.active{ display:block; animation: pageFlip 0.35s cubic-bezier(0.16, 1, 0.3, 1) both; }
   @keyframes pageFlip {
@@ -845,34 +844,50 @@ function addCategoryFromSettings() {
 function checkAndApplyRecurringTransactions() {
   if(!state.recurringItems || state.recurringItems.length === 0) return;
   const now = new Date();
-  const currentYear = now.getFullYear();
-  const currentMonth = now.getMonth();
-  const currentDay = now.getDate();
-  const currentMonthKey = `${currentYear}-${currentMonth}`;
+  const fDay = parseInt(state.financialDay) || 1;
+
+  // שליפת תאריכי המחזור הפיננסי הנוכחי
+  const { startPeriod } = getFinancialPeriodDates(0);
+  const periodKey = getLocalDateString(startPeriod);
 
   let changed = false;
   state.recurringItems.forEach(rec => {
     const targetDay = rec.day || 1;
-    if (currentDay >= targetDay) {
-      if (rec.lastAppliedMonth !== currentMonthKey) {
-        let applyDate = new Date(currentYear, currentMonth, targetDay);
-        const dateStr = getLocalDateString(applyDate);
-        const activeCats = rec.type === 'expense' ? state.expenseCats : state.incomeCats;
-        const catObj = activeCats[0] || {color:'#9AA1AC'};
-        
-        state.transactions.push({
-          id: Date.now() + Math.random(),
-          type: rec.type,
-          amount: rec.amount,
-          cat: rec.name,
-          desc: rec.name,
-          color: catObj.color,
-          date: dateStr
-        });
-
-        rec.lastAppliedMonth = currentMonthKey;
-        changed = true;
+    
+    // חישוב מדויק של התאריך לפי החודש הפיננסי
+    let targetYear = startPeriod.getFullYear();
+    let targetMonth = startPeriod.getMonth();
+    
+    if (targetDay < fDay) {
+      targetMonth += 1;
+      if (targetMonth > 11) {
+        targetMonth = 0;
+        targetYear += 1;
       }
+    }
+    
+    const lastDayOfTargetMonth = new Date(targetYear, targetMonth + 1, 0).getDate();
+    const actualDay = Math.min(targetDay, lastDayOfTargetMonth);
+    
+    const applyDate = new Date(targetYear, targetMonth, actualDay);
+    const dateStr = getLocalDateString(applyDate);
+
+    if (now >= applyDate && rec.lastAppliedPeriod !== periodKey) {
+      const activeCats = rec.type === 'expense' ? state.expenseCats : state.incomeCats;
+      const catObj = activeCats[0] || {color:'#9AA1AC'};
+      
+      state.transactions.push({
+        id: Date.now() + Math.random(),
+        type: rec.type,
+        amount: rec.amount,
+        cat: rec.name,
+        desc: rec.name,
+        color: catObj.color,
+        date: dateStr
+      });
+
+      rec.lastAppliedPeriod = periodKey;
+      changed = true;
     }
   });
 
@@ -1330,7 +1345,6 @@ function parseVoiceCommandForDescModal(text){
   let txDate = new Date();
   let dateFound = false;
 
-  // זיהוי תאריך בתצורת DD.MM (למשל 18.8)
   const dotDateMatch = cleanText.match(/(\d{1,2})\.(\d{1,2})/);
   if (dotDateMatch) {
     let dayNum = parseInt(dotDateMatch[1]);
@@ -1386,7 +1400,6 @@ function parseVoiceCommandForDescModal(text){
     }
   }
 
-  // זיהוי סכום
   let amount = 0;
   const currencyMatch = cleanText.match(/(\d+[\.,]?\d*)\s*(שקל|שקלים|₪)/);
   if (currencyMatch) {
@@ -1404,7 +1417,6 @@ function parseVoiceCommandForDescModal(text){
     return;
   }
 
-  // זיהוי קטגוריה מתוך הקטגוריות הקיימות במערכת (ברירת מחדל או שהמשתמש הוסיף)
   let targetMode = 'expense';
   if(cleanText.includes("משכורת") || cleanText.includes("קיבלתי") || cleanText.includes("הכנסתי") || cleanText.includes("הרווחתי")){ 
     targetMode = 'income'; 

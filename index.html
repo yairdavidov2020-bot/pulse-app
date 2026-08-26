@@ -43,11 +43,12 @@
   
   .tabular{ font-variant-numeric:tabular-nums; letter-spacing:-0.02em; }
   
+  /* עמודים נפרדים עם אנימציית מעבר */
   .screen{ display:none; flex:1; padding-bottom:30px; width: 100%; }
-  .screen.active{ display:block; animation: pageFlip 0.35s cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .screen.active{ display:block; animation: pageFlip 0.3s cubic-bezier(0.16, 1, 0.3, 1) both; }
   @keyframes pageFlip {
-    from { opacity: 0; transform: scale(0.98) translateX(var(--slide-dir, 20px)); }
-    to { opacity: 1; transform: scale(1) translateX(0); }
+    from { opacity: 0; transform: scale(0.98) translateY(8px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
   }
 
   .gradient-text {
@@ -56,13 +57,13 @@
     -webkit-text-fill-color: transparent;
   }
 
-  .glow-wrap{ position:relative; display:flex; justify-content:center; padding:6px 0 4px; }
-  .glow-halo{ position:absolute; inset:-40px 8% auto 8%; height:200px; border-radius:50%; filter:blur(38px); background:radial-gradient(circle, var(--glow) 0%, transparent 68%); opacity:.5; transition:background 1s ease; }
+  .glow-wrap{ position:relative; display:flex; justify-content:center; padding:4px 0 2px; }
+  .glow-halo{ position:absolute; inset:-30px 8% auto 8%; height:160px; border-radius:50%; filter:blur(38px); background:radial-gradient(circle, var(--glow) 0%, transparent 68%); opacity:.5; transition:background 1s ease; }
   
-  .balance-card{ position:relative; width:100%; border:1px solid var(--border); background:linear-gradient(180deg, var(--card) 0%, var(--card-2) 100%); border-radius:28px; padding:24px 20px 20px; text-align:center; z-index:1; box-shadow:inset 0 1px 0 rgba(255,255,255,0.04); }
-  .balance-card::before{ content:""; position:absolute; inset:0; border-radius:28px; padding:1px; background:linear-gradient(135deg, var(--glow) 0%, transparent 45%, transparent 55%, var(--glow) 100%); opacity:.45; -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; transition:background 1s ease; pointer-events:none; }
+  .balance-card{ position:relative; width:100%; border:1px solid var(--border); background:linear-gradient(180deg, var(--card) 0%, var(--card-2) 100%); border-radius:24px; padding:18px 16px 16px; text-align:center; z-index:1; box-shadow:inset 0 1px 0 rgba(255,255,255,0.04); }
+  .balance-card::before{ content:""; position:absolute; inset:0; border-radius:24px; padding:1px; background:linear-gradient(135deg, var(--glow) 0%, transparent 45%, transparent 55%, var(--glow) 100%); opacity:.45; -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; transition:background 1s ease; pointer-events:none; }
   
-  .ecg-line{ width:100%; height:32px; margin-top:4px; overflow:hidden; }
+  .ecg-line{ width:100%; height:26px; margin-top:2px; overflow:hidden; }
   .ecg-line path{ stroke: #2EB88A; stroke-dasharray:340; animation:ecg-sweep 2s linear infinite; }
   @keyframes ecg-sweep{ from{stroke-dashoffset:340;} to{stroke-dashoffset:0;} }
 
@@ -72,7 +73,7 @@
   input[type="text"], select { font-size: 16px !important; }
   input[type="tel"], input[type="number"] { font-size: 16px !important; }
 
-  .field-shell{ background:rgba(15, 20, 30, 0.85); border:1px solid rgba(255,255,255,0.15); border-radius:18px; transition: border-color 0.2s; backdrop-filter:blur(10px); }
+  .field-shell{ background:rgba(15, 20, 30, 0.85); border:1px solid rgba(255,255,255,0.15); border-radius:16px; transition: border-color 0.2s; backdrop-filter:blur(10px); }
   .field-shell:focus-within{ border-color: var(--mint); }
 
   #colorPalette, #settingsColorPalette {
@@ -106,8 +107,8 @@
   .color-swatch:hover { transform: scale(1.1); }
   .color-swatch.selected { border-color: #ffffff; box-shadow: 0 0 8px rgba(255,255,255,0.5); transform: scale(1.15); }
 
-  .ai-voice-box { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 16px; display: flex; align-items: center; gap: 14px; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.3); }
-  .mic-btn{ width:48px; height:48px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; background:var(--card-2); border: 1px solid var(--border); color:var(--text); position:relative; cursor:pointer; transition: transform 0.2s, background 0.2s; }
+  .ai-voice-box { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 12px 14px; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.3); }
+  .mic-btn{ width:42px; height:42px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; background:var(--card-2); border: 1px solid var(--border); color:var(--text); position:relative; cursor:pointer; transition: transform 0.2s, background 0.2s; }
   .mic-btn:active { transform: scale(0.94); }
   .mic-ring{ position:absolute; inset:-6px; border-radius:50%; border:2px solid var(--mint); opacity:0; pointer-events:none; }
   .mic-btn.listening .mic-ring{ animation:ring-out 1.4s ease-out infinite; }
@@ -120,7 +121,7 @@
   .save-btn:hover{ background: rgba(5, 150, 105, 1); border-color: var(--mint); }
   .save-btn:active{ transform:scale(.97); }
   
-  .icon-btn{ width:38px; height:38px; border-radius:12px; display:flex; align-items:center; justify-content:center; background:var(--card-2); border:1px solid var(--border); color:var(--text-dim); cursor:pointer; transition: 0.2s; }
+  .icon-btn{ width:36px; height:36px; border-radius:12px; display:flex; align-items:center; justify-content:center; background:var(--card-2); border:1px solid var(--border); color:var(--text-dim); cursor:pointer; transition: 0.2s; }
   .icon-btn:hover { border-color: var(--mint); color: var(--text); }
 
   .modal-overlay { position:fixed; inset:0; z-index:50; background:rgba(10,12,17,0.95); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:16px; transition: opacity .25s ease; }
@@ -193,18 +194,18 @@
     gap: 16px;
   }
 
-  .bottom-nav{ position:sticky; bottom:0; left:0; right:0; display:flex; justify-content:space-around; align-items:center; padding:10px 12px calc(10px + env(safe-area-inset-bottom)); background:var(--card); border-top:1px solid var(--border); z-index:20; margin-top:auto; }
-  .nav-item{ display:flex; flex-direction:column; align-items:center; gap:3px; color:var(--text-faint); background:none; border:none; font-size:11px; font-weight:500; padding:4px 18px; border-radius:12px; transition:.2s; cursor:pointer; }
+  .bottom-nav{ position:sticky; bottom:0; left:0; right:0; display:flex; justify-content:space-around; align-items:center; padding:8px 12px calc(8px + env(safe-area-inset-bottom)); background:var(--card); border-top:1px solid var(--border); z-index:20; margin-top:auto; }
+  .nav-item{ display:flex; flex-direction:column; align-items:center; gap:2px; color:var(--text-faint); background:none; border:none; font-size:11px; font-weight:500; padding:4px 18px; border-radius:12px; transition:.2s; cursor:pointer; }
   .nav-item.active{ color:var(--text); }
   .nav-item.active svg{ stroke:var(--mint); }
 
-  .donut{ width:160px; height:160px; border-radius:50%; position:relative; margin:0 auto; }
-  .donut::after{ content:""; position:absolute; inset:22px; border-radius:50%; background:var(--card); }
+  .donut{ width:150px; height:150px; border-radius:50%; position:relative; margin:0 auto; }
+  .donut::after{ content:""; position:absolute; inset:20px; border-radius:50%; background:var(--card); }
   .donut-center{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2; }
 
-  .legend-row{ display:flex; align-items:center; justify-content:space-between; padding:9px 0; border-bottom:1px solid var(--border); }
+  .legend-row{ display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border); }
   .legend-row:last-child{ border-bottom:none; }
-  .tx-row{ display:flex; align-items:center; justify-content:space-between; padding:11px 0; border-bottom:1px solid var(--border); }
+  .tx-row{ display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border); }
   .tx-row:last-child{ border-bottom:none; }
 
   @keyframes pulse-arrow {
@@ -457,21 +458,21 @@
 <div class="app-frame">
 
   <!-- HEADER -->
-  <div class="flex items-center justify-between px-5 pt-12 pb-3" id="headerHome">
+  <div class="flex items-center justify-between px-5 pt-10 pb-2" id="headerHome">
     <div class="flex items-center gap-2">
-      <svg width="24" height="24" viewBox="0 0 26 26" fill="none"><circle cx="13" cy="13" r="12" stroke="var(--mint)" stroke-width="1.6" opacity=".5"/><path d="M4 13H9L11 7L15 19L17 13H22" stroke="var(--mint)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span class="text-lg font-bold tracking-tight gradient-text">Pulse</span>
+      <svg width="22" height="22" viewBox="0 0 26 26" fill="none"><circle cx="13" cy="13" r="12" stroke="var(--mint)" stroke-width="1.6" opacity=".5"/><path d="M4 13H9L11 7L15 19L17 13H22" stroke="var(--mint)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="text-base font-bold tracking-tight gradient-text">Pulse</span>
     </div>
     <div class="flex flex-col items-end">
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-1.5">
         <button onclick="openSettingsModal()" class="icon-btn" title="הגדרות">
           <i class="fa-solid fa-gear text-sm"></i>
         </button>
         <button onclick="document.documentElement.classList.toggle('light')" class="icon-btn" title="מצב תצוגה">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
         </button>
       </div>
-      <button onclick="showPwaHelp()" class="text-[10px] text-emerald-400 hover:underline mt-1 cursor-pointer font-medium">
+      <button onclick="showPwaHelp()" class="text-[9px] text-emerald-400 hover:underline mt-0.5 cursor-pointer font-medium">
         הוסף למסך הבית
       </button>
     </div>
@@ -479,119 +480,101 @@
 
   <!-- SCREEN 1: HOME -->
   <section id="screen-home" class="screen active">
-    <main class="px-5 pb-6 pt-2 space-y-4">
+    <main class="px-4 pb-4 pt-1 space-y-3">
       
-      <section class="px-1">
-        <h2 id="greetingTitle" class="text-xl font-bold tracking-tight">שלום</h2>
-        <p class="text-xs text-slate-400">הנה תמונת המצב הפיננסית שלך להיום</p>
+      <section class="px-0.5">
+        <h2 id="greetingTitle" class="text-lg font-bold tracking-tight">שלום</h2>
+        <p class="text-[11px] text-slate-400">תמונת המצב הפיננסית שלך להיום</p>
       </section>
 
       <!-- כרטיס יתרה דינמי -->
       <section class="glow-wrap">
         <div class="glow-halo" id="glowHalo"></div>
         <div class="balance-card">
-          <p class="text-[12px] font-medium" style="color:var(--text-dim)">יתרה בעו״ש</p>
-          <h1 class="tabular text-[38px] font-extrabold mt-1 leading-none" id="balanceValue">₪0</h1>
-          <svg class="ecg-line" viewBox="0 0 340 30" preserveAspectRatio="none"><path d="M0,15 L60,15 L72,4 L84,26 L96,15 L150,15 L162,7 L174,15 L340,15" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <p class="text-[11px] font-medium" style="color:var(--text-dim)">יתרה בעו״ש</p>
+          <h1 class="tabular text-[34px] font-extrabold mt-0.5 leading-none" id="balanceValue">₪0</h1>
+          <svg class="ecg-line" viewBox="0 0 340 26" preserveAspectRatio="none"><path d="M0,13 L60,13 L72,3 L84,23 L96,13 L150,13 L162,5 L174,13 L340,13" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
       </section>
 
-      <section class="grid grid-cols-2 gap-3">
-        <div class="summary-card p-3.5">
-          <div class="flex items-center gap-2">
-            <span class="w-6 h-6 rounded-full flex items-center justify-center" style="background:var(--mint-bg)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2.4" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
-            <span class="text-[12px]" style="color:var(--text-dim)">הכנסות החודש</span>
+      <section class="grid grid-cols-2 gap-2.5">
+        <div class="summary-card p-3">
+          <div class="flex items-center gap-1.5">
+            <span class="w-5 h-5 rounded-full flex items-center justify-center" style="background:var(--mint-bg)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2.4" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
+            <span class="text-[11px]" style="color:var(--text-dim)">הכנסות החודש</span>
           </div>
-          <p class="tabular text-xl font-bold mt-2.5" style="color:var(--mint)" id="totalIncome">₪0</p>
+          <p class="tabular text-lg font-bold mt-2" style="color:var(--mint)" id="totalIncome">₪0</p>
         </div>
-        <div class="summary-card p-3.5">
-          <div class="flex items-center gap-2">
-            <span class="w-6 h-6 rounded-full flex items-center justify-center" style="background:var(--coral-bg)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--coral)" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg></span>
-            <span class="text-[12px]" style="color:var(--text-dim)">הוצאות החודש</span>
+        <div class="summary-card p-3">
+          <div class="flex items-center gap-1.5">
+            <span class="w-5 h-5 rounded-full flex items-center justify-center" style="background:var(--coral-bg)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--coral)" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg></span>
+            <span class="text-[11px]" style="color:var(--text-dim)">הוצאות החודש</span>
           </div>
-          <p class="tabular text-xl font-bold mt-2.5" style="color:var(--coral)" id="totalExpense">₪0</p>
+          <p class="tabular text-lg font-bold mt-2" style="color:var(--coral)" id="totalExpense">₪0</p>
         </div>
       </section>
 
-      <section class="summary-card p-4">
-        <div class="flex items-center justify-between mb-2">
-          <div class="flex items-center gap-2">
-            <span class="text-sm">🎯</span>
-            <span class="text-[13px] font-semibold">יעד חיסכון חודשי</span>
+      <section class="summary-card p-3">
+        <div class="flex items-center justify-between mb-1">
+          <div class="flex items-center gap-1.5">
+            <span class="text-xs">📅</span>
+            <span class="text-[12px] font-semibold">חודש פיננסי</span>
           </div>
-          <button onclick="promptSavingsGoal()" class="text-[11px] font-bold text-emerald-400 bg-[var(--card-2)] hover:bg-[var(--card)] px-2.5 py-1 rounded-lg border border-[var(--border)] transition cursor-pointer">שנה יעד</button>
+          <button onclick="showFinancialHelp()" class="w-4 h-4 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[9px] font-bold flex items-center justify-center text-emerald-400 cursor-pointer">?</button>
         </div>
-        <div class="w-full bg-[var(--card-2)] h-2.5 rounded-full overflow-hidden border border-[var(--border)] mb-1.5">
-          <div id="savingsProgressBar" class="bg-emerald-400 h-full transition-all duration-500" style="width: 0%"></div>
-        </div>
-        <div class="flex justify-between text-[11px]" style="color:var(--text-dim)">
-          <span id="savingsCurrentStatus">חסכת ₪0 החודש</span>
-          <span id="savingsGoalTarget">יעד: ₪1,500</span>
-        </div>
-      </section>
-
-      <section class="summary-card p-4">
-        <div class="flex items-center justify-between mb-1.5">
-          <div class="flex items-center gap-2">
-            <span class="text-sm">📅</span>
-            <span class="text-[13px] font-semibold">בחר את החודש הפיננסי שלך</span>
-          </div>
-          <button onclick="showFinancialHelp()" class="w-5 h-5 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[11px] font-bold flex items-center justify-center text-emerald-400 cursor-pointer">?</button>
-        </div>
-        <p class="text-[11px] mb-3" style="color:var(--text-dim)">יום בחודש שבו מתחיל מחזור החיובים וההוצאות שלך</p>
-        <div class="field-shell flex items-center px-3 py-2">
-          <select id="homeFinancialDaySelect" onchange="saveFinancialDay(this.value)" class="w-full bg-transparent outline-none font-bold cursor-pointer" style="color:var(--text)">
+        <div class="field-shell flex items-center px-2.5 py-1.5">
+          <select id="homeFinancialDaySelect" onchange="saveFinancialDay(this.value)" class="w-full bg-transparent outline-none font-bold text-xs cursor-pointer" style="color:var(--text)">
           </select>
         </div>
       </section>
 
       <!-- הוספה חכמה והכתבה -->
-      <section class="mt-2">
-        <div class="flex items-center justify-between mb-2.5">
-          <h2 class="text-[14px] font-semibold">הכתבה חכמה ותנועות</h2>
-          <div class="flex items-center gap-2">
-            <button onclick="openCategoriesModal()" class="text-[11px] font-semibold px-2.5 py-1.5 rounded-xl bg-[var(--card)] border border-[var(--border)] text-slate-300 hover:text-white transition flex items-center gap-1 shadow-sm cursor-pointer">
+      <section class="mt-1">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="text-[13px] font-semibold">הכתבה חכמה ותנועות</h2>
+          <div class="flex items-center gap-1.5">
+            <button onclick="openCategoriesModal()" class="text-[10px] font-semibold px-2 py-1 rounded-lg bg-[var(--card)] border border-[var(--border)] text-slate-300 hover:text-white transition flex items-center gap-1 cursor-pointer">
               <i class="fa-solid fa-tags"></i> קטגוריות
             </button>
-            <button onclick="openRecurringModal()" class="text-[11px] font-semibold px-2.5 py-1.5 rounded-xl bg-[var(--card)] border border-[var(--border)] text-emerald-400 hover:opacity-80 transition flex items-center gap-1 shadow-sm cursor-pointer">
-              <i class="fa-solid fa-repeat"></i> קבועות
+            <button onclick="openRecurringModal()" class="text-[10px] font-semibold px-2 py-1 rounded-lg bg-[var(--card)] border border-[var(--border)] text-emerald-400 hover:opacity-80 transition flex items-center gap-1 cursor-pointer">
+              <i class="fa-solid fa-repeat"></i> הוראות קבע
             </button>
           </div>
         </div>
 
-        <div class="ai-voice-box mb-3.5">
+        <div class="ai-voice-box mb-2.5">
           <button id="micBtn" class="mic-btn" onclick="toggleVoiceRecognition()" title="הכתבה קולית">
             <span class="mic-ring"></span><span class="mic-ring d2"></span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
           </button>
           <div class="flex-1">
             <div class="flex items-center justify-between">
-              <h4 class="text-[13px] font-bold flex items-center gap-1.5">
+              <h4 class="text-[12px] font-bold flex items-center gap-1.5">
                 <span>עוזר קולי דיגיטלי</span>
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
               </h4>
-              <button onclick="openVoiceHelpModal()" class="w-5 h-5 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[10px] font-bold flex items-center justify-center text-emerald-400 hover:bg-[var(--card)] transition cursor-pointer" title="עזרה">?</button>
+              <button onclick="openVoiceHelpModal()" class="w-4 h-4 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[9px] font-bold flex items-center justify-center text-emerald-400 hover:bg-[var(--card)] transition cursor-pointer" title="עזרה">?</button>
             </div>
-            <p id="micStatus" class="text-[11px] mt-0.5 leading-relaxed" style="color:var(--text-dim)">לחץ על המיקרופון ואמר סכום, קטגוריה ותאריך</p>
+            <p id="micStatus" class="text-[10px] mt-0.5 leading-relaxed" style="color:var(--text-dim)">לחץ על המיקרופון ואמר סכום, קטגוריה ותאריך</p>
           </div>
         </div>
 
-        <div class="summary-card p-4 space-y-3">
+        <div class="summary-card p-3 space-y-2.5">
           <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-              <span class="text-emerald-400 text-sm">✨</span>
-              <span class="text-xs font-bold">הכתבה חכמה בטקסט</span>
+            <div class="flex items-center gap-1.5">
+              <span class="text-emerald-400 text-xs">✨</span>
+              <span class="text-[11px] font-bold">הכתבה חכמה בטקסט</span>
             </div>
-            <button onclick="openVoiceHelpModal()" class="w-5 h-5 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[10px] font-bold flex items-center justify-center text-emerald-400 hover:bg-[var(--card)] transition cursor-pointer" title="עזרה">?</button>
+            <button onclick="openVoiceHelpModal()" class="w-4 h-4 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[9px] font-bold flex items-center justify-center text-emerald-400 hover:bg-[var(--card)] transition cursor-pointer" title="עזרה">?</button>
           </div>
           
-          <div class="field-shell flex items-center px-3.5 py-3">
+          <div class="field-shell flex items-center px-3 py-2">
             <input id="smartTextInput" type="text" placeholder="כתוב בצורה חופשית..." class="w-full bg-transparent outline-none text-xs font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
           </div>
 
-          <div class="flex items-center justify-between pt-1">
-            <span class="text-[10px] text-slate-400">ניתן להשתמש במיקרופון במקלדת!</span>
-            <button onclick="processSmartText()" class="save-btn px-5 py-2.5 rounded-xl text-xs font-bold cursor-pointer">פענח והוסף</button>
+          <div class="flex items-center justify-between pt-0.5">
+            <span class="text-[9px] text-slate-400">ניתן להשתמש במיקרופון במקלדת!</span>
+            <button onclick="processSmartText()" class="save-btn px-4 py-2 rounded-xl text-[11px] font-bold cursor-pointer">פענח והוסף</button>
           </div>
         </div>
       </section>
@@ -599,63 +582,111 @@
     </main>
   </section>
 
-  <!-- SCREEN 2: STATUS -->
+  <!-- SCREEN 2: STATUS (ANALYTICS) -->
   <section id="screen-analytics" class="screen">
-    <div class="flex items-center justify-between px-5 pt-12 pb-3">
-      <span class="text-lg font-bold">תמונת מצב</span>
+    <div class="flex items-center justify-between px-5 pt-10 pb-2">
+      <span class="text-base font-bold">תמונת מצב</span>
       <div class="flex bg-[var(--card-2)] border border-[var(--border)] rounded-full p-1 gap-1">
         <button class="text-[11px] font-semibold px-3 py-1 rounded-full" style="background:var(--card); color:var(--text)">חודש פיננסי פעיל</button>
       </div>
     </div>
-    <main class="px-5 pb-6 pt-2 space-y-4">
-      <section class="summary-card p-4">
-        <h3 class="text-[13px] font-semibold mb-2 text-slate-300">השוואה לחודש קודם</h3>
-        <div id="monthlyComparisonBox" class="text-xs space-y-1.5" style="color:var(--text-dim)"></div>
+    <main class="px-4 pb-6 pt-1 space-y-3">
+      
+      <!-- יעד חיסכון -->
+      <section class="summary-card p-3.5">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-1.5">
+            <span class="text-sm">🎯</span>
+            <span class="text-[12px] font-semibold">יעד חיסכון חודשי</span>
+          </div>
+          <button onclick="promptSavingsGoal()" class="text-[10px] font-bold text-emerald-400 bg-[var(--card-2)] hover:bg-[var(--card)] px-2.5 py-1 rounded-lg border border-[var(--border)] transition cursor-pointer">שנה יעד</button>
+        </div>
+        <div class="w-full bg-[var(--card-2)] h-2 rounded-full overflow-hidden border border-[var(--border)] mb-1">
+          <div id="savingsProgressBar" class="bg-emerald-400 h-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+        <div class="flex justify-between text-[10px]" style="color:var(--text-dim)">
+          <span id="savingsCurrentStatus">חסכת ₪0 החודש</span>
+          <span id="savingsGoalTarget">יעד: ₪1,500</span>
+        </div>
       </section>
 
-      <section class="summary-card p-4">
-        <p class="text-[12px] mb-2" style="color:var(--text-dim)">פילוח הוצאות החודש</p>
-        <div class="donut" id="donutChart">
-          <div class="donut-center">
-            <span class="text-[10px]" style="color:var(--text-dim)">סה״כ</span>
-            <span class="tabular text-lg font-bold" id="donutTotal" style="color:var(--coral)">₪0</span>
+      <!-- השוואה לחודש קודם -->
+      <section class="summary-card p-3.5">
+        <h3 class="text-[12px] font-semibold mb-1.5 text-slate-300">השוואה לחודש קודם</h3>
+        <div id="monthlyComparisonBox" class="text-[11px] space-y-1" style="color:var(--text-dim)"></div>
+      </section>
+
+      <!-- פילוח הוצאות קומפקטי עם אפשרות הרחבה -->
+      <section class="summary-card p-3.5 cursor-pointer transition select-none" onclick="toggleDonutExpand()">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-sm">🍩</span>
+            <span class="text-[12px] font-semibold">פילוח הוצאות החודש</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="tabular text-[12px] font-bold" style="color:var(--coral)" id="previewDonutTotal">₪0</span>
+            <i id="donutArrowIcon" class="fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform"></i>
           </div>
         </div>
-        <div class="mt-4" id="legendList"></div>
+        <div id="donutExpandedContent" class="hidden mt-3 pt-2 border-t border-[var(--border)] space-y-3" onclick="event.stopPropagation()">
+          <div class="donut" id="donutChart">
+            <div class="donut-center">
+              <span class="text-[9px]" style="color:var(--text-dim)">סה״כ</span>
+              <span class="tabular text-base font-bold" id="donutTotal" style="color:var(--coral)">₪0</span>
+            </div>
+          </div>
+          <div class="mt-3" id="legendList"></div>
+        </div>
       </section>
 
-      <section>
-        <h2 class="text-[14px] font-semibold mb-2 px-1">תנועות החודש הנוכחי</h2>
-        <div class="summary-card p-3.5 max-h-[260px] overflow-y-auto" id="txList"></div>
+      <!-- תנועות החודש הנוכחי קומפקטי עם אפשרות הרחבה -->
+      <section class="summary-card p-3.5 cursor-pointer transition select-none" onclick="toggleTxExpand()">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-sm">📜</span>
+            <span class="text-[12px] font-semibold">תנועות החודש הנוכחי</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span id="txPreviewSummary" class="text-[10px] text-slate-400"></span>
+            <i id="txArrowIcon" class="fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform"></i>
+          </div>
+        </div>
+        <div id="txPreviewRow" class="mt-2 text-[11px] text-slate-300 border-t border-[var(--border)] pt-2 flex items-center justify-between">
+          <!-- תצוגה מקדימה של התנועה האחרונה -->
+        </div>
+        <div id="txExpandedContent" class="hidden mt-3 pt-2 border-t border-[var(--border)] space-y-2" onclick="event.stopPropagation()">
+          <div class="max-h-[240px] overflow-y-auto" id="txList"></div>
+        </div>
       </section>
 
-      <section class="mt-4">
-        <h2 class="text-[14px] font-semibold mb-2 px-1">ארכיון חודשים קודמים</h2>
-        <div class="summary-card p-3.5 max-h-[220px] overflow-y-auto" id="archiveList"></div>
+      <!-- ארכיון חודשים קודמים -->
+      <section class="mt-3">
+        <h2 class="text-[13px] font-semibold mb-1.5 px-0.5">ארכיון חודשים קודמים</h2>
+        <div class="summary-card p-3 max-h-[200px] overflow-y-auto" id="archiveList"></div>
       </section>
 
-      <!-- מגמה היסטורית בתחתית העמוד -->
-      <section class="summary-card p-4 mt-4">
-        <div class="flex items-center justify-between mb-3">
-          <h3 class="text-[13px] font-semibold text-slate-300 flex items-center gap-2">
+      <!-- מגמה היסטורית -->
+      <section class="summary-card p-3.5 mt-3">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-[12px] font-semibold text-slate-300 flex items-center gap-1.5">
             <span>📊</span> מגמה היסטורית
           </h3>
-          <button onclick="toggleHistoricalView()" id="historicalToggleBtn" class="text-[11px] font-bold text-emerald-400 bg-[var(--card-2)] hover:bg-[var(--card)] px-2.5 py-1 rounded-lg border border-[var(--border)] transition cursor-pointer">
+          <button onclick="toggleHistoricalView()" id="historicalToggleBtn" class="text-[10px] font-bold text-emerald-400 bg-[var(--card-2)] hover:bg-[var(--card)] px-2 py-1 rounded-lg border border-[var(--border)] transition cursor-pointer">
             הצג את כל 6 החודשים האחרונים
           </button>
         </div>
-        <div id="historicalChartContainer" class="space-y-3 pt-1"></div>
+        <div id="historicalChartContainer" class="space-y-2.5 pt-1"></div>
       </section>
     </main>
   </section>
 
   <!-- BOTTOM NAV -->
   <nav class="bottom-nav">
-    <button class="nav-item active" id="navHome" onclick="showScreen('home', -30)">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>בית
+    <button class="nav-item active" id="navHome" onclick="showScreen('home')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>בית
     </button>
-    <button class="nav-item" id="navAnalytics" onclick="showScreen('analytics', 30)">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9M12 19V4M20 19v-6"/></svg>תמונת מצב
+    <button class="nav-item" id="navAnalytics" onclick="showScreen('analytics')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9M12 19V4M20 19v-6"/></svg>תמונת מצב
     </button>
   </nav>
 </div>
@@ -694,6 +725,8 @@ let activeRecognition = null;
 let speechResultProcessed = false;
 let speechSafetyTimer = null;
 let historicalExpanded = false;
+let donutExpanded = false;
+let txExpanded = false;
 
 const availableColors = [
   '#FF8D82', '#FF6E6E', '#F43F5E', '#E11D48', '#BE123C', '#9F1239', '#FF4D4D', '#FF3366', '#FF9999', '#FFB3B3',
@@ -735,37 +768,7 @@ window.onload = function() {
   buildColorPalette();
   buildSettingsColorPalette();
   renderHome();
-  initSwipeGestures();
 };
-
-function initSwipeGestures() {
-  let touchStartX = 0;
-  let touchStartY = 0;
-  const appFrame = document.querySelector('.app-frame');
-
-  if(appFrame) {
-    appFrame.addEventListener('touchstart', e => {
-      touchStartX = e.changedTouches[0].screenX;
-      touchStartY = e.changedTouches[0].screenY;
-    }, {passive: true});
-
-    appFrame.addEventListener('touchend', e => {
-      const touchEndX = e.changedTouches[0].screenX;
-      const touchEndY = e.changedTouches[0].screenY;
-      const diffX = touchEndX - touchStartX;
-      const diffY = touchEndY - touchStartY;
-
-      if (Math.abs(diffX) > 65 && Math.abs(diffX) > Math.abs(diffY)) {
-        const homeActive = document.getElementById('screen-home').classList.contains('active');
-        if (diffX < 0 && homeActive) {
-          showScreen('analytics', 30);
-        } else if (diffX > 0 && !homeActive) {
-          showScreen('home', -30);
-        }
-      }
-    }, {passive: true});
-  }
-}
 
 function sortTransactions() {
   if (state.transactions && state.transactions.length > 0) {
@@ -846,15 +849,12 @@ function checkAndApplyRecurringTransactions() {
   const now = new Date();
   const fDay = parseInt(state.financialDay) || 1;
 
-  // שליפת תאריכי המחזור הפיננסי הנוכחי
   const { startPeriod } = getFinancialPeriodDates(0);
   const periodKey = getLocalDateString(startPeriod);
 
   let changed = false;
   state.recurringItems.forEach(rec => {
     const targetDay = rec.day || 1;
-    
-    // חישוב מדויק של התאריך לפי החודש הפיננסי
     let targetYear = startPeriod.getFullYear();
     let targetMonth = startPeriod.getMonth();
     
@@ -1044,16 +1044,36 @@ function closeVoiceHelpModal() {
   document.getElementById('voiceHelpModal').classList.add('hidden');
 }
 
-function showScreen(name, dir = 30){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  const targetScreen = document.getElementById('screen-'+name);
-  targetScreen.style.setProperty('--slide-dir', dir + 'px');
+function showScreen(name){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const targetScreen = document.getElementById('screen-' + name);
   targetScreen.classList.add('active');
 
-  document.getElementById('headerHome').style.display = name==='home' ? 'flex' : 'none';
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  if(name==='home') document.getElementById('navHome').classList.add('active');
-  if(name==='analytics'){ document.getElementById('navAnalytics').classList.add('active'); renderAnalytics(); }
+  document.getElementById('headerHome').style.display = name === 'home' ? 'flex' : 'none';
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  
+  if(name === 'home') {
+    document.getElementById('navHome').classList.add('active');
+  } else if(name === 'analytics') {
+    document.getElementById('navAnalytics').classList.add('active');
+
+    // איפוס חלוניות למצב סגור בכל מעבר לתמונת מצב
+    donutExpanded = false;
+    txExpanded = false;
+    const donutContent = document.getElementById('donutExpandedContent');
+    const donutArrow = document.getElementById('donutArrowIcon');
+    if(donutContent) donutContent.classList.add('hidden');
+    if(donutArrow) donutArrow.style.transform = 'rotate(0deg)';
+
+    const txContent = document.getElementById('txExpandedContent');
+    const txPreview = document.getElementById('txPreviewRow');
+    const txArrow = document.getElementById('txArrowIcon');
+    if(txContent) txContent.classList.add('hidden');
+    if(txPreview) txPreview.classList.remove('hidden');
+    if(txArrow) txArrow.style.transform = 'rotate(0deg)';
+
+    renderAnalytics();
+  }
   document.querySelector('.app-frame').scrollTo({top:0, behavior:'smooth'});
 }
 
@@ -1470,6 +1490,35 @@ function cancelVoiceTransaction() {
   resetVoiceUI();
 }
 
+function toggleDonutExpand() {
+  donutExpanded = !donutExpanded;
+  const content = document.getElementById('donutExpandedContent');
+  const arrow = document.getElementById('donutArrowIcon');
+  if(donutExpanded) {
+    content.classList.remove('hidden');
+    arrow.style.transform = 'rotate(180deg)';
+  } else {
+    content.classList.add('hidden');
+    arrow.style.transform = 'rotate(0deg)';
+  }
+}
+
+function toggleTxExpand() {
+  txExpanded = !txExpanded;
+  const content = document.getElementById('txExpandedContent');
+  const preview = document.getElementById('txPreviewRow');
+  const arrow = document.getElementById('txArrowIcon');
+  if(txExpanded) {
+    content.classList.remove('hidden');
+    preview.classList.add('hidden');
+    arrow.style.transform = 'rotate(180deg)';
+  } else {
+    content.classList.add('hidden');
+    preview.classList.remove('hidden');
+    arrow.style.transform = 'rotate(0deg)';
+  }
+}
+
 function renderAnalytics(){
   let currentExpense = 0;
   let currentIncome = 0;
@@ -1511,7 +1560,10 @@ function renderAnalytics(){
 
   renderHistoricalChart();
 
-  const total = Object.values(spend).reduce((a,b)=>a+b,0) || 1;
+  const totalExpenseVal = Object.values(spend).reduce((a,b)=>a+b,0);
+  document.getElementById('previewDonutTotal').textContent = fmt(totalExpenseVal);
+
+  const total = totalExpenseVal || 1;
   const colorOf = name => {
     const found = state.expenseCats.find(c=>c.name===name) || state.incomeCats.find(c=>c.name===name);
     return found ? found.color : '#9AA1AC';
@@ -1523,7 +1575,7 @@ function renderAnalytics(){
     stops.push(`${colorOf(name)} ${start}% ${end}%`);
   });
   document.getElementById('donutChart').style.background = stops.length ? `conic-gradient(${stops.join(',')})` : 'var(--card-2)';
-  document.getElementById('donutTotal').textContent = fmt(Object.values(spend).reduce((a,b)=>a+b,0));
+  document.getElementById('donutTotal').textContent = fmt(totalExpenseVal);
 
   const legend = document.getElementById('legendList');
   legend.innerHTML = '';
@@ -1531,13 +1583,30 @@ function renderAnalytics(){
     const pct = Math.round(amt/total*100);
     const row = document.createElement('div');
     row.className = 'legend-row';
-    row.innerHTML = `<div class="flex items-center gap-2"><span class="chip-dot" style="width:8px;height:8px;background:${colorOf(name)}"></span><span class="text-[13px]">${name}</span></div><div class="flex items-center gap-3"><span class="text-[11px]" style="color:var(--text-faint)">${pct}%</span><span class="tabular text-[13px] font-semibold">${fmt(amt)}</span></div>`;
+    row.innerHTML = `<div class="flex items-center gap-2"><span class="chip-dot" style="width:8px;height:8px;background:${colorOf(name)}"></span><span class="text-[12px]">${name}</span></div><div class="flex items-center gap-3"><span class="text-[10px]" style="color:var(--text-faint)">${pct}%</span><span class="tabular text-[12px] font-semibold">${fmt(amt)}</span></div>`;
     legend.appendChild(row);
   });
 
+  const currentTxs = state.transactions.filter(t => isWithinFinancialMonth(t.date, 0));
+  
+  const previewRow = document.getElementById('txPreviewRow');
+  if(currentTxs.length === 0) {
+    previewRow.innerHTML = '<span class="text-[10px] text-slate-500">אין תנועות בחודש זה</span>';
+  } else {
+    const latest = currentTxs[0];
+    const sign = latest.type==='income' ? '+' : '−';
+    const col = latest.type==='income' ? 'var(--mint)' : 'var(--coral)';
+    previewRow.innerHTML = `
+      <div class="flex items-center gap-2">
+        <span class="chip-dot" style="width:8px;height:8px;background:${latest.color}"></span>
+        <span class="font-medium truncate max-w-[180px]">${latest.desc || latest.cat}</span>
+      </div>
+      <span class="tabular font-bold" style="color:${col}">${sign}${fmt(latest.amount).replace('₪','')} ₪</span>
+    `;
+  }
+
   const txList = document.getElementById('txList');
   txList.innerHTML = '';
-  const currentTxs = state.transactions.filter(t => isWithinFinancialMonth(t.date, 0));
   if(currentTxs.length === 0) {
     txList.innerHTML = '<p class="text-xs text-center text-slate-500 py-3">אין תנועות בחודש זה</p>';
   } else {
@@ -1550,14 +1619,14 @@ function renderAnalytics(){
         <div class="flex items-center gap-2">
           <span class="chip-dot" style="width:8px;height:8px;background:${t.color}"></span>
           <div>
-            <p class="text-[13px] font-medium">${t.desc || t.cat}</p>
+            <p class="text-[12px] font-medium">${t.desc || t.cat}</p>
             <p class="text-[10px]" style="color:var(--text-faint)">${t.cat} • ${t.date || 'היום'}</p>
           </div>
         </div>
-        <div class="flex items-center gap-2.5">
-          <span class="tabular text-[13px] font-bold" style="color:${col}">${sign}${fmt(t.amount).replace('₪','')} ₪</span>
-          <button onclick="editTransaction(${t.id})" class="text-[11px] text-slate-400 hover:text-white cursor-pointer">ערוך</button>
-          <button onclick="deleteTransaction(${t.id})" class="text-[11px] text-rose-400 cursor-pointer">מחק</button>
+        <div class="flex items-center gap-2">
+          <span class="tabular text-[12px] font-bold" style="color:${col}">${sign}${fmt(t.amount).replace('₪','')} ₪</span>
+          <button onclick="editTransaction(${t.id})" class="text-[10px] text-slate-400 hover:text-white cursor-pointer">ערוך</button>
+          <button onclick="deleteTransaction(${t.id})" class="text-[10px] text-rose-400 cursor-pointer">מחק</button>
         </div>`;
       txList.appendChild(row);
     });
@@ -1578,13 +1647,13 @@ function renderAnalytics(){
         <div class="flex items-center gap-2">
           <span class="chip-dot" style="width:8px;height:8px;background:${t.color}"></span>
           <div>
-            <p class="text-[13px] font-medium">${t.desc || t.cat}</p>
+            <p class="text-[12px] font-medium">${t.desc || t.cat}</p>
             <p class="text-[10px]" style="color:var(--text-faint)">${t.cat} • ${t.date}</p>
           </div>
         </div>
-        <div class="flex items-center gap-2.5">
-          <span class="tabular text-[13px] font-bold" style="color:${col}">${sign}${fmt(t.amount).replace('₪','')} ₪</span>
-          <button onclick="deleteTransaction(${t.id})" class="text-[11px] text-rose-400 cursor-pointer">מחק</button>
+        <div class="flex items-center gap-2">
+          <span class="tabular text-[12px] font-bold" style="color:${col}">${sign}${fmt(t.amount).replace('₪','')} ₪</span>
+          <button onclick="deleteTransaction(${t.id})" class="text-[10px] text-rose-400 cursor-pointer">מחק</button>
         </div>`;
       archiveList.appendChild(row);
     });

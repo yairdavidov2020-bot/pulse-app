@@ -293,21 +293,22 @@
     </div>
 </div>
 
-<!-- מודל הסבר לעוזר הקולי והטקסט החכם -->
+<!-- מודל הסבר להכתבה החכמה -->
 <div id="voiceHelpModal" class="modal-overlay hidden">
     <div class="summary-card p-5 max-w-xs w-full space-y-3 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-            <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-microphone ml-1"></i> מדריך הוספה חכמה</h3>
+            <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-microphone ml-1"></i> מדריך הכתבה חכמה</h3>
             <button onclick="closeVoiceHelpModal()" class="icon-btn" style="width:28px;height:28px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
         <div class="space-y-2 text-[11px] leading-relaxed text-slate-300">
-            <p>המערכת מזהה אוטומטית <span class="text-white font-semibold">סכום</span>, <span class="text-white font-semibold">קטגוריה</span> ו<span class="text-white font-semibold">תאריך במילים</span>.</p>
-            <p>תוכל להשתמש ב<span class="text-emerald-400 font-bold">כפתור המיקרופון הקולי</span> או להקליד ישירות ב<span class="text-emerald-400 font-bold">תיבת הטקסט החכמה</span>!</p>
+            <p>המערכת מזהה אוטומטית את 3 העמודות המרכזיות: <span class="text-white font-semibold">סכום</span>, <span class="text-white font-semibold">קטגוריה</span> ו<span class="text-white font-semibold">תאריך</span>.</p>
+            <p>הקטגוריות מזוהות מתוך <span class="text-emerald-400 font-bold">הקטגוריות הקיימות באפליקציה</span> (כולל קטגוריות ברירת המחדל או קטגוריות אישיות שהוספת בעצמך).</p>
+            <p>ניתן לכתוב בחופשיות או ללחוץ על מיקרופון המקלדת במכשיר להכתבה קולית!</p>
             <div class="bg-[var(--card-2)] p-2.5 rounded-xl border border-[var(--border)] space-y-1">
-                <p class="font-bold text-emerald-400">דוגמאות:</p>
-                <p>• <span class="text-white font-medium">"50 שקל קניות אתמול"</span></p>
-                <p>• <span class="text-white font-medium">"ב-22 לאוגוסט 150 קיוסק"</span></p>
-                <p>• <span class="text-white font-medium">"5000 משכורת היום"</span></p>
+                <p class="font-bold text-emerald-400">דוגמאות לתצורה:</p>
+                <p>• <span class="text-white font-medium">"50 קניות 18.8"</span> (18 באוגוסט)</p>
+                <p>• <span class="text-white font-medium">"150 קיוסק אתמול"</span></p>
+                <p>• <span class="text-white font-medium">"4000 משכורת ב-1 לחודש"</span></p>
             </div>
         </div>
         <button onclick="closeVoiceHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי, תודה!</button>
@@ -545,10 +546,10 @@
         </div>
       </section>
 
-      <!-- הוספה חכמה ומיקרופון קולי -->
+      <!-- הוספה חכמה והכתבה -->
       <section class="mt-2">
         <div class="flex items-center justify-between mb-2.5">
-          <h2 class="text-[14px] font-semibold">הוספה חכמה</h2>
+          <h2 class="text-[14px] font-semibold">הכתבה חכמה ותנועות</h2>
           <div class="flex items-center gap-2">
             <button onclick="openCategoriesModal()" class="text-[11px] font-semibold px-2.5 py-1.5 rounded-xl bg-[var(--card)] border border-[var(--border)] text-slate-300 hover:text-white transition flex items-center gap-1 shadow-sm cursor-pointer">
               <i class="fa-solid fa-tags"></i> קטגוריות
@@ -559,9 +560,8 @@
           </div>
         </div>
 
-        <!-- עוזר קולי עם כפתור מיקרופון -->
         <div class="ai-voice-box mb-3.5">
-          <button id="micBtn" class="mic-btn" onclick="toggleVoiceRecognition()" title="עוזר קולי AI">
+          <button id="micBtn" class="mic-btn" onclick="toggleVoiceRecognition()" title="הכתבה קולית">
             <span class="mic-ring"></span><span class="mic-ring d2"></span>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
           </button>
@@ -573,25 +573,25 @@
               </h4>
               <button onclick="openVoiceHelpModal()" class="w-5 h-5 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[10px] font-bold flex items-center justify-center text-emerald-400 hover:bg-[var(--card)] transition cursor-pointer" title="עזרה">?</button>
             </div>
-            <p id="micStatus" class="text-[11px] mt-0.5 leading-relaxed" style="color:var(--text-dim)">לחץ על המיקרופון ואמר סכום וקטגוריה</p>
+            <p id="micStatus" class="text-[11px] mt-0.5 leading-relaxed" style="color:var(--text-dim)">לחץ על המיקרופון ואמר סכום, קטגוריה ותאריך</p>
           </div>
         </div>
 
-        <!-- תיבת טקסט חכמה -->
         <div class="summary-card p-4 space-y-3">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
               <span class="text-emerald-400 text-sm">✨</span>
-              <span class="text-xs font-bold">או הקלד תנועה בשפה חופשית</span>
+              <span class="text-xs font-bold">הכתבה חכמה בטקסט</span>
             </div>
+            <button onclick="openVoiceHelpModal()" class="w-5 h-5 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[10px] font-bold flex items-center justify-center text-emerald-400 hover:bg-[var(--card)] transition cursor-pointer" title="עזרה">?</button>
           </div>
           
           <div class="field-shell flex items-center px-3.5 py-3">
-            <input id="smartTextInput" type="text" placeholder="למשל: 50 שקל קניות אתמול, או 4000 משכורת..." class="w-full bg-transparent outline-none text-xs font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
+            <input id="smartTextInput" type="text" placeholder="כתוב בצורה חופשית..." class="w-full bg-transparent outline-none text-xs font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
           </div>
 
           <div class="flex items-center justify-between pt-1">
-            <span class="text-[10px] text-slate-400">ניתן ללחוץ על מיקרופון המקלדת במכשיר!</span>
+            <span class="text-[10px] text-slate-400">ניתן להשתמש במיקרופון במקלדת!</span>
             <button onclick="processSmartText()" class="save-btn px-5 py-2.5 rounded-xl text-xs font-bold cursor-pointer">פענח והוסף</button>
           </div>
         </div>
@@ -1279,7 +1279,7 @@ function toggleVoiceRecognition() {
       if (speechSafetyTimer) clearTimeout(speechSafetyTimer);
       btn.classList.remove('listening');
       if (!speechResultProcessed) {
-        status.textContent = "לחץ על המיקרופון ואמר סכום וקטגוריה";
+        status.textContent = "לחץ על המיקרופון ואמר סכום, קטגוריה ותאריך";
       }
     };
 
@@ -1295,7 +1295,7 @@ function resetVoiceUI(){
   const btn = document.getElementById('micBtn');
   if(btn) btn.classList.remove('listening');
   const status = document.getElementById('micStatus');
-  if(status) status.textContent = 'לחץ על המיקרופון ואמר סכום וקטגוריה';
+  if(status) status.textContent = 'לחץ על המיקרופון ואמר סכום, קטגוריה ותאריך';
   if(speechSafetyTimer) clearTimeout(speechSafetyTimer);
   activeRecognition = null;
 }
@@ -1303,7 +1303,7 @@ function resetVoiceUI(){
 function processSmartText() {
   const input = document.getElementById('smartTextInput');
   const text = input.value.trim();
-  if(!text) { alert("נא להזין טקסט לפענוח (למשל: 50 שקל קניות אתמול)"); return; }
+  if(!text) { alert("נא להזין טקסט לפענוח (למשל: 50 קניות 18.8)"); return; }
   parseVoiceCommandForDescModal(text);
   input.value = '';
 }
@@ -1330,30 +1330,50 @@ function parseVoiceCommandForDescModal(text){
   let txDate = new Date();
   let dateFound = false;
 
-  for (let [monthName, monthIdx] of Object.entries(hebrewMonths)) {
-    if (cleanText.includes(monthName)) {
-      let dayNum = 0;
-      const numericDateMatch = cleanText.match(new RegExp(`(ה-?|ב-?)?(\\d+)\\s*(ב|ל)?\\s*${monthName}`));
-      if (numericDateMatch) {
-        dayNum = parseInt(numericDateMatch[2]);
-        dateFound = true;
-      } else {
-        for (let [wordDay, numVal] of Object.entries(hebrewDaysMap)) {
-          if (cleanText.includes(wordDay + ' ב' + monthName) || cleanText.includes(wordDay + ' ל' + monthName) || cleanText.includes(wordDay + ' ' + monthName)) {
-            dayNum = numVal;
-            dateFound = true;
-            break;
+  // זיהוי תאריך בתצורת DD.MM (למשל 18.8)
+  const dotDateMatch = cleanText.match(/(\d{1,2})\.(\d{1,2})/);
+  if (dotDateMatch) {
+    let dayNum = parseInt(dotDateMatch[1]);
+    let monthNum = parseInt(dotDateMatch[2]);
+    if (dayNum >= 1 && dayNum <= 31 && monthNum >= 1 && monthNum <= 12) {
+      let year = txDate.getFullYear();
+      let targetDate = new Date(year, monthNum - 1, dayNum);
+      if (targetDate > txDate) {
+        targetDate.setFullYear(year - 1);
+      }
+      txDate = targetDate;
+      dateFound = true;
+      cleanText = cleanText.replace(dotDateMatch[0], ' ');
+    }
+  }
+
+  if (!dateFound) {
+    for (let [monthName, monthIdx] of Object.entries(hebrewMonths)) {
+      if (cleanText.includes(monthName)) {
+        let dayNum = 0;
+        const numericDateMatch = cleanText.match(new RegExp(`(ה-?|ב-?)?(\\d+)\\s*(ב|ל)?\\s*${monthName}`));
+        if (numericDateMatch) {
+          dayNum = parseInt(numericDateMatch[2]);
+          dateFound = true;
+          cleanText = cleanText.replace(numericDateMatch[0], ' ');
+        } else {
+          for (let [wordDay, numVal] of Object.entries(hebrewDaysMap)) {
+            if (cleanText.includes(wordDay + ' ב' + monthName) || cleanText.includes(wordDay + ' ל' + monthName) || cleanText.includes(wordDay + ' ' + monthName)) {
+              dayNum = numVal;
+              dateFound = true;
+              break;
+            }
           }
         }
-      }
-      if (dateFound && dayNum > 0) {
-        let year = txDate.getFullYear();
-        let targetDate = new Date(year, monthIdx, dayNum);
-        if (targetDate > txDate) {
-          targetDate.setFullYear(year - 1);
+        if (dateFound && dayNum > 0) {
+          let year = txDate.getFullYear();
+          let targetDate = new Date(year, monthIdx, dayNum);
+          if (targetDate > txDate) {
+            targetDate.setFullYear(year - 1);
+          }
+          txDate = targetDate;
+          break;
         }
-        txDate = targetDate;
-        break;
       }
     }
   }
@@ -1366,22 +1386,25 @@ function parseVoiceCommandForDescModal(text){
     }
   }
 
+  // זיהוי סכום
   let amount = 0;
   const currencyMatch = cleanText.match(/(\d+[\.,]?\d*)\s*(שקל|שקלים|₪)/);
   if (currencyMatch) {
     amount = parseFloat(currencyMatch[1].replace(',', '.'));
+    cleanText = cleanText.replace(currencyMatch[0], ' ');
   } else {
-    const allNumbers = cleanText.match(/\d+/g);
+    const allNumbers = cleanText.match(/\d+[\.,]?\d*/g);
     if (allNumbers && allNumbers.length > 0) {
-      amount = parseFloat(allNumbers[allNumbers.length - 1]);
+      amount = parseFloat(allNumbers[0].replace(',', '.'));
     }
   }
 
   if(!amount || isNaN(amount)) {
-    alert("לא זיהיתי סכום ברור. נסה למשל: '50 שקל קניות'.");
+    alert("לא זיהיתי סכום ברור. נסה למשל: '50 קניות 18.8'.");
     return;
   }
 
+  // זיהוי קטגוריה מתוך הקטגוריות הקיימות במערכת (ברירת מחדל או שהמשתמש הוסיף)
   let targetMode = 'expense';
   if(cleanText.includes("משכורת") || cleanText.includes("קיבלתי") || cleanText.includes("הכנסתי") || cleanText.includes("הרווחתי")){ 
     targetMode = 'income'; 

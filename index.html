@@ -243,7 +243,7 @@
     </div>
 </div>
 
-<!-- שלב 2: מסך ניהול קטגוריות מלא למשתמשים חדשים בלבד -->
+<!-- שלב 2: מסך ניהול קטגוריות מלא למשתמשים חדשים בלבד (ללא גלילה - הכל פתוח בחלונית) -->
 <div id="onboarding-screen-2" class="full-page-onboarding hidden">
     <div class="onboarding-content-box text-right space-y-3 p-4 bg-[var(--card)] rounded-3xl border border-[var(--border)] shadow-2xl">
         <div class="text-center space-y-1">
@@ -254,9 +254,9 @@
             </p>
         </div>
 
-        <div class="space-y-2">
+        <div class="space-y-1.5">
             <p class="text-[10px] font-semibold text-violet-400">קטגוריות קיימות:</p>
-            <div id="onboardingCatList" class="grid grid-cols-2 gap-1.5 max-h-[140px] overflow-y-auto pr-1"></div>
+            <div id="onboardingCatList" class="grid grid-cols-2 gap-1.5"></div>
         </div>
 
         <div class="border-t border-[var(--border)] pt-2 space-y-2">
@@ -286,11 +286,11 @@
     </div>
 </div>
 
-<!-- מודל עזרה מפורט ליד ההגדרות -->
+<!-- מודל שימוש יעיל באפליקציה (ללא סימן שאלה, מעודכן לפי ההנחיות) -->
 <div id="generalHelpModal" class="modal-overlay hidden">
     <div class="summary-card p-5 max-w-sm w-full space-y-3.5 shadow-2xl text-right max-h-[85vh] overflow-y-auto">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-            <h3 class="text-xs font-bold text-violet-400"><i class="fa-solid fa-circle-question ml-1"></i> מדריך שימוש מקיף - Pulse</h3>
+            <h3 class="text-xs font-bold text-violet-400"><i class="fa-solid fa-lightbulb ml-1"></i> לשימוש יעיל באפליקציה</h3>
             <button onclick="closeGeneralHelpModal()" class="icon-btn" style="width:28px;height:28px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
         <div class="space-y-2.5 text-[11px] leading-relaxed text-slate-300">
@@ -303,12 +303,8 @@
                 <p>ניתן להגדיר תקציב חודשי לכל קטגוריה בהגדרות או בניהול הקטגוריות. האפליקציה תציג מעקב התקדמות וחריגה עבור כל קטגוריה במסך תמונת המצב.</p>
             </div>
             <div class="bg-[var(--card-2)] p-2.5 rounded-xl border border-[var(--border)] space-y-1">
-                <p class="font-bold text-amber-400">💰 עובר ושב וחיסכון:</p>
-                <p>היתרה ההתחלתית בעו״ש נכללת בחיסכון הכולל שלך באפליקציה כיוון שמדובר בכסף נזיל שקיים בחשבונך. במגמה ההיסטורית, יתרה זו נחשבת כהכנסה התחלתית.</p>
-            </div>
-            <div class="bg-[var(--card-2)] p-2.5 rounded-xl border border-[var(--border)] space-y-1">
-                <p class="font-bold text-violet-400">📱 מעבר מהיר והתקנה:</p>
-                <p>ניתן להחליק עם האצבע ימינה ושמאלה על המסך כדי לעבור מהר בין מסך הבית לתמונת המצב. באנדרואיד ניתן להוסיף את האפליקציה למסך הבית דרך שלוש הנקודות ואז הוסף סימניה לקיצור דרך.</p>
+                <p class="font-bold text-amber-400">📅 מהו חודש פיננסי?</p>
+                <p>חודש פיננסי נועד להתאים את מעקב ההוצאות למחזור האמיתי שלך. אם המשכורת שלך נכנסת או החיובים בכרטיס האשראי יורדים ביום מסוים בחודש (למשל ב-10 או ב-15 לחודש), תוכל לבחור את היום הזה, והאפליקציה תחשב את הסיכומים והתקציבים שלך בדיוק לפיו.</p>
             </div>
         </div>
         <button onclick="closeGeneralHelpModal()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs">הבנתי, תודה רבה!</button>
@@ -354,7 +350,7 @@
     </div>
 </div>
 
-<!-- מודל קומפקטי ומאוחד לבחירה וניהול קטגוריות ותקציבים -->
+<!-- מודל ניהול קטגוריות ותקציבים (ללא גלילה פנימית - מוצג במלואו) -->
 <div id="categoriesModal" class="modal-overlay hidden">
     <div class="summary-card p-3.5 max-w-sm w-full space-y-2.5 shadow-2xl">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-1.5">
@@ -364,7 +360,7 @@
        
         <div class="space-y-1">
             <p class="text-[9px] font-semibold text-slate-400">קטגוריות ותקציבים קיימים:</p>
-            <div id="modalCatList" class="grid grid-cols-1 gap-1.5 pr-0.5 max-h-[140px] overflow-y-auto"></div>
+            <div id="modalCatList" class="grid grid-cols-1 gap-1.5 pr-0.5"></div>
         </div>
 
         <div class="border-t border-[var(--border)] pt-2 space-y-1.5">
@@ -481,29 +477,22 @@
 
 <div class="app-frame">
 
-  <!-- HEADER -->
-  <div class="flex items-center justify-between px-5 pt-10 pb-2" id="headerHome">
+  <!-- HEADER: סרגל עליון אחיד ויורד קצת למטה לנוחות לחיצה -->
+  <div class="flex items-center justify-between px-5 pt-10 pb-4" id="headerHome">
     <div class="flex items-center gap-2">
       <svg width="22" height="22" viewBox="0 0 26 26" fill="none"><circle cx="13" cy="13" r="12" stroke="var(--mint)" stroke-width="1.6" opacity=".5"/><path d="M4 13H9L11 7L15 19L17 13H22" stroke="var(--mint)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span class="text-base font-bold tracking-tight gradient-text">Pulse</span>
     </div>
     <div class="flex items-center gap-2">
-      <button onclick="openGeneralHelpModal()" class="icon-btn" title="מדריך למשתמש">
-        <i class="fa-solid fa-question text-sm text-violet-400"></i>
+      <button onclick="openGeneralHelpModal()" class="text-[11px] font-semibold px-2.5 py-1.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center gap-1.5 cursor-pointer shadow-sm">
+        <i class="fa-solid fa-lightbulb text-xs"></i> לשימוש יעיל
       </button>
-      <div class="flex flex-col items-end">
-        <div class="flex items-center gap-1.5">
-          <button onclick="openSettingsModal()" class="icon-btn" title="הגדרות">
-            <i class="fa-solid fa-gear text-sm"></i>
-          </button>
-          <button onclick="document.documentElement.classList.toggle('light')" class="icon-btn" title="מצב תצוגה">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
-          </button>
-        </div>
-        <button onclick="showPwaHelp()" class="text-[9px] text-emerald-400 hover:underline mt-0.5 cursor-pointer font-medium">
-          הוסף למסך הבית
-        </button>
-      </div>
+      <button onclick="openSettingsModal()" class="icon-btn" title="הגדרות">
+        <i class="fa-solid fa-gear text-sm"></i>
+      </button>
+      <button onclick="document.documentElement.classList.toggle('light')" class="icon-btn" title="מצב תצוגה">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+      </button>
     </div>
   </div>
 
@@ -566,7 +555,7 @@
               <i class="fa-solid fa-tags"></i> קטגוריות
             </button>
             <button onclick="openRecurringModal()" class="text-[10px] font-semibold px-2 py-1 rounded-lg bg-[var(--card)] border border-[var(--border)] text-amber-400 hover:opacity-80 transition flex items-center gap-1 cursor-pointer">
-              <i class="fa-solid fa-repeat"></i> קבע
+              <i class="fa-solid fa-repeat"></i> הוראות קבע
             </button>
           </div>
         </div>
@@ -776,7 +765,6 @@ function getLocalDateString(d) {
 }
 
 window.onload = function() {
-  // טעינה מהמפתח המקורי v52 כדי לא לאבד נתונים של משתמשים קיימים
   const saved = localStorage.getItem('pulse_state_v52');
   if(saved) {
     state = JSON.parse(saved);
@@ -785,7 +773,6 @@ window.onload = function() {
     sortTransactions();
   }
   
-  // בדיקה האם מדובר במשתמש קיים או חדש
   if(!state.userName || state.baseline === null || state.baseline === undefined) {
     document.getElementById('onboarding-screen-1').classList.remove('hidden');
     document.getElementById('onboarding-screen-2').classList.add('hidden');
@@ -822,11 +809,11 @@ function setupSwipeGestures() {
     const diff = touchEndX - touchStartX;
     if (Math.abs(diff) > 70) {
       const activeScreen = document.querySelector('.screen.active');
-      if (diff > 0) { // החלקה ימינה -> מעבר לבית
+      if (diff > 0) { 
         if (activeScreen && activeScreen.id === 'screen-analytics') {
           showScreen('home');
         }
-      } else { // החלקה שמאלה -> מעבר לתמונת מצב
+      } else { 
         if (activeScreen && activeScreen.id === 'screen-home') {
           showScreen('analytics');
         }

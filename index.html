@@ -267,7 +267,7 @@
 
         <div class="space-y-1">
             <p class="text-[10px] font-semibold text-violet-400">קטגוריות קיימות:</p>
-            <div id="onboardingCatList" class="grid grid-cols-2 gap-1.5"></div>
+            <div id="onboardingCatList" class="space-y-1 max-h-[140px] overflow-y-auto"></div>
         </div>
 
         <div class="border-t border-[var(--border)] pt-1.5 space-y-1.5">
@@ -337,7 +337,7 @@
             </div>
             <div class="bg-[var(--card-2)] p-2.5 rounded-xl border border-[var(--border)] space-y-1">
                 <p class="font-bold text-blue-400">🤖 באנדרואיד (כרום):</p>
-                <p>לחץ על שלוש הנקודות בפינה העליונה ובחר <span class="text-white font-semibold">"התקן אפליקציה"</span> או <span class="text-white font-semibold">"הוסף למסך הבית"</span>.</p>
+                <p>לחץ על שלוש הנקודות בפינה העליונה ובחר <span class="text-white font-semibold">"התקן אפליקציה"</span>, <span class="text-white font-semibold">"הוסף למסך הבית"</span> או <span class="text-white font-semibold">"הוסף סימניה לקיצור דרך"</span>.</p>
             </div>
         </div>
         <button onclick="closePwaModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי, תודה!</button>
@@ -383,36 +383,36 @@
     </div>
 </div>
 
-<!-- מודל ניהול קטגוריות ותקציבים (בלי גלילה לחלוטין - קומפקטי ב-2 טורים) -->
+<!-- מודל ניהול קטגוריות ותקציבים (עם גלילה רגילה ונוחה) -->
 <div id="categoriesModal" class="modal-overlay hidden">
-    <div class="summary-card p-3.5 max-w-md w-full space-y-2 shadow-2xl">
-        <div class="flex items-center justify-between border-b border-[var(--border)] pb-1.5">
+    <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl">
+        <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
             <h3 class="text-xs font-bold text-violet-400">ניהול קטגוריות ותקציבים</h3>
-            <button onclick="closeCategoriesModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
+            <button onclick="closeCategoriesModal()" class="icon-btn" style="width:28px;height:28px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
        
-        <div class="space-y-1">
-            <p class="text-[9px] font-semibold text-slate-400">קטגוריות ותקציבים קיימים:</p>
-            <div id="modalCatList" class="grid grid-cols-2 gap-1"></div>
+        <div class="space-y-1.5">
+            <p class="text-[10px] font-semibold text-slate-400">קטגוריות ותקציבים קיימים:</p>
+            <div id="modalCatList" class="space-y-1.5 max-h-[180px] overflow-y-auto"></div>
         </div>
 
-        <div class="border-t border-[var(--border)] pt-1.5 space-y-1.5">
-            <p class="text-[9px] font-semibold text-emerald-400">הוסף קטגוריה ותקציב חדש</p>
-            <div class="grid grid-cols-2 gap-1">
-                <div class="field-shell px-2 py-1">
-                    <input id="newCatNameInput" placeholder="שם חדש..." class="w-full bg-transparent outline-none font-bold text-[10px]" style="color:var(--text)" />
+        <div class="border-t border-[var(--border)] pt-2.5 space-y-2">
+            <p class="text-[10px] font-semibold text-emerald-400">הוסף קטגוריה ותקציב חדש</p>
+            <div class="grid grid-cols-2 gap-2">
+                <div class="field-shell px-2.5 py-1.5">
+                    <input id="newCatNameInput" placeholder="שם חדש..." class="w-full bg-transparent outline-none font-bold text-[11px]" style="color:var(--text)" />
                 </div>
-                <div class="field-shell px-2 py-1">
-                    <input id="newCatBudgetInput" type="tel" inputmode="decimal" placeholder="תקציב ₪ (אופציונלי)" class="w-full bg-transparent outline-none text-[10px]" style="color:var(--text)" />
+                <div class="field-shell px-2.5 py-1.5">
+                    <input id="newCatBudgetInput" type="tel" inputmode="decimal" placeholder="תקציב ₪ (אופציונלי)" class="w-full bg-transparent outline-none text-[11px]" style="color:var(--text)" />
                 </div>
             </div>
-            <div class="flex items-center gap-1 justify-between">
-                <input type="color" id="freeColorPicker" value="#7FE8C6" onchange="selectedNewCatColor = this.value; document.querySelectorAll('#colorPalette .color-swatch').forEach(s=>s.classList.remove('selected'));" class="w-7 h-6 rounded-lg bg-transparent cursor-pointer border border-[var(--border)] flex-shrink-0" />
-                <button onclick="addNewCategoryFromModal()" class="save-btn px-3 py-1.5 rounded-xl font-bold text-[10px] flex-1">הוסף קטגוריה</button>
+            <div class="flex items-center gap-2">
+                <input type="color" id="freeColorPicker" value="#7FE8C6" onchange="selectedNewCatColor = this.value; document.querySelectorAll('#colorPalette .color-swatch').forEach(s=>s.classList.remove('selected'));" class="w-8 h-8 rounded-xl bg-transparent cursor-pointer border border-[var(--border)] flex-shrink-0" />
+                <button onclick="addNewCategoryFromModal()" class="save-btn px-4 py-2 rounded-xl font-bold text-[11px] flex-1">הוסף קטגוריה</button>
             </div>
              
             <div>
-                <p class="text-[8px] mb-0.5 text-slate-400">בחר צבע לקטגוריה:</p>
+                <p class="text-[9px] mb-1 text-slate-400">בחר צבע לקטגוריה:</p>
                 <div id="colorPalette"></div>
             </div>
         </div>
@@ -530,13 +530,13 @@
   <section id="screen-home" class="screen active">
     <main class="px-4 pb-4 pt-0 space-y-3">
       
-      <!-- שני כפתורי הסבר קטנים במיוחד, אחד מתחת לשני ממש מתחת לסרגל העליון -->
-      <section class="flex flex-col gap-1 px-0.5">
-        <button onclick="openGeneralHelpModal()" class="text-[10px] font-medium px-3 py-1.5 rounded-xl bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-between cursor-pointer shadow-sm">
+      <!-- שני כפתורי הסבר מכווצים ומוצמדים לצד שמאל -->
+      <section class="flex flex-col gap-1 px-0.5 mr-auto w-fit">
+        <button onclick="openGeneralHelpModal()" class="text-[10px] font-medium px-3 py-1.5 rounded-xl bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-between gap-3 cursor-pointer shadow-sm">
           <span><i class="fa-solid fa-lightbulb ml-1"></i> שימוש יעיל באפליקציה</span>
           <i class="fa-solid fa-chevron-left text-[8px] opacity-75"></i>
         </button>
-        <button onclick="openPwaHelpModal()" class="text-[10px] font-medium px-3 py-1.5 rounded-xl bg-[var(--card)] border border-[var(--border)] text-emerald-400 hover:text-white transition flex items-center justify-between cursor-pointer shadow-sm">
+        <button onclick="openPwaHelpModal()" class="text-[10px] font-medium px-3 py-1.5 rounded-xl bg-[var(--card)] border border-[var(--border)] text-emerald-400 hover:text-white transition flex items-center justify-between gap-3 cursor-pointer shadow-sm">
           <span><i class="fa-solid fa-mobile-screen-button ml-1"></i> הוספה למסך הבית</span>
           <i class="fa-solid fa-chevron-left text-[8px] opacity-75"></i>
         </button>
@@ -935,16 +935,16 @@ function renderOnboardingCategoryList() {
   
   allCats.forEach(c => {
     const row = document.createElement('div');
-    row.className = 'flex items-center justify-between px-2 py-1 rounded-md border bg-[var(--card-2)] border-[var(--border)]';
+    row.className = 'flex items-center justify-between px-2.5 py-1.5 rounded-lg border bg-[var(--card-2)] border-[var(--border)]';
     row.innerHTML = `
-      <div class="flex items-center gap-1.5 min-w-0 flex-1">
-        <span class="w-2 h-2 rounded-full flex-shrink-0" style="background:${c.color}"></span>
-        <div class="truncate text-[8px]">
-          <p class="font-bold truncate">${c.name}</p>
-          <p class="text-[7px] text-slate-400">תקציב: ${fmt(c.budget || 0)}</p>
+      <div class="flex items-center gap-2 min-w-0 flex-1">
+        <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:${c.color}"></span>
+        <div class="truncate text-[10px] flex-1 flex items-center justify-between">
+          <span class="font-bold truncate">${c.name}</span>
+          <span class="text-slate-400 text-[9px]">תקציב: ${fmt(c.budget || 0)}</span>
         </div>
       </div>
-      <button onclick="deleteCatOnboarding('${c.name.replace(/'/g, "\\'")}')" class="text-rose-400 text-[8px] px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--border)] hover:bg-rose-500/10 transition cursor-pointer flex-shrink-0">
+      <button onclick="deleteCatOnboarding('${c.name.replace(/'/g, "\\'")}')" class="text-rose-400 text-[10px] px-2 py-1 rounded bg-[var(--card)] border border-[var(--border)] hover:bg-rose-500/10 transition cursor-pointer flex-shrink-0 mr-2">
         <i class="fa-solid fa-trash"></i>
       </button>
     `;
@@ -1315,16 +1315,16 @@ function renderModalCategoryList(){
   
   allCats.forEach((c) => {
     const row = document.createElement('div');
-    row.className = `flex items-center justify-between px-2 py-1 rounded-md border bg-[var(--card-2)] border-[var(--border)]`;
+    row.className = `flex items-center justify-between px-2.5 py-1.5 rounded-lg border bg-[var(--card-2)] border-[var(--border)]`;
     row.innerHTML = `
-      <div class="flex items-center gap-1 flex-1 min-w-0">
-        <span class="w-2 h-2 rounded-full flex-shrink-0" style="background:${c.color}"></span>
-        <div class="text-[8px] min-w-0 flex-1">
-          <p class="font-bold truncate">${c.name}</p>
-          <p class="text-[7px] text-slate-400">תקציב: <input type="tel" inputmode="decimal" value="${c.budget || 0}" onchange="updateCategoryBudget('${c.name.replace(/'/g, "\\'")}', this.value)" class="w-10 bg-transparent border-b border-[var(--border)] font-bold text-[8px] outline-none tabular text-emerald-400" /></p>
+      <div class="flex items-center gap-2 flex-1 min-w-0">
+        <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:${c.color}"></span>
+        <div class="text-[10px] min-w-0 flex-1 flex items-center justify-between">
+          <span class="font-bold truncate">${c.name}</span>
+          <span class="text-slate-400 text-[9px]">תקציב: <input type="tel" inputmode="decimal" value="${c.budget || 0}" onchange="updateCategoryBudget('${c.name.replace(/'/g, "\\'")}', this.value)" class="w-14 bg-transparent border-b border-[var(--border)] font-bold text-[10px] outline-none tabular text-emerald-400 text-left" /></span>
         </div>
       </div>
-      <button onclick="deleteCatModal('${c.name.replace(/'/g, "\\'")}')" class="text-rose-400 text-[8px] px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--border)] hover:bg-rose-500/10 transition cursor-pointer flex-shrink-0">
+      <button onclick="deleteCatModal('${c.name.replace(/'/g, "\\'")}')" class="text-rose-400 text-[10px] px-2 py-1 rounded bg-[var(--card)] border border-[var(--border)] hover:bg-rose-500/10 transition cursor-pointer flex-shrink-0 mr-2">
         <i class="fa-solid fa-trash"></i>
       </button>
     `;

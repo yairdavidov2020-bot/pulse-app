@@ -10,6 +10,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Pulse">
 <meta name="application-name" content="Pulse">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="manifest" href='data:application/manifest+json;utf8,{"name":"Pulse","short_name":"Pulse","start_url":"/","display":"standalone","background_color":"%2305070B","theme_color":"%2305070B","icons":[{"src":"icon.png","sizes":"512x512","type":"image/png"}]}'>
 
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -49,7 +51,6 @@
     -webkit-font-smoothing: antialiased; 
   }
   
-  /* מסך מלא אמיתי מקצה לקצה במחשב ובנייד */
   .app-frame{ 
     width: 100%; 
     height: 100%;
@@ -236,7 +237,6 @@
 
   .onboarding-content-box { position: relative; z-index: 2; width: 100%; max-width: 380px; margin: auto; display: flex; flex-direction: column; gap: 10px; max-height: 90vh; overflow-y: auto; }
 
-  /* סרגל ניווט תחתון מתוח עד הסוף התחתון */
   .bottom-nav{ 
     grid-row: 3;
     display: flex; 
@@ -658,7 +658,7 @@
           </div>
         </section>
 
-        <!-- כרטיס היתרה - כיתוב ומספרים גדולים ומנופחים במיוחד -->
+        <!-- כרטיס היתרה -->
         <section class="glow-wrap flex-[1.6] flex flex-col justify-center">
           <div class="glow-halo" id="glowHalo"></div>
           <div class="balance-card">
@@ -668,7 +668,7 @@
           </div>
         </section>
 
-        <!-- הכנסות והוצאות בחודש - כיתובים ומספרים גדולים ומודגשים -->
+        <!-- הכנסות והוצאות בחודש -->
         <section class="grid grid-cols-2 gap-2 flex-1 items-center">
           <div class="summary-card p-3 h-full flex flex-col justify-center">
             <div class="flex items-center gap-1.5">

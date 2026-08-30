@@ -114,7 +114,7 @@
   .field-shell{ background:rgba(15, 20, 30, 0.85); border:1px solid rgba(255,255,255,0.15); border-radius:12px; transition: border-color 0.2s; backdrop-filter:blur(10px); }
   .field-shell:focus-within{ border-color: var(--mint); }
 
-  #colorPalette, #settingsColorPalette, #onboardingColorPalette {
+  #colorPalette, #settingsColorPalette {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
     gap: 3px;
@@ -122,6 +122,19 @@
     background: var(--card-2);
     border: 1px solid var(--border);
     border-radius: 8px;
+  }
+
+  /* חלונית צבעים קטנה וגלילה לשלב 2 באון בורדינג */
+  #onboardingColorPalette {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 3px;
+    padding: 2px;
+    background: var(--card-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    max-height: 46px;
+    overflow-y: auto;
   }
 
   .color-swatch { width: 100% !important; aspect-ratio: 1 !important; height: auto !important; border-radius: 4px !important; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; border: 2px solid transparent; }
@@ -175,7 +188,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 24px 16px;
+    padding: 16px;
     overflow-y: auto;
     transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease, filter 0.8s ease;
   }
@@ -195,7 +208,7 @@
   @keyframes float-animation { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
   .floating-element { animation: float-animation 3.5s ease-in-out infinite; }
 
-  .onboarding-content-box { position: relative; z-index: 2; width: 100%; max-width: 380px; margin: auto; display: flex; flex-direction: column; gap: 12px; }
+  .onboarding-content-box { position: relative; z-index: 2; width: 100%; max-width: 380px; margin: auto; display: flex; flex-direction: column; gap: 10px; max-height: 90vh; overflow-y: auto; }
 
   /* סרגל ניווט תחתון מעוגן ומתוח לקצה התחתון של המסך */
   .bottom-nav{ 
@@ -304,33 +317,33 @@
     </div>
 </div>
 
-<!-- שלב 2: מסך ניהול קטגוריות ראשוני -->
+<!-- שלב 2: מסך ניהול קטגוריות ראשוני מעודכן -->
 <div id="onboarding-screen-2" class="full-page-onboarding hidden">
-    <div class="onboarding-content-box text-right space-y-2.5 p-3.5 bg-[var(--card)] rounded-3xl border border-[var(--border)] shadow-2xl">
+    <div class="onboarding-content-box text-right space-y-2 p-3 bg-[var(--card)] rounded-3xl border border-[var(--border)] shadow-2xl">
         <div class="text-center space-y-0.5">
-            <h2 class="text-lg font-black gradient-text">ניהול והגדרת קטגוריות</h2>
+            <h2 class="text-base font-black gradient-text">ניהול והגדרת קטגוריות</h2>
             <p class="text-[10px] text-slate-300 leading-tight">
-                הוסף תקציב רק אם תרצה (ברירת המחדל היא 0). העוזר הקולי מזהה לפי מה שמוגדר כאן!
+                הוסף תקציב חודשי. העוזר הקולי מזהה לפי מה שמוגדר כאן!
             </p>
         </div>
 
         <div class="space-y-1">
             <p class="text-[10px] font-semibold text-violet-400">קטגוריות קיימות:</p>
-            <div id="onboardingCatList" class="space-y-1 max-h-[140px] overflow-y-auto"></div>
+            <div id="onboardingCatList" class="space-y-1 max-h-[110px] overflow-y-auto"></div>
         </div>
 
         <div class="border-t border-[var(--border)] pt-1.5 space-y-1.5">
-            <p class="text-[10px] font-semibold text-emerald-400">הוסף קטגוריה ותקציב חודשי (אופציונלי):</p>
+            <p class="text-[10px] font-semibold text-emerald-400">הוסף קטגוריה ותקציב חודשי:</p>
             <div class="grid grid-cols-2 gap-1.5">
                 <div class="field-shell px-2 py-1">
                     <input id="onboardingCatName" placeholder="שם קטגוריה..." class="w-full bg-transparent outline-none font-bold text-[10px]" style="color:var(--text)" />
                 </div>
                 <div class="field-shell px-2 py-1">
-                    <input id="onboardingCatBudget" type="tel" inputmode="decimal" placeholder="תקציב ₪ (אופציונלי)" class="w-full bg-transparent outline-none text-[10px]" style="color:var(--text)" />
+                    <input id="onboardingCatBudget" type="tel" inputmode="decimal" placeholder="תקציב ₪" class="w-full bg-transparent outline-none text-[10px]" style="color:var(--text)" />
                 </div>
             </div>
             <div class="flex items-center gap-1.5">
-                <input type="color" id="onboardingFreeColor" value="#7FE8C6" onchange="onboardingSelectedColor = this.value; document.querySelectorAll('#onboardingColorPalette .color-swatch').forEach(s=>s.classList.remove('selected'));" class="w-8 h-7 rounded-lg bg-transparent cursor-pointer border border-[var(--border)] flex-shrink-0" />
+                <input type="color" id="onboardingFreeColor" value="#7FE8C6" onchange="onboardingSelectedColor = this.value; document.querySelectorAll('#onboardingColorPalette .color-swatch').forEach(s=>s.classList.remove('selected'));" class="w-7 h-7 rounded-lg bg-transparent cursor-pointer border border-[var(--border)] flex-shrink-0" />
                 <button onclick="addCategoryFromOnboarding()" class="save-btn px-3 py-1.5 rounded-xl font-bold text-[10px] flex-1">הוסף קטגוריה</button>
             </div>
             <div>
@@ -339,7 +352,7 @@
             </div>
         </div>
 
-        <button onclick="saveInitialSetupFinal()" class="w-full py-3 px-4 rounded-2xl font-bold text-xs shadow-xl cursor-pointer bg-gradient-to-l from-violet-600 to-indigo-600 text-white hover:opacity-95 transition flex items-center justify-between border border-violet-400/30">
+        <button onclick="saveInitialSetupFinal()" class="w-full py-2.5 px-4 rounded-2xl font-bold text-xs shadow-xl cursor-pointer bg-gradient-to-l from-violet-600 to-indigo-600 text-white hover:opacity-95 transition flex items-center justify-between border border-violet-400/30">
             <span class="text-[11px] opacity-90 font-medium">סיימתי, יוצאים לדרך!</span>
             <i class="fa-solid fa-arrow-left text-xs animated-arrow"></i>
         </button>
@@ -554,7 +567,6 @@
 
   <!-- SCREEN 1: HOME -->
   <section id="screen-home" class="screen active">
-    <!-- פריסה עם מרווח תחתון (pb-16) כך שהתוכן לא יוסתר מאחורי הסרגל המעוגן -->
     <main class="px-4 pb-16 pt-1 flex-1 flex flex-col justify-between h-full overflow-y-auto">
       
       <!-- אזור עליון: ברכה וכפתורי עזר -->
@@ -753,7 +765,7 @@
     </main>
   </section>
 
-  <!-- BOTTOM NAV (מעוגן לחלוטין לקצה התחתון) -->
+  <!-- BOTTOM NAV -->
   <nav class="bottom-nav">
     <button class="nav-item active" id="navHome" onclick="showScreen('home')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>בית
@@ -949,7 +961,7 @@ function renderOnboardingCategoryList() {
   
   allCats.forEach(c => {
     const row = document.createElement('div');
-    row.className = 'flex items-center justify-between px-2.5 py-1.5 rounded-lg border bg-[var(--card-2)] border-[var(--border)]';
+    row.className = 'flex items-center justify-between px-2 py-1 rounded-lg border bg-[var(--card-2)] border-[var(--border)]';
     row.innerHTML = `
       <div class="flex items-center gap-2 min-w-0 flex-1">
         <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:${c.color}"></span>

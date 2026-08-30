@@ -194,6 +194,33 @@
   .modal-overlay { position:fixed; inset:0; z-index:50; background:rgba(10,12,17,0.95); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:16px; transition: opacity .25s ease; }
   .modal-overlay.hidden { display:none !important; }
 
+  /* עיצוב תפריט צד (Sidebar) לאורך כל העמוד */
+  #menuModal {
+    justify-content: flex-start !important;
+    padding: 0 !important;
+    background: rgba(10,12,17,0.75);
+  }
+  #menuModal .menu-sidebar-panel {
+    width: 290px;
+    height: 100%;
+    max-height: 100dvh;
+    border-radius: 0;
+    border-left: 1px solid var(--border);
+    border-top: none;
+    border-bottom: none;
+    border-right: none;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    overflow-y: auto;
+    animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @keyframes slideInRight {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+  }
+
   .full-page-onboarding {
     position: fixed;
     inset: 0;
@@ -556,45 +583,54 @@
     </div>
 </div>
 
-<!-- מודל תפריט 3 פסים (תפריט ראשי) -->
-<div id="menuModal" class="modal-overlay hidden">
-    <div class="summary-card p-4 max-w-xs w-full space-y-2.5 shadow-2xl text-right">
-        <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-            <h3 class="text-xs font-bold gradient-text"><i class="fa-solid fa-bars ml-1.5"></i> תפריט ראשי</h3>
+<!-- תפריט צד (Sidebar) עם פרופיל משתמש בראשו -->
+<div id="menuModal" class="modal-overlay hidden" onclick="if(event.target === this) closeMenuModal()">
+    <div class="menu-sidebar-panel space-y-3 shadow-2xl text-right">
+        <div class="flex items-center justify-between border-b border-[var(--border)] pb-2.5">
+            <h3 class="text-sm font-bold gradient-text flex items-center gap-2"><i class="fa-solid fa-bars"></i> תפריט ראשי</h3>
             <button onclick="closeMenuModal()" class="icon-btn" style="width:28px;height:28px;"><i class="fa-solid fa-xmark text-sm"></i></button>
         </div>
+
+        <!-- כרטיס פרופיל משתמש מעל התפריט -->
+        <div class="summary-card p-3 flex items-center gap-3 bg-[var(--card-2)] border border-[var(--border)] rounded-xl">
+            <div class="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-400 font-bold text-sm" id="sidebarUserInitial">?</div>
+            <div class="min-w-0 flex-1 text-right">
+                <p id="sidebarUserName" class="text-xs font-bold truncate text-slate-100">אורח</p>
+                <p id="sidebarUserBalance" class="text-[10px] text-emerald-400 font-semibold tabular mt-0.5">יתרה: ₪0</p>
+            </div>
+        </div>
         
-        <div class="space-y-1 pt-1">
-            <button onclick="menuGoHome()" class="w-full flex items-center justify-between p-2 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-emerald-400 transition text-[11px] font-bold cursor-pointer">
-                <span class="flex items-center gap-2"><i class="fa-solid fa-house text-emerald-400 w-4"></i> בית</span>
-                <i class="fa-solid fa-chevron-left text-[9px] text-slate-500"></i>
+        <div class="space-y-1.5 pt-1">
+            <button onclick="menuGoHome()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-emerald-400 transition text-[12px] font-bold cursor-pointer">
+                <span class="flex items-center gap-2.5"><i class="fa-solid fa-house text-emerald-400 w-4"></i> בית</span>
+                <i class="fa-solid fa-chevron-left text-[10px] text-slate-500"></i>
             </button>
             
-            <button onclick="menuGoAnalytics()" class="w-full flex items-center justify-between p-2 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-blue-400 transition text-[11px] font-bold cursor-pointer">
-                <span class="flex items-center gap-2"><i class="fa-solid fa-chart-pie text-blue-400 w-4"></i> תרשימים (תמונת מצב)</span>
-                <i class="fa-solid fa-chevron-left text-[9px] text-slate-500"></i>
+            <button onclick="menuGoAnalytics()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-blue-400 transition text-[12px] font-bold cursor-pointer">
+                <span class="flex items-center gap-2.5"><i class="fa-solid fa-chart-pie text-blue-400 w-4"></i> תרשימים (תמונת מצב)</span>
+                <i class="fa-solid fa-chevron-left text-[10px] text-slate-500"></i>
             </button>
             
-            <button onclick="menuOpenCategories()" class="w-full flex items-center justify-between p-2 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-violet-400 transition text-[11px] font-bold cursor-pointer">
-                <span class="flex items-center gap-2"><i class="fa-solid fa-tags text-violet-400 w-4"></i> קטגוריות</span>
-                <i class="fa-solid fa-chevron-left text-[9px] text-slate-500"></i>
+            <button onclick="menuOpenCategories()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-violet-400 transition text-[12px] font-bold cursor-pointer">
+                <span class="flex items-center gap-2.5"><i class="fa-solid fa-tags text-violet-400 w-4"></i> קטגוריות</span>
+                <i class="fa-solid fa-chevron-left text-[10px] text-slate-500"></i>
             </button>
             
-            <button onclick="menuOpenRecurring()" class="w-full flex items-center justify-between p-2 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-amber-400 transition text-[11px] font-bold cursor-pointer">
-                <span class="flex items-center gap-2"><i class="fa-solid fa-repeat text-amber-400 w-4"></i> הוראות קבע</span>
-                <i class="fa-solid fa-chevron-left text-[9px] text-slate-500"></i>
+            <button onclick="menuOpenRecurring()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-amber-400 transition text-[12px] font-bold cursor-pointer">
+                <span class="flex items-center gap-2.5"><i class="fa-solid fa-repeat text-amber-400 w-4"></i> הוראות קבע</span>
+                <i class="fa-solid fa-chevron-left text-[10px] text-slate-500"></i>
             </button>
             
-            <button onclick="toggleSystemSettingsInMenu()" class="w-full flex items-center justify-between p-2 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-cyan-400 transition text-[11px] font-bold cursor-pointer">
-                <span class="flex items-center gap-2"><i class="fa-solid fa-gear text-cyan-400 w-4"></i> הגדרות מערכת</span>
-                <i id="settingsArrow" class="fa-solid fa-chevron-down text-[9px] text-slate-500 transition-transform"></i>
+            <button onclick="toggleSystemSettingsInMenu()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-cyan-400 transition text-[12px] font-bold cursor-pointer">
+                <span class="flex items-center gap-2.5"><i class="fa-solid fa-gear text-cyan-400 w-4"></i> הגדרות מערכת</span>
+                <i id="settingsArrow" class="fa-solid fa-chevron-down text-[10px] text-slate-500 transition-transform"></i>
             </button>
 
             <!-- אזור הגדרות מערכת נפתח -->
-            <div id="systemSettingsBox" class="hidden p-2 rounded-xl bg-[var(--card)] border border-[var(--border)] space-y-2 mt-1">
+            <div id="systemSettingsBox" class="hidden p-2.5 rounded-xl bg-[var(--card)] border border-[var(--border)] space-y-2.5 mt-1">
                 <div>
-                    <label class="text-[9px] font-semibold text-slate-400 flex items-center gap-1 mb-0.5"><i class="fa-solid fa-globe text-blue-400"></i> שינוי שפה</label>
-                    <select id="langSelect" onchange="changeLanguage(this.value)" class="w-full bg-[var(--card-2)] border border-[var(--border)] p-1.5 rounded-lg text-[10px] font-bold outline-none cursor-pointer" style="color:var(--text)">
+                    <label class="text-[10px] font-semibold text-slate-400 flex items-center gap-1.5 mb-1"><i class="fa-solid fa-globe text-blue-400"></i> שינוי שפה</label>
+                    <select id="langSelect" onchange="changeLanguage(this.value)" class="w-full bg-[var(--card-2)] border border-[var(--border)] p-2 rounded-lg text-[11px] font-bold outline-none cursor-pointer" style="color:var(--text)">
                         <option value="he">עברית (Hebrew)</option>
                         <option value="en">אנגלית (English)</option>
                         <option value="ar">ערבית (العربية)</option>
@@ -604,8 +640,8 @@
                     </select>
                 </div>
                 <div>
-                    <label class="text-[9px] font-semibold text-slate-400 flex items-center gap-1 mb-0.5"><i class="fa-solid fa-coins text-amber-400"></i> שינוי מטבע</label>
-                    <select id="currencySelect" onchange="changeCurrency(this.value)" class="w-full bg-[var(--card-2)] border border-[var(--border)] p-1.5 rounded-lg text-[10px] font-bold outline-none cursor-pointer" style="color:var(--text)">
+                    <label class="text-[10px] font-semibold text-slate-400 flex items-center gap-1.5 mb-1"><i class="fa-solid fa-coins text-amber-400"></i> שינוי מטבע</label>
+                    <select id="currencySelect" onchange="changeCurrency(this.value)" class="w-full bg-[var(--card-2)] border border-[var(--border)] p-2 rounded-lg text-[11px] font-bold outline-none cursor-pointer" style="color:var(--text)">
                         <option value="₪">שקל (₪ ILS)</option>
                         <option value="$">דולר ($ USD)</option>
                         <option value="€">אירו (€ EUR)</option>
@@ -613,14 +649,14 @@
                         <option value="¥">ין (¥ JPY)</option>
                     </select>
                 </div>
-                <button onclick="factoryReset()" class="w-full py-1.5 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-400 text-[10px] font-bold flex items-center justify-center gap-1 hover:bg-rose-500/20 transition cursor-pointer">
+                <button onclick="factoryReset()" class="w-full py-2 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-400 text-[11px] font-bold flex items-center justify-center gap-1.5 hover:bg-rose-500/20 transition cursor-pointer">
                     <i class="fa-solid fa-triangle-exclamation"></i> איפוס של האפליקציה
                 </button>
             </div>
 
-            <button onclick="shareApp()" class="w-full flex items-center justify-between p-2 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-emerald-400 transition text-[11px] font-bold cursor-pointer">
-                <span class="flex items-center gap-2"><i class="fa-solid fa-share-nodes text-emerald-400 w-4"></i> שתף עם חברים</span>
-                <i class="fa-solid fa-arrow-up-right-from-square text-[9px] text-slate-500"></i>
+            <button onclick="shareApp()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-emerald-400 transition text-[12px] font-bold cursor-pointer">
+                <span class="flex items-center gap-2.5"><i class="fa-solid fa-share-nodes text-emerald-400 w-4"></i> שתף עם חברים</span>
+                <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-500"></i>
             </button>
         </div>
     </div>
@@ -910,13 +946,12 @@ function getLocalDateString(d) {
 }
 
 window.onload = function() {
-  // ייבוא אוטומטי מגרסאות קודמות (v52) אם קיימות
   let saved = localStorage.getItem('pulse_state_v53');
   if(!saved) {
     const oldSaved = localStorage.getItem('pulse_state_v52');
     if(oldSaved) {
       saved = oldSaved;
-      localStorage.setItem('pulse_state_v53', saved); // העברה למפתח החדש
+      localStorage.setItem('pulse_state_v53', saved);
     }
   }
 
@@ -1121,9 +1156,16 @@ function closePwaModal() {
   document.getElementById('pwaHelpModal').classList.add('hidden');
 }
 
-// ניהול תפריט 3 פסים
+// ניהול תפריט צד (Sidebar)
 function openMenuModal() {
   document.getElementById('menuModal').classList.remove('hidden');
+  
+  // עדכון פרטי הפרופיל בתפריט הצד
+  const { balance } = totals();
+  document.getElementById('sidebarUserName').textContent = state.userName || 'אורח';
+  document.getElementById('sidebarUserBalance').textContent = `יתרה: ${fmt(balance)}`;
+  document.getElementById('sidebarUserInitial').textContent = state.userName ? state.userName.charAt(0) : '?';
+
   const langSel = document.getElementById('langSelect');
   if(langSel) langSel.value = state.language || 'he';
   const currSel = document.getElementById('currencySelect');

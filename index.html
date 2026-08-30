@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Pulse</title>
 
-<!-- תגיות PWA מותאמות לאייפון ואנדרואיד לשם קצר במסך הבית -->
+<!-- תגיות PWA מותאמות לאייפון ואנדרואיד -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Pulse">
@@ -194,7 +194,7 @@
   .modal-overlay { position:fixed; inset:0; z-index:50; background:rgba(10,12,17,0.95); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:16px; transition: opacity .25s ease; }
   .modal-overlay.hidden { display:none !important; }
 
-  /* עיצוב תפריט צד (Sidebar) לאורך כל העמוד */
+  /* עיצוב תפריט צד (Sidebar) */
   #menuModal {
     justify-content: flex-start !important;
     padding: 0 !important;
@@ -206,9 +206,6 @@
     max-height: 100dvh;
     border-radius: 0;
     border-left: 1px solid var(--border);
-    border-top: none;
-    border-bottom: none;
-    border-right: none;
     background: var(--bg);
     display: flex;
     flex-direction: column;
@@ -293,6 +290,27 @@
 </style>
 </head>
 <body>
+
+<!-- מסך טעינה בכניסה לאפליקציה (Splash Screen) -->
+<div id="appSplashScreen" class="fixed inset-0 z-[999999] bg-[#05070B] flex flex-col items-center justify-center transition-all duration-700">
+    <div class="flex flex-col items-center space-y-4">
+        <!-- מסגרת סמל האפליקציה עם זוהר ירוק -->
+        <div class="relative flex items-center justify-center">
+            <div class="absolute -inset-6 rounded-full bg-emerald-500/20 blur-xl animate-pulse"></div>
+            <svg width="64" height="64" viewBox="0 0 26 26" fill="none" class="relative z-10">
+                <circle cx="13" cy="13" r="12" stroke="#7FE8C6" stroke-width="1.6" opacity=".9"/>
+                <path d="M4 13H9L11 7L15 19L17 13H22" stroke="#7FE8C6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+        <h1 class="text-3xl font-black tracking-tight gradient-text">Pulse</h1>
+        <!-- קו הדופק הירוק הרץ מתחת -->
+        <div class="w-48 h-6 overflow-hidden mt-1">
+            <svg class="w-full h-full" viewBox="0 0 340 24" preserveAspectRatio="none">
+                <path d="M0,12 L60,12 L72,2 L84,22 L96,12 L150,12 L162,4 L174,12 L340,12" fill="none" stroke="#2EB88A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="stroke-dasharray:340; animation:ecg-sweep 1.2s linear infinite;"/>
+            </svg>
+        </div>
+    </div>
+</div>
 
 <!-- שלב 1: מסך פתיחה ראשון -->
 <div id="onboarding-screen-1" class="full-page-onboarding hidden">
@@ -411,7 +429,7 @@
     </div>
 </div>
 
-<!-- מודל שימוש יעיל באפליקציה -->
+<!-- מודלים שונים -->
 <div id="generalHelpModal" class="modal-overlay hidden">
     <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl text-right max-h-[85vh] overflow-y-auto">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
@@ -423,20 +441,11 @@
                 <p class="font-bold text-emerald-400">🎙️ עוזר קולי וצ'אט חכם:</p>
                 <p>העוזר הקולי ופקודות הטקסט מזהים אוטומטית סכומים, תאריכים וקטגוריות <span class="text-white font-semibold">אך ורק לפי מה שהוגדר באפליקציה</span>.</p>
             </div>
-            <div class="bg-[var(--card-2)] p-2 rounded-xl border border-[var(--border)] space-y-1">
-                <p class="font-bold text-blue-400">🎯 תקציב לכל קטגוריה:</p>
-                <p>ניתן להגדיר תקציב חודשי לכל קטגוריה בהגדרות או בניהול הקטגוריות.</p>
-            </div>
-            <div class="bg-[var(--card-2)] p-2 rounded-xl border border-[var(--border)] space-y-1">
-                <p class="font-bold text-amber-400">📅 מהו חודש פיננסי?</p>
-                <p>מתאים את מעקב ההוצאות למחזור האמיתי שלך (למשל מיום ה-10 או ה-15 לחודש).</p>
-            </div>
         </div>
         <button onclick="closeGeneralHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי, תודה רבה!</button>
     </div>
 </div>
 
-<!-- מודל הסבר על הצ'אט החכם -->
 <div id="chatHelpModal" class="modal-overlay hidden">
     <div class="summary-card p-4 max-w-xs w-full space-y-3 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
@@ -445,18 +454,11 @@
         </div>
         <div class="space-y-2 text-[11px] leading-relaxed text-slate-300">
             <p>העוזר הקולי ופקודות הטקסט מאפשרים לך להוסיף תנועות בקלות ומהירות בשפה טבעית.</p>
-            <div class="bg-[var(--card-2)] p-2 rounded-xl border border-[var(--border)] space-y-1">
-                <p class="font-bold text-emerald-400">💡 טיפים לשימוש:</p>
-                <p>• אמור או הקלד סכום, קטגוריה ותאריך (למשל: <span class="text-white font-medium">"100 קניות אתמול"</span>).</p>
-                <p>• המערכת מזהה אוטומטית את הקטגוריות שהגדרת באפליקציה.</p>
-                <p>• ניתן לומר "משכורת" או "קיבלתי" כדי לסווג כהכנסה.</p>
-            </div>
         </div>
         <button onclick="closeChatHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי, תודה!</button>
     </div>
 </div>
 
-<!-- מודל הוספה למסך הבית -->
 <div id="pwaHelpModal" class="modal-overlay hidden">
     <div class="summary-card p-4 max-w-xs w-full space-y-3 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
@@ -464,21 +466,12 @@
             <button onclick="closePwaModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
         <div class="space-y-2 text-[11px] leading-relaxed text-slate-300">
-            <p>הפוך את Pulse לאפליקציה אמיתית על מסך הטלפון שלך לגישה מהירה:</p>
-            <div class="bg-[var(--card-2)] p-2 rounded-xl border border-[var(--border)] space-y-1">
-                <p class="font-bold text-emerald-400">🍏 באייפון (ספארי):</p>
-                <p>לחץ על כפתור השיתוף בתחתית הדפדפן ובחר <span class="text-white font-semibold">"הוסף למסך הבית"</span>.</p>
-            </div>
-            <div class="bg-[var(--card-2)] p-2 rounded-xl border border-[var(--border)] space-y-1">
-                <p class="font-bold text-blue-400">🤖 באנדרואיד (כרום):</p>
-                <p>לחץ על שלוש הנקודות בפינה העליונה ובחר <span class="text-white font-semibold">"התקן אפליקציה"</span>, <span class="text-white font-semibold">"הוסף למסך הבית"</span> או <span class="text-white font-semibold">"הוסף סימניה לקיצור דרך"</span>.</p>
-            </div>
+            <p>הפוך את Pulse לאפליקציה אמיתית על מסך הטלפון שלך לגישה מהירה.</p>
         </div>
         <button onclick="closePwaModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי, תודה!</button>
     </div>
 </div>
 
-<!-- מודל הסבר להכתבה החכמה -->
 <div id="voiceHelpModal" class="modal-overlay hidden">
     <div class="summary-card p-4 max-w-xs w-full space-y-2.5 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
@@ -486,18 +479,12 @@
             <button onclick="closeVoiceHelpModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
         <div class="space-y-2 text-[11px] leading-relaxed text-slate-300">
-            <p>המערכת מזהה אוטומטית: <span class="text-white font-semibold">סכום</span>, <span class="text-white font-semibold">קטגוריה</span> ו<span class="text-white font-semibold">תאריך</span>.</p>
-            <div class="bg-[var(--card-2)] p-2 rounded-xl border border-[var(--border)] space-y-0.5">
-                <p class="font-bold text-emerald-400 text-[10px]">דוגמאות:</p>
-                <p>• <span class="text-white font-medium">"50 קניות 18.8"</span></p>
-                <p>• <span class="text-white font-medium">"150 קיוסק אתמול"</span></p>
-            </div>
+            <p>המערכת מזהה אוטומטית: סכום, קטגוריה ותאריך.</p>
         </div>
         <button onclick="closeVoiceHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי, תודה!</button>
     </div>
 </div>
 
-<!-- מודל להזנת תיאור לאחר פענוח -->
 <div id="voiceDescModal" class="modal-overlay hidden">
     <div class="summary-card p-4 max-w-xs w-full space-y-3 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
@@ -516,19 +503,16 @@
     </div>
 </div>
 
-<!-- מודל ניהול קטגוריות ותקציבים -->
 <div id="categoriesModal" class="modal-overlay hidden">
     <div class="summary-card p-3 max-w-xs w-full space-y-2 shadow-2xl max-h-[82vh] overflow-y-auto">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-1.5">
             <h3 class="text-xs font-bold text-violet-400">ניהול קטגוריות ותקציבים</h3>
             <button onclick="closeCategoriesModal()" class="icon-btn" style="width:28px;height:28px;flex-shrink:0;"><i class="fa-solid fa-xmark text-sm font-black"></i></button>
         </div>
-       
         <div class="space-y-1">
             <p class="text-[9px] font-semibold text-slate-400">קטגוריות ותקציבים קיימים:</p>
             <div id="modalCatList" class="space-y-1 max-h-[110px] overflow-y-auto"></div>
         </div>
-
         <div class="border-t border-[var(--border)] pt-1.5 space-y-1.5">
             <p class="text-[9px] font-semibold text-emerald-400">הוסף קטגוריה ותקציב חדש</p>
             <div class="grid grid-cols-2 gap-1.5">
@@ -543,7 +527,6 @@
                 <input type="color" id="freeColorPicker" value="#7FE8C6" onchange="selectedNewCatColor = this.value; document.querySelectorAll('#colorPalette .color-swatch').forEach(s=>s.classList.remove('selected'));" class="w-6 h-6 rounded-lg bg-transparent cursor-pointer border border-[var(--border)] flex-shrink-0" />
                 <button onclick="addNewCategoryFromModal()" class="save-btn px-3 py-1.5 rounded-xl font-bold text-[10px] flex-1">הוסף קטגוריה</button>
             </div>
-             
             <div>
                 <p class="text-[8px] mb-0.5 text-slate-400">בחר צבע לקטגוריה:</p>
                 <div id="colorPalette" style="max-height: 48px; overflow-y: auto;"></div>
@@ -552,7 +535,6 @@
     </div>
 </div>
 
-<!-- מודל הוראות קבע -->
 <div id="recurringModal" class="modal-overlay hidden">
     <div class="summary-card p-4 max-w-xs w-full space-y-3 shadow-2xl">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
@@ -583,7 +565,6 @@
     </div>
 </div>
 
-<!-- תפריט צד (Sidebar) עם פרופיל משתמש בראשו -->
 <div id="menuModal" class="modal-overlay hidden" onclick="if(event.target === this) closeMenuModal()">
     <div class="menu-sidebar-panel space-y-3 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2.5">
@@ -591,7 +572,6 @@
             <button onclick="closeMenuModal()" class="icon-btn" style="width:28px;height:28px;"><i class="fa-solid fa-xmark text-sm"></i></button>
         </div>
 
-        <!-- כרטיס פרופיל משתמש מעל התפריט -->
         <div class="summary-card p-3 flex items-center gap-3 bg-[var(--card-2)] border border-[var(--border)] rounded-xl">
             <div class="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-400 font-bold text-sm" id="sidebarUserInitial">?</div>
             <div class="min-w-0 flex-1 text-right">
@@ -605,28 +585,23 @@
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-house text-emerald-400 w-4"></i> בית</span>
                 <i class="fa-solid fa-chevron-left text-[10px] text-slate-500"></i>
             </button>
-            
             <button onclick="menuGoAnalytics()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-blue-400 transition text-[12px] font-bold cursor-pointer">
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-chart-pie text-blue-400 w-4"></i> תרשימים (תמונת מצב)</span>
                 <i class="fa-solid fa-chevron-left text-[10px] text-slate-500"></i>
             </button>
-            
             <button onclick="menuOpenCategories()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-violet-400 transition text-[12px] font-bold cursor-pointer">
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-tags text-violet-400 w-4"></i> קטגוריות</span>
                 <i class="fa-solid fa-chevron-left text-[10px] text-slate-500"></i>
             </button>
-            
             <button onclick="menuOpenRecurring()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-amber-400 transition text-[12px] font-bold cursor-pointer">
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-repeat text-amber-400 w-4"></i> הוראות קבע</span>
                 <i class="fa-solid fa-chevron-left text-[10px] text-slate-500"></i>
             </button>
-            
             <button onclick="toggleSystemSettingsInMenu()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-cyan-400 transition text-[12px] font-bold cursor-pointer">
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-gear text-cyan-400 w-4"></i> הגדרות מערכת</span>
                 <i id="settingsArrow" class="fa-solid fa-chevron-down text-[10px] text-slate-500 transition-transform"></i>
             </button>
 
-            <!-- אזור הגדרות מערכת נפתח -->
             <div id="systemSettingsBox" class="hidden p-2.5 rounded-xl bg-[var(--card)] border border-[var(--border)] space-y-2.5 mt-1">
                 <div>
                     <label class="text-[10px] font-semibold text-slate-400 flex items-center gap-1.5 mb-1"><i class="fa-solid fa-globe text-blue-400"></i> שינוי שפה</label>
@@ -682,7 +657,6 @@
     <section id="screen-home" class="screen active">
       <main class="px-3 pb-1 pt-1 flex-1 flex flex-col justify-between h-full overflow-hidden gap-1.5">
         
-        <!-- כותרת וכפתורי עזר -->
         <section class="flex flex-col justify-center flex-1">
           <div class="flex gap-2 mr-auto w-fit mb-1">
             <button onclick="openGeneralHelpModal()" class="text-[9px] font-medium px-2 py-0.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-between gap-1 shadow-sm">
@@ -698,7 +672,6 @@
           </div>
         </section>
 
-        <!-- כרטיס היתרה - בולט וגדול יותר -->
         <section class="glow-wrap flex-[1.5] flex flex-col justify-center">
           <div class="glow-halo" id="glowHalo"></div>
           <div class="balance-card">
@@ -708,7 +681,6 @@
           </div>
         </section>
 
-        <!-- הכנסות והוצאות בחודש -->
         <section class="grid grid-cols-2 gap-2 flex-1 items-center">
           <div class="summary-card p-2 h-full flex flex-col justify-center">
             <div class="flex items-center gap-1.5">
@@ -726,7 +698,6 @@
           </div>
         </section>
 
-        <!-- חודש פיננסי -->
         <section class="summary-card px-3 py-1 flex flex-col justify-center flex-1">
           <div class="flex items-center justify-between mb-0.5">
             <div class="flex items-center gap-1.5">
@@ -740,7 +711,6 @@
           </div>
         </section>
 
-        <!-- עוזר קולי וצ'אט חכם (כולל כפתור ? ייעודי) -->
         <section class="flex-[1.8] flex flex-col justify-between min-h-0 pb-1">
           <div class="flex items-center justify-between mb-1">
             <div class="flex items-center gap-1.5">
@@ -877,7 +847,6 @@
 
   </div>
 
-  <!-- שורה 3 בגריד: סרגל הניווט יושב בתחתית המוחלטת -->
   <nav class="bottom-nav">
     <button class="nav-item active" id="navHome" onclick="showScreen('home')">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>בית
@@ -946,6 +915,16 @@ function getLocalDateString(d) {
 }
 
 window.onload = function() {
+  // הסרת מסך הטעינה (Splash Screen) באנימציה חלקה אחרי 1.6 שניות
+  setTimeout(() => {
+    const splash = document.getElementById('appSplashScreen');
+    if(splash) {
+      splash.style.opacity = '0';
+      splash.style.transform = 'scale(1.05)';
+      setTimeout(() => splash.remove(), 700);
+    }
+  }, 1600);
+
   let saved = localStorage.getItem('pulse_state_v53');
   if(!saved) {
     const oldSaved = localStorage.getItem('pulse_state_v52');
@@ -1135,32 +1114,15 @@ function saveInitialSetupFinal() {
   renderHome();
 }
 
-function openGeneralHelpModal() {
-  document.getElementById('generalHelpModal').classList.remove('hidden');
-}
-function closeGeneralHelpModal() {
-  document.getElementById('generalHelpModal').classList.add('hidden');
-}
+function openGeneralHelpModal() { document.getElementById('generalHelpModal').classList.remove('hidden'); }
+function closeGeneralHelpModal() { document.getElementById('generalHelpModal').classList.add('hidden'); }
+function openChatHelpModal() { document.getElementById('chatHelpModal').classList.remove('hidden'); }
+function closeChatHelpModal() { document.getElementById('chatHelpModal').classList.add('hidden'); }
+function openPwaHelpModal() { document.getElementById('pwaHelpModal').classList.remove('hidden'); }
+function closePwaModal() { document.getElementById('pwaHelpModal').classList.add('hidden'); }
 
-function openChatHelpModal() {
-  document.getElementById('chatHelpModal').classList.remove('hidden');
-}
-function closeChatHelpModal() {
-  document.getElementById('chatHelpModal').classList.add('hidden');
-}
-
-function openPwaHelpModal() {
-  document.getElementById('pwaHelpModal').classList.remove('hidden');
-}
-function closePwaModal() {
-  document.getElementById('pwaHelpModal').classList.add('hidden');
-}
-
-// ניהול תפריט צד (Sidebar)
 function openMenuModal() {
   document.getElementById('menuModal').classList.remove('hidden');
-  
-  // עדכון פרטי הפרופיל בתפריט הצד
   const { balance } = totals();
   document.getElementById('sidebarUserName').textContent = state.userName || 'אורח';
   document.getElementById('sidebarUserBalance').textContent = `יתרה: ${fmt(balance)}`;
@@ -1171,34 +1133,16 @@ function openMenuModal() {
   const currSel = document.getElementById('currencySelect');
   if(currSel) currSel.value = state.currency || '₪';
 }
-function closeMenuModal() {
-  document.getElementById('menuModal').classList.add('hidden');
-}
-function menuGoHome() {
-  showScreen('home');
-  closeMenuModal();
-}
-function menuGoAnalytics() {
-  showScreen('analytics');
-  closeMenuModal();
-}
-function menuOpenCategories() {
-  closeMenuModal();
-  openCategoriesModal();
-}
-function menuOpenRecurring() {
-  closeMenuModal();
-  openRecurringModal();
-}
+function closeMenuModal() { document.getElementById('menuModal').classList.add('hidden'); }
+function menuGoHome() { showScreen('home'); closeMenuModal(); }
+function menuGoAnalytics() { showScreen('analytics'); closeMenuModal(); }
+function menuOpenCategories() { closeMenuModal(); openCategoriesModal(); }
+function menuOpenRecurring() { closeMenuModal(); openRecurringModal(); }
 function toggleSystemSettingsInMenu() {
   const box = document.getElementById('systemSettingsBox');
   const arrow = document.getElementById('settingsArrow');
   box.classList.toggle('hidden');
-  if(box.classList.contains('hidden')) {
-    arrow.style.transform = 'rotate(0deg)';
-  } else {
-    arrow.style.transform = 'rotate(180deg)';
-  }
+  arrow.style.transform = box.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
 }
 
 function changeLanguage(lang) {
@@ -1206,33 +1150,22 @@ function changeLanguage(lang) {
   persist();
   alert(`השפה עודכנה בהצלחה ל-${lang.toUpperCase()}`);
 }
-
 function changeCurrency(curr) {
   state.currency = curr;
   persist();
   renderHome();
   renderAnalytics();
 }
-
 function shareApp() {
-  const shareData = {
-    title: 'Pulse - ניהול פיננסי חכם',
-    text: 'בדוק את אפליקציית Pulse לשליטה מלאה בעתיד הכלכלי שלך!',
-    url: window.location.href
-  };
-  if (navigator.share) {
-    navigator.share(shareData).catch(() => {});
-  } else {
-    navigator.clipboard.writeText(window.location.href);
-    alert('קישור האפליקציה הועתק ללוח בהצלחה!');
-  }
+  const shareData = { title: 'Pulse - ניהול פיננסי חכם', text: 'בדוק את אפליקציית Pulse לשליטה מלאה בעתיד הכלכלי שלך!', url: window.location.href };
+  if (navigator.share) { navigator.share(shareData).catch(() => {}); }
+  else { navigator.clipboard.writeText(window.location.href); alert('קישור האפליקציה הועתק ללוח בהצלחה!'); }
 }
 
 function checkAndApplyRecurringTransactions() {
   if(!state.recurringItems || state.recurringItems.length === 0) return;
   const now = new Date();
   const fDay = parseInt(state.financialDay) || 1;
-
   const { startPeriod } = getFinancialPeriodDates(0);
   const periodKey = getLocalDateString(startPeriod);
 
@@ -1244,15 +1177,11 @@ function checkAndApplyRecurringTransactions() {
     
     if (targetDay < fDay) {
       targetMonth += 1;
-      if (targetMonth > 11) {
-        targetMonth = 0;
-        targetYear += 1;
-      }
+      if (targetMonth > 11) { targetMonth = 0; targetYear += 1; }
     }
     
     const lastDayOfTargetMonth = new Date(targetYear, targetMonth + 1, 0).getDate();
     const actualDay = Math.min(targetDay, lastDayOfTargetMonth);
-    
     const applyDate = new Date(targetYear, targetMonth, actualDay);
     const dateStr = getLocalDateString(applyDate);
 
@@ -1269,16 +1198,12 @@ function checkAndApplyRecurringTransactions() {
         color: catObj.color,
         date: dateStr
       });
-
       rec.lastAppliedPeriod = periodKey;
       changed = true;
     }
   });
 
-  if(changed) {
-    sortTransactions();
-    persist();
-  }
+  if(changed) { sortTransactions(); persist(); }
 }
 
 function setDynamicGreeting() {
@@ -1286,12 +1211,10 @@ function setDynamicGreeting() {
   if(!title) return;
   const hour = new Date().getHours();
   let timeGreeting = "שלום";
-
   if (hour >= 5 && hour < 12) timeGreeting = "בוקר טוב";
   else if (hour >= 12 && hour < 19) timeGreeting = "צהריים טובים";
   else if (hour >= 19 && hour < 24) timeGreeting = "ערב טוב";
   else timeGreeting = "לילה טוב";
-
   title.textContent = `${timeGreeting}, ${state.userName || 'דוידי'} 👋`;
 }
 
@@ -1356,18 +1279,12 @@ function factoryReset() {
   }
 }
 
-function openVoiceHelpModal() {
-  document.getElementById('voiceHelpModal').classList.remove('hidden');
-}
-function closeVoiceHelpModal() {
-  document.getElementById('voiceHelpModal').classList.add('hidden');
-}
+function openVoiceHelpModal() { document.getElementById('voiceHelpModal').classList.remove('hidden'); }
+function closeVoiceHelpModal() { document.getElementById('voiceHelpModal').classList.add('hidden'); }
 
 function showScreen(name){
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  const targetScreen = document.getElementById('screen-' + name);
-  targetScreen.classList.add('active');
-
+  document.getElementById('screen-' + name).classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   
   if(name === 'home') {
@@ -1385,9 +1302,7 @@ function getFinancialPeriodDates(offsetMonths = 0) {
   const fDay = parseInt(state.financialDay) || 1;
   let targetYear = now.getFullYear();
   let targetMonth = now.getMonth() + offsetMonths;
-  
   if(now.getDate() < fDay) targetMonth -= 1;
-
   let startPeriod = new Date(targetYear, targetMonth, fDay);
   let endPeriod = new Date(targetYear, targetMonth + 1, fDay);
   return { startPeriod, endPeriod };
@@ -1439,19 +1354,13 @@ function saveFinancialDay(val) {
   renderHome();
 }
 
-function openCategoriesModal(){
-  document.getElementById('categoriesModal').classList.remove('hidden');
-  renderModalCategoryList();
-}
-function closeCategoriesModal(){
-  document.getElementById('categoriesModal').classList.add('hidden');
-}
+function openCategoriesModal(){ document.getElementById('categoriesModal').classList.remove('hidden'); renderModalCategoryList(); }
+function closeCategoriesModal(){ document.getElementById('categoriesModal').classList.add('hidden'); }
 
 function renderModalCategoryList(){
   const listContainer = document.getElementById('modalCatList');
   if(!listContainer) return;
   listContainer.innerHTML = '';
-  
   const allCats = [...state.expenseCats.map(c=>({...c, kind:'הוצאה'})), ...state.incomeCats.map(c=>({...c, kind:'הכנסה'}))];
   
   allCats.forEach((c) => {
@@ -1506,14 +1415,9 @@ function deleteCatModal(catName){
   renderModalCategoryList();
 }
 
-function openRecurringModal() {
-  document.getElementById('recurringModal').classList.remove('hidden');
-  buildRecDayDropdown();
-  renderRecurringList();
-}
-function closeRecurringModal() {
-  document.getElementById('recurringModal').classList.add('hidden');
-}
+function openRecurringModal() { document.getElementById('recurringModal').classList.remove('hidden'); buildRecDayDropdown(); renderRecurringList(); }
+function closeRecurringModal() { document.getElementById('recurringModal').classList.add('hidden'); }
+
 function renderRecurringList() {
   const container = document.getElementById('recurringList');
   if(!container) return;
@@ -1539,6 +1443,7 @@ function renderRecurringList() {
     container.appendChild(row);
   });
 }
+
 function addRecurringItem() {
   const type = document.getElementById('recType').value;
   const amount = parseFloat(document.getElementById('recAmount').value);
@@ -1555,25 +1460,11 @@ function addRecurringItem() {
   document.getElementById('recAmount').value = '';
   document.getElementById('recName').value = '';
 }
+
 function deleteRecurring(idx) {
   state.recurringItems.splice(idx, 1);
   persist();
   renderRecurringList();
-}
-
-function exportToCSV() {
-  if(!state.transactions || state.transactions.length === 0) { alert("אין תנועות לייצוא."); return; }
-  let csvContent = "\uFEFFמזהה,סוג,סכום,קטגוריה,תיאור,תאריך\n";
-  state.transactions.forEach(t => {
-    csvContent += `${t.id},${t.type === 'income' ? 'הכנסה' : 'הוצאה'},${t.amount},"${t.cat}","${t.desc || ''}",${t.date}\n`;
-  });
-  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `Pulse_Transactions_${getLocalDateString(new Date())}.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
 }
 
 function toggleVoiceRecognition() {
@@ -1657,7 +1548,6 @@ function processSmartText() {
 
 function parseVoiceCommandForDescModal(text){
   let cleanText = text;
-
   let txDate = new Date();
   let dateFound = false;
 

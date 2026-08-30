@@ -197,7 +197,21 @@
 
   .onboarding-content-box { position: relative; z-index: 2; width: 100%; max-width: 380px; margin: auto; display: flex; flex-direction: column; gap: 12px; }
 
-  .bottom-nav{ display:flex; justify-content:space-around; align-items:center; padding:8px 12px calc(8px + env(safe-area-inset-bottom)); background:var(--card); border-top:1px solid var(--border); z-index:20; flex-shrink: 0; }
+  /* סרגל ניווט תחתון מעוגן ומתוח לקצה התחתון של המסך */
+  .bottom-nav{ 
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex; 
+    justify-content: space-around; 
+    align-items: center; 
+    padding: 10px 12px calc(12px + env(safe-area-inset-bottom)); 
+    background: var(--card); 
+    border-top: 1px solid var(--border); 
+    backdrop-filter: blur(12px);
+    z-index: 30; 
+  }
   .nav-item{ display:flex; flex-direction:column; align-items:center; gap:3px; color:var(--text-faint); background:none; border:none; font-size:11px; font-weight:500; padding:4px 16px; border-radius:10px; transition:.2s; cursor:pointer; }
   .nav-item.active{ color:var(--text); }
   .nav-item.active svg{ stroke:var(--mint); }
@@ -540,8 +554,8 @@
 
   <!-- SCREEN 1: HOME -->
   <section id="screen-home" class="screen active">
-    <!-- פריסה שמחלקת את המרווחים באופן אחיד בין כל האלמנטים -->
-    <main class="px-4 pb-3 pt-1 flex-1 flex flex-col justify-between h-full">
+    <!-- פריסה עם מרווח תחתון (pb-16) כך שהתוכן לא יוסתר מאחורי הסרגל המעוגן -->
+    <main class="px-4 pb-16 pt-1 flex-1 flex flex-col justify-between h-full overflow-y-auto">
       
       <!-- אזור עליון: ברכה וכפתורי עזר -->
       <section class="flex flex-col gap-1.5 flex-shrink-0">
@@ -587,7 +601,7 @@
         </div>
       </section>
 
-      <!-- חודש פיננסי - הוספנו מרווח עליון מורגש (mt-2.5) כדי להרחיק מהכנסות/הוצאות -->
+      <!-- חודש פיננסי -->
       <section class="summary-card px-4 py-3 flex-shrink-0 mt-2.5">
         <div class="flex items-center justify-between mb-1">
           <div class="flex items-center gap-1.5">
@@ -651,7 +665,7 @@
         <button class="text-[11px] font-semibold px-3 py-1 rounded-full" style="background:var(--card); color:var(--text)">חודש פיננסי פעיל</button>
       </div>
     </div>
-    <main class="px-4 pb-6 pt-1 space-y-3 flex-1 overflow-y-auto">
+    <main class="px-4 pb-20 pt-1 space-y-3 flex-1 overflow-y-auto">
       <!-- יעד חיסכון -->
       <section class="summary-card p-3.5">
         <div class="flex items-center justify-between mb-2">
@@ -739,7 +753,7 @@
     </main>
   </section>
 
-  <!-- BOTTOM NAV -->
+  <!-- BOTTOM NAV (מעוגן לחלוטין לקצה התחתון) -->
   <nav class="bottom-nav">
     <button class="nav-item active" id="navHome" onclick="showScreen('home')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>בית

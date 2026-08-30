@@ -26,7 +26,6 @@
     --amber:#FFC85C; --amber-bg:rgba(255,200,92,0.13);
     --blue:#8FB8FF; --blue-bg:rgba(143,184,255,0.13);
     --glow-safe:#2EB88A; --glow-danger:#FF6E6E; --glow:var(--glow-safe);
-    --shadow-ambient:0 30px 60px -20px rgba(0,0,0,0.8);
     --nav-bg: rgba(14, 18, 27, 0.78);
   }
   html.light{
@@ -34,7 +33,6 @@
     --border:rgba(10,12,17,0.08); --text:#12141A; --text-dim:#6B7280; --text-faint:#9AA1AC;
     --mint-bg:rgba(46,184,138,0.12); --coral-bg:rgba(230,90,80,0.10);
     --violet-bg:rgba(139,92,246,0.1); --amber-bg:rgba(245,158,11,0.1); --blue-bg:rgba(59,130,246,0.1);
-    --shadow-ambient:0 30px 60px -25px rgba(20,20,30,0.18);
     --nav-bg: rgba(255, 255, 255, 0.96);
   }
   *{ box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
@@ -44,41 +42,23 @@
     width: 100%; 
     overflow: hidden; 
     position: fixed; 
-  }
-  body{ 
-    margin: 0; 
-    background: var(--bg-soft); 
+    margin: 0;
+    background: var(--bg); 
     font-family: 'Rubik', system-ui, sans-serif; 
     color: var(--text); 
     -webkit-font-smoothing: antialiased; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
   }
   
+  /* אפליקציית מסך מלא אמיתי ללא מסגרת צדדית */
   .app-frame{ 
     width: 100%; 
-    max-width: 480px; 
     height: 100dvh;
     padding-top: max(env(safe-area-inset-top), 4px);
     background: var(--bg); 
     position: relative; 
-    box-shadow: var(--shadow-ambient); 
     display: grid; 
     grid-template-rows: auto 1fr auto; 
     overflow: hidden; 
-  }
-
-  @media (min-width: 768px){ 
-    body { position: relative; }
-    html, body { overflow-y: auto; position: static; height: auto; }
-    .app-frame{ 
-        height: 88vh; 
-        max-height: 92vh; 
-        border-radius: 40px; 
-        border: 1px solid var(--border); 
-        padding-top: 0;
-    } 
   }
   
   .tabular{ font-variant-numeric:tabular-nums; letter-spacing:-0.03em; }
@@ -255,7 +235,6 @@
 
   .onboarding-content-box { position: relative; z-index: 2; width: 100%; max-width: 380px; margin: auto; display: flex; flex-direction: column; gap: 10px; max-height: 90vh; overflow-y: auto; }
 
-  /* הסרגל התחתון מתוקן למניעת קו הפרדה מיותר במצב בהיר */
   .bottom-nav{ 
     grid-row: 3;
     display: flex; 

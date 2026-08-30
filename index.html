@@ -910,7 +910,16 @@ function getLocalDateString(d) {
 }
 
 window.onload = function() {
-  const saved = localStorage.getItem('pulse_state_v53');
+  // ייבוא אוטומטי מגרסאות קודמות (v52) אם קיימות
+  let saved = localStorage.getItem('pulse_state_v53');
+  if(!saved) {
+    const oldSaved = localStorage.getItem('pulse_state_v52');
+    if(oldSaved) {
+      saved = oldSaved;
+      localStorage.setItem('pulse_state_v53', saved); // העברה למפתח החדש
+    }
+  }
+
   if(saved) {
     state = JSON.parse(saved);
     state.expenseCats.forEach(c => { if(c.budget === undefined) c.budget = 0; });

@@ -194,7 +194,6 @@
   .modal-overlay { position:fixed; inset:0; z-index:50; background:rgba(10,12,17,0.95); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:16px; transition: opacity .25s ease; }
   .modal-overlay.hidden { display:none !important; }
 
-  /* עיצוב תפריט צד (Sidebar) */
   #menuModal {
     justify-content: flex-start !important;
     padding: 0 !important;
@@ -294,7 +293,6 @@
 <!-- מסך טעינה בכניסה לאפליקציה (Splash Screen) -->
 <div id="appSplashScreen" class="fixed inset-0 z-[999999] bg-[#05070B] flex flex-col items-center justify-center transition-all duration-700">
     <div class="flex flex-col items-center space-y-4">
-        <!-- מסגרת סמל האפליקציה עם זוהר ירוק -->
         <div class="relative flex items-center justify-center">
             <div class="absolute -inset-6 rounded-full bg-emerald-500/20 blur-xl animate-pulse"></div>
             <svg width="64" height="64" viewBox="0 0 26 26" fill="none" class="relative z-10">
@@ -303,7 +301,6 @@
             </svg>
         </div>
         <h1 class="text-3xl font-black tracking-tight gradient-text">Pulse</h1>
-        <!-- קו הדופק הירוק הרץ מתחת -->
         <div class="w-48 h-6 overflow-hidden mt-1">
             <svg class="w-full h-full" viewBox="0 0 340 24" preserveAspectRatio="none">
                 <path d="M0,12 L60,12 L72,2 L84,22 L96,12 L150,12 L162,4 L174,12 L340,12" fill="none" stroke="#2EB88A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="stroke-dasharray:340; animation:ecg-sweep 1.2s linear infinite;"/>
@@ -915,7 +912,6 @@ function getLocalDateString(d) {
 }
 
 window.onload = function() {
-  // הסרת מסך הטעינה (Splash Screen) באנימציה חלקה אחרי 1.6 שניות
   setTimeout(() => {
     const splash = document.getElementById('appSplashScreen');
     if(splash) {
@@ -1455,8 +1451,13 @@ function addRecurringItem() {
 
   if(!state.recurringItems) state.recurringItems = [];
   state.recurringItems.push({ type, amount, name, day });
+  
+  // הוספת הפעלה מיידית של בדיקת החלת הוראות קבע כדי שאם היום כבר עבר התנועה תופיע מיד
+  checkAndApplyRecurringTransactions();
+  
   persist();
   renderRecurringList();
+  renderHome();
   document.getElementById('recAmount').value = '';
   document.getElementById('recName').value = '';
 }

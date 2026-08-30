@@ -511,7 +511,7 @@
 <div class="app-frame">
 
   <!-- HEADER: סרגל עליון נקי (כולל רק לוגו, הגדרות ומצב תצוגה) -->
-  <div class="flex items-center justify-between px-5 pt-10 pb-4" id="headerHome">
+  <div class="flex items-center justify-between px-5 pt-10 pb-3" id="headerHome">
     <div class="flex items-center gap-2">
       <svg width="22" height="22" viewBox="0 0 26 26" fill="none"><circle cx="13" cy="13" r="12" stroke="var(--mint)" stroke-width="1.6" opacity=".5"/><path d="M4 13H9L11 7L15 19L17 13H22" stroke="var(--mint)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span class="text-base font-bold tracking-tight gradient-text">Pulse</span>
@@ -528,17 +528,17 @@
 
   <!-- SCREEN 1: HOME -->
   <section id="screen-home" class="screen active">
-    <main class="px-4 pb-4 pt-1 space-y-3">
+    <main class="px-4 pb-4 pt-0 space-y-3">
       
-      <!-- שני כפתורי גישה מהירה קטנים במיוחד, אחד מתחת לשני ממש מתחת להגדרות -->
-      <section class="flex flex-col gap-1.5 px-0.5">
-        <button onclick="openGeneralHelpModal()" class="text-[10px] font-semibold px-3 py-1.5 rounded-xl bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-between cursor-pointer shadow-sm">
+      <!-- שני כפתורי הסבר קטנים במיוחד, אחד מתחת לשני ממש מתחת לסרגל העליון -->
+      <section class="flex flex-col gap-1 px-0.5">
+        <button onclick="openGeneralHelpModal()" class="text-[10px] font-medium px-3 py-1.5 rounded-xl bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-between cursor-pointer shadow-sm">
           <span><i class="fa-solid fa-lightbulb ml-1"></i> שימוש יעיל באפליקציה</span>
-          <i class="fa-solid fa-chevron-left text-[9px] opacity-75"></i>
+          <i class="fa-solid fa-chevron-left text-[8px] opacity-75"></i>
         </button>
-        <button onclick="openPwaHelpModal()" class="text-[10px] font-semibold px-3 py-1.5 rounded-xl bg-[var(--card)] border border-[var(--border)] text-emerald-400 hover:text-white transition flex items-center justify-between cursor-pointer shadow-sm">
+        <button onclick="openPwaHelpModal()" class="text-[10px] font-medium px-3 py-1.5 rounded-xl bg-[var(--card)] border border-[var(--border)] text-emerald-400 hover:text-white transition flex items-center justify-between cursor-pointer shadow-sm">
           <span><i class="fa-solid fa-mobile-screen-button ml-1"></i> הוספה למסך הבית</span>
-          <i class="fa-solid fa-chevron-left text-[9px] opacity-75"></i>
+          <i class="fa-solid fa-chevron-left text-[8px] opacity-75"></i>
         </button>
       </section>
 

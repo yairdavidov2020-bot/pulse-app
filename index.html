@@ -236,12 +236,13 @@
 
   .onboarding-content-box { position: relative; z-index: 2; width: 100%; max-width: 380px; margin: auto; display: flex; flex-direction: column; gap: 10px; max-height: 90vh; overflow-y: auto; }
 
+  /* סרגל ניווט תחתון מתוח עד הסוף התחתון */
   .bottom-nav{ 
     grid-row: 3;
     display: flex; 
     justify-content: space-around; 
     align-items: center; 
-    padding: 4px 16px calc(10px + env(safe-area-inset-bottom)); 
+    padding: 10px 16px calc(24px + env(safe-area-inset-bottom)); 
     background: var(--nav-bg); 
     border-top: none; 
     backdrop-filter: blur(16px);

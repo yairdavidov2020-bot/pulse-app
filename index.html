@@ -83,21 +83,16 @@
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     gap: 4px;
-    max-height: 80px;
-    overflow-y: auto;
     padding: 2px;
     background: var(--card-2);
     border: 1px solid var(--border);
     border-radius: 10px;
   }
-  #colorPalette::-webkit-scrollbar, #settingsColorPalette::-webkit-scrollbar, #onboardingColorPalette::-webkit-scrollbar { width: 3px; }
-  #colorPalette::-webkit-scrollbar-thumb, #settingsColorPalette::-webkit-scrollbar-thumb, #onboardingColorPalette::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
   .color-swatch { width: 100% !important; aspect-ratio: 1 !important; height: auto !important; border-radius: 6px !important; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; border: 2px solid transparent; }
   .color-swatch:hover { transform: scale(1.1); }
   .color-swatch.selected { border-color: #ffffff; box-shadow: 0 0 8px rgba(255,255,255,0.5); transform: scale(1.15); }
 
-  /* עיצוב משודרג ומעודן לעוזר הקולי והצ'אט החכם */
   .ai-voice-box { 
     background: linear-gradient(135deg, rgba(19, 24, 36, 0.95) 0%, rgba(14, 18, 27, 0.9) 100%); 
     border: 1px solid rgba(127, 232, 198, 0.3); 
@@ -176,8 +171,6 @@
   .donut::after{ content:""; position:absolute; inset:20px; border-radius:50%; background:var(--card); }
   .donut-center{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2; }
 
-  .legend-row{ display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border); }
-  .legend-row:last-child{ border-bottom:none; }
   .tx-row{ display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border); }
   .tx-row:last-child{ border-bottom:none; }
 
@@ -274,7 +267,7 @@
 
         <div class="space-y-1">
             <p class="text-[10px] font-semibold text-violet-400">קטגוריות קיימות:</p>
-            <div id="onboardingCatList" class="grid grid-cols-2 gap-1.5 max-h-[140px] overflow-y-auto pr-0.5"></div>
+            <div id="onboardingCatList" class="grid grid-cols-2 gap-1.5"></div>
         </div>
 
         <div class="border-t border-[var(--border)] pt-1.5 space-y-1.5">
@@ -390,7 +383,7 @@
     </div>
 </div>
 
-<!-- מודל ניהול קטגוריות ותקציבים (מותאם להמון קטגוריות בגלילה נקייה) -->
+<!-- מודל ניהול קטגוריות ותקציבים -->
 <div id="categoriesModal" class="modal-overlay hidden">
     <div class="summary-card p-4 max-w-md w-full space-y-3 shadow-2xl">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
@@ -400,7 +393,7 @@
        
         <div class="space-y-1">
             <p class="text-[10px] font-semibold text-slate-400">קטגוריות ותקציבים קיימים (בחר ושנה תקציב חופשי):</p>
-            <div id="modalCatList" class="grid grid-cols-2 gap-1.5 max-h-[160px] overflow-y-auto pr-0.5"></div>
+            <div id="modalCatList" class="grid grid-cols-2 gap-1.5"></div>
         </div>
 
         <div class="border-t border-[var(--border)] pt-2 space-y-2">
@@ -517,19 +510,13 @@
 
 <div class="app-frame">
 
-  <!-- HEADER: סרגל עליון הכולל את כפתורי הגישה המהירה (לשימוש יעיל ולמסך הבית) -->
+  <!-- HEADER: סרגל עליון נקי (כולל רק לוגו, הגדרות ומצב תצוגה) -->
   <div class="flex items-center justify-between px-5 pt-10 pb-4" id="headerHome">
     <div class="flex items-center gap-2">
       <svg width="22" height="22" viewBox="0 0 26 26" fill="none"><circle cx="13" cy="13" r="12" stroke="var(--mint)" stroke-width="1.6" opacity=".5"/><path d="M4 13H9L11 7L15 19L17 13H22" stroke="var(--mint)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span class="text-base font-bold tracking-tight gradient-text">Pulse</span>
     </div>
-    <div class="flex items-center gap-1.5">
-      <button onclick="openGeneralHelpModal()" class="text-[10px] font-semibold px-2.5 py-1.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center gap-1 cursor-pointer shadow-sm">
-        <i class="fa-solid fa-lightbulb text-xs"></i> לשימוש יעיל
-      </button>
-      <button onclick="openPwaHelpModal()" class="text-[10px] font-semibold px-2.5 py-1.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] text-emerald-400 hover:text-white transition flex items-center gap-1 cursor-pointer shadow-sm">
-        <i class="fa-solid fa-mobile-screen-button text-xs"></i> למסך הבית
-      </button>
+    <div class="flex items-center gap-2">
       <button onclick="openSettingsModal()" class="icon-btn" title="הגדרות">
         <i class="fa-solid fa-gear text-sm"></i>
       </button>
@@ -543,7 +530,19 @@
   <section id="screen-home" class="screen active">
     <main class="px-4 pb-4 pt-1 space-y-3">
       
-      <section class="px-0.5">
+      <!-- כפתורי הגישה המהירה (לשימוש יעיל ולמסך הבית) - אחד מתחת לשני מתחת להגדרות -->
+      <section class="space-y-2">
+        <button onclick="openGeneralHelpModal()" class="w-full text-xs font-semibold px-3.5 py-2.5 rounded-xl bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-between cursor-pointer shadow-sm">
+          <span class="flex items-center gap-2"><i class="fa-solid fa-lightbulb"></i> לשימוש יעיל באפליקציה</span>
+          <i class="fa-solid fa-chevron-left text-[10px] text-slate-400"></i>
+        </button>
+        <button onclick="openPwaHelpModal()" class="w-full text-xs font-semibold px-3.5 py-2.5 rounded-xl bg-[var(--card)] border border-[var(--border)] text-emerald-400 hover:text-white transition flex items-center justify-between cursor-pointer shadow-sm">
+          <span class="flex items-center gap-2"><i class="fa-solid fa-mobile-screen-button"></i> הוספה למסך הבית</span>
+          <i class="fa-solid fa-chevron-left text-[10px] text-slate-400"></i>
+        </button>
+      </section>
+
+      <section class="px-0.5 pt-1">
         <h2 id="greetingTitle" class="text-lg font-bold tracking-tight">שלום</h2>
         <p class="text-[11px] text-slate-400">תמונת המצב הפיננסית שלך להיום</p>
       </section>
@@ -752,7 +751,6 @@
 </div>
 
 <script>
-// קטגוריות ברירת מחדל ללא תקציב מוגדר מראש (המשתמש בוחר האם וכמה)
 const defaultCustomExpenseCats = [
   {name:'קניות', color:'#FF8D82', budget: 0}, 
   {name:'חברים', color:'#FFB382', budget: 0}, 
@@ -1751,10 +1749,17 @@ function renderAnalytics(){
     return found ? found.color : '#9AA1AC';
   };
 
+  const sortedExpenseCatsForDonut = [...state.expenseCats].sort((a, b) => {
+    return (spend[b.name] || 0) - (spend[a.name] || 0);
+  });
+
   let acc = 0; const stops = [];
-  Object.entries(spend).sort((a,b)=>b[1]-a[1]).forEach(([name, amt])=>{
-    const start = acc/total*100; acc += amt; const end = acc/total*100;
-    stops.push(`${colorOf(name)} ${start}% ${end}%`);
+  sortedExpenseCatsForDonut.forEach(cat => {
+    const amt = spend[cat.name] || 0;
+    if(amt > 0) {
+      const start = acc/total*100; acc += amt; const end = acc/total*100;
+      stops.push(`${cat.color} ${start}% ${end}%`);
+    }
   });
   document.getElementById('donutChart').style.background = stops.length ? `conic-gradient(${stops.join(',')})` : 'var(--card-2)';
   document.getElementById('donutTotal').textContent = fmt(totalExpenseVal);
@@ -1762,7 +1767,7 @@ function renderAnalytics(){
   const legend = document.getElementById('legendList');
   legend.innerHTML = '';
   
-  state.expenseCats.forEach(cat => {
+  sortedExpenseCatsForDonut.forEach(cat => {
     const amt = spend[cat.name] || 0;
     const budget = cat.budget || 0;
     const pctOfTotal = totalExpenseVal > 0 ? Math.round(amt/total*100) : 0;
@@ -1909,9 +1914,7 @@ function renderHistoricalChart() {
       }
     });
 
-    if (i === loopLimit && state.baseline) {
-      mInc += state.baseline;
-    }
+    // היתרה ההתחלתית לא מתווספת כאן יותר לגרף ההיסטורי
 
     monthlyData.push({ name: mName, income: mInc, expense: mExp });
   }

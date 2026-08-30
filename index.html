@@ -82,7 +82,6 @@
   
   .tabular{ font-variant-numeric:tabular-nums; letter-spacing:-0.02em; }
   
-  /* ניהול מסכים בתוך מעטפת נפרדת כדי שלא יגלשו על הסרגל התחתון */
   .screens-container {
     position: relative;
     flex: 1;
@@ -141,7 +140,6 @@
     border-radius: 8px;
   }
 
-  /* חלונית צבעים קטנה וגלילה לשלב 2 באון בורדינג */
   #onboardingColorPalette {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
@@ -227,7 +225,6 @@
 
   .onboarding-content-box { position: relative; z-index: 2; width: 100%; max-width: 380px; margin: auto; display: flex; flex-direction: column; gap: 10px; max-height: 90vh; overflow-y: auto; }
 
-  /* סרגל ניווט תחתון מעוגן ומתוח לקצה התחתון של המסך */
   .bottom-nav{ 
     position: absolute;
     bottom: 0;
@@ -334,19 +331,19 @@
     </div>
 </div>
 
-<!-- שלב 2: מסך ניהול קטגוריות ראשוני מעודכן -->
+<!-- שלב 2: מסך ניהול קטגוריות ראשוני עם ההסבר האלגנטי המעודכן -->
 <div id="onboarding-screen-2" class="full-page-onboarding hidden">
     <div class="onboarding-content-box text-right space-y-2 p-3 bg-[var(--card)] rounded-3xl border border-[var(--border)] shadow-2xl">
-        <div class="text-center space-y-0.5">
+        <div class="text-center space-y-1">
             <h2 class="text-base font-black gradient-text">ניהול והגדרת קטגוריות</h2>
-            <p class="text-[10px] text-slate-300 leading-tight">
-                הוסף תקציב חודשי. העוזר הקולי מזהה לפי מה שמוגדר כאן!
+            <p class="text-[10px] text-slate-300 leading-relaxed px-1">
+                הגדר תקציב חודשי, הוסף קטגוריות מתאימות ומחק את הלא רלוונטיות. העוזר הקולי והצ'אט פועלים ומתעדכנים אך ורק לפי הקטגוריות שבחרת!
             </p>
         </div>
 
         <div class="space-y-1">
             <p class="text-[10px] font-semibold text-violet-400">קטגוריות קיימות:</p>
-            <div id="onboardingCatList" class="space-y-1 max-h-[110px] overflow-y-auto"></div>
+            <div id="onboardingCatList" class="space-y-1 max-h-[100px] overflow-y-auto"></div>
         </div>
 
         <div class="border-t border-[var(--border)] pt-1.5 space-y-1.5">
@@ -582,14 +579,13 @@
     </div>
   </div>
 
-  <!-- מעטפת המסכים מופרדת מהסרגל התחתון למניעת חפיפה -->
   <div class="screens-container">
 
     <!-- SCREEN 1: HOME -->
     <section id="screen-home" class="screen active">
-      <main class="px-4 pb-4 pt-1 flex-1 flex flex-col justify-between h-full overflow-y-auto">
+      <!-- הוספת ריווח תחתון נדיב (pb-24) כך שהצ'אט וההכתבה החכמה לא יוסתרו מאחורי הסרגל -->
+      <main class="px-4 pb-24 pt-1 flex-1 flex flex-col justify-between h-full overflow-y-auto">
         
-        <!-- אזור עליון: ברכה וכפתורי עזר -->
         <section class="flex flex-col gap-1.5 flex-shrink-0">
           <div class="flex gap-2 mr-auto w-fit">
             <button onclick="openGeneralHelpModal()" class="text-[10px] font-medium px-2.5 py-1 rounded-lg bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-between gap-2 shadow-sm">
@@ -605,7 +601,6 @@
           </div>
         </section>
 
-        <!-- יתרה -->
         <section class="glow-wrap flex-shrink-0">
           <div class="glow-halo" id="glowHalo"></div>
           <div class="balance-card">
@@ -615,7 +610,6 @@
           </div>
         </section>
 
-        <!-- הוצאות/הכנסות -->
         <section class="grid grid-cols-2 gap-3 flex-shrink-0">
           <div class="summary-card p-3.5">
             <div class="flex items-center gap-1.5">
@@ -633,7 +627,6 @@
           </div>
         </section>
 
-        <!-- חודש פיננסי -->
         <section class="summary-card px-4 py-3 flex-shrink-0 mt-2.5">
           <div class="flex items-center justify-between mb-1">
             <div class="flex items-center gap-1.5">
@@ -647,7 +640,6 @@
           </div>
         </section>
 
-        <!-- הכתבה והוספה -->
         <section class="flex-1 flex flex-col justify-end min-h-0 pt-1">
           <div class="flex items-center justify-between mb-2">
             <h2 class="text-[11px] font-semibold">הכתבה חכמה ותנועות</h2>
@@ -697,8 +689,7 @@
           <button class="text-[11px] font-semibold px-3 py-1 rounded-full" style="background:var(--card); color:var(--text)">חודש פיננסי פעיל</button>
         </div>
       </div>
-      <main class="px-4 pb-6 pt-1 space-y-3 flex-1 overflow-y-auto">
-        <!-- יעד חיסכון -->
+      <main class="px-4 pb-24 pt-1 space-y-3 flex-1 overflow-y-auto">
         <section class="summary-card p-3.5">
           <div class="flex items-center justify-between mb-2">
             <div class="flex items-center gap-1.5">
@@ -716,13 +707,11 @@
           </div>
         </section>
 
-        <!-- השוואה לחודש קודם -->
         <section class="summary-card p-3.5">
           <h3 class="text-[12px] font-semibold mb-1.5 text-slate-300">השוואה לחודש קודם</h3>
           <div id="monthlyComparisonBox" class="text-[11px] space-y-1" style="color:var(--text-dim)"></div>
         </section>
 
-        <!-- פילוח הוצאות ותקציבים לקטגוריות -->
         <section class="summary-card p-3.5 cursor-pointer transition select-none" onclick="toggleDonutExpand()">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -745,7 +734,6 @@
           </div>
         </section>
 
-        <!-- תנועות החודש הנוכחי קומפקטי עם אפשרות הרחבה -->
         <section class="summary-card p-3.5 cursor-pointer transition select-none" onclick="toggleTxExpand()">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -764,13 +752,11 @@
           </div>
         </section>
 
-        <!-- ארכיון חודשים קודמים -->
         <section class="mt-3">
           <h2 class="text-[13px] font-semibold mb-1.5 px-0.5">ארכיון חודשים קודמים</h2>
           <div class="summary-card p-3 max-h-[200px] overflow-y-auto" id="archiveList"></div>
         </section>
 
-        <!-- מגמה היסטורית -->
         <section class="summary-card p-3.5 mt-3">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-[12px] font-semibold text-slate-300 flex items-center gap-1.5">
@@ -787,7 +773,6 @@
 
   </div>
 
-  <!-- BOTTOM NAV (מעוגן בדיוק בתחתית המסגרת ויושב באופן חלק) -->
   <nav class="bottom-nav">
     <button class="nav-item active" id="navHome" onclick="showScreen('home')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>בית

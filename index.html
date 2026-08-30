@@ -13,7 +13,7 @@
 
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
@@ -79,7 +79,7 @@
     } 
   }
   
-  .tabular{ font-variant-numeric:tabular-nums; letter-spacing:-0.02em; }
+  .tabular{ font-variant-numeric:tabular-nums; letter-spacing:-0.03em; }
   
   .screens-container {
     grid-row: 2;
@@ -669,29 +669,31 @@
           </div>
         </section>
 
+        <!-- כרטיס היתרה - גודל ומשקל פונט מנופח ובולט יותר -->
         <section class="glow-wrap flex-[1.5] flex flex-col justify-center">
           <div class="glow-halo" id="glowHalo"></div>
           <div class="balance-card">
-            <p class="text-[11px] font-medium" style="color:var(--text-dim)">יתרה בעו״ש</p>
-            <h1 class="tabular text-[26px] font-extrabold mt-0.5 leading-none" id="balanceValue">0</h1>
+            <p class="text-[11px] font-semibold" style="color:var(--text-dim)">יתרה בעו״ש</p>
+            <h1 class="tabular text-[32px] sm:text-[36px] font-black mt-1 leading-none" id="balanceValue">0</h1>
             <svg class="ecg-line" viewBox="0 0 340 24" preserveAspectRatio="none"><path d="M0,12 L60,12 L72,2 L84,22 L96,12 L150,12 L162,4 L174,12 L340,12" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
         </section>
 
+        <!-- הכנסות והוצאות בחודש - ערכים מנופחים ובולטים יותר -->
         <section class="grid grid-cols-2 gap-2 flex-1 items-center">
-          <div class="summary-card p-2 h-full flex flex-col justify-center">
+          <div class="summary-card p-2.5 h-full flex flex-col justify-center">
             <div class="flex items-center gap-1.5">
               <span class="w-3 h-3 rounded-full flex items-center justify-center" style="background:var(--mint-bg)"><svg width="6" height="6" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2.6" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
               <span class="text-[9px]" style="color:var(--text-dim)">הכנסות החודש</span>
             </div>
-            <p class="tabular text-xs font-bold mt-0.5" style="color:var(--mint)" id="totalIncome">0</p>
+            <p class="tabular text-sm sm:text-base font-black mt-1" style="color:var(--mint)" id="totalIncome">0</p>
           </div>
-          <div class="summary-card p-2 h-full flex flex-col justify-center">
+          <div class="summary-card p-2.5 h-full flex flex-col justify-center">
             <div class="flex items-center gap-1.5">
               <span class="w-3 h-3 rounded-full flex items-center justify-center" style="background:var(--coral-bg)"><svg width="6" height="6" viewBox="0 0 24 24" fill="none" stroke="var(--coral)" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg></span>
               <span class="text-[9px]" style="color:var(--text-dim)">הוצאות החודש</span>
             </div>
-            <p class="tabular text-xs font-bold mt-0.5" style="color:var(--coral)" id="totalExpense">0</p>
+            <p class="tabular text-sm sm:text-base font-black mt-1" style="color:var(--coral)" id="totalExpense">0</p>
           </div>
         </section>
 
@@ -1452,7 +1454,6 @@ function addRecurringItem() {
   if(!state.recurringItems) state.recurringItems = [];
   state.recurringItems.push({ type, amount, name, day });
   
-  // הוספת הפעלה מיידית של בדיקת החלת הוראות קבע כדי שאם היום כבר עבר התנועה תופיע מיד
   checkAndApplyRecurringTransactions();
   
   persist();
@@ -1877,7 +1878,7 @@ function deleteTransaction(id) {
 
 function editTransaction(id) {
   const tx = state.transactions.find(t => t.id === id);
-  if(!tx) return;
+  if(!txt) return;
   const newAmt = prompt("הכנס סכום חדש לתנועה:", tx.amount);
   if(newAmt !== null && !isNaN(parseFloat(newAmt))) {
     tx.amount = parseFloat(newAmt);

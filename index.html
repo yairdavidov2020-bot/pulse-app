@@ -409,6 +409,26 @@
     </div>
 </div>
 
+<!-- מודל הסבר על הצ'אט החכם -->
+<div id="chatHelpModal" class="modal-overlay hidden">
+    <div class="summary-card p-4 max-w-xs w-full space-y-3 shadow-2xl text-right">
+        <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
+            <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-comments ml-1"></i> הצ'אט החכם והעוזר הקולי</h3>
+            <button onclick="closeChatHelpModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
+        </div>
+        <div class="space-y-2 text-[11px] leading-relaxed text-slate-300">
+            <p>העוזר הקולי ופקודות הטקסט מאפשרים לך להוסיף תנועות בקלות ומהירות בשפה טבעית.</p>
+            <div class="bg-[var(--card-2)] p-2 rounded-xl border border-[var(--border)] space-y-1">
+                <p class="font-bold text-emerald-400">💡 טיפים לשימוש:</p>
+                <p>• אמור או הקלד סכום, קטגוריה ותאריך (למשל: <span class="text-white font-medium">"100 קניות אתמול"</span>).</p>
+                <p>• המערכת מזהה אוטומטית את הקטגוריות שהגדרת באפליקציה.</p>
+                <p>• ניתן לומר "משכורת" או "קיבלתי" כדי לסווג כהכנסה.</p>
+            </div>
+        </div>
+        <button onclick="closeChatHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי, תודה!</button>
+    </div>
+</div>
+
 <!-- מודל הוספה למסך הבית -->
 <div id="pwaHelpModal" class="modal-overlay hidden">
     <div class="summary-card p-4 max-w-xs w-full space-y-3 shadow-2xl text-right">
@@ -469,37 +489,37 @@
     </div>
 </div>
 
-<!-- מודל ניהול קטגוריות ותקציבים -->
+<!-- מודל ניהול קטגוריות ותקציבים (הוקטן לגישה נוחה לאיקס) -->
 <div id="categoriesModal" class="modal-overlay hidden">
-    <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl">
-        <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
+    <div class="summary-card p-3 max-w-xs w-full space-y-2 shadow-2xl max-h-[82vh] overflow-y-auto">
+        <div class="flex items-center justify-between border-b border-[var(--border)] pb-1.5">
             <h3 class="text-xs font-bold text-violet-400">ניהול קטגוריות ותקציבים</h3>
-            <button onclick="closeCategoriesModal()" class="icon-btn" style="width:28px;height:28px;"><i class="fa-solid fa-xmark text-xs"></i></button>
+            <button onclick="closeCategoriesModal()" class="icon-btn" style="width:28px;height:28px;flex-shrink:0;"><i class="fa-solid fa-xmark text-sm font-black"></i></button>
         </div>
        
-        <div class="space-y-1.5">
-            <p class="text-[10px] font-semibold text-slate-400">קטגוריות ותקציבים קיימים:</p>
-            <div id="modalCatList" class="space-y-1.5 max-h-[160px] overflow-y-auto"></div>
+        <div class="space-y-1">
+            <p class="text-[9px] font-semibold text-slate-400">קטגוריות ותקציבים קיימים:</p>
+            <div id="modalCatList" class="space-y-1 max-h-[110px] overflow-y-auto"></div>
         </div>
 
-        <div class="border-t border-[var(--border)] pt-2 space-y-2">
-            <p class="text-[10px] font-semibold text-emerald-400">הוסף קטגוריה ותקציב חדש</p>
-            <div class="grid grid-cols-2 gap-2">
+        <div class="border-t border-[var(--border)] pt-1.5 space-y-1.5">
+            <p class="text-[9px] font-semibold text-emerald-400">הוסף קטגוריה ותקציב חדש</p>
+            <div class="grid grid-cols-2 gap-1.5">
                 <div class="field-shell px-2 py-1">
-                    <input id="newCatNameInput" placeholder="שם חדש..." class="w-full bg-transparent outline-none font-bold text-[11px]" style="color:var(--text)" />
+                    <input id="newCatNameInput" placeholder="שם חדש..." class="w-full bg-transparent outline-none font-bold text-[10px]" style="color:var(--text)" />
                 </div>
                 <div class="field-shell px-2 py-1">
-                    <input id="newCatBudgetInput" type="tel" inputmode="decimal" placeholder="תקציב ₪" class="w-full bg-transparent outline-none text-[11px]" style="color:var(--text)" />
+                    <input id="newCatBudgetInput" type="tel" inputmode="decimal" placeholder="תקציב ₪" class="w-full bg-transparent outline-none text-[10px]" style="color:var(--text)" />
                 </div>
             </div>
-            <div class="flex items-center gap-2">
-                <input type="color" id="freeColorPicker" value="#7FE8C6" onchange="selectedNewCatColor = this.value; document.querySelectorAll('#colorPalette .color-swatch').forEach(s=>s.classList.remove('selected'));" class="w-7 h-7 rounded-lg bg-transparent cursor-pointer border border-[var(--border)] flex-shrink-0" />
-                <button onclick="addNewCategoryFromModal()" class="save-btn px-3 py-1.5 rounded-xl font-bold text-[11px] flex-1">הוסף קטגוריה</button>
+            <div class="flex items-center gap-1.5">
+                <input type="color" id="freeColorPicker" value="#7FE8C6" onchange="selectedNewCatColor = this.value; document.querySelectorAll('#colorPalette .color-swatch').forEach(s=>s.classList.remove('selected'));" class="w-6 h-6 rounded-lg bg-transparent cursor-pointer border border-[var(--border)] flex-shrink-0" />
+                <button onclick="addNewCategoryFromModal()" class="save-btn px-3 py-1.5 rounded-xl font-bold text-[10px] flex-1">הוסף קטגוריה</button>
             </div>
              
             <div>
-                <p class="text-[9px] mb-1 text-slate-400">בחר צבע לקטגוריה:</p>
-                <div id="colorPalette"></div>
+                <p class="text-[8px] mb-0.5 text-slate-400">בחר צבע לקטגוריה:</p>
+                <div id="colorPalette" style="max-height: 48px; overflow-y: auto;"></div>
             </div>
         </div>
     </div>
@@ -594,7 +614,6 @@
 
     <!-- SCREEN 1: HOME -->
     <section id="screen-home" class="screen active">
-      <!-- כל הרכיבים בעמוד נפרסים יחסית (flex-1) כך שיתפסו את כל העמוד, והיתרה בולטת יותר (flex-[1.4]) -->
       <main class="px-3 pb-1 pt-1 flex-1 flex flex-col justify-between h-full overflow-hidden gap-1.5">
         
         <!-- כותרת וכפתורי עזר -->
@@ -655,16 +674,19 @@
           </div>
         </section>
 
-        <!-- עוזר קולי וצ'אט חכם (נמתח ומתאים את עצמו יחסית) -->
+        <!-- עוזר קולי וצ'אט חכם (כולל כפתור ? ייעודי) -->
         <section class="flex-[1.8] flex flex-col justify-between min-h-0 pb-1">
           <div class="flex items-center justify-between mb-1">
-            <h2 class="text-[10px] font-semibold">הכתבה חכמה ותנועות</h2>
+            <div class="flex items-center gap-1.5">
+              <h2 class="text-[10px] font-semibold">הכתבה חכמה ותנועות</h2>
+              <button onclick="openChatHelpModal()" class="w-3.5 h-3.5 rounded-full bg-[var(--card)] border border-[var(--border)] text-[8px] font-bold flex items-center justify-center text-emerald-400 cursor-pointer hover:bg-emerald-500/10 transition" title="עזרה על הצ'אט החכם">?</button>
+            </div>
             <div class="flex items-center gap-1.5">
               <button onclick="openCategoriesModal()" class="text-[9px] font-semibold px-2 py-0.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center gap-1 cursor-pointer">
                 <i class="fa-solid fa-tags"></i> קטגוריות
               </button>
               <button onclick="openRecurringModal()" class="text-[9px] font-semibold px-2 py-0.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-amber-400 hover:opacity-80 transition flex items-center gap-1 cursor-pointer">
-                <i class="fa-solid fa-repeat"></i> קבע
+                <i class="fa-solid fa-repeat"></i> הוראות קבע
               </button>
             </div>
           </div>
@@ -1042,6 +1064,13 @@ function closeGeneralHelpModal() {
   document.getElementById('generalHelpModal').classList.add('hidden');
 }
 
+function openChatHelpModal() {
+  document.getElementById('chatHelpModal').classList.remove('hidden');
+}
+function closeChatHelpModal() {
+  document.getElementById('chatHelpModal').classList.add('hidden');
+}
+
 function openPwaHelpModal() {
   document.getElementById('pwaHelpModal').classList.remove('hidden');
 }
@@ -1063,6 +1092,7 @@ function checkAndApplyRecurringTransactions() {
     let targetYear = startPeriod.getFullYear();
     let targetMonth = startPeriod.getMonth();
     
+    // מותאם לחודש הפיננסי: אם היום נבחר מתחת ליום תחילת החודש הפיננסי, הוא שייך לחודש העוקב של המחזור (נשאר תחת המחזור הנוכחי)
     if (targetDay < fDay) {
       targetMonth += 1;
       if (targetMonth > 11) {

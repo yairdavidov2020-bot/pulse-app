@@ -110,13 +110,13 @@
     -webkit-text-fill-color: transparent;
   }
 
-  .glow-wrap{ position:relative; display:flex; justify-content:center; width:100%; flex-shrink:0; }
-  .glow-halo{ position:absolute; inset:-15px 10% auto 10%; height:90px; border-radius:50%; filter:blur(25px); background:radial-gradient(circle, var(--glow) 0%, transparent 68%); opacity:.4; transition:background 1s ease; }
+  .glow-wrap{ position:relative; display:flex; justify-content:center; width:100%; }
+  .glow-halo{ position:absolute; inset:-15px 10% auto 10%; height:100px; border-radius:50%; filter:blur(25px); background:radial-gradient(circle, var(--glow) 0%, transparent 68%); opacity:.45; transition:background 1s ease; }
   
-  .balance-card{ position:relative; width:100%; border:1px solid var(--border); background:linear-gradient(180deg, var(--card) 0%, var(--card-2) 100%); border-radius:16px; padding:10px; text-align:center; z-index:1; }
-  .balance-card::before{ content:""; position:absolute; inset:0; border-radius:16px; padding:1px; background:linear-gradient(135deg, var(--glow) 0%, transparent 45%, transparent 55%, var(--glow) 100%); opacity:.45; -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; }
+  .balance-card{ position:relative; width:100%; border:1px solid var(--border); background:linear-gradient(180deg, var(--card) 0%, var(--card-2) 100%); border-radius:18px; padding:14px 12px; text-align:center; z-index:1; display:flex; flex-direction:column; justify-content:center; height:100%; }
+  .balance-card::before{ content:""; position:absolute; inset:0; border-radius:18px; padding:1px; background:linear-gradient(135deg, var(--glow) 0%, transparent 45%, transparent 55%, var(--glow) 100%); opacity:.5; -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; }
   
-  .ecg-line{ width:100%; height:14px; margin-top:2px; overflow:hidden; }
+  .ecg-line{ width:100%; height:16px; margin-top:3px; overflow:hidden; }
   .ecg-line path{ stroke: #2EB88A; stroke-dasharray:340; animation:ecg-sweep 2s linear infinite; }
   @keyframes ecg-sweep{ from{stroke-dashoffset:340;} to{stroke-dashoffset:0;} }
 
@@ -155,7 +155,6 @@
   .color-swatch:hover { transform: scale(1.1); }
   .color-swatch.selected { border-color: #ffffff; box-shadow: 0 0 6px rgba(255,255,255,0.5); transform: scale(1.15); }
 
-  /* מעטפת צ'אט והכתבה מורחבת שתופסת את כל הגובה שנותר */
   .ai-voice-box { 
     background: linear-gradient(135deg, rgba(19, 24, 36, 0.95) 0%, rgba(14, 18, 27, 0.9) 100%); 
     border: 1px solid rgba(127, 232, 198, 0.3); 
@@ -167,8 +166,7 @@
     box-shadow: 0 8px 24px -6px rgba(0,0,0,0.5); 
     position: relative;
     overflow: hidden;
-    flex: 1;
-    min-height: 55px;
+    height: 100%;
   }
   .ai-voice-box::before {
     content: "";
@@ -177,7 +175,7 @@
     background: linear-gradient(to bottom, var(--mint), var(--blue));
   }
 
-  .mic-btn{ width:40px; height:40px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, rgba(127,232,198,0.25) 0%, rgba(143,184,255,0.25) 100%); border: 1px solid rgba(127,232,198,0.5); color:var(--mint); position:relative; cursor:pointer; transition: transform 0.2s, background 0.2s; }
+  .mic-btn{ width:38px; height:38px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, rgba(127,232,198,0.25) 0%, rgba(143,184,255,0.25) 100%); border: 1px solid rgba(127,232,198,0.5); color:var(--mint); position:relative; cursor:pointer; transition: transform 0.2s, background 0.2s; }
   .mic-btn:active { transform: scale(0.94); }
   .mic-ring{ position:absolute; inset:-4px; border-radius:50%; border:2px solid var(--mint); opacity:0; pointer-events:none; }
   .mic-btn.listening .mic-ring{ animation:ring-out 1.4s ease-out infinite; }
@@ -596,100 +594,103 @@
 
     <!-- SCREEN 1: HOME -->
     <section id="screen-home" class="screen active">
-      <!-- אזור תוכן מרכזי נעול, הדוק, כאשר אזור הצ'אט/ההכתבה נמתח עד הסרגל התחתון -->
-      <main class="px-4 pb-2 pt-1 flex-1 flex flex-col gap-2 h-full overflow-hidden">
+      <!-- כל הרכיבים בעמוד נפרסים יחסית (flex-1) כך שיתפסו את כל העמוד, והיתרה בולטת יותר (flex-[1.4]) -->
+      <main class="px-3 pb-1 pt-1 flex-1 flex flex-col justify-between h-full overflow-hidden gap-1.5">
         
-        <section class="flex flex-col gap-0.5 flex-shrink-0">
-          <div class="flex gap-2 mr-auto w-fit">
-            <button onclick="openGeneralHelpModal()" class="text-[10px] font-medium px-2 py-0.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-between gap-1 shadow-sm">
+        <!-- כותרת וכפתורי עזר -->
+        <section class="flex flex-col justify-center flex-1">
+          <div class="flex gap-2 mr-auto w-fit mb-1">
+            <button onclick="openGeneralHelpModal()" class="text-[9px] font-medium px-2 py-0.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-between gap-1 shadow-sm">
               <span><i class="fa-solid fa-lightbulb ml-1"></i> שימוש יעיל</span>
             </button>
-            <button onclick="openPwaHelpModal()" class="text-[10px] font-medium px-2 py-0.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-emerald-400 hover:text-white transition flex items-center justify-between gap-1 shadow-sm">
+            <button onclick="openPwaHelpModal()" class="text-[9px] font-medium px-2 py-0.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-emerald-400 hover:text-white transition flex items-center justify-between gap-1 shadow-sm">
               <span><i class="fa-solid fa-mobile-screen-button ml-1"></i> מסך הבית</span>
             </button>
           </div>
           <div class="px-0.5">
-            <h2 id="greetingTitle" class="text-[14px] font-bold tracking-tight leading-tight">שלום</h2>
-            <p class="text-[10px] text-slate-400">תמונת המצב הפיננסית שלך להיום</p>
+            <h2 id="greetingTitle" class="text-[13px] font-bold tracking-tight leading-tight">שלום</h2>
+            <p class="text-[9px] text-slate-400">תמונת המצב הפיננסית שלך להיום</p>
           </div>
         </section>
 
-        <section class="glow-wrap flex-shrink-0">
+        <!-- כרטיס היתרה - בולט וגדול יותר -->
+        <section class="glow-wrap flex-[1.5] flex flex-col justify-center">
           <div class="glow-halo" id="glowHalo"></div>
           <div class="balance-card">
             <p class="text-[11px] font-medium" style="color:var(--text-dim)">יתרה בעו״ש</p>
-            <h1 class="tabular text-[25px] font-extrabold mt-0.5 leading-none" id="balanceValue">₪0</h1>
+            <h1 class="tabular text-[26px] font-extrabold mt-0.5 leading-none" id="balanceValue">₪0</h1>
             <svg class="ecg-line" viewBox="0 0 340 24" preserveAspectRatio="none"><path d="M0,12 L60,12 L72,2 L84,22 L96,12 L150,12 L162,4 L174,12 L340,12" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
         </section>
 
-        <section class="grid grid-cols-2 gap-2 flex-shrink-0">
-          <div class="summary-card p-2">
+        <!-- הכנסות והוצאות בחודש -->
+        <section class="grid grid-cols-2 gap-2 flex-1 items-center">
+          <div class="summary-card p-2 h-full flex flex-col justify-center">
             <div class="flex items-center gap-1.5">
-              <span class="w-3.5 h-3.5 rounded-full flex items-center justify-center" style="background:var(--mint-bg)"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2.6" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
-              <span class="text-[10px]" style="color:var(--text-dim)">הכנסות החודש</span>
+              <span class="w-3 h-3 rounded-full flex items-center justify-center" style="background:var(--mint-bg)"><svg width="6" height="6" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2.6" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
+              <span class="text-[9px]" style="color:var(--text-dim)">הכנסות החודש</span>
             </div>
             <p class="tabular text-xs font-bold mt-0.5" style="color:var(--mint)" id="totalIncome">₪0</p>
           </div>
-          <div class="summary-card p-2">
+          <div class="summary-card p-2 h-full flex flex-col justify-center">
             <div class="flex items-center gap-1.5">
-              <span class="w-3.5 h-3.5 rounded-full flex items-center justify-center" style="background:var(--coral-bg)"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="var(--coral)" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg></span>
-              <span class="text-[10px]" style="color:var(--text-dim)">הוצאות החודש</span>
+              <span class="w-3 h-3 rounded-full flex items-center justify-center" style="background:var(--coral-bg)"><svg width="6" height="6" viewBox="0 0 24 24" fill="none" stroke="var(--coral)" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg></span>
+              <span class="text-[9px]" style="color:var(--text-dim)">הוצאות החודש</span>
             </div>
             <p class="tabular text-xs font-bold mt-0.5" style="color:var(--coral)" id="totalExpense">₪0</p>
           </div>
         </section>
 
-        <!-- חודש פיננסי קרוב למעלה -->
-        <section class="summary-card px-3 py-1.5 flex-shrink-0">
+        <!-- חודש פיננסי -->
+        <section class="summary-card px-3 py-1 flex flex-col justify-center flex-1">
           <div class="flex items-center justify-between mb-0.5">
             <div class="flex items-center gap-1.5">
-              <span class="text-[10px]">📅</span>
-              <span class="text-[10px] font-semibold">חודש פיננסי</span>
+              <span class="text-[9px]">📅</span>
+              <span class="text-[9px] font-semibold">חודש פיננסי</span>
             </div>
-            <button onclick="showFinancialHelp()" class="w-3.5 h-3.5 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[9px] font-bold flex items-center justify-center text-emerald-400 cursor-pointer">?</button>
+            <button onclick="showFinancialHelp()" class="w-3 h-3 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[8px] font-bold flex items-center justify-center text-emerald-400 cursor-pointer">?</button>
           </div>
-          <div class="field-shell flex items-center px-2.5 py-1">
-            <select id="homeFinancialDaySelect" onchange="saveFinancialDay(this.value)" class="w-full bg-transparent outline-none font-bold text-[10px] cursor-pointer" style="color:var(--text)"></select>
+          <div class="field-shell flex items-center px-2 py-0.5">
+            <select id="homeFinancialDaySelect" onchange="saveFinancialDay(this.value)" class="w-full bg-transparent outline-none font-bold text-[9px] cursor-pointer" style="color:var(--text)"></select>
           </div>
         </section>
 
-        <!-- אזור הכתבה חכמה וצ'אט שנמתח בכוח עד הסרגל התחתון -->
-        <section class="flex-1 flex flex-col justify-end min-h-0 pb-1">
+        <!-- עוזר קולי וצ'אט חכם (נמתח ומתאים את עצמו יחסית) -->
+        <section class="flex-[1.8] flex flex-col justify-between min-h-0 pb-1">
           <div class="flex items-center justify-between mb-1">
-            <h2 class="text-[11px] font-semibold">הכתבה חכמה ותנועות</h2>
+            <h2 class="text-[10px] font-semibold">הכתבה חכמה ותנועות</h2>
             <div class="flex items-center gap-1.5">
-              <button onclick="openCategoriesModal()" class="text-[10px] font-semibold px-2 py-0.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center gap-1 cursor-pointer">
+              <button onclick="openCategoriesModal()" class="text-[9px] font-semibold px-2 py-0.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center gap-1 cursor-pointer">
                 <i class="fa-solid fa-tags"></i> קטגוריות
               </button>
-              <button onclick="openRecurringModal()" class="text-[10px] font-semibold px-2 py-0.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-amber-400 hover:opacity-80 transition flex items-center gap-1 cursor-pointer">
+              <button onclick="openRecurringModal()" class="text-[9px] font-semibold px-2 py-0.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-amber-400 hover:opacity-80 transition flex items-center gap-1 cursor-pointer">
                 <i class="fa-solid fa-repeat"></i> קבע
               </button>
             </div>
           </div>
 
-          <div class="ai-voice-box mb-1.5 shadow-md">
+          <div class="ai-voice-box mb-1 shadow-md">
             <button id="micBtn" class="mic-btn" onclick="toggleVoiceRecognition()" title="הכתבה קולית">
               <span class="mic-ring"></span><span class="mic-ring d2"></span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
             </button>
             <div class="flex-1 min-w-0">
               <div class="flex items-center justify-between">
-                <h4 class="text-[11px] font-bold flex items-center gap-1.5 text-slate-100">
+                <h4 class="text-[10px] font-bold flex items-center gap-1.5 text-slate-100">
                   <span>עוזר קולי דיגיטלי</span>
                   <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                 </h4>
-                <button onclick="openVoiceHelpModal()" class="w-3.5 h-3.5 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[9px] font-bold flex items-center justify-center text-emerald-400 cursor-pointer">?</button>
+                <button onclick="openVoiceHelpModal()" class="w-3.5 h-3.5 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[8px] font-bold flex items-center justify-center text-emerald-400 cursor-pointer">?</button>
               </div>
-              <p id="micStatus" class="text-[10px] mt-0.5 leading-tight truncate" style="color:var(--text-dim)">לחץ לאמירת סכום, קטגוריה ותאריך</p>
+              <p id="micStatus" class="text-[9px] mt-0.5 leading-tight truncate" style="color:var(--text-dim)">לחץ לאמירת סכום, קטגוריה ותאריך</p>
             </div>
           </div>
 
-          <div class="summary-card p-2.5 space-y-1.5">
-            <div class="field-shell flex items-center px-3 py-2">
-              <input id="smartTextInput" type="text" placeholder="הכתבה (למשל: 50 קניות 18.8)..." class="w-full bg-transparent outline-none text-[11px] font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
+          <div class="summary-card p-2 space-y-1">
+            <div class="field-shell flex items-center px-2.5 py-1.5">
+              <input id="smartTextInput" type="text" placeholder="הכתבה (למשל: 50 קניות 18.8)..." class="w-full bg-transparent outline-none text-[10px] font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
             </div>
-            <button onclick="processSmartText()" class="save-btn w-full py-2 rounded-xl text-[11px] font-bold cursor-pointer shadow-sm">פענח והוסף תנועה</button>
+            <button onclick="processSmartText()" class="save-btn w-full py-1.5 rounded-xl text-[10px] font-bold cursor-pointer shadow-sm">פענח והוסף תנועה</button>
           </div>
         </section>
 

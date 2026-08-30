@@ -27,13 +27,15 @@
     --blue:#8FB8FF; --blue-bg:rgba(143,184,255,0.13);
     --glow-safe:#2EB88A; --glow-danger:#FF6E6E; --glow:var(--glow-safe);
     --shadow-ambient:0 30px 60px -20px rgba(0,0,0,0.8);
+    --nav-bg: rgba(14, 18, 27, 0.78);
   }
   html.light{
     --bg:#F3F4F7; --bg-soft:#EAEBEF; --card:rgba(255, 255, 255, 0.88); --card-2:rgba(247, 248, 250, 0.92);
-    --border:rgba(10,12,17,0.1); --text:#12141A; --text-dim:#6B7280; --text-faint:#9AA1AC;
+    --border:rgba(10,12,17,0.08); --text:#12141A; --text-dim:#6B7280; --text-faint:#9AA1AC;
     --mint-bg:rgba(46,184,138,0.12); --coral-bg:rgba(230,90,80,0.10);
     --violet-bg:rgba(139,92,246,0.1); --amber-bg:rgba(245,158,11,0.1); --blue-bg:rgba(59,130,246,0.1);
     --shadow-ambient:0 30px 60px -25px rgba(20,20,30,0.18);
+    --nav-bg: rgba(255, 255, 255, 0.96);
   }
   *{ box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
   
@@ -127,6 +129,7 @@
   input[type="tel"], input[type="number"] { font-size: 16px !important; }
 
   .field-shell{ background:rgba(15, 20, 30, 0.85); border:1px solid rgba(255,255,255,0.15); border-radius:10px; transition: border-color 0.2s; backdrop-filter:blur(10px); }
+  html.light .field-shell { background: rgba(240, 242, 245, 0.9); border-color: rgba(0,0,0,0.1); }
   .field-shell:focus-within{ border-color: var(--mint); }
 
   #colorPalette, #settingsColorPalette {
@@ -167,6 +170,10 @@
     position: relative;
     overflow: hidden;
     height: 100%;
+  }
+  html.light .ai-voice-box {
+    background: linear-gradient(135deg, rgba(240, 243, 248, 0.98) 0%, rgba(230, 235, 242, 0.95) 100%);
+    border-color: rgba(46, 184, 138, 0.4);
   }
   .ai-voice-box::before {
     content: "";
@@ -248,15 +255,16 @@
 
   .onboarding-content-box { position: relative; z-index: 2; width: 100%; max-width: 380px; margin: auto; display: flex; flex-direction: column; gap: 10px; max-height: 90vh; overflow-y: auto; }
 
+  /* הסרגל התחתון מתוקן למניעת קו הפרדה מיותר במצב בהיר */
   .bottom-nav{ 
     grid-row: 3;
     display: flex; 
     justify-content: space-around; 
     align-items: center; 
-    padding: 4px 16px calc(4px + env(safe-area-inset-bottom)); 
-    background: var(--card); 
-    border-top: 1px solid var(--border); 
-    backdrop-filter: blur(12px);
+    padding: 4px 16px calc(10px + env(safe-area-inset-bottom)); 
+    background: var(--nav-bg); 
+    border-top: none; 
+    backdrop-filter: blur(16px);
     z-index: 30; 
   }
   .nav-item{ 
@@ -269,7 +277,7 @@
     border: none; 
     font-size: 11px; 
     font-weight: 600; 
-    padding: 3px 16px; 
+    padding: 5px 16px; 
     border-radius: 8px; 
     transition: .2s; 
     cursor: pointer; 

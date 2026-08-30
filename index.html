@@ -225,6 +225,7 @@
 
   .onboarding-content-box { position: relative; z-index: 2; width: 100%; max-width: 380px; margin: auto; display: flex; flex-direction: column; gap: 10px; max-height: 90vh; overflow-y: auto; }
 
+  /* סרגל ניווט תחתון דק וקומפקטי במיוחד */
   .bottom-nav{ 
     position: absolute;
     bottom: 0;
@@ -233,15 +234,29 @@
     display: flex; 
     justify-content: space-around; 
     align-items: center; 
-    padding: 10px 12px calc(12px + env(safe-area-inset-bottom)); 
+    padding: 6px 16px calc(6px + env(safe-area-inset-bottom)); 
     background: var(--card); 
     border-top: 1px solid var(--border); 
     backdrop-filter: blur(12px);
     z-index: 30; 
   }
-  .nav-item{ display:flex; flex-direction:column; align-items:center; gap:3px; color:var(--text-faint); background:none; border:none; font-size:11px; font-weight:500; padding:4px 16px; border-radius:10px; transition:.2s; cursor:pointer; }
-  .nav-item.active{ color:var(--text); }
-  .nav-item.active svg{ stroke:var(--mint); }
+  .nav-item{ 
+    display: flex; 
+    flex-direction: row; 
+    align-items: center; 
+    gap: 6px; 
+    color: var(--text-faint); 
+    background: none; 
+    border: none; 
+    font-size: 11px; 
+    font-weight: 600; 
+    padding: 6px 20px; 
+    border-radius: 12px; 
+    transition: .2s; 
+    cursor: pointer; 
+  }
+  .nav-item.active{ color: var(--text); background: var(--card-2); border: 1px solid var(--border); }
+  .nav-item.active svg{ stroke: var(--mint); }
 
   .donut{ width:130px; height:130px; border-radius:50%; position:relative; margin:0 auto; }
   .donut::after{ content:""; position:absolute; inset:18px; border-radius:50%; background:var(--card); }
@@ -583,8 +598,8 @@
 
     <!-- SCREEN 1: HOME -->
     <section id="screen-home" class="screen active">
-      <!-- הוספת ריווח תחתון נדיב (pb-24) כך שהצ'אט וההכתבה החכמה לא יוסתרו מאחורי הסרגל -->
-      <main class="px-4 pb-24 pt-1 flex-1 flex flex-col justify-between h-full overflow-y-auto">
+      <!-- ריווח תחתון קומפקטי (pb-16) המותאם לסרגל הדק -->
+      <main class="px-4 pb-16 pt-1 flex-1 flex flex-col justify-between h-full overflow-y-auto">
         
         <section class="flex flex-col gap-1.5 flex-shrink-0">
           <div class="flex gap-2 mr-auto w-fit">
@@ -689,7 +704,7 @@
           <button class="text-[11px] font-semibold px-3 py-1 rounded-full" style="background:var(--card); color:var(--text)">חודש פיננסי פעיל</button>
         </div>
       </div>
-      <main class="px-4 pb-24 pt-1 space-y-3 flex-1 overflow-y-auto">
+      <main class="px-4 pb-16 pt-1 space-y-3 flex-1 overflow-y-auto">
         <section class="summary-card p-3.5">
           <div class="flex items-center justify-between mb-2">
             <div class="flex items-center gap-1.5">
@@ -775,10 +790,10 @@
 
   <nav class="bottom-nav">
     <button class="nav-item active" id="navHome" onclick="showScreen('home')">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>בית
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>בית
     </button>
     <button class="nav-item" id="navAnalytics" onclick="showScreen('analytics')">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9M12 19V4M20 19v-6"/></svg>תמונת מצב
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9M12 19V4M20 19v-6"/></svg>תמונת מצב
     </button>
   </nav>
 </div>

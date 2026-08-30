@@ -111,13 +111,13 @@
     -webkit-text-fill-color: transparent;
   }
 
-  .glow-wrap{ position:relative; display:flex; justify-content:center; width:100%; margin: 6px 0; flex-shrink:0; }
+  .glow-wrap{ position:relative; display:flex; justify-content:center; width:100%; margin: 4px 0; flex-shrink:0; }
   .glow-halo{ position:absolute; inset:-20px 10% auto 10%; height:120px; border-radius:50%; filter:blur(30px); background:radial-gradient(circle, var(--glow) 0%, transparent 68%); opacity:.4; transition:background 1s ease; }
   
-  .balance-card{ position:relative; width:100%; border:1px solid var(--border); background:linear-gradient(180deg, var(--card) 0%, var(--card-2) 100%); border-radius:24px; padding:18px 16px; text-align:center; z-index:1; }
-  .balance-card::before{ content:""; position:absolute; inset:0; border-radius:24px; padding:1px; background:linear-gradient(135deg, var(--glow) 0%, transparent 45%, transparent 55%, var(--glow) 100%); opacity:.45; -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; }
+  .balance-card{ position:relative; width:100%; border:1px solid var(--border); background:linear-gradient(180deg, var(--card) 0%, var(--card-2) 100%); border-radius:22px; padding:16px 14px; text-align:center; z-index:1; }
+  .balance-card::before{ content:""; position:absolute; inset:0; border-radius:22px; padding:1px; background:linear-gradient(135deg, var(--glow) 0%, transparent 45%, transparent 55%, var(--glow) 100%); opacity:.45; -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; }
   
-  .ecg-line{ width:100%; height:22px; margin-top:6px; overflow:hidden; }
+  .ecg-line{ width:100%; height:20px; margin-top:4px; overflow:hidden; }
   .ecg-line path{ stroke: #2EB88A; stroke-dasharray:340; animation:ecg-sweep 2s linear infinite; }
   @keyframes ecg-sweep{ from{stroke-dashoffset:340;} to{stroke-dashoffset:0;} }
 
@@ -160,10 +160,10 @@
     background: linear-gradient(135deg, rgba(19, 24, 36, 0.95) 0%, rgba(14, 18, 27, 0.9) 100%); 
     border: 1px solid rgba(127, 232, 198, 0.3); 
     border-radius: 16px; 
-    padding: 10px 14px; 
+    padding: 8px 12px; 
     display: flex; 
     align-items: center; 
-    gap: 14px; 
+    gap: 12px; 
     box-shadow: 0 8px 25px -8px rgba(0,0,0,0.4); 
     position: relative;
     overflow: hidden;
@@ -175,7 +175,7 @@
     background: linear-gradient(to bottom, var(--mint), var(--blue));
   }
 
-  .mic-btn{ width:38px; height:38px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, rgba(127,232,198,0.2) 0%, rgba(143,184,255,0.2) 100%); border: 1px solid rgba(127,232,198,0.4); color:var(--mint); position:relative; cursor:pointer; transition: transform 0.2s, background 0.2s; }
+  .mic-btn{ width:34px; height:34px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, rgba(127,232,198,0.2) 0%, rgba(143,184,255,0.2) 100%); border: 1px solid rgba(127,232,198,0.4); color:var(--mint); position:relative; cursor:pointer; transition: transform 0.2s, background 0.2s; }
   .mic-btn:active { transform: scale(0.94); }
   .mic-ring{ position:absolute; inset:-4px; border-radius:50%; border:2px solid var(--mint); opacity:0; pointer-events:none; }
   .mic-btn.listening .mic-ring{ animation:ring-out 1.4s ease-out infinite; }
@@ -188,7 +188,7 @@
   .save-btn:hover{ background: rgba(5, 150, 105, 1); border-color: var(--mint); }
   .save-btn:active{ transform:scale(.97); }
   
-  .icon-btn{ width:32px; height:32px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:var(--card-2); border:1px solid var(--border); color:var(--text-dim); cursor:pointer; transition: 0.2s; }
+  .icon-btn{ width:30px; height:30px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:var(--card-2); border:1px solid var(--border); color:var(--text-dim); cursor:pointer; transition: 0.2s; }
   .icon-btn:hover { border-color: var(--mint); color: var(--text); }
 
   .modal-overlay { position:fixed; inset:0; z-index:50; background:rgba(10,12,17,0.95); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:16px; transition: opacity .25s ease; }
@@ -225,7 +225,7 @@
 
   .onboarding-content-box { position: relative; z-index: 2; width: 100%; max-width: 380px; margin: auto; display: flex; flex-direction: column; gap: 10px; max-height: 90vh; overflow-y: auto; }
 
-  /* סרגל ניווט תחתון דק וקומפקטי במיוחד */
+  /* סרגל ניווט תחתון דק ומדויק ביותר */
   .bottom-nav{ 
     position: absolute;
     bottom: 0;
@@ -234,7 +234,7 @@
     display: flex; 
     justify-content: space-around; 
     align-items: center; 
-    padding: 6px 16px calc(6px + env(safe-area-inset-bottom)); 
+    padding: 3px 16px calc(3px + env(safe-area-inset-bottom)); 
     background: var(--card); 
     border-top: 1px solid var(--border); 
     backdrop-filter: blur(12px);
@@ -244,25 +244,25 @@
     display: flex; 
     flex-direction: row; 
     align-items: center; 
-    gap: 6px; 
+    gap: 5px; 
     color: var(--text-faint); 
     background: none; 
     border: none; 
     font-size: 11px; 
     font-weight: 600; 
-    padding: 6px 20px; 
-    border-radius: 12px; 
+    padding: 4px 18px; 
+    border-radius: 10px; 
     transition: .2s; 
     cursor: pointer; 
   }
   .nav-item.active{ color: var(--text); background: var(--card-2); border: 1px solid var(--border); }
   .nav-item.active svg{ stroke: var(--mint); }
 
-  .donut{ width:130px; height:130px; border-radius:50%; position:relative; margin:0 auto; }
-  .donut::after{ content:""; position:absolute; inset:18px; border-radius:50%; background:var(--card); }
+  .donut{ width:120px; height:120px; border-radius:50%; position:relative; margin:0 auto; }
+  .donut::after{ content:""; position:absolute; inset:16px; border-radius:50%; background:var(--card); }
   .donut-center{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2; }
 
-  .tx-row{ display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border); }
+  .tx-row{ display:flex; align-items:center; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border); }
   .tx-row:last-child{ border-bottom:none; }
 
   @keyframes pulse-arrow { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-6px); } }
@@ -598,8 +598,8 @@
 
     <!-- SCREEN 1: HOME -->
     <section id="screen-home" class="screen active">
-      <!-- ריווח תחתון קומפקטי (pb-16) המותאם לסרגל הדק -->
-      <main class="px-4 pb-16 pt-1 flex-1 flex flex-col justify-between h-full overflow-y-auto">
+      <!-- ריווח תחתון מקסימלי ומדויק בהתאמה לסרגל הדק (pb-14) -->
+      <main class="px-4 pb-14 pt-1 flex-1 flex flex-col justify-between h-full overflow-y-auto">
         
         <section class="flex flex-col gap-1.5 flex-shrink-0">
           <div class="flex gap-2 mr-auto w-fit">
@@ -620,43 +620,43 @@
           <div class="glow-halo" id="glowHalo"></div>
           <div class="balance-card">
             <p class="text-[12px] font-medium" style="color:var(--text-dim)">יתרה בעו״ש</p>
-            <h1 class="tabular text-[32px] font-extrabold mt-1 leading-none" id="balanceValue">₪0</h1>
+            <h1 class="tabular text-[30px] font-extrabold mt-1 leading-none" id="balanceValue">₪0</h1>
             <svg class="ecg-line" viewBox="0 0 340 24" preserveAspectRatio="none"><path d="M0,12 L60,12 L72,2 L84,22 L96,12 L150,12 L162,4 L174,12 L340,12" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
         </section>
 
-        <section class="grid grid-cols-2 gap-3 flex-shrink-0">
-          <div class="summary-card p-3.5">
+        <section class="grid grid-cols-2 gap-2.5 flex-shrink-0">
+          <div class="summary-card p-3">
             <div class="flex items-center gap-1.5">
               <span class="w-4 h-4 rounded-full flex items-center justify-center" style="background:var(--mint-bg)"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2.6" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
               <span class="text-[11px]" style="color:var(--text-dim)">הכנסות החודש</span>
             </div>
-            <p class="tabular text-lg font-bold mt-1" style="color:var(--mint)" id="totalIncome">₪0</p>
+            <p class="tabular text-base font-bold mt-1" style="color:var(--mint)" id="totalIncome">₪0</p>
           </div>
-          <div class="summary-card p-3.5">
+          <div class="summary-card p-3">
             <div class="flex items-center gap-1.5">
               <span class="w-4 h-4 rounded-full flex items-center justify-center" style="background:var(--coral-bg)"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--coral)" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg></span>
               <span class="text-[11px]" style="color:var(--text-dim)">הוצאות החודש</span>
             </div>
-            <p class="tabular text-lg font-bold mt-1" style="color:var(--coral)" id="totalExpense">₪0</p>
+            <p class="tabular text-base font-bold mt-1" style="color:var(--coral)" id="totalExpense">₪0</p>
           </div>
         </section>
 
-        <section class="summary-card px-4 py-3 flex-shrink-0 mt-2.5">
+        <section class="summary-card px-3.5 py-2.5 flex-shrink-0 mt-2">
           <div class="flex items-center justify-between mb-1">
             <div class="flex items-center gap-1.5">
-              <span class="text-[12px]">📅</span>
-              <span class="text-[12px] font-semibold">חודש פיננסי</span>
+              <span class="text-[11px]">📅</span>
+              <span class="text-[11px] font-semibold">חודש פיננסי</span>
             </div>
             <button onclick="showFinancialHelp()" class="w-4 h-4 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[9px] font-bold flex items-center justify-center text-emerald-400 cursor-pointer">?</button>
           </div>
-          <div class="field-shell flex items-center px-3 py-1.5">
-            <select id="homeFinancialDaySelect" onchange="saveFinancialDay(this.value)" class="w-full bg-transparent outline-none font-bold text-[12px] cursor-pointer" style="color:var(--text)"></select>
+          <div class="field-shell flex items-center px-3 py-1">
+            <select id="homeFinancialDaySelect" onchange="saveFinancialDay(this.value)" class="w-full bg-transparent outline-none font-bold text-[11px] cursor-pointer" style="color:var(--text)"></select>
           </div>
         </section>
 
         <section class="flex-1 flex flex-col justify-end min-h-0 pt-1">
-          <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center justify-between mb-1.5">
             <h2 class="text-[11px] font-semibold">הכתבה חכמה ותנועות</h2>
             <div class="flex items-center gap-1.5">
               <button onclick="openCategoriesModal()" class="text-[10px] font-semibold px-2.5 py-1 rounded-lg bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center gap-1 cursor-pointer">
@@ -668,14 +668,14 @@
             </div>
           </div>
 
-          <div class="ai-voice-box mb-2 p-3">
+          <div class="ai-voice-box mb-1.5 p-2.5">
             <button id="micBtn" class="mic-btn" onclick="toggleVoiceRecognition()" title="הכתבה קולית">
               <span class="mic-ring"></span><span class="mic-ring d2"></span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
             </button>
             <div class="flex-1 min-w-0">
               <div class="flex items-center justify-between">
-                <h4 class="text-[12px] font-bold flex items-center gap-1.5 text-slate-100">
+                <h4 class="text-[11px] font-bold flex items-center gap-1.5 text-slate-100">
                   <span>עוזר קולי דיגיטלי</span>
                   <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                 </h4>
@@ -685,11 +685,11 @@
             </div>
           </div>
 
-          <div class="summary-card p-2.5 space-y-2">
-            <div class="field-shell flex items-center px-3 py-2">
-              <input id="smartTextInput" type="text" placeholder="הכתבה (למשל: 50 קניות 18.8)..." class="w-full bg-transparent outline-none text-[12px] font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
+          <div class="summary-card p-2 space-y-1.5">
+            <div class="field-shell flex items-center px-3 py-1.5">
+              <input id="smartTextInput" type="text" placeholder="הכתבה (למשל: 50 קניות 18.8)..." class="w-full bg-transparent outline-none text-[11px] font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
             </div>
-            <button onclick="processSmartText()" class="save-btn w-full py-2.5 rounded-xl text-[12px] font-bold cursor-pointer">פענח והוסף תנועה</button>
+            <button onclick="processSmartText()" class="save-btn w-full py-2 rounded-xl text-[11px] font-bold cursor-pointer">פענח והוסף תנועה</button>
           </div>
         </section>
 
@@ -704,7 +704,7 @@
           <button class="text-[11px] font-semibold px-3 py-1 rounded-full" style="background:var(--card); color:var(--text)">חודש פיננסי פעיל</button>
         </div>
       </div>
-      <main class="px-4 pb-16 pt-1 space-y-3 flex-1 overflow-y-auto">
+      <main class="px-4 pb-14 pt-1 space-y-3 flex-1 overflow-y-auto">
         <section class="summary-card p-3.5">
           <div class="flex items-center justify-between mb-2">
             <div class="flex items-center gap-1.5">
@@ -790,10 +790,10 @@
 
   <nav class="bottom-nav">
     <button class="nav-item active" id="navHome" onclick="showScreen('home')">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>בית
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>בית
     </button>
     <button class="nav-item" id="navAnalytics" onclick="showScreen('analytics')">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9M12 19V4M20 19v-6"/></svg>תמונת מצב
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9M12 19V4M20 19v-6"/></svg>תמונת מצב
     </button>
   </nav>
 </div>

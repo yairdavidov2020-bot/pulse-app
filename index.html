@@ -1280,17 +1280,34 @@ function factoryReset() {
 function openVoiceHelpModal() { document.getElementById('voiceHelpModal').classList.remove('hidden'); }
 function closeVoiceHelpModal() { document.getElementById('voiceHelpModal').classList.add('hidden'); }
 
+function collapseAnalyticsCards() {
+  donutExpanded = false;
+  txExpanded = false;
+  
+  const donutContent = document.getElementById('donutExpandedContent');
+  const donutArrow = document.getElementById('donutArrowIcon');
+  if(donutContent) donutContent.classList.add('hidden');
+  if(donutArrow) donutArrow.style.transform = 'rotate(0deg)';
+
+  const txContent = document.getElementById('txExpandedContent');
+  const txPreview = document.getElementById('txPreviewRow');
+  const txArrow = document.getElementById('txArrowIcon');
+  if(txContent) txContent.classList.add('hidden');
+  if(txPreview) txPreview.classList.remove('hidden');
+  if(txArrow) txArrow.style.transform = 'rotate(0deg)';
+}
+
 function showScreen(name){
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + name).classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   
+  collapseAnalyticsCards();
+
   if(name === 'home') {
     document.getElementById('navHome').classList.add('active');
   } else if(name === 'analytics') {
     document.getElementById('navAnalytics').classList.add('active');
-    donutExpanded = false;
-    txExpanded = false;
     renderAnalytics();
   }
 }

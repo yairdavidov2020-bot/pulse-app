@@ -81,17 +81,17 @@
 
   #colorPalette, #settingsColorPalette, #onboardingColorPalette {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 4px;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 3px;
     padding: 2px;
     background: var(--card-2);
     border: 1px solid var(--border);
-    border-radius: 10px;
+    border-radius: 8px;
   }
 
-  .color-swatch { width: 100% !important; aspect-ratio: 1 !important; height: auto !important; border-radius: 6px !important; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; border: 2px solid transparent; }
+  .color-swatch { width: 100% !important; aspect-ratio: 1 !important; height: auto !important; border-radius: 4px !important; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; border: 2px solid transparent; }
   .color-swatch:hover { transform: scale(1.1); }
-  .color-swatch.selected { border-color: #ffffff; box-shadow: 0 0 8px rgba(255,255,255,0.5); transform: scale(1.15); }
+  .color-swatch.selected { border-color: #ffffff; box-shadow: 0 0 6px rgba(255,255,255,0.5); transform: scale(1.15); }
 
   .ai-voice-box { 
     background: linear-gradient(135deg, rgba(19, 24, 36, 0.95) 0%, rgba(14, 18, 27, 0.9) 100%); 
@@ -267,7 +267,7 @@
 
         <div class="space-y-1">
             <p class="text-[10px] font-semibold text-violet-400">קטגוריות קיימות:</p>
-            <div id="onboardingCatList" class="grid grid-cols-2 gap-1.5 max-h-[140px] overflow-y-auto"></div>
+            <div id="onboardingCatList" class="grid grid-cols-2 gap-1.5"></div>
         </div>
 
         <div class="border-t border-[var(--border)] pt-1.5 space-y-1.5">
@@ -383,36 +383,36 @@
     </div>
 </div>
 
-<!-- מודל ניהול קטגוריות ותקציבים (בלי גלילה - הכל במסך אחד ב-2 טורים) -->
+<!-- מודל ניהול קטגוריות ותקציבים (בלי גלילה לחלוטין - קומפקטי ב-2 טורים) -->
 <div id="categoriesModal" class="modal-overlay hidden">
-    <div class="summary-card p-4 max-w-lg w-full space-y-2.5 shadow-2xl">
-        <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
+    <div class="summary-card p-3.5 max-w-md w-full space-y-2 shadow-2xl">
+        <div class="flex items-center justify-between border-b border-[var(--border)] pb-1.5">
             <h3 class="text-xs font-bold text-violet-400">ניהול קטגוריות ותקציבים</h3>
-            <button onclick="closeCategoriesModal()" class="icon-btn" style="width:28px;height:28px;"><i class="fa-solid fa-xmark text-xs"></i></button>
+            <button onclick="closeCategoriesModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
        
         <div class="space-y-1">
-            <p class="text-[10px] font-semibold text-slate-400">קטגוריות ותקציבים קיימים:</p>
-            <div id="modalCatList" class="grid grid-cols-2 gap-1.5"></div>
+            <p class="text-[9px] font-semibold text-slate-400">קטגוריות ותקציבים קיימים:</p>
+            <div id="modalCatList" class="grid grid-cols-2 gap-1"></div>
         </div>
 
-        <div class="border-t border-[var(--border)] pt-2 space-y-2">
-            <p class="text-[10px] font-semibold text-emerald-400">הוסף קטגוריה ותקציב חדש</p>
-            <div class="grid grid-cols-2 gap-1.5">
-                <div class="field-shell px-2.5 py-1.5">
-                    <input id="newCatNameInput" placeholder="שם חדש..." class="w-full bg-transparent outline-none font-bold text-[11px]" style="color:var(--text)" />
+        <div class="border-t border-[var(--border)] pt-1.5 space-y-1.5">
+            <p class="text-[9px] font-semibold text-emerald-400">הוסף קטגוריה ותקציב חדש</p>
+            <div class="grid grid-cols-2 gap-1">
+                <div class="field-shell px-2 py-1">
+                    <input id="newCatNameInput" placeholder="שם חדש..." class="w-full bg-transparent outline-none font-bold text-[10px]" style="color:var(--text)" />
                 </div>
-                <div class="field-shell px-2.5 py-1.5">
-                    <input id="newCatBudgetInput" type="tel" inputmode="decimal" placeholder="תקציב ₪ (אופציונלי)" class="w-full bg-transparent outline-none text-[11px]" style="color:var(--text)" />
+                <div class="field-shell px-2 py-1">
+                    <input id="newCatBudgetInput" type="tel" inputmode="decimal" placeholder="תקציב ₪ (אופציונלי)" class="w-full bg-transparent outline-none text-[10px]" style="color:var(--text)" />
                 </div>
             </div>
-            <div class="flex items-center gap-1.5 justify-between">
-                <input type="color" id="freeColorPicker" value="#7FE8C6" onchange="selectedNewCatColor = this.value; document.querySelectorAll('#colorPalette .color-swatch').forEach(s=>s.classList.remove('selected'));" class="w-9 h-8 rounded-lg bg-transparent cursor-pointer border border-[var(--border)] flex-shrink-0" />
-                <button onclick="addNewCategoryFromModal()" class="save-btn px-3 py-2 rounded-xl font-bold text-[11px] flex-1">הוסף קטגוריה</button>
+            <div class="flex items-center gap-1 justify-between">
+                <input type="color" id="freeColorPicker" value="#7FE8C6" onchange="selectedNewCatColor = this.value; document.querySelectorAll('#colorPalette .color-swatch').forEach(s=>s.classList.remove('selected'));" class="w-7 h-6 rounded-lg bg-transparent cursor-pointer border border-[var(--border)] flex-shrink-0" />
+                <button onclick="addNewCategoryFromModal()" class="save-btn px-3 py-1.5 rounded-xl font-bold text-[10px] flex-1">הוסף קטגוריה</button>
             </div>
              
             <div>
-                <p class="text-[9px] mb-1 text-slate-400">בחר צבע לקטגוריה:</p>
+                <p class="text-[8px] mb-0.5 text-slate-400">בחר צבע לקטגוריה:</p>
                 <div id="colorPalette"></div>
             </div>
         </div>
@@ -530,13 +530,15 @@
   <section id="screen-home" class="screen active">
     <main class="px-4 pb-4 pt-1 space-y-3">
       
-      <!-- שני כפתורי גישה מהירה קטנים וקומפקטיים אחד ליד השני מתחת להגדרות -->
-      <section class="grid grid-cols-2 gap-2">
-        <button onclick="openGeneralHelpModal()" class="text-[11px] font-semibold px-2.5 py-2 rounded-xl bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
-          <i class="fa-solid fa-lightbulb"></i> שימוש יעיל
+      <!-- שני כפתורי גישה מהירה קטנים במיוחד, אחד מתחת לשני ממש מתחת להגדרות -->
+      <section class="flex flex-col gap-1.5 px-0.5">
+        <button onclick="openGeneralHelpModal()" class="text-[10px] font-semibold px-3 py-1.5 rounded-xl bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-between cursor-pointer shadow-sm">
+          <span><i class="fa-solid fa-lightbulb ml-1"></i> שימוש יעיל באפליקציה</span>
+          <i class="fa-solid fa-chevron-left text-[9px] opacity-75"></i>
         </button>
-        <button onclick="openPwaHelpModal()" class="text-[11px] font-semibold px-2.5 py-2 rounded-xl bg-[var(--card)] border border-[var(--border)] text-emerald-400 hover:text-white transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
-          <i class="fa-solid fa-mobile-screen-button"></i> למסך הבית
+        <button onclick="openPwaHelpModal()" class="text-[10px] font-semibold px-3 py-1.5 rounded-xl bg-[var(--card)] border border-[var(--border)] text-emerald-400 hover:text-white transition flex items-center justify-between cursor-pointer shadow-sm">
+          <span><i class="fa-solid fa-mobile-screen-button ml-1"></i> הוספה למסך הבית</span>
+          <i class="fa-solid fa-chevron-left text-[9px] opacity-75"></i>
         </button>
       </section>
 
@@ -933,16 +935,16 @@ function renderOnboardingCategoryList() {
   
   allCats.forEach(c => {
     const row = document.createElement('div');
-    row.className = 'flex items-center justify-between px-2 py-1 rounded-lg border bg-[var(--card-2)] border-[var(--border)]';
+    row.className = 'flex items-center justify-between px-2 py-1 rounded-md border bg-[var(--card-2)] border-[var(--border)]';
     row.innerHTML = `
       <div class="flex items-center gap-1.5 min-w-0 flex-1">
         <span class="w-2 h-2 rounded-full flex-shrink-0" style="background:${c.color}"></span>
-        <div class="truncate text-[9px]">
+        <div class="truncate text-[8px]">
           <p class="font-bold truncate">${c.name}</p>
           <p class="text-[7px] text-slate-400">תקציב: ${fmt(c.budget || 0)}</p>
         </div>
       </div>
-      <button onclick="deleteCatOnboarding('${c.name.replace(/'/g, "\\'")}')" class="text-rose-400 text-[9px] px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--border)] hover:bg-rose-500/10 transition cursor-pointer flex-shrink-0">
+      <button onclick="deleteCatOnboarding('${c.name.replace(/'/g, "\\'")}')" class="text-rose-400 text-[8px] px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--border)] hover:bg-rose-500/10 transition cursor-pointer flex-shrink-0">
         <i class="fa-solid fa-trash"></i>
       </button>
     `;
@@ -1313,16 +1315,16 @@ function renderModalCategoryList(){
   
   allCats.forEach((c) => {
     const row = document.createElement('div');
-    row.className = `flex items-center justify-between px-2 py-1 rounded-lg border bg-[var(--card-2)] border-[var(--border)]`;
+    row.className = `flex items-center justify-between px-2 py-1 rounded-md border bg-[var(--card-2)] border-[var(--border)]`;
     row.innerHTML = `
-      <div class="flex items-center gap-1.5 flex-1 min-w-0">
-        <span class="w-2 h-2 rounded-full shadow-sm flex-shrink-0" style="background:${c.color}"></span>
-        <div class="text-[9px] min-w-0 flex-1">
+      <div class="flex items-center gap-1 flex-1 min-w-0">
+        <span class="w-2 h-2 rounded-full flex-shrink-0" style="background:${c.color}"></span>
+        <div class="text-[8px] min-w-0 flex-1">
           <p class="font-bold truncate">${c.name}</p>
-          <p class="text-[8px] text-slate-400">תקציב: <input type="tel" inputmode="decimal" value="${c.budget || 0}" onchange="updateCategoryBudget('${c.name.replace(/'/g, "\\'")}', this.value)" class="w-10 bg-transparent border-b border-[var(--border)] font-bold text-[9px] outline-none tabular text-emerald-400" /></p>
+          <p class="text-[7px] text-slate-400">תקציב: <input type="tel" inputmode="decimal" value="${c.budget || 0}" onchange="updateCategoryBudget('${c.name.replace(/'/g, "\\'")}', this.value)" class="w-10 bg-transparent border-b border-[var(--border)] font-bold text-[8px] outline-none tabular text-emerald-400" /></p>
         </div>
       </div>
-      <button onclick="deleteCatModal('${c.name.replace(/'/g, "\\'")}')" class="text-rose-400 text-[9px] px-1.5 py-0.5 rounded bg-[var(--card)] border border-[var(--border)] hover:bg-rose-500/10 transition cursor-pointer flex-shrink-0">
+      <button onclick="deleteCatModal('${c.name.replace(/'/g, "\\'")}')" class="text-rose-400 text-[8px] px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--border)] hover:bg-rose-500/10 transition cursor-pointer flex-shrink-0">
         <i class="fa-solid fa-trash"></i>
       </button>
     `;

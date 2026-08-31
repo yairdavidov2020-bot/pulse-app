@@ -618,11 +618,7 @@
                 </button>
             </div>
 
-           <button onclick="persist(); alert('הנתונים סונכרנו לענן בהצלחה!');" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-emerald-400 transition text-[12px] font-bold cursor-pointer mb-1.5">
-    <span class="flex items-center gap-2.5"><i class="fa-solid fa-cloud-arrow-up text-emerald-400 w-4"></i> סנכרן נתונים לענן</span>
-    <i class="fa-solid fa-check text-[10px] text-emerald-400"></i>
-</button>
-          <button onclick="shareApp()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-emerald-400 transition text-[12px] font-bold cursor-pointer">
+            <button onclick="shareApp()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-emerald-400 transition text-[12px] font-bold cursor-pointer">
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-share-nodes text-emerald-400 w-4"></i> שתף עם חברים</span>
                 <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-500"></i>
             </button>
@@ -855,7 +851,7 @@
 <script>
 // הגדרת Supabase (התחברות ישירה לענן שלך)
 const supabaseUrl = 'https://zxexgpognjnaocchwgxi.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4ZXhncG9xbmpuYW9jY2h3Z3hpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgxNjAyMDQsImV4cCI6MjEwMzczNjIwNH0.3U6qqy_Sz8MgJrVYiTSk2QZCcX_CjOH2gARCIAZPuIc'; 
+const supabaseKey = 'sb_publishable_o8o7xzTe_fqswXqe2d2Exw_585G2'; 
 const _supabase = window.supabase ? window.supabase.createClient(supabaseUrl, supabaseKey) : null;
 
 const defaultCustomExpenseCats = [

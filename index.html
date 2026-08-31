@@ -299,7 +299,7 @@
     </div>
 </div>
 
-<!-- הודעת עדכון מערכת חכמה הכוללת כפתור גיבוי ישיר בתוכה -->
+<!-- הודעת עדכון מערכת מעודכנת עם הרגעה על שמירת הנתונים וגיבוי מהיר -->
 <div id="updateAnnouncementModal" class="modal-overlay hidden" style="z-index: 9999999;">
     <div class="summary-card p-5 max-w-sm w-full space-y-3.5 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
@@ -307,24 +307,16 @@
             <button onclick="closeUpdateAnnouncement()" class="icon-btn" style="width:28px;height:28px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
         <div class="space-y-2.5 text-[11px] leading-relaxed text-slate-300">
-            <p class="font-bold text-emerald-300">משתמשים יקרים, שוחרר עדכון חדש ומשמעותי לאפליקציית Pulse! 🌟</p>
-            <p>כדי שהעדכון ייכנס לתוקף בצורה חלקה במכשיר שלכם, מבלי לאבד שום נתון, בצעו את השלבים הבאים:</p>
-            
-            <div class="bg-[var(--card-2)] p-2.5 rounded-xl border border-[var(--border)] space-y-1.5 text-[10px]">
-                <p>1️⃣ לחצו כאן למטה על כפתור <b>הגיבוי המהיר</b> ושמרו את קובץ הנתונים.</p>
-                <p>2️⃣ מחקו את האפליקציה הנוכחית ממסך הבית.</p>
-                <p>3️⃣ היכנסו מחדש לקישור האפליקציה והוסיפו אותה למסך הבית מחדש.</p>
-                <p>4️⃣ במסך הפתיחה, לחצו על <b>"שחזור נתונים"</b> ובחרו את הקובץ ששמרתם – והכל יחזור לקדמותו בשניות!</p>
-            </div>
+            <p class="font-bold text-emerald-300">משתמשים יקרים, שוחרר עדכון חדש לאפליקציית Pulse! 🌟</p>
+            <p>למרות שלעיתים דפדפני המובייל שומרים את הנתונים והקישור גם לאחר הסרה והוספה מחדש למסך הבית, <b>תמיד עדיף להיות בראש שקט לחלוטין!</b></p>
+            <p>מומלץ לבצע גיבוי קצר של הנתונים לפני הסרת האפליקציה, ובמידה ויש צורך – תוכלו לבצע שחזור נתונים בשניות דרך קובץ הגיבוי.</p>
 
             <!-- כפתור גיבוי ישיר בתוך ההודעה -->
             <button onclick="exportBackup()" class="w-full py-3 px-4 rounded-xl font-bold text-xs bg-gradient-to-l from-emerald-500 to-teal-600 text-white shadow-lg cursor-pointer flex items-center justify-center gap-2 hover:opacity-95 transition">
-                <i class="fa-solid fa-cloud-arrow-down"></i> 1️⃣ לחץ כאן לגיבוי מהיר של כל הנתונים
+                <i class="fa-solid fa-cloud-arrow-down"></i> לחץ כאן לגיבוי מהיר ליתר בטחון
             </button>
-
-            <p class="text-[10px] text-amber-300 font-medium">💡 אל דאגה, שום נתון לא ילך לאיבוד כל עוד תשמרו את הקובץ.</p>
         </div>
-        <button onclick="closeUpdateAnnouncement()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs">הבנתי, סגור הודעה</button>
+        <button onclick="closeUpdateAnnouncement()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs">הבנתי, תודה רבה!</button>
     </div>
 </div>
 
@@ -993,8 +985,8 @@ window.onload = function() {
     document.getElementById('onboarding-screen-2').classList.add('hidden');
   }
 
-  // הצגת הודעת העדכון החדשה לכל המשתמשים (v55)
-  if(!localStorage.getItem('pulse_update_seen_v55')) {
+  // הצגת הודעת העדכון החדשה לכל המשתמשים (v56)
+  if(!localStorage.getItem('pulse_update_seen_v56')) {
     document.getElementById('updateAnnouncementModal').classList.remove('hidden');
   }
 
@@ -1008,7 +1000,7 @@ window.onload = function() {
 };
 
 function closeUpdateAnnouncement() {
-  localStorage.setItem('pulse_update_seen_v55', 'true');
+  localStorage.setItem('pulse_update_seen_v56', 'true');
   document.getElementById('updateAnnouncementModal').classList.add('hidden');
 }
 

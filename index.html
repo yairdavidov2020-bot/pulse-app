@@ -299,7 +299,30 @@
     </div>
 </div>
 
-<!-- שלב 1: מסך פתיחה ראשון - מעוצב מחדש עם שחזור גיבוי בולט בראש המסך -->
+<!-- מודל הודעת עדכון מערכת חדש שקופץ מיד לכל המשתמשים -->
+<div id="updateAnnouncementModal" class="modal-overlay hidden" style="z-index: 9999999;">
+    <div class="summary-card p-5 max-w-sm w-full space-y-3.5 shadow-2xl text-right">
+        <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
+            <h3 class="text-xs font-bold gradient-text flex items-center gap-1.5"><i class="fa-solid fa-rocket text-emerald-400"></i> עדכון מערכת חדש זמין!</h3>
+            <button onclick="closeUpdateAnnouncement()" class="icon-btn" style="width:28px;height:28px;"><i class="fa-solid fa-xmark text-xs"></i></button>
+        </div>
+        <div class="space-y-2 text-[11px] leading-relaxed text-slate-300">
+            <p class="font-bold text-emerald-300">משתמשים יקרים, שוחרר עדכון חדש ומשמעותי לאפליקציית Pulse! 🌟</p>
+            <p>כדי שהעדכון ייכנס לתוקף בצורה חלקה במכשיר שלכם, יש לבצע מספר צעדים פשוטים:</p>
+            <div class="bg-[var(--card-2)] p-2.5 rounded-xl border border-[var(--border)] space-y-1.5 text-[10px]">
+                <p>1️⃣ היכנסו לתפריט ⬅️ <b>הגדרות מערכת</b>.</p>
+                <p>2️⃣ לחצו על <b>"גיבוי נתונים"</b> ושמרו את קובץ ה-JSON במכשיר שלכם.</p>
+                <p>3️⃣ מחקו את האפליקציה הנוכחית ממסך הבית.</p>
+                <p>4️⃣ היכנסו מחדש לקישור האפליקציה והוסיפו אותה למסך הבית מחדש.</p>
+                <p>5️⃣ לחצו על <b>"שחזור גיבוי"</b> (במסך הפתיחה או בהגדרות) ובחרו את הקובץ ששמרתם – והכל יחזור לקדמותו בשניות!</p>
+            </div>
+            <p class="text-[10px] text-amber-300 font-medium">💡 אל דאגה, שום נתון לא ילך לאיבוד כל עוד תשמרו את קובץ הגיבוי לפני ההסרה.</p>
+        </div>
+        <button onclick="closeUpdateAnnouncement()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs">הבנתי, תודה רבה!</button>
+    </div>
+</div>
+
+<!-- שלב 1: מסך פתיחה ראשון -->
 <div id="onboarding-screen-1" class="full-page-onboarding hidden">
     <div class="road-city-bg">
         <svg class="w-full h-full" viewBox="0 0 400 800" preserveAspectRatio="none">
@@ -938,6 +961,11 @@ window.onload = function() {
     }
   }, 1600);
 
+  // הצגת הודעת העדכון מיד בפתיחת האפליקציה (ניתן לעדכן מפתח לגרסה חדשה כשתרצה שוב)
+  if(!localStorage.getItem('pulse_update_seen_v54')) {
+    document.getElementById('updateAnnouncementModal').classList.remove('hidden');
+  }
+
   let saved = localStorage.getItem('pulse_state_v53');
   if(!saved) {
     const oldSaved = localStorage.getItem('pulse_state_v52');
@@ -972,6 +1000,11 @@ window.onload = function() {
   setupSwipeGestures();
   renderHome();
 };
+
+function closeUpdateAnnouncement() {
+  localStorage.setItem('pulse_update_seen_v54', 'true');
+  document.getElementById('updateAnnouncementModal').classList.add('hidden');
+}
 
 function setupSwipeGestures() {
   let touchStartX = 0;

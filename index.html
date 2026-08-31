@@ -284,7 +284,7 @@
 </head>
 <body>
 
-<!-- מסך טעינה בכניסה לאפליקציה (Splash Screen) -->
+<!-- מסך טעינה בכניסה לאפליקציה (עם מנגנון חירום שלא יתקע לעולם) -->
 <div id="appSplashScreen" class="fixed inset-0 z-[999999] bg-[#05070B] flex flex-col items-center justify-center transition-all duration-700">
     <div class="flex flex-col items-center space-y-4">
         <div class="relative flex items-center justify-center">
@@ -302,6 +302,17 @@
         </div>
     </div>
 </div>
+<script>
+  // מנגנון חירום: אם מסיבה כלשהי הסקריפט הראשי מתעכב, מסך הטעינה יירד תוך 1.5 שניות בדיוק
+  setTimeout(() => {
+    const splash = document.getElementById('appSplashScreen');
+    if(splash && splash.style.opacity !== '0') {
+      splash.style.opacity = '0';
+      splash.style.transform = 'scale(1.05)';
+      setTimeout(() => splash.remove(), 700);
+    }
+  }, 1500);
+</script>
 
 <!-- מודל תזכורת הוצאות מרהיב -->
 <div id="reminderModal" class="modal-overlay hidden">
@@ -1069,7 +1080,7 @@ window.onload = async function() {
       splash.style.transform = 'scale(1.05)';
       setTimeout(() => splash.remove(), 700);
     }
-  }, 1600);
+  }, 1200);
 
   let saved = localStorage.getItem('pulse_state_v53');
   if(!saved) {

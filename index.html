@@ -202,7 +202,6 @@
     display: flex;
     flex-direction: column;
     padding: 16px;
-    /* מוריד את התפריט למטה כך שהמצלמה/נוץ' לא יפריעו ולא יחתכו כלום */
     padding-top: max(env(safe-area-inset-top), 32px); 
     overflow-y: auto;
     animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -1026,17 +1025,14 @@ window.onload = async function() {
     }
   }, 1600);
 
-  let loadedFromCloud = await loadDataFromSupabase();
-
-  if (!loadedFromCloud || !state.userName || state.baseline === null || state.baseline === undefined) {
-    let saved = localStorage.getItem('pulse_state_v53');
-    if(!saved) {
-      let oldSaved = localStorage.getItem('pulse_state_v52');
-      if(oldSaved) saved = oldSaved;
-    }
-    if(saved) {
-      state = JSON.parse(saved);
-    }
+  // טעינה מיידית מזיכרון מקומי (localStorage) כדי שהנתונים יוצגו ישר בלי אפס ובלי עיכוב!
+  let saved = localStorage.getItem('pulse_state_v53');
+  if(!saved) {
+    let oldSaved = localStorage.getItem('pulse_state_v52');
+    if(oldSaved) saved = oldSaved;
+  }
+  if(saved) {
+    state = JSON.parse(saved);
   }
 
   state.expenseCats.forEach(c => { if(c.budget === undefined) c.budget = 0; });
@@ -1053,13 +1049,21 @@ window.onload = async function() {
     document.getElementById('onboarding-screen-2').classList.add('hidden');
   }
 
-  checkAndApplyRecurringTransactions();
   setDynamicGreeting();
   buildFinancialDayDropdown();
   buildRecDayDropdown();
   buildColorPalettes();
   setupSwipeGestures();
   renderHome();
+
+  // סנכרון שקט ברקע מול ענן Supabase לעדכון נתונים
+  let loadedFromCloud = await loadDataFromSupabase();
+  if (loadedFromCloud) {
+    state.expenseCats.forEach(c => { if(c.budget === undefined) c.budget = 0; });
+    state.incomeCats.forEach(c => { if(c.budget === undefined) c.budget = 0; });
+    sortTransactions();
+    renderHome();
+  }
 };
 
 function setupSwipeGestures() {

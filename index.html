@@ -300,7 +300,7 @@
     </div>
 </div>
 
-<!-- שלב 1: מסך פתיחה ראשון -->
+<!-- שלב 1: מסך פתיחה ראשון + כפתור שחזור גיבוי -->
 <div id="onboarding-screen-1" class="full-page-onboarding hidden">
     <div class="road-city-bg">
         <svg class="w-full h-full" viewBox="0 0 400 800" preserveAspectRatio="none">
@@ -370,26 +370,37 @@
                 <i class="fa-solid fa-arrow-left text-xs animated-arrow"></i>
             </span>
         </button>
+
+        <!-- כפתור שחזור גיבוי במסך הפתיחה -->
+        <label class="w-full py-2.5 px-4 rounded-xl font-bold text-[11px] cursor-pointer bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-file-arrow-up"></i> יש לך גיבוי? שחזר נתונים מקובץ קיים
+            <input type="file" accept=".json" onchange="importBackup(event)" class="hidden" />
+        </label>
     </div>
 </div>
 
-<!-- שלב 2: מסך ניהול קטגוריות ראשוני -->
+<!-- שלב 2: מסך ניהול קטגוריות ראשוני עם הפרדה מלאה -->
 <div id="onboarding-screen-2" class="full-page-onboarding hidden">
     <div class="onboarding-content-box text-right space-y-2 p-3 bg-[var(--card)] rounded-3xl border border-[var(--border)] shadow-2xl">
         <div class="text-center space-y-1">
-            <h2 class="text-base font-black gradient-text">ניהול והגדרת קטגוריות</h2>
+            <h2 class="text-base font-black gradient-text">ניהול קטגוריות נפרד</h2>
             <p class="text-[10px] text-slate-300 leading-relaxed px-1">
-                הגדר תקציב חודשי, הוסף קטגוריות מתאימות ומחק את הלא רלוונטיות. העוזר הקולי והצ'אט פועלים ומתעדכנים אך ורק לפי הקטגוריות שבחרת!
+                הגדר בנפרד את קטגוריות ההוצאות וקטגוריות ההכנסות שלך.
             </p>
         </div>
 
+        <!-- טאבים להפרדה במסך ההתקנה -->
+        <div class="flex bg-[var(--card-2)] p-1 rounded-xl border border-[var(--border)] gap-1">
+            <button onclick="switchOnboardTab('expense')" id="onboardTabExpense" class="flex-1 py-1 rounded-lg text-[10px] font-bold bg-[var(--card)] text-emerald-400">הוצאות</button>
+            <button onclick="switchOnboardTab('income')" id="onboardTabIncome" class="flex-1 py-1 rounded-lg text-[10px] font-bold text-slate-400">הכנסות</button>
+        </div>
+
         <div class="space-y-1">
-            <p class="text-[10px] font-semibold text-violet-400">קטגוריות קיימות:</p>
-            <div id="onboardingCatList" class="space-y-1 max-h-[100px] overflow-y-auto"></div>
+            <div id="onboardingCatList" class="space-y-1 max-h-[90px] overflow-y-auto"></div>
         </div>
 
         <div class="border-t border-[var(--border)] pt-1.5 space-y-1.5">
-            <p class="text-[10px] font-semibold text-emerald-400">הוסף קטגוריה ותקציב חודשי:</p>
+            <p class="text-[10px] font-semibold text-emerald-400" id="onboardAddTitle">הוסף קטגוריית הוצאה ותקציב:</p>
             <div class="grid grid-cols-2 gap-1.5">
                 <div class="field-shell px-2 py-1">
                     <input id="onboardingCatName" placeholder="שם קטגוריה..." class="w-full bg-transparent outline-none font-bold text-[10px]" style="color:var(--text)" />
@@ -425,7 +436,11 @@
         <div class="space-y-2 text-[11px] leading-relaxed text-slate-300">
             <div class="bg-[var(--card-2)] p-2 rounded-xl border border-[var(--border)] space-y-1">
                 <p class="font-bold text-emerald-400">🎙️ עוזר קולי וצ'אט חכם:</p>
-                <p>העוזר הקולי ופקודות הטקסט מזהים אוטומטית סכומים, תאריכים וקטגוריות <span class="text-white font-semibold">אך ורק לפי מה שהוגדר באפליקציה</span>.</p>
+                <p>העוזר הקולי מזהה אוטומטית סכומים, תאריכים וקטגוריות מתוך הקטגוריות שהגדרת.</p>
+            </div>
+            <div class="bg-[var(--card-2)] p-2 rounded-xl border border-[var(--border)] space-y-1">
+                <p class="font-bold text-amber-400">⏰ תזכורת יומית:</p>
+                <p>האפליקציה תזכיר לך בכל ערב בשעה 20:00 להזין את הוצאות היום.</p>
             </div>
         </div>
         <button onclick="closeGeneralHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי, תודה רבה!</button>
@@ -489,18 +504,25 @@
     </div>
 </div>
 
+<!-- מודל ניהול קטגוריות עם הפרדה מלאה -->
 <div id="categoriesModal" class="modal-overlay hidden">
-    <div class="summary-card p-3 max-w-xs w-full space-y-2 shadow-2xl max-h-[82vh] overflow-y-auto">
+    <div class="summary-card p-3 max-w-xs w-full space-y-2 shadow-2xl max-h-[85vh] overflow-y-auto">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-1.5">
-            <h3 class="text-xs font-bold text-violet-400">ניהול קטגוריות ותקציבים</h3>
+            <h3 class="text-xs font-bold text-violet-400">ניהול קטגוריות נפרד</h3>
             <button onclick="closeCategoriesModal()" class="icon-btn" style="width:28px;height:28px;flex-shrink:0;"><i class="fa-solid fa-xmark text-sm font-black"></i></button>
         </div>
+
+        <!-- טאבים לבחירה בין הוצאות להכנסות -->
+        <div class="flex bg-[var(--card-2)] p-1 rounded-xl border border-[var(--border)] gap-1">
+            <button onclick="switchCatTab('expense')" id="catTabExpense" class="flex-1 py-1 rounded-lg text-[10px] font-bold bg-[var(--card)] text-emerald-400">קטגוריות הוצאות</button>
+            <button onclick="switchCatTab('income')" id="catTabIncome" class="flex-1 py-1 rounded-lg text-[10px] font-bold text-slate-400">קטגוריות הכנסות</button>
+        </div>
+
         <div class="space-y-1">
-            <p class="text-[9px] font-semibold text-slate-400">קטגוריות ותקציבים קיימים:</p>
             <div id="modalCatList" class="space-y-1 max-h-[110px] overflow-y-auto"></div>
         </div>
         <div class="border-t border-[var(--border)] pt-1.5 space-y-1.5">
-            <p class="text-[9px] font-semibold text-emerald-400">הוסף קטגוריה ותקציב חדש</p>
+            <p class="text-[9px] font-semibold text-emerald-400" id="modalAddTitle">הוסף קטגוריית הוצאה ותקציב</p>
             <div class="grid grid-cols-2 gap-1.5">
                 <div class="field-shell px-2 py-1">
                     <input id="newCatNameInput" placeholder="שם חדש..." class="w-full bg-transparent outline-none font-bold text-[10px]" style="color:var(--text)" />
@@ -610,6 +632,16 @@
                         <option value="¥">ין (¥ JPY)</option>
                     </select>
                 </div>
+
+                <!-- כפתורי גיבוי ושחזור בתפריט ההגדרות -->
+                <button onclick="exportBackup()" class="w-full py-2 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-[11px] font-bold flex items-center justify-center gap-1.5 hover:bg-emerald-500/20 transition cursor-pointer">
+                    <i class="fa-solid fa-file-arrow-down"></i> גיבוי נתונים (ייצוא קובץ)
+                </button>
+
+                <label class="w-full py-2 rounded-lg bg-violet-500/15 border border-violet-500/30 text-violet-400 text-[11px] font-bold flex items-center justify-center gap-1.5 hover:bg-violet-500/20 transition cursor-pointer">
+                    <i class="fa-solid fa-file-arrow-up"></i> שחזור נתונים (ייבוא קובץ)
+                    <input type="file" accept=".json" onchange="importBackup(event)" class="hidden" />
+                </label>
 
                 <button onclick="factoryReset()" class="w-full py-2 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-400 text-[11px] font-bold flex items-center justify-center gap-1.5 hover:bg-rose-500/20 transition cursor-pointer">
                     <i class="fa-solid fa-triangle-exclamation"></i> איפוס של האפליקציה
@@ -884,6 +916,8 @@ let speechSafetyTimer = null;
 let historicalExpanded = false;
 let donutExpanded = false;
 let txExpanded = false;
+let currentCatTab = 'expense'; // 'expense' or 'income'
+let currentOnboardTab = 'expense'; // 'expense' or 'income'
 
 const availableColors = [
   '#FF8D82', '#FF6E6E', '#F43F5E', '#E11D48', '#BE123C', '#9F1239', '#FF4D4D', '#FF3366', '#FF9999', '#FFB3B3',
@@ -907,6 +941,66 @@ function getLocalDateString(d) {
 function persist() {
   sortTransactions();
   localStorage.setItem('pulse_state_v53', JSON.stringify(state));
+}
+
+// פונקציות גיבוי ושחזור (ייצוא וייבוא JSON)
+function exportBackup() {
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
+  const downloadAnchor = document.createElement('a');
+  downloadAnchor.setAttribute("href", dataStr);
+  downloadAnchor.setAttribute("download", `pulse_backup_${getLocalDateString(new Date())}.json`);
+  document.body.appendChild(downloadAnchor);
+  downloadAnchor.click();
+  downloadAnchor.remove();
+}
+
+function importBackup(event) {
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if(imported && imported.userName && (imported.expenseCats || imported.transactions)) {
+        state = imported;
+        if(!state.incomeCats) state.incomeCats = [{name:'משכורת', color:'#7FE8C6', budget:0}];
+        if(!state.expenseCats) state.expenseCats = [...defaultCustomExpenseCats];
+        persist();
+        alert("הגיבוי שוחזר בהצלחה!");
+        location.reload();
+      } else {
+        alert("קובץ הגיבוי אינו תקין או שאינו שייך לאפליקציית Pulse.");
+      }
+    } catch(err) {
+      alert("שגיאה בפענוח קובץ הגיבוי.");
+    }
+  };
+  reader.readAsText(file);
+}
+
+// מערכת תזכורת יומית ב-20:00
+function initDailyReminder() {
+  if ("Notification" in window && Notification.permission !== "granted") {
+    Notification.requestPermission();
+  }
+  
+  setInterval(() => {
+    const now = new Date();
+    if (now.getHours() === 20 && now.getMinutes() === 0) {
+      const todayStr = getLocalDateString(now);
+      if (localStorage.getItem('pulse_last_reminder') !== todayStr) {
+        localStorage.setItem('pulse_last_reminder', todayStr);
+        if ("Notification" in window && Notification.permission === "granted") {
+          new Notification("Pulse - תזכורת יומית", {
+            body: "היי דוידי! אל תשכח להזין את ההוצאות וההכנסות שלך להיום 💡",
+            icon: "icon.png"
+          });
+        } else {
+          alert("תזכורת Pulse ⏰\nהיי דוידי! אל תשכח להזין את ההוצאות וההכנסות שלך להיום.");
+        }
+      }
+    }
+  }, 60000); // בדיקה כל דקה
 }
 
 window.onload = async function() {
@@ -948,6 +1042,7 @@ window.onload = async function() {
   buildRecDayDropdown();
   buildColorPalettes();
   setupSwipeGestures();
+  initDailyReminder();
   renderHome();
 };
 
@@ -1044,6 +1139,28 @@ function goToOnboardingStep2() {
 
   document.getElementById('onboarding-screen-1').classList.add('hidden');
   document.getElementById('onboarding-screen-2').classList.remove('hidden');
+  switchOnboardTab('expense');
+}
+
+function switchOnboardTab(tab) {
+  currentOnboardTab = tab;
+  const btnExp = document.getElementById('onboardTabExpense');
+  const btnInc = document.getElementById('onboardTabIncome');
+  const titleAdd = document.getElementById('onboardAddTitle');
+
+  if(tab === 'expense') {
+    btnExp.style.background = 'var(--card)';
+    btnExp.style.color = 'var(--mint)';
+    btnInc.style.background = 'transparent';
+    btnInc.style.color = 'var(--text-dim)';
+    titleAdd.textContent = 'הוסף קטגוריית הוצאה ותקציב:';
+  } else {
+    btnInc.style.background = 'var(--card)';
+    btnInc.style.color = 'var(--mint)';
+    btnExp.style.background = 'transparent';
+    btnExp.style.color = 'var(--text-dim)';
+    titleAdd.textContent = 'הוסף קטגוריית הכנסה:';
+  }
   renderOnboardingCategoryList();
 }
 
@@ -1051,9 +1168,14 @@ function renderOnboardingCategoryList() {
   const container = document.getElementById('onboardingCatList');
   if(!container) return;
   container.innerHTML = '';
-  const allCats = [...state.expenseCats.map(c=>({...c, kind:'הוצאה'})), ...state.incomeCats.map(c=>({...c, kind:'הכנסה'}))];
+  const cats = currentOnboardTab === 'expense' ? state.expenseCats : state.incomeCats;
   
-  allCats.forEach(c => {
+  if(cats.length === 0) {
+    container.innerHTML = '<p class="text-[10px] text-center text-slate-500 py-1">אין קטגוריות ברשימה זו</p>';
+    return;
+  }
+
+  cats.forEach(c => {
     const row = document.createElement('div');
     row.className = 'flex items-center justify-between px-2 py-1 rounded-lg border bg-[var(--card-2)] border-[var(--border)]';
     row.innerHTML = `
@@ -1079,7 +1201,11 @@ function addCategoryFromOnboarding() {
   const budget = parseFloat(budgetInput.value) || 0;
   if(!name) { alert("נא להזין שם קטגוריה"); return; }
 
-  state.expenseCats.push({ name, color: onboardingSelectedColor, budget });
+  if(currentOnboardTab === 'expense') {
+    state.expenseCats.push({ name, color: onboardingSelectedColor, budget });
+  } else {
+    state.incomeCats.push({ name, color: onboardingSelectedColor, budget });
+  }
   renderOnboardingCategoryList();
   nameInput.value = '';
   budgetInput.value = '';
@@ -1087,8 +1213,11 @@ function addCategoryFromOnboarding() {
 
 function deleteCatOnboarding(catName) {
   if(state.expenseCats.length + state.incomeCats.length <= 2) { alert("חייבות להישאר לפחות קטגוריות במערכת."); return; }
-  state.expenseCats = state.expenseCats.filter(c => c.name !== catName);
-  state.incomeCats = state.incomeCats.filter(c => c.name !== catName);
+  if(currentOnboardTab === 'expense') {
+    state.expenseCats = state.expenseCats.filter(c => c.name !== catName);
+  } else {
+    state.incomeCats = state.incomeCats.filter(c => c.name !== catName);
+  }
   renderOnboardingCategoryList();
 }
 
@@ -1358,16 +1487,43 @@ function saveFinancialDay(val) {
   renderHome();
 }
 
-function openCategoriesModal(){ document.getElementById('categoriesModal').classList.remove('hidden'); renderModalCategoryList(); }
+function openCategoriesModal(){ document.getElementById('categoriesModal').classList.remove('hidden'); switchCatTab('expense'); }
 function closeCategoriesModal(){ document.getElementById('categoriesModal').classList.add('hidden'); }
+
+function switchCatTab(tab) {
+  currentCatTab = tab;
+  const btnExp = document.getElementById('catTabExpense');
+  const btnInc = document.getElementById('catTabIncome');
+  const titleAdd = document.getElementById('modalAddTitle');
+
+  if(tab === 'expense') {
+    btnExp.style.background = 'var(--card)';
+    btnExp.style.color = 'var(--mint)';
+    btnInc.style.background = 'transparent';
+    btnInc.style.color = 'var(--text-dim)';
+    titleAdd.textContent = 'הוסף קטגוריית הוצאה ותקציב';
+  } else {
+    btnInc.style.background = 'var(--card)';
+    btnInc.style.color = 'var(--mint)';
+    btnExp.style.background = 'transparent';
+    btnExp.style.color = 'var(--text-dim)';
+    titleAdd.textContent = 'הוסף קטגוריית הכנסה';
+  }
+  renderModalCategoryList();
+}
 
 function renderModalCategoryList(){
   const listContainer = document.getElementById('modalCatList');
   if(!listContainer) return;
   listContainer.innerHTML = '';
-  const allCats = [...state.expenseCats.map(c=>({...c, kind:'הוצאה'})), ...state.incomeCats.map(c=>({...c, kind:'הכנסה'}))];
+  const cats = currentCatTab === 'expense' ? state.expenseCats : state.incomeCats;
   
-  allCats.forEach((c) => {
+  if(cats.length === 0) {
+    listContainer.innerHTML = '<p class="text-[10px] text-center text-slate-500 py-2">אין קטגוריות ברשימה זו</p>';
+    return;
+  }
+
+  cats.forEach((c) => {
     const row = document.createElement('div');
     row.className = `flex items-center justify-between px-2.5 py-1.5 rounded-lg border bg-[var(--card-2)] border-[var(--border)]`;
     row.innerHTML = `
@@ -1388,9 +1544,10 @@ function renderModalCategoryList(){
 
 function updateCategoryBudget(catName, valStr) {
   const newBudget = parseFloat(valStr) || 0;
-  const foundExp = state.expenseCats.find(c => c.name === catName);
-  if(foundExp) foundExp.budget = newBudget;
-  else {
+  if(currentCatTab === 'expense') {
+    const foundExp = state.expenseCats.find(c => c.name === catName);
+    if(foundExp) foundExp.budget = newBudget;
+  } else {
     const foundInc = state.incomeCats.find(c => c.name === catName);
     if(foundInc) foundInc.budget = newBudget;
   }
@@ -1404,7 +1561,11 @@ function addNewCategoryFromModal(){
   const budget = parseFloat(budgetInput.value) || 0;
   if(!name) { alert("נא להזין שם קטגוריה"); return; }
   
-  state.expenseCats.push({ name, color: selectedNewCatColor, budget });
+  if(currentCatTab === 'expense') {
+    state.expenseCats.push({ name, color: selectedNewCatColor, budget });
+  } else {
+    state.incomeCats.push({ name, color: selectedNewCatColor, budget });
+  }
   persist();
   renderModalCategoryList();
   nameInput.value = '';
@@ -1413,8 +1574,11 @@ function addNewCategoryFromModal(){
 
 function deleteCatModal(catName){
   if(state.expenseCats.length + state.incomeCats.length <= 2) { alert("חייבות להישאר לפחות קטגוריות במערכת."); return; }
-  state.expenseCats = state.expenseCats.filter(c => c.name !== catName);
-  state.incomeCats = state.incomeCats.filter(c => c.name !== catName);
+  if(currentCatTab === 'expense') {
+    state.expenseCats = state.expenseCats.filter(c => c.name !== catName);
+  } else {
+    state.incomeCats = state.incomeCats.filter(c => c.name !== catName);
+  }
   persist();
   renderModalCategoryList();
 }

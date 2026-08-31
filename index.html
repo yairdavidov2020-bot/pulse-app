@@ -15,6 +15,9 @@
 <meta name="theme-color" content="#05070B">
 
 <script src="https://cdn.tailwindcss.com"></script>
+<!-- Supabase SDK לחיבור מסד הנתונים בענן -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -299,35 +302,6 @@
     </div>
 </div>
 
-<!-- הודעת עדכון מערכת חכמה הכוללת כפתור גיבוי ישיר בתוכה -->
-<div id="updateAnnouncementModal" class="modal-overlay hidden" style="z-index: 9999999;">
-    <div class="summary-card p-5 max-w-sm w-full space-y-3.5 shadow-2xl text-right">
-        <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-            <h3 class="text-xs font-bold gradient-text flex items-center gap-1.5"><i class="fa-solid fa-rocket text-emerald-400"></i> עדכון מערכת חדש זמין!</h3>
-            <button onclick="closeUpdateAnnouncement()" class="icon-btn" style="width:28px;height:28px;"><i class="fa-solid fa-xmark text-xs"></i></button>
-        </div>
-        <div class="space-y-2.5 text-[11px] leading-relaxed text-slate-300">
-            <p class="font-bold text-emerald-300">משתמשים יקרים, שוחרר עדכון חדש ומשמעותי לאפליקציית Pulse! 🌟</p>
-            <p>כדי שהעדכון ייכנס לתוקף בצורה חלקה במכשיר שלכם, מבלי לאבד שום נתון, בצעו את השלבים הבאים:</p>
-            
-            <div class="bg-[var(--card-2)] p-2.5 rounded-xl border border-[var(--border)] space-y-1.5 text-[10px]">
-                <p>1️⃣ לחצו כאן למטה על כפתור <b>הגיבוי המהיר</b> ושמרו את קובץ הנתונים.</p>
-                <p>2️⃣ מחקו את האפליקציה הנוכחית ממסך הבית.</p>
-                <p>3️⃣ היכנסו מחדש לקישור האפליקציה והוסיפו אותה למסך הבית מחדש.</p>
-                <p>4️⃣ במסך הפתיחה, לחצו על <b>"שחזור נתונים"</b> ובחרו את הקובץ ששמרתם – והכל יחזור לקדמותו בשניות!</p>
-            </div>
-
-            <!-- כפתור גיבוי ישיר בתוך ההודעה -->
-            <button onclick="exportBackup()" class="w-full py-3 px-4 rounded-xl font-bold text-xs bg-gradient-to-l from-emerald-500 to-teal-600 text-white shadow-lg cursor-pointer flex items-center justify-center gap-2 hover:opacity-95 transition">
-                <i class="fa-solid fa-cloud-arrow-down"></i> 1️⃣ לחץ כאן לגיבוי מהיר של כל הנתונים
-            </button>
-
-            <p class="text-[10px] text-amber-300 font-medium">💡 אל דאגה, שום נתון לא ילך לאיבוד כל עוד תשמרו את הקובץ.</p>
-        </div>
-        <button onclick="closeUpdateAnnouncement()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs">הבנתי, סגור הודעה</button>
-    </div>
-</div>
-
 <!-- שלב 1: מסך פתיחה ראשון -->
 <div id="onboarding-screen-1" class="full-page-onboarding hidden">
     <div class="road-city-bg">
@@ -379,21 +353,6 @@
         <div class="space-y-1 text-center py-1">
             <h1 class="text-3xl font-black tracking-tight gradient-text drop-shadow-[0_10px_20px_rgba(127,232,198,0.3)]">Pulse</h1>
             <p class="text-xs font-bold text-slate-200">הדרך שלך לחופש כלכלי</p>
-        </div>
-
-        <!-- כפתור שחזור גיבוי מרכזי וראשי בראש המסך -->
-        <div class="summary-card p-3.5 space-y-2 border border-emerald-500/40 bg-emerald-500/10 rounded-2xl text-center shadow-xl">
-            <p class="text-[11px] font-bold text-emerald-300"><i class="fa-solid fa-cloud-arrow-down ml-1"></i> יש לך קובץ גיבוי קיים?</p>
-            <button onclick="document.getElementById('onboardingImportFile').click()" class="w-full py-3 px-4 rounded-xl font-bold text-xs bg-gradient-to-l from-emerald-500 to-teal-600 text-white shadow-lg cursor-pointer flex items-center justify-center gap-2 hover:opacity-95 transition">
-                <i class="fa-solid fa-upload"></i> שחזר נתונים מיד (דלג על הגדרות)
-            </button>
-            <input type="file" id="onboardingImportFile" accept=".json" class="hidden" onchange="importBackupFromOnboarding(event)" />
-        </div>
-
-        <div class="flex items-center my-1">
-            <div class="flex-1 border-t border-[var(--border)]"></div>
-            <span class="px-3 text-[10px] text-slate-400 font-medium">או התחל משתמש חדש מאפס</span>
-            <div class="flex-1 border-t border-[var(--border)]"></div>
         </div>
 
         <div class="space-y-2">
@@ -654,17 +613,6 @@
                     </select>
                 </div>
 
-                <!-- גיבוי ושחזור נתונים -->
-                <div class="grid grid-cols-2 gap-1.5 pt-1">
-                    <button onclick="exportBackup()" class="w-full py-2 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold flex items-center justify-center gap-1 hover:bg-emerald-500/20 transition cursor-pointer">
-                        <i class="fa-solid fa-download"></i> גיבוי נתונים
-                    </button>
-                    <button onclick="document.getElementById('importFile').click()" class="w-full py-2 rounded-lg bg-blue-500/15 border border-blue-500/30 text-blue-400 text-[10px] font-bold flex items-center justify-center gap-1 hover:bg-blue-500/20 transition cursor-pointer">
-                        <i class="fa-solid fa-upload"></i> שחזור גיבוי
-                    </button>
-                    <input type="file" id="importFile" accept=".json" class="hidden" onchange="importBackup(event)" />
-                </div>
-
                 <button onclick="factoryReset()" class="w-full py-2 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-400 text-[11px] font-bold flex items-center justify-center gap-1.5 hover:bg-rose-500/20 transition cursor-pointer">
                     <i class="fa-solid fa-triangle-exclamation"></i> איפוס של האפליקציה
                 </button>
@@ -901,6 +849,11 @@
 </div>
 
 <script>
+// הגדרת Supabase (כתובת המערכת ומפתח ה-Publishable שלך)
+const supabaseUrl = 'https://zxexgpognjnaocchwgxi.supabase.co';
+const supabaseKey = 'sb_publishable_o8o7xzTe_fqswXqe2d2Exw_585G2'; 
+const _supabase = window.supabase ? supabase.createClient(supabaseUrl, supabaseKey) : null;
+
 const defaultCustomExpenseCats = [
   {name:'קניות', color:'#FF8D82', budget: 0}, 
   {name:'חברים', color:'#FFB382', budget: 0}, 
@@ -957,7 +910,99 @@ function getLocalDateString(d) {
   return `${year}-${month}-${day}`;
 }
 
-window.onload = function() {
+// טעינת נתונים מ-Supabase בעליית האפליקציה
+async function loadDataFromSupabase() {
+  if (!_supabase) return false;
+  try {
+    // 1. הגדרות משתמש
+    const { data: settingsData } = await _supabase.from('user_settings').select('*').limit(1);
+    if (settingsData && settingsData.length > 0) {
+      const s = settingsData[0];
+      state.userName = s.user_name || '';
+      state.baseline = s.baseline !== null ? s.baseline : null;
+      state.financialDay = s.financial_day || 1;
+      state.savingsGoal = s.savings_goal || 1500;
+      state.currency = s.currency || '₪';
+      state.language = s.language || 'he';
+    } else {
+      return false; // אין עדיין נתונים בענן
+    }
+
+    // 2. קטגוריות
+    const { data: catData } = await _supabase.from('categories').select('*');
+    if (catData && catData.length > 0) {
+      state.expenseCats = catData.filter(c => c.type === 'expense').map(c => ({ name: c.name, color: c.color, budget: c.budget }));
+      state.incomeCats = catData.filter(c => c.type === 'income').map(c => ({ name: c.name, color: c.color, budget: c.budget }));
+    }
+
+    // 3. הוראות קבע
+    const { data: recData } = await _supabase.from('recurring_items').select('*');
+    if (recData) {
+      state.recurringItems = recData.map(r => ({ name: r.name, type: r.type, amount: r.amount, day: r.day, lastAppliedPeriod: r.last_applied_period }));
+    }
+
+    // 4. תנועות
+    const { data: txData } = await _supabase.from('transactions').select('*');
+    if (txData) {
+      state.transactions = txData.map(t => ({ id: t.id, type: t.type, amount: t.amount, cat: t.cat, desc: t.desc, color: t.color, date: t.date }));
+    }
+    return true;
+  } catch (err) {
+    console.error('שגיאה בטעינת נתונים מ-Supabase:', err);
+    return false;
+  }
+}
+
+// שמירת נתונים ל-Supabase ול-localStorage כגיבוי
+async function persist() {
+  sortTransactions();
+  localStorage.setItem('pulse_state_v53', JSON.stringify(state));
+
+  if (!_supabase) return;
+  try {
+    // 1. שמירת הגדרות
+    await _supabase.from('user_settings').upsert({
+      id: 1,
+      user_name: state.userName,
+      baseline: state.baseline,
+      financial_day: state.financialDay,
+      savings_goal: state.savingsGoal,
+      currency: state.currency,
+      language: state.language
+    });
+
+    // 2. שמירת קטגוריות
+    await _supabase.from('categories').delete().neq('id', 0);
+    const catRows = [
+      ...state.expenseCats.map(c => ({ name: c.name, type: 'expense', color: c.color, budget: c.budget || 0 })),
+      ...state.incomeCats.map(c => ({ name: c.name, type: 'income', color: c.color, budget: c.budget || 0 }))
+    ];
+    if(catRows.length > 0) await _supabase.from('categories').insert(catRows);
+
+    // 3. שמירת הוראות קבע
+    await _supabase.from('recurring_items').delete().neq('id', 0);
+    if(state.recurringItems && state.recurringItems.length > 0) {
+      const recRows = state.recurringItems.map(r => ({
+        name: r.name, type: r.type, amount: r.amount, day: r.day, last_applied_period: r.lastAppliedPeriod
+      }));
+      await _supabase.from('recurring_items').insert(recRows);
+    }
+
+    // 4. שמירת תנועות
+    await _supabase.from('transactions').delete().neq('id', 0);
+    if(state.transactions && state.transactions.length > 0) {
+      const txRows = state.transactions.map(t => ({
+        id: typeof t.id === 'number' ? t.id : undefined,
+        type: t.type, amount: t.amount, cat: t.cat, desc: t.desc, color: t.color, date: t.date
+      }));
+      await _supabase.from('transactions').insert(txRows);
+    }
+  } catch (err) {
+    console.error('שגיאה בסנכרון ל-Supabase:', err);
+  }
+}
+
+window.onload = async function() {
   setTimeout(() => {
     const splash = document.getElementById('appSplashScreen');
     if(splash) {
@@ -967,23 +1012,26 @@ window.onload = function() {
     }
   }, 1600);
 
-  let saved = localStorage.getItem('pulse_state_v53');
-  if(!saved) {
-    const oldSaved = localStorage.getItem('pulse_state_v52');
-    if(oldSaved) {
-      saved = oldSaved;
-      localStorage.setItem('pulse_state_v53', saved);
+  // טעינת נתונים מענן Supabase
+  let loadedFromCloud = await loadDataFromSupabase();
+
+  // אם אין בענן, ניסיון טעינה מ-localStorage
+  if (!loadedFromCloud || !state.userName || state.baseline === null || state.baseline === undefined) {
+    let saved = localStorage.getItem('pulse_state_v53');
+    if(!saved) {
+      let oldSaved = localStorage.getItem('pulse_state_v52');
+      if(oldSaved) saved = oldSaved;
+    }
+    if(saved) {
+      state = JSON.parse(saved);
     }
   }
 
-  if(saved) {
-    state = JSON.parse(saved);
-    state.expenseCats.forEach(c => { if(c.budget === undefined) c.budget = 0; });
-    state.incomeCats.forEach(c => { if(c.budget === undefined) c.budget = 0; });
-    if(!state.currency) state.currency = '₪';
-    if(!state.language) state.language = 'he';
-    sortTransactions();
-  }
+  state.expenseCats.forEach(c => { if(c.budget === undefined) c.budget = 0; });
+  state.incomeCats.forEach(c => { if(c.budget === undefined) c.budget = 0; });
+  if(!state.currency) state.currency = '₪';
+  if(!state.language) state.language = 'he';
+  sortTransactions();
   
   if(!state.userName || state.baseline === null || state.baseline === undefined) {
     document.getElementById('onboarding-screen-1').classList.remove('hidden');
@@ -991,11 +1039,6 @@ window.onload = function() {
   } else {
     document.getElementById('onboarding-screen-1').classList.add('hidden');
     document.getElementById('onboarding-screen-2').classList.add('hidden');
-  }
-
-  // הצגת הודעת העדכון החדשה לכל המשתמשים (v55)
-  if(!localStorage.getItem('pulse_update_seen_v55')) {
-    document.getElementById('updateAnnouncementModal').classList.remove('hidden');
   }
 
   checkAndApplyRecurringTransactions();
@@ -1006,11 +1049,6 @@ window.onload = function() {
   setupSwipeGestures();
   renderHome();
 };
-
-function closeUpdateAnnouncement() {
-  localStorage.setItem('pulse_update_seen_v55', 'true');
-  document.getElementById('updateAnnouncementModal').classList.add('hidden');
-}
 
 function setupSwipeGestures() {
   let touchStartX = 0;
@@ -1166,35 +1204,6 @@ function saveInitialSetupFinal() {
   renderHome();
 }
 
-// שחזור גיבוי ישירות ממסך הפתיחה
-function importBackupFromOnboarding(event) {
-  const file = event.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const imported = JSON.parse(e.target.result);
-      if(imported && imported.userName !== undefined && imported.transactions) {
-        state = imported;
-        persist();
-        document.getElementById('onboarding-screen-1').classList.add('hidden');
-        document.getElementById('onboarding-screen-2').classList.add('hidden');
-        setDynamicGreeting();
-        buildFinancialDayDropdown();
-        buildRecDayDropdown();
-        buildColorPalettes();
-        renderHome();
-        alert("הגיבוי שוחזר בהצלחה!");
-      } else {
-        alert("קובץ הגיבוי אינו תקין.");
-      }
-    } catch(err) {
-      alert("שגיאה בקריאת קובץ הגיבוי.");
-    }
-  };
-  reader.readAsText(file);
-}
-
 function openGeneralHelpModal() { document.getElementById('generalHelpModal').classList.remove('hidden'); }
 function closeGeneralHelpModal() { document.getElementById('generalHelpModal').classList.add('hidden'); }
 function openChatHelpModal() { document.getElementById('chatHelpModal').classList.remove('hidden'); }
@@ -1238,46 +1247,9 @@ function changeCurrency(curr) {
   renderAnalytics();
 }
 
-// גיבוי ושחזור נתונים
-function exportBackup() {
-  const dataStr = JSON.stringify(state, null, 2);
-  const blob = new Blob([dataStr], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const downloadAnchor = document.createElement('a');
-  downloadAnchor.href = url;
-  downloadAnchor.download = `pulse_backup_${getLocalDateString(new Date())}.json`;
-  document.body.appendChild(downloadAnchor);
-  downloadAnchor.click();
-  downloadAnchor.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-
-function importBackup(event) {
-  const file = event.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const imported = JSON.parse(e.target.result);
-      if(imported && imported.userName !== undefined && imported.transactions) {
-        state = imported;
-        persist();
-        alert("הגיבוי שוחזר בהצלחה! האפליקציה תתרענן כעת.");
-        location.reload();
-      } else {
-        alert("קובץ הגיבוי אינו תקין.");
-      }
-    } catch(err) {
-      alert("שגיאה בקריאת קובץ הגיבוי.");
-    }
-  };
-  reader.readAsText(file);
-}
-
 function factoryReset() {
-  if(confirm("האם אתה בטוח שברצונך לאפס את האפליקציה? פעולה זו תמחק את כל הנתונים ותחזיר אותך למסך הפתיחה.")) {
+  if(confirm("האם אתה בטוח שברצונך לאפס את האפליקציה? פעולה זו תמחק את כל הנתונים.")) {
     localStorage.removeItem('pulse_state_v53');
-    localStorage.removeItem('pulse_state_v52');
     location.reload();
   }
 }
@@ -1354,11 +1326,6 @@ function buildFinancialDayDropdown() {
     if(i === (state.financialDay || 1)) opt.selected = true;
     select.appendChild(opt);
   }
-}
-
-function persist() {
-  sortTransactions();
-  localStorage.setItem('pulse_state_v53', JSON.stringify(state));
 }
 
 function promptSavingsGoal() {

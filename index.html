@@ -372,10 +372,9 @@
             <p class="text-xs font-bold text-slate-200">הדרך שלך לחופש כלכלי</p>
         </div>
 
-        <!-- כרטיס הסבר ברור למשתמשים חדשים וותיקים -->
         <div class="summary-card p-3 text-[11px] space-y-1 border border-emerald-400/30 bg-[var(--card)] shadow-lg">
             <p class="font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-circle-info"></i> לידיעתך לפני ההתחברות:</p>
-            <p class="text-slate-300">🔹 <b>משתמש קיים?</b> הקלד את שם המשתמש שלך כדי לשחזר את הנתונים שלך אוטומטית מהענן.</p>
+            <p class="text-slate-300">🔹 <b>משתמש קיים?</b> הקלד את שם המשתמש שלך ואת השם שלך שוב כדי לשחזר את הנתונים שלך אוטומטית מהענן.</p>
             <p class="text-slate-300">🔹 <b>משתמש חדש?</b> בחר שם משתמש משלך וצא לדרך.</p>
         </div>
 
@@ -1123,8 +1122,6 @@ window.onload = async function() {
   }
   if(saved) {
     state = JSON.parse(saved);
-    
-    // מיגרציה אוטומטית למשתמשים קיימים
     if (state.userName && !state.handle) {
       state.handle = state.userName;
     }
@@ -1149,7 +1146,7 @@ window.onload = async function() {
   if(!state.language) state.language = 'he';
   sortTransactions();
   
-  if(!state.userName || !state.handle || state.baseline === null || state.baseline === undefined) {
+  if(!state.handle || state.baseline === null || state.baseline === undefined) {
     document.getElementById('onboarding-screen-1').classList.remove('hidden');
     document.getElementById('onboarding-screen-2').classList.add('hidden');
   } else {
@@ -1269,8 +1266,9 @@ async function goToOnboardingStep2() {
       if (data && data.payload) {
         // שם המשתמש כבר קיים! התחברות אוטומטית לחשבון הקיים
         state = data.payload;
-        state.userName = displayNameVal; // עדכון שם תצוגה
-        localStorage.setItem('pulse_state_v53', JSON.stringify(state));
+        state.handle = handleVal;
+        state.userName = displayNameVal;
+        persist(); // שמירה מיידית בזיכרון ובענן
         
         const onboardingEl1 = document.getElementById('onboarding-screen-1');
         onboardingEl1.classList.add('closing');
@@ -1295,6 +1293,8 @@ async function goToOnboardingStep2() {
   state.handle = handleVal;
   state.userName = displayNameVal;
   state.baseline = val;
+  
+  persist(); // שמירה מיידית למניעת איבוד נתונים בסגירת אפליקציה
 
   document.getElementById('onboarding-screen-1').classList.add('hidden');
   document.getElementById('onboarding-screen-2').classList.remove('hidden');

@@ -11,7 +11,8 @@
 <meta name="apple-mobile-web-app-title" content="Pulse">
 <meta name="application-name" content="Pulse">
 <link rel="apple-touch-icon" href="icon.png">
-<link rel="manifest" href='data:application/manifest+json;utf8,{"name":"Pulse","short_name":"Pulse","start_url":"/","display":"standalone","background_color":"%2305070B","theme_color":"%2305070B","icons":[{"src":"icon.png","sizes":"512x512","type":"image/png"}]}'>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#05070B">
 
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1773,7 +1774,7 @@ function renderAnalytics(){
           <span class="tabular text-[12px] font-bold" style="color:${col}">${sign}${fmt(t.amount)}</span>
           <button onclick="editTransaction(${t.id})" class="text-[10px] text-slate-400 hover:text-white cursor-pointer">ערוך</button>
           <button onclick="deleteTransaction(${t.id})" class="text-[10px] text-rose-400 cursor-pointer">מחק</button>
-        </div>`;
+      </div>`;
       txList.appendChild(row);
     });
   }
@@ -1800,7 +1801,7 @@ function renderAnalytics(){
         <div class="flex items-center gap-2">
           <span class="tabular text-[12px] font-bold" style="color:${col}">${sign}${fmt(t.amount)}</span>
           <button onclick="deleteTransaction(${t.id})" class="text-[10px] text-rose-400 cursor-pointer">מחק</button>
-        </div>`;
+      </div>`;
       archiveList.appendChild(row);
     });
   }

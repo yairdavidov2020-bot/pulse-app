@@ -374,7 +374,7 @@
         <!-- כפתור שחזור גיבוי במסך הפתיחה -->
         <label class="w-full py-2.5 px-4 rounded-xl font-bold text-[11px] cursor-pointer bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-center gap-2">
             <i class="fa-solid fa-file-arrow-up"></i> יש לך גיבוי? שחזר נתונים מקובץ קיים
-            <input type="file" accept=".json" onchange="importBackup(event)" class="hidden" />
+            <input type="file" accept=".json,.txt,.pulse" onchange="importBackup(event)" class="hidden" />
         </label>
     </div>
 </div>
@@ -640,7 +640,7 @@
 
                 <label class="w-full py-2 rounded-lg bg-violet-500/15 border border-violet-500/30 text-violet-400 text-[11px] font-bold flex items-center justify-center gap-1.5 hover:bg-violet-500/20 transition cursor-pointer">
                     <i class="fa-solid fa-file-arrow-up"></i> שחזור נתונים (ייבוא קובץ)
-                    <input type="file" accept=".json" onchange="importBackup(event)" class="hidden" />
+                    <input type="file" accept=".json,.txt,.pulse" onchange="importBackup(event)" class="hidden" />
                 </label>
 
                 <button onclick="factoryReset()" class="w-full py-2 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-400 text-[11px] font-bold flex items-center justify-center gap-1.5 hover:bg-rose-500/20 transition cursor-pointer">
@@ -943,11 +943,11 @@ function persist() {
   localStorage.setItem('pulse_state_v53', JSON.stringify(state));
 }
 
-// פונקציות גיבוי ושחזור (ייצוא באמצעות Blob וגיבוי גיבוי ללוח אם נחסם)
+// פונקציית גיבוי מתוקנת עם application/octet-stream למניעת פתיחה אוטומטית ב-Kodex
 function exportBackup() {
   try {
     const dataStr = JSON.stringify(state, null, 2);
-    const blob = new Blob([dataStr], { type: 'application/json' });
+    const blob = new Blob([dataStr], { type: 'application/octet-stream' });
     const url = URL.createObjectURL(blob);
     const downloadAnchor = document.createElement('a');
     downloadAnchor.href = url;
@@ -960,7 +960,7 @@ function exportBackup() {
     const dataStr = JSON.stringify(state, null, 2);
     if (navigator.clipboard) {
       navigator.clipboard.writeText(dataStr).then(() => {
-        alert("הורדת הקובץ נחסמה בדפדפן זה. קוד הגיבוי הועתק ללוח שלך בהצלחה! הדבק אותו בקובץ טקסט ושמור.");
+        alert("קוד הגיבוי הועתק ללוח שלך בהצלחה!");
       }).catch(() => {
         prompt("העתק את קוד הגיבוי הבא ושמור אותו:", dataStr);
       });

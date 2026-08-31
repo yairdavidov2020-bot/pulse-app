@@ -849,10 +849,10 @@
 </div>
 
 <script>
-// הגדרת Supabase (כתובת המערכת ומפתח ה-Publishable שלך)
+// הגדרת Supabase (התחברות ישירה לענן שלך)
 const supabaseUrl = 'https://zxexgpognjnaocchwgxi.supabase.co';
 const supabaseKey = 'sb_publishable_o8o7xzTe_fqswXqe2d2Exw_585G2'; 
-const _supabase = window.supabase ? supabase.createClient(supabaseUrl, supabaseKey) : null;
+const _supabase = window.supabase ? window.supabase.createClient(supabaseUrl, supabaseKey) : null;
 
 const defaultCustomExpenseCats = [
   {name:'קניות', color:'#FF8D82', budget: 0}, 
@@ -914,7 +914,6 @@ function getLocalDateString(d) {
 async function loadDataFromSupabase() {
   if (!_supabase) return false;
   try {
-    // 1. הגדרות משתמש
     const { data: settingsData } = await _supabase.from('user_settings').select('*').limit(1);
     if (settingsData && settingsData.length > 0) {
       const s = settingsData[0];
@@ -925,23 +924,20 @@ async function loadDataFromSupabase() {
       state.currency = s.currency || '₪';
       state.language = s.language || 'he';
     } else {
-      return false; // אין עדיין נתונים בענן
+      return false;
     }
 
-    // 2. קטגוריות
     const { data: catData } = await _supabase.from('categories').select('*');
     if (catData && catData.length > 0) {
       state.expenseCats = catData.filter(c => c.type === 'expense').map(c => ({ name: c.name, color: c.color, budget: c.budget }));
       state.incomeCats = catData.filter(c => c.type === 'income').map(c => ({ name: c.name, color: c.color, budget: c.budget }));
     }
 
-    // 3. הוראות קבע
     const { data: recData } = await _supabase.from('recurring_items').select('*');
     if (recData) {
       state.recurringItems = recData.map(r => ({ name: r.name, type: r.type, amount: r.amount, day: r.day, lastAppliedPeriod: r.last_applied_period }));
     }
 
-    // 4. תנועות
     const { data: txData } = await _supabase.from('transactions').select('*');
     if (txData) {
       state.transactions = txData.map(t => ({ id: t.id, type: t.type, amount: t.amount, cat: t.cat, desc: t.desc, color: t.color, date: t.date }));
@@ -953,14 +949,13 @@ async function loadDataFromSupabase() {
   }
 }
 
-// שמירת נתונים ל-Supabase ול-localStorage כגיבוי
+// שמירת נתונים ל-Supabase ול-localStorage
 async function persist() {
   sortTransactions();
   localStorage.setItem('pulse_state_v53', JSON.stringify(state));
 
   if (!_supabase) return;
   try {
-    // 1. שמירת הגדרות
     await _supabase.from('user_settings').upsert({
       id: 1,
       user_name: state.userName,
@@ -971,7 +966,6 @@ async function persist() {
       language: state.language
     });
 
-    // 2. שמירת קטגוריות
     await _supabase.from('categories').delete().neq('id', 0);
     const catRows = [
       ...state.expenseCats.map(c => ({ name: c.name, type: 'expense', color: c.color, budget: c.budget || 0 })),
@@ -979,7 +973,6 @@ async function persist() {
     ];
     if(catRows.length > 0) await _supabase.from('categories').insert(catRows);
 
-    // 3. שמירת הוראות קבע
     await _supabase.from('recurring_items').delete().neq('id', 0);
     if(state.recurringItems && state.recurringItems.length > 0) {
       const recRows = state.recurringItems.map(r => ({
@@ -988,11 +981,10 @@ async function persist() {
       await _supabase.from('recurring_items').insert(recRows);
     }
 
-    // 4. שמירת תנועות
     await _supabase.from('transactions').delete().neq('id', 0);
     if(state.transactions && state.transactions.length > 0) {
       const txRows = state.transactions.map(t => ({
-        id: typeof t.id === 'number' ? t.id : undefined,
+        id: typeof t.id === 'number' ? t.id : Date.now(),
         type: t.type, amount: t.amount, cat: t.cat, desc: t.desc, color: t.color, date: t.date
       }));
       await _supabase.from('transactions').insert(txRows);
@@ -1012,10 +1004,8 @@ window.onload = async function() {
     }
   }, 1600);
 
-  // טעינת נתונים מענן Supabase
   let loadedFromCloud = await loadDataFromSupabase();
 
-  // אם אין בענן, ניסיון טעינה מ-localStorage
   if (!loadedFromCloud || !state.userName || state.baseline === null || state.baseline === undefined) {
     let saved = localStorage.getItem('pulse_state_v53');
     if(!saved) {

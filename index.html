@@ -943,15 +943,31 @@ function persist() {
   localStorage.setItem('pulse_state_v53', JSON.stringify(state));
 }
 
-// פונקציות גיבוי ושחזור (ייצוא וייבוא JSON)
+// פונקציות גיבוי ושחזור (ייצוא באמצעות Blob וגיבוי גיבוי ללוח אם נחסם)
 function exportBackup() {
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
-  const downloadAnchor = document.createElement('a');
-  downloadAnchor.setAttribute("href", dataStr);
-  downloadAnchor.setAttribute("download", `pulse_backup_${getLocalDateString(new Date())}.json`);
-  document.body.appendChild(downloadAnchor);
-  downloadAnchor.click();
-  downloadAnchor.remove();
+  try {
+    const dataStr = JSON.stringify(state, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.href = url;
+    downloadAnchor.download = `pulse_backup_${getLocalDateString(new Date())}.json`;
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    document.body.removeChild(downloadAnchor);
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    const dataStr = JSON.stringify(state, null, 2);
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(dataStr).then(() => {
+        alert("הורדת הקובץ נחסמה בדפדפן זה. קוד הגיבוי הועתק ללוח שלך בהצלחה! הדבק אותו בקובץ טקסט ושמור.");
+      }).catch(() => {
+        prompt("העתק את קוד הגיבוי הבא ושמור אותו:", dataStr);
+      });
+    } else {
+      prompt("העתק את קוד הגיבוי הבא ושמור אותו:", dataStr);
+    }
+  }
 }
 
 function importBackup(event) {

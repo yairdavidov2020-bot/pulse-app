@@ -1044,6 +1044,7 @@ function importBackup(event) {
         state = imported;
         if(!state.incomeCats) state.incomeCats = [{name:'משכורת', color:'#7FE8C6', budget:0}];
         if(!state.expenseCats) state.expenseCats = [...defaultCustomExpenseCats];
+        if(state.userName && !state.handle) state.handle = state.userName;
         persist();
         alert("הגיבוי שוחזר בהצלחה!");
         location.reload();
@@ -1115,9 +1116,14 @@ window.onload = async function() {
   }
   if(saved) {
     state = JSON.parse(saved);
+    
+    // מיגרציה אוטומטית למשתמשים קיימים
+    if (state.userName && !state.handle) {
+      state.handle = state.userName;
+    }
   }
 
-  // ניסיון טעינה מהענן אם יש לנו handle שמור מקומית
+  // ניסיון טעינה מהענן אם יש לנו handle
   if (state.handle && supabaseClient) {
     try {
       const cloudData = await loadDataFromSupabase();
@@ -1142,7 +1148,6 @@ window.onload = async function() {
   } else {
     document.getElementById('onboarding-screen-1').classList.add('hidden');
     document.getElementById('onboarding-screen-2').classList.add('hidden');
-    // אם יש משתמש תקף, נשמור מיד לוודא שהטבלה מלאה
     await saveDataToSupabase(state);
   }
 

@@ -202,7 +202,6 @@
     display: flex;
     flex-direction: column;
     padding: 16px;
-    padding-top: max(env(safe-area-inset-top), 32px); 
     overflow-y: auto;
     animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
@@ -554,7 +553,6 @@
     </div>
 </div>
 
-<!-- תפריט צדדי (Menu) מורד למטה כדי שהמצלמה/נוץ' לא יסתירו כלום -->
 <div id="menuModal" class="modal-overlay hidden" onclick="if(event.target === this) closeMenuModal()">
     <div class="menu-sidebar-panel space-y-3 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2.5">
@@ -571,12 +569,6 @@
         </div>
         
         <div class="space-y-1.5 pt-1">
-            <!-- כפתור סנכרון בולט וירוק בתפריט הראשי -->
-            <button onclick="manualSyncToCloud()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/40 hover:border-emerald-400 transition text-[12px] font-bold cursor-pointer text-emerald-400 shadow-sm">
-                <span class="flex items-center gap-2.5"><i class="fa-solid fa-cloud-arrow-up w-4"></i> סנכרן נתונים לענן</span>
-                <i class="fa-solid fa-check text-[10px]"></i>
-            </button>
-
             <button onclick="menuGoHome()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-emerald-400 transition text-[12px] font-bold cursor-pointer">
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-house text-emerald-400 w-4"></i> בית</span>
                 <i class="fa-solid fa-chevron-left text-[10px] text-slate-500"></i>
@@ -859,7 +851,7 @@
 <script>
 // הגדרת Supabase (התחברות ישירה לענן שלך)
 const supabaseUrl = 'https://zxexgpognjnaocchwgxi.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4ZXhncG9xbmpuYW9jY2h3Z3hpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgxNjAyMDQsImV4cCI6MjEwMzczNjIwNH0.3U6qqy_Sz8MgJrVYiTSk2QZCcX_CjOH2gARCIAZPuIc'; 
+const supabaseKey = 'sb_publishable_o8o7xzTe_fqswXqe2d2Exw_585G2'; 
 const _supabase = window.supabase ? window.supabase.createClient(supabaseUrl, supabaseKey) : null;
 
 const defaultCustomExpenseCats = [
@@ -918,11 +910,11 @@ function getLocalDateString(d) {
   return `${year}-${month}-${day}`;
 }
 
+// טעינת נתונים מ-Supabase בעליית האפליקציה
 async function loadDataFromSupabase() {
   if (!_supabase) return false;
   try {
-    const { data: settingsData, error: err1 } = await _supabase.from('user_settings').select('*').limit(1);
-    if (err1) console.error(err1);
+    const { data: settingsData } = await _supabase.from('user_settings').select('*').limit(1);
     if (settingsData && settingsData.length > 0) {
       const s = settingsData[0];
       state.userName = s.user_name || '';
@@ -948,7 +940,7 @@ async function loadDataFromSupabase() {
 
     const { data: txData } = await _supabase.from('transactions').select('*');
     if (txData) {
-      state.transactions = txData.map(t => ({ id: t.id, type: t.type, amount: t.amount, cat: t.cat, desc: t.desc || t.cat, color: t.color, date: t.date }));
+      state.transactions = txData.map(t => ({ id: t.id, type: t.type, amount: t.amount, cat: t.cat, desc: t.desc, color: t.color, date: t.date }));
     }
     return true;
   } catch (err) {
@@ -957,6 +949,7 @@ async function loadDataFromSupabase() {
   }
 }
 
+// שמירת נתונים ל-Supabase ול-localStorage
 async function persist() {
   sortTransactions();
   localStorage.setItem('pulse_state_v53', JSON.stringify(state));
@@ -973,14 +966,14 @@ async function persist() {
       language: state.language
     });
 
-    await _supabase.from('categories').delete().neq('id', -999999);
+    await _supabase.from('categories').delete().neq('id', 0);
     const catRows = [
       ...state.expenseCats.map(c => ({ name: c.name, type: 'expense', color: c.color, budget: c.budget || 0 })),
       ...state.incomeCats.map(c => ({ name: c.name, type: 'income', color: c.color, budget: c.budget || 0 }))
     ];
     if(catRows.length > 0) await _supabase.from('categories').insert(catRows);
 
-    await _supabase.from('recurring_items').delete().neq('id', -999999);
+    await _supabase.from('recurring_items').delete().neq('id', 0);
     if(state.recurringItems && state.recurringItems.length > 0) {
       const recRows = state.recurringItems.map(r => ({
         name: r.name, type: r.type, amount: r.amount, day: r.day, last_applied_period: r.lastAppliedPeriod
@@ -988,30 +981,16 @@ async function persist() {
       await _supabase.from('recurring_items').insert(recRows);
     }
 
-    await _supabase.from('transactions').delete().neq('id', -999999);
+    await _supabase.from('transactions').delete().neq('id', 0);
     if(state.transactions && state.transactions.length > 0) {
       const txRows = state.transactions.map(t => ({
         id: typeof t.id === 'number' ? t.id : Date.now(),
-        type: t.type,
-        amount: t.amount,
-        cat: t.cat,
-        "desc": t.desc || t.cat,
-        color: t.color,
-        date: t.date
+        type: t.type, amount: t.amount, cat: t.cat, desc: t.desc, color: t.color, date: t.date
       }));
       await _supabase.from('transactions').insert(txRows);
     }
   } catch (err) {
     console.error('שגיאה בסנכרון ל-Supabase:', err);
-  }
-}
-
-async function manualSyncToCloud() {
-  try {
-    await persist();
-    alert('הנתונים סונכרנו לענן בהצלחה!');
-  } catch(e) {
-    alert('שגיאה בסנכרון לענן');
   }
 }
 
@@ -1025,14 +1004,17 @@ window.onload = async function() {
     }
   }, 1600);
 
-  // טעינה מיידית מזיכרון מקומי (localStorage) כדי שהנתונים יוצגו ישר בלי אפס ובלי עיכוב!
-  let saved = localStorage.getItem('pulse_state_v53');
-  if(!saved) {
-    let oldSaved = localStorage.getItem('pulse_state_v52');
-    if(oldSaved) saved = oldSaved;
-  }
-  if(saved) {
-    state = JSON.parse(saved);
+  let loadedFromCloud = await loadDataFromSupabase();
+
+  if (!loadedFromCloud || !state.userName || state.baseline === null || state.baseline === undefined) {
+    let saved = localStorage.getItem('pulse_state_v53');
+    if(!saved) {
+      let oldSaved = localStorage.getItem('pulse_state_v52');
+      if(oldSaved) saved = oldSaved;
+    }
+    if(saved) {
+      state = JSON.parse(saved);
+    }
   }
 
   state.expenseCats.forEach(c => { if(c.budget === undefined) c.budget = 0; });
@@ -1049,21 +1031,13 @@ window.onload = async function() {
     document.getElementById('onboarding-screen-2').classList.add('hidden');
   }
 
+  checkAndApplyRecurringTransactions();
   setDynamicGreeting();
   buildFinancialDayDropdown();
   buildRecDayDropdown();
   buildColorPalettes();
   setupSwipeGestures();
   renderHome();
-
-  // סנכרון שקט ברקע מול ענן Supabase לעדכון נתונים
-  let loadedFromCloud = await loadDataFromSupabase();
-  if (loadedFromCloud) {
-    state.expenseCats.forEach(c => { if(c.budget === undefined) c.budget = 0; });
-    state.incomeCats.forEach(c => { if(c.budget === undefined) c.budget = 0; });
-    sortTransactions();
-    renderHome();
-  }
 };
 
 function setupSwipeGestures() {

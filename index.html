@@ -375,20 +375,20 @@
         <!-- כרטיס הסבר ברור למשתמשים חדשים וותיקים -->
         <div class="summary-card p-3 text-[11px] space-y-1 border border-emerald-400/30 bg-[var(--card)] shadow-lg">
             <p class="font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-circle-info"></i> לידיעתך לפני ההתחברות:</p>
-            <p class="text-slate-300">🔹 <b>משתמש קיים?</b> הקלד את שם המשתמש שלך (<span class="text-emerald-300 font-bold">יאיר</span>) כדי לשחזר את הנתונים שלך אוטומטית מהענן.</p>
+            <p class="text-slate-300">🔹 <b>משתמש קיים?</b> הקלד את שם המשתמש שלך כדי לשחזר את הנתונים שלך אוטומטית מהענן.</p>
             <p class="text-slate-300">🔹 <b>משתמש חדש?</b> בחר שם משתמש משלך וצא לדרך.</p>
         </div>
 
         <div class="space-y-2 pt-1">
             <div class="field-shell flex items-center px-4 py-2.5">
-                <input id="userHandleInput" type="text" placeholder="שם משתמש (yair)..." class="amount-input text-center font-bold text-sm" />
+                <input id="userHandleInput" type="text" placeholder="שם משתמש..." class="amount-input text-center font-bold text-sm" />
             </div>
             <div class="field-shell flex items-center px-4 py-2.5">
-                <input id="userDisplayNameInput" type="text" placeholder="איך לקרוא לך באפליקציה? (דוידי)..." class="amount-input text-center font-bold text-sm" />
+                <input id="userDisplayNameInput" type="text" placeholder="איך לקרוא לך באפליקציה?..." class="amount-input text-center font-bold text-sm" />
             </div>
             <div class="field-shell flex items-center px-4 py-2.5">
                 <span class="text-base font-bold ml-2 text-emerald-400">₪</span>
-                <input id="initialBalanceInput" type="tel" inputmode="decimal" placeholder="יתרה התחלתית בעו״ש (לחדשים בלבד)..." class="amount-input text-center text-sm" />
+                <input id="initialBalanceInput" type="tel" inputmode="decimal" placeholder="יתרה התחלתית בעו״ש..." class="amount-input text-center text-sm" />
             </div>
         </div>
         
@@ -588,7 +588,7 @@
                 </div>
             </div>
             <div class="field-shell px-2 py-1">
-                <input id="recName" type="text" placeholder="שם (שכירות)" class="w-full bg-transparent outline-none text-[10px]" style="color:var(--text)" />
+                <input id="recName" type="text" placeholder="שם" class="w-full bg-transparent outline-none text-[10px]" style="color:var(--text)" />
             </div>
             <button onclick="addRecurringItem()" class="save-btn w-full py-2 rounded-xl font-bold text-[10px]">הוסף קבוע</button>
         </div>
@@ -788,7 +788,7 @@
 
           <div class="summary-card p-2 space-y-1">
             <div class="field-shell flex items-center px-2.5 py-1.5">
-              <input id="smartTextInput" type="text" placeholder="הכתבה (למשל: 50 קניות 18.8)..." class="w-full bg-transparent outline-none text-[10px] font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
+              <input id="smartTextInput" type="text" placeholder="הכתבה..." class="w-full bg-transparent outline-none text-[10px] font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
             </div>
             <button onclick="processSmartText()" class="save-btn w-full py-1.5 rounded-xl text-[10px] font-bold cursor-pointer shadow-sm">פענח והוסף תנועה</button>
           </div>
@@ -1872,7 +1872,7 @@ function resetVoiceUI(){
 function processSmartText() {
   const input = document.getElementById('smartTextInput');
   const text = input.value.trim();
-  if(!text) { alert("נא להזין טקסט לפענוח (למשל: 50 קניות 18.8)"); return; }
+  if(!text) { alert("נא להזין טקסט לפענוח"); return; }
   parseVoiceCommandForDescModal(text);
   input.value = '';
 }

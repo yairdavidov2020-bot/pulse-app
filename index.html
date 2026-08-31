@@ -1008,7 +1008,6 @@ function getLocalDateString(d) {
 function persist() {
   sortTransactions();
   localStorage.setItem('pulse_state_v53', JSON.stringify(state));
-  // סנכרון אוטומטי לענן של Supabase
   saveDataToSupabase(state);
 }
 
@@ -1113,7 +1112,6 @@ window.onload = async function() {
     }
   }, 1600);
 
-  // טעינה ראשונית מהענן (Supabase) עם גיבוי מקומי כגיבוי חירום
   try {
     const cloudData = await loadDataFromSupabase();
     if (cloudData && cloudData.userName) {
@@ -1127,6 +1125,11 @@ window.onload = async function() {
       }
       if(saved) {
         state = JSON.parse(saved);
+      }
+      
+      // אם הענן היה ריק ויש לנו נתונים מקומיים, נשמור אותם מיד לענן
+      if (state.userName) {
+        await saveDataToSupabase(state);
       }
     }
   } catch (e) {
@@ -2114,6 +2117,7 @@ function renderHistoricalChart() {
   }
 
   let maxVal = 100;
+  monthlyData.endforEach?.(d => {});
   monthlyData.forEach(d => {
     if(d.income > maxVal) maxVal = d.income;
     if(d.expense > maxVal) maxVal = d.expense;

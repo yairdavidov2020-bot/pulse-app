@@ -374,7 +374,10 @@
 
         <div class="space-y-2">
             <div class="field-shell flex items-center px-4 py-2.5">
-                <input id="userNameInput" type="text" placeholder="איך לקרוא לך? (הכנס שם)..." class="amount-input text-center font-bold text-sm" />
+                <input id="userHandleInput" type="text" placeholder="כינוי מערכת ייחודי (למשל: yair_636)..." class="amount-input text-center font-bold text-sm" />
+            </div>
+            <div class="field-shell flex items-center px-4 py-2.5">
+                <input id="userDisplayNameInput" type="text" placeholder="איך לקרוא לך באפליקציה? (למשל: דוידי)..." class="amount-input text-center font-bold text-sm" />
             </div>
             <div class="field-shell flex items-center px-4 py-2.5">
                 <span class="text-base font-bold ml-2 text-emerald-400">₪</span>
@@ -906,22 +909,14 @@ try {
 async function loadDataFromSupabase() {
   if (!supabaseClient) return null;
   try {
-    const userId = state.userName || 'yair';
+    const userKey = state.handle || state.userName || 'יאיר';
     const { data, error } = await supabaseClient
       .from('app_data')
       .select('payload')
-      .eq('id', userId)
+      .eq('id', userKey)
       .single();
     
-    if (error || !data) {
-      const { data: dataFallback, error: errFallback } = await supabaseClient
-        .from('app_data')
-        .select('payload')
-        .eq('id', 'yair')
-        .single();
-      if (errFallback || !dataFallback) return null;
-      return dataFallback.payload;
-    }
+    if (error || !data) return null;
     return data.payload;
   } catch (err) {
     console.error('Error loading from Supabase:', err);
@@ -932,11 +927,11 @@ async function loadDataFromSupabase() {
 async function saveDataToSupabase(appState) {
   if (!supabaseClient) return;
   try {
-    const userId = appState.userName || 'yair';
+    const userKey = appState.handle || appState.userName || 'יאיר';
     const { error } = await supabaseClient
       .from('app_data')
       .upsert({ 
-        id: userId, 
+        id: userKey, 
         payload: appState 
       });
     if (error) {
@@ -958,6 +953,7 @@ const defaultCustomExpenseCats = [
 ];
 
 let state = {
+  handle: '',
   userName: '',
   baseline: null,
   financialDay: 1,
@@ -1044,7 +1040,7 @@ function importBackup(event) {
   reader.onload = function(e) {
     try {
       const imported = JSON.parse(e.target.result);
-      if(imported && imported.userName && (imported.expenseCats || imported.transactions)) {
+      if(imported && (imported.userName || imported.handle) && (imported.expenseCats || imported.transactions)) {
         state = imported;
         if(!state.incomeCats) state.incomeCats = [{name:'משכורת', color:'#7FE8C6', budget:0}];
         if(!state.expenseCats) state.expenseCats = [...defaultCustomExpenseCats];
@@ -1112,30 +1108,26 @@ window.onload = async function() {
     }
   }, 1600);
 
-  try {
-    const cloudData = await loadDataFromSupabase();
-    if (cloudData && cloudData.userName) {
-      state = cloudData;
-      localStorage.setItem('pulse_state_v53', JSON.stringify(state));
-    } else {
-      let saved = localStorage.getItem('pulse_state_v53');
-      if(!saved) {
-        let oldSaved = localStorage.getItem('pulse_state_v52');
-        if(oldSaved) saved = oldSaved;
+  let saved = localStorage.getItem('pulse_state_v53');
+  if(!saved) {
+    let oldSaved = localStorage.getItem('pulse_state_v52');
+    if(oldSaved) saved = oldSaved;
+  }
+  if(saved) {
+    state = JSON.parse(saved);
+  }
+
+  // ניסיון טעינה מהענן אם יש לנו handle שמור מקומית
+  if (state.handle && supabaseClient) {
+    try {
+      const cloudData = await loadDataFromSupabase();
+      if (cloudData && cloudData.userName) {
+        state = cloudData;
+        localStorage.setItem('pulse_state_v53', JSON.stringify(state));
       }
-      if(saved) {
-        state = JSON.parse(saved);
-      }
-      
-      // אם הענן היה ריק ויש לנו נתונים מקומיים, נשמור אותם מיד לענן
-      if (state.userName) {
-        await saveDataToSupabase(state);
-      }
+    } catch(e) {
+      console.warn("Could not load from cloud on init", e);
     }
-  } catch (e) {
-    console.warn("Could not load from cloud, falling back to local storage", e);
-    let saved = localStorage.getItem('pulse_state_v53');
-    if(saved) state = JSON.parse(saved);
   }
 
   state.expenseCats.forEach(c => { if(c.budget === undefined) c.budget = 0; });
@@ -1144,12 +1136,14 @@ window.onload = async function() {
   if(!state.language) state.language = 'he';
   sortTransactions();
   
-  if(!state.userName || state.baseline === null || state.baseline === undefined) {
+  if(!state.userName || !state.handle || state.baseline === null || state.baseline === undefined) {
     document.getElementById('onboarding-screen-1').classList.remove('hidden');
     document.getElementById('onboarding-screen-2').classList.add('hidden');
   } else {
     document.getElementById('onboarding-screen-1').classList.add('hidden');
     document.getElementById('onboarding-screen-2').classList.add('hidden');
+    // אם יש משתמש תקף, נשמור מיד לוודא שהטבלה מלאה
+    await saveDataToSupabase(state);
   }
 
   checkAndApplyRecurringTransactions();
@@ -1244,13 +1238,50 @@ function buildColorPalettes() {
   settingsSelectedColor = availableColors[0];
 }
 
-function goToOnboardingStep2() {
-  const nameVal = document.getElementById('userNameInput').value.trim();
+async function goToOnboardingStep2() {
+  const handleVal = document.getElementById('userHandleInput').value.trim().toLowerCase();
+  const displayNameVal = document.getElementById('userDisplayNameInput').value.trim();
+
+  if(!handleVal) { alert("נא להזין כינוי מערכת ייחודי"); return; }
+  if(!displayNameVal) { alert("נא להזין את שמך באפליקציה"); return; }
+
+  // בדיקה האם הכינוי כבר קיים בענן של Supabase
+  if (supabaseClient) {
+    try {
+      const { data, error } = await supabaseClient
+        .from('app_data')
+        .select('payload')
+        .eq('id', handleVal)
+        .single();
+      
+      if (data && data.payload) {
+        // הכינוי כבר קיים! התחברות אוטומטית לחשבון הקיים
+        state = data.payload;
+        state.userName = displayNameVal; // עדכון שם תצוגה
+        localStorage.setItem('pulse_state_v53', JSON.stringify(state));
+        
+        const onboardingEl1 = document.getElementById('onboarding-screen-1');
+        onboardingEl1.classList.add('closing');
+        setTimeout(() => {
+          onboardingEl1.classList.add('hidden');
+          onboardingEl1.classList.remove('closing');
+        }, 800);
+
+        setDynamicGreeting();
+        renderHome();
+        return;
+      }
+    } catch(err) {
+      console.log("Handle is available for new registration", err);
+    }
+  }
+
+  // אם הכינוי פנוי לחלוטין, ממשיכים להגדרת יתרה ראשונית
   const val = parseFloat(document.getElementById('initialBalanceInput').value);
-  if(!nameVal) { alert("נא להזין את שמך"); return; }
   if(isNaN(val)) { alert("נא להזין סכום תקין בעו״ש"); return; }
   
-  state.userName = nameVal;
+  state.handle = handleVal;
+  state.userName = displayNameVal;
   state.baseline = val;
 
   document.getElementById('onboarding-screen-1').classList.add('hidden');
@@ -2117,7 +2148,6 @@ function renderHistoricalChart() {
   }
 
   let maxVal = 100;
-  monthlyData.endforEach?.(d => {});
   monthlyData.forEach(d => {
     if(d.income > maxVal) maxVal = d.income;
     if(d.expense > maxVal) maxVal = d.expense;

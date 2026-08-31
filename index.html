@@ -300,6 +300,23 @@
     </div>
 </div>
 
+<!-- מודל תזכורת הוצאות מרהיב (קופץ ב-16:43 וב-20:00) -->
+<div id="reminderModal" class="modal-overlay hidden">
+    <div class="summary-card p-6 max-w-xs w-full space-y-4 shadow-2xl text-center relative overflow-hidden border border-emerald-400/40">
+        <div class="absolute -top-12 -left-12 w-32 h-32 bg-emerald-500/20 rounded-full blur-2xl"></div>
+        <div class="relative z-10 flex flex-col items-center space-y-3">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500/20 to-blue-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-400 text-2xl shadow-xl">
+                <i class="fa-solid fa-wallet"></i>
+            </div>
+            <h3 class="text-base font-black gradient-text">תזכורת הוצאות יומית</h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+                היי דוידי! זה הזמן לעצור רגע, לעדכן את ההוצאות וההכנסות של היום ולהישאר בשליטה מלאה 💡
+            </p>
+        </div>
+        <button onclick="closeReminderModal()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs shadow-lg cursor-pointer relative z-10">הבנתי, יאללה מעדכן!</button>
+    </div>
+</div>
+
 <!-- שלב 1: מסך פתיחה ראשון + כפתור שחזור גיבוי -->
 <div id="onboarding-screen-1" class="full-page-onboarding hidden">
     <div class="road-city-bg">
@@ -439,8 +456,8 @@
                 <p>העוזר הקולי מזהה אוטומטית סכומים, תאריכים וקטגוריות מתוך הקטגוריות שהגדרת.</p>
             </div>
             <div class="bg-[var(--card-2)] p-2 rounded-xl border border-[var(--border)] space-y-1">
-                <p class="font-bold text-amber-400">⏰ תזכורת יומית:</p>
-                <p>האפליקציה תזכיר לך בכל ערב בשעה 20:00 להזין את הוצאות היום.</p>
+                <p class="font-bold text-amber-400">⏰ תזכורות יומיות:</p>
+                <p>האפליקציה תזכיר לך ב-16:43 וב-20:00 להזין את הוצאות היום.</p>
             </div>
         </div>
         <button onclick="closeGeneralHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי, תודה רבה!</button>
@@ -916,8 +933,8 @@ let speechSafetyTimer = null;
 let historicalExpanded = false;
 let donutExpanded = false;
 let txExpanded = false;
-let currentCatTab = 'expense'; // 'expense' or 'income'
-let currentOnboardTab = 'expense'; // 'expense' or 'income'
+let currentCatTab = 'expense';
+let currentOnboardTab = 'expense';
 
 const availableColors = [
   '#FF8D82', '#FF6E6E', '#F43F5E', '#E11D48', '#BE123C', '#9F1239', '#FF4D4D', '#FF3366', '#FF9999', '#FFB3B3',
@@ -937,13 +954,11 @@ function getLocalDateString(d) {
   return `${year}-${month}-${day}`;
 }
 
-// שמירת נתונים ל-localStorage בלבד
 function persist() {
   sortTransactions();
   localStorage.setItem('pulse_state_v53', JSON.stringify(state));
 }
 
-// פונקציית גיבוי מתוקנת עם application/octet-stream למניעת פתיחה אוטומטית ב-Kodex
 function exportBackup() {
   try {
     const dataStr = JSON.stringify(state, null, 2);
@@ -994,7 +1009,7 @@ function importBackup(event) {
   reader.readAsText(file);
 }
 
-// מערכת תזכורת יומית ב-20:00
+// מערכת תזכורות מעודכנת (16:43 ניסוי + 20:00 ערב)
 function initDailyReminder() {
   if ("Notification" in window && Notification.permission !== "granted") {
     Notification.requestPermission();
@@ -1002,21 +1017,42 @@ function initDailyReminder() {
   
   setInterval(() => {
     const now = new Date();
-    if (now.getHours() === 20 && now.getMinutes() === 0) {
-      const todayStr = getLocalDateString(now);
-      if (localStorage.getItem('pulse_last_reminder') !== todayStr) {
-        localStorage.setItem('pulse_last_reminder', todayStr);
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const todayStr = getLocalDateString(now);
+    
+    // בדיקה לשעה 16:43 (ניסוי) או 20:00 (ערב)
+    const is1643 = (hours === 16 && minutes === 43);
+    const is2000 = (hours === 20 && minutes === 0);
+    
+    if (is1643 || is2000) {
+      const reminderKey = `pulse_reminder_${todayStr}_${hours}_${minutes}`;
+      if (localStorage.getItem(reminderKey) !== 'true') {
+        localStorage.setItem(reminderKey, 'true');
+        
+        // התראת מערכת דפדפן אם יש הרשאה
         if ("Notification" in window && Notification.permission === "granted") {
-          new Notification("Pulse - תזכורת יומית", {
-            body: "היי דוידי! אל תשכח להזין את ההוצאות וההכנסות שלך להיום 💡",
+          new Notification("Pulse - תזכורת הוצאות", {
+            body: "היי דוידי! אל תשכח לעדכן את ההוצאות וההכנסות להיום 💡",
             icon: "icon.png"
           });
-        } else {
-          alert("תזכורת Pulse ⏰\nהיי דוידי! אל תשכח להזין את ההוצאות וההכנסות שלך להיום.");
         }
+        
+        // פתיחת מודל יפהפה באפליקציה
+        openReminderModal();
       }
     }
-  }, 60000); // בדיקה כל דקה
+  }, 30000); // בדיקה כל 30 שניות לדייק ב-16:43
+}
+
+function openReminderModal() {
+  const m = document.getElementById('reminderModal');
+  if(m) m.classList.remove('hidden');
+}
+
+function closeReminderModal() {
+  const m = document.getElementById('reminderModal');
+  if(m) m.classList.add('hidden');
 }
 
 window.onload = async function() {

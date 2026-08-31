@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Pulse</title>
 
-<!-- סקריפט חיבור ל-Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <!-- תגיות PWA מותאמות לאייפון ואנדרואיד -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -284,7 +281,7 @@
 </head>
 <body>
 
-<!-- מסך טעינה בכניסה לאפליקציה (עם מנגנון חירום שלא יתקע לעולם) -->
+<!-- מסך טעינה בכניסה לאפליקציה (Splash Screen) -->
 <div id="appSplashScreen" class="fixed inset-0 z-[999999] bg-[#05070B] flex flex-col items-center justify-center transition-all duration-700">
     <div class="flex flex-col items-center space-y-4">
         <div class="relative flex items-center justify-center">
@@ -302,19 +299,8 @@
         </div>
     </div>
 </div>
-<script>
-  // מנגנון חירום: אם מסיבה כלשהי הסקריפט הראשי מתעכב, מסך הטעינה יירד תוך 1.5 שניות בדיוק
-  setTimeout(() => {
-    const splash = document.getElementById('appSplashScreen');
-    if(splash && splash.style.opacity !== '0') {
-      splash.style.opacity = '0';
-      splash.style.transform = 'scale(1.05)';
-      setTimeout(() => splash.remove(), 700);
-    }
-  }, 1500);
-</script>
 
-<!-- מודל תזכורת הוצאות מרהיב -->
+<!-- מודל תזכורת הוצאות מרהיב (קופץ ב-16:43 וב-20:00) -->
 <div id="reminderModal" class="modal-overlay hidden">
     <div class="summary-card p-6 max-w-xs w-full space-y-4 shadow-2xl text-center relative overflow-hidden border border-emerald-400/40">
         <div class="absolute -top-12 -left-12 w-32 h-32 bg-emerald-500/20 rounded-full blur-2xl"></div>
@@ -402,6 +388,7 @@
             </span>
         </button>
 
+        <!-- כפתור שחזור גיבוי במסך הפתיחה -->
         <label class="w-full py-2.5 px-4 rounded-xl font-bold text-[11px] cursor-pointer bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-center gap-2">
             <i class="fa-solid fa-file-arrow-up"></i> יש לך גיבוי? שחזר נתונים מקובץ קיים
             <input type="file" accept=".json,.txt,.pulse" onchange="importBackup(event)" class="hidden" />
@@ -409,7 +396,7 @@
     </div>
 </div>
 
-<!-- שלב 2: מסך ניהול קטגוריות ראשוני -->
+<!-- שלב 2: מסך ניהול קטגוריות ראשוני עם הפרדה מלאה -->
 <div id="onboarding-screen-2" class="full-page-onboarding hidden">
     <div class="onboarding-content-box text-right space-y-2 p-3 bg-[var(--card)] rounded-3xl border border-[var(--border)] shadow-2xl">
         <div class="text-center space-y-1">
@@ -419,6 +406,7 @@
             </p>
         </div>
 
+        <!-- טאבים להפרדה במסך ההתקנה -->
         <div class="flex bg-[var(--card-2)] p-1 rounded-xl border border-[var(--border)] gap-1">
             <button onclick="switchOnboardTab('expense')" id="onboardTabExpense" class="flex-1 py-1 rounded-lg text-[10px] font-bold bg-[var(--card)] text-emerald-400">הוצאות</button>
             <button onclick="switchOnboardTab('income')" id="onboardTabIncome" class="flex-1 py-1 rounded-lg text-[10px] font-bold text-slate-400">הכנסות</button>
@@ -533,7 +521,7 @@
     </div>
 </div>
 
-<!-- מודל ניהול קטגוריות -->
+<!-- מודל ניהול קטגוריות עם הפרדה מלאה -->
 <div id="categoriesModal" class="modal-overlay hidden">
     <div class="summary-card p-3 max-w-xs w-full space-y-2 shadow-2xl max-h-[85vh] overflow-y-auto">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-1.5">
@@ -541,6 +529,7 @@
             <button onclick="closeCategoriesModal()" class="icon-btn" style="width:28px;height:28px;flex-shrink:0;"><i class="fa-solid fa-xmark text-sm font-black"></i></button>
         </div>
 
+        <!-- טאבים לבחירה בין הוצאות להכנסות -->
         <div class="flex bg-[var(--card-2)] p-1 rounded-xl border border-[var(--border)] gap-1">
             <button onclick="switchCatTab('expense')" id="catTabExpense" class="flex-1 py-1 rounded-lg text-[10px] font-bold bg-[var(--card)] text-emerald-400">קטגוריות הוצאות</button>
             <button onclick="switchCatTab('income')" id="catTabIncome" class="flex-1 py-1 rounded-lg text-[10px] font-bold text-slate-400">קטגוריות הכנסות</button>
@@ -661,6 +650,7 @@
                     </select>
                 </div>
 
+                <!-- כפתורי גיבוי ושחזור בתפריט ההגדרות -->
                 <button onclick="exportBackup()" class="w-full py-2 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-[11px] font-bold flex items-center justify-center gap-1.5 hover:bg-emerald-500/20 transition cursor-pointer">
                     <i class="fa-solid fa-file-arrow-down"></i> גיבוי נתונים (ייצוא קובץ)
                 </button>
@@ -906,18 +896,6 @@
 </div>
 
 <script>
-// --- אתחול Supabase בצורה בטוחה ---
-let supabase = null;
-try {
-  if (window.supabase) {
-    const supabaseUrl = 'https://fgxqcrbihyjdfqiyttyv.supabase.co';
-    const supabaseKey = 'sb_publishable_VKJ_DG8mhzBVxv-PfbvMDQ_SA_2E0Rs';
-    supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-  }
-} catch (err) {
-  console.warn("לא ניתן להתחבר ל-Supabase כרגע:", err);
-}
-
 const defaultCustomExpenseCats = [
   {name:'קניות', color:'#FF8D82', budget: 0}, 
   {name:'חברים', color:'#FFB382', budget: 0}, 
@@ -1031,6 +1009,7 @@ function importBackup(event) {
   reader.readAsText(file);
 }
 
+// מערכת תזכורות מעודכנת (16:43 ניסוי + 20:00 ערב)
 function initDailyReminder() {
   if ("Notification" in window && Notification.permission !== "granted") {
     Notification.requestPermission();
@@ -1042,6 +1021,7 @@ function initDailyReminder() {
     const minutes = now.getMinutes();
     const todayStr = getLocalDateString(now);
     
+    // בדיקה לשעה 16:43 (ניסוי) או 20:00 (ערב)
     const is1643 = (hours === 16 && minutes === 43);
     const is2000 = (hours === 20 && minutes === 0);
     
@@ -1050,16 +1030,19 @@ function initDailyReminder() {
       if (localStorage.getItem(reminderKey) !== 'true') {
         localStorage.setItem(reminderKey, 'true');
         
+        // התראת מערכת דפדפן אם יש הרשאה
         if ("Notification" in window && Notification.permission === "granted") {
           new Notification("Pulse - תזכורת הוצאות", {
             body: "היי דוידי! אל תשכח לעדכן את ההוצאות וההכנסות להיום 💡",
             icon: "icon.png"
           });
         }
+        
+        // פתיחת מודל יפהפה באפליקציה
         openReminderModal();
       }
     }
-  }, 30000);
+  }, 30000); // בדיקה כל 30 שניות לדייק ב-16:43
 }
 
 function openReminderModal() {
@@ -1080,7 +1063,7 @@ window.onload = async function() {
       splash.style.transform = 'scale(1.05)';
       setTimeout(() => splash.remove(), 700);
     }
-  }, 1200);
+  }, 1600);
 
   let saved = localStorage.getItem('pulse_state_v53');
   if(!saved) {

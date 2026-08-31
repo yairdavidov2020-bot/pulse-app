@@ -372,21 +372,28 @@
             <p class="text-xs font-bold text-slate-200">הדרך שלך לחופש כלכלי</p>
         </div>
 
-        <div class="space-y-2">
+        <!-- כרטיס הסבר ברור למשתמשים חדשים וותיקים -->
+        <div class="summary-card p-3 text-[11px] space-y-1 border border-emerald-400/30 bg-[var(--card)] shadow-lg">
+            <p class="font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-circle-info"></i> לידיעתך לפני ההתחברות:</p>
+            <p class="text-slate-300">🔹 <b>משתמש קיים?</b> הקלד את שם המשתמש שלך (למשל: <span class="text-emerald-300 font-bold">יאיר</span>) כדי לשחזר את הנתונים שלך אוטומטית מהענן.</p>
+            <p class="text-slate-300">🔹 <b>משתמש חדש?</b> בחר שם משתמש משלך וצא לדרך.</p>
+        </div>
+
+        <div class="space-y-2 pt-1">
             <div class="field-shell flex items-center px-4 py-2.5">
-                <input id="userHandleInput" type="text" placeholder="כינוי מערכת ייחודי (למשל: yair_636)..." class="amount-input text-center font-bold text-sm" />
+                <input id="userHandleInput" type="text" placeholder="שם משתמש (למשל: yair)..." class="amount-input text-center font-bold text-sm" />
             </div>
             <div class="field-shell flex items-center px-4 py-2.5">
                 <input id="userDisplayNameInput" type="text" placeholder="איך לקרוא לך באפליקציה? (למשל: דוידי)..." class="amount-input text-center font-bold text-sm" />
             </div>
             <div class="field-shell flex items-center px-4 py-2.5">
                 <span class="text-base font-bold ml-2 text-emerald-400">₪</span>
-                <input id="initialBalanceInput" type="tel" inputmode="decimal" placeholder="יתרה התחלתית בעו״ש..." class="amount-input text-center text-sm" />
+                <input id="initialBalanceInput" type="tel" inputmode="decimal" placeholder="יתרה התחלתית בעו״ש (לחדשים בלבד)..." class="amount-input text-center text-sm" />
             </div>
         </div>
         
         <button onclick="goToOnboardingStep2()" class="w-full py-3 px-5 rounded-2xl font-bold text-sm shadow-xl cursor-pointer bg-[var(--card-2)] border border-[var(--border)] text-slate-200 hover:text-white hover:border-emerald-400/50 transition flex items-center justify-between group">
-            <span class="text-[11px] opacity-90 font-medium">הגדר קטגוריות והתחל</span>
+            <span class="text-[11px] opacity-90 font-medium">המשך לאפליקציה</span>
             <span class="flex items-center gap-2">
                 <span>הבא</span>
                 <i class="fa-solid fa-arrow-left text-xs animated-arrow"></i>
@@ -394,7 +401,7 @@
         </button>
 
         <label class="w-full py-2.5 px-4 rounded-xl font-bold text-[11px] cursor-pointer bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-center gap-2">
-            <i class="fa-solid fa-file-arrow-up"></i> יש לך גיבוי? שחזר נתונים מקובץ קיים
+            <i class="fa-solid fa-file-arrow-up"></i> יש לך גיבוי מקומי? שחזר מקובץ
             <input type="file" accept=".json,.txt,.pulse" onchange="importBackup(event)" class="hidden" />
         </label>
     </div>
@@ -1247,10 +1254,10 @@ async function goToOnboardingStep2() {
   const handleVal = document.getElementById('userHandleInput').value.trim().toLowerCase();
   const displayNameVal = document.getElementById('userDisplayNameInput').value.trim();
 
-  if(!handleVal) { alert("נא להזין כינוי מערכת ייחודי"); return; }
+  if(!handleVal) { alert("נא להזין שם משתמש"); return; }
   if(!displayNameVal) { alert("נא להזין את שמך באפליקציה"); return; }
 
-  // בדיקה האם הכינוי כבר קיים בענן של Supabase
+  // בדיקה האם שם המשתמש כבר קיים בענן של Supabase
   if (supabaseClient) {
     try {
       const { data, error } = await supabaseClient
@@ -1260,7 +1267,7 @@ async function goToOnboardingStep2() {
         .single();
       
       if (data && data.payload) {
-        // הכינוי כבר קיים! התחברות אוטומטית לחשבון הקיים
+        // שם המשתמש כבר קיים! התחברות אוטומטית לחשבון הקיים
         state = data.payload;
         state.userName = displayNameVal; // עדכון שם תצוגה
         localStorage.setItem('pulse_state_v53', JSON.stringify(state));
@@ -1277,11 +1284,11 @@ async function goToOnboardingStep2() {
         return;
       }
     } catch(err) {
-      console.log("Handle is available for new registration", err);
+      console.log("Username is available for new registration", err);
     }
   }
 
-  // אם הכינוי פנוי לחלוטין, ממשיכים להגדרת יתרה ראשונית
+  // אם שם המשתמש פנוי לחלוטין, ממשיכים להגדרת יתרה ראשונית
   const val = parseFloat(document.getElementById('initialBalanceInput').value);
   if(isNaN(val)) { alert("נא להזין סכום תקין בעו״ש"); return; }
   

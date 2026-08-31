@@ -299,7 +299,7 @@
     </div>
 </div>
 
-<!-- שלב 1: מסך פתיחה ראשון -->
+<!-- שלב 1: מסך פתיחה ראשון - מעוצב מחדש עם שחזור גיבוי בולט בראש המסך -->
 <div id="onboarding-screen-1" class="full-page-onboarding hidden">
     <div class="road-city-bg">
         <svg class="w-full h-full" viewBox="0 0 400 800" preserveAspectRatio="none">
@@ -347,36 +347,43 @@
     </div>
 
     <div class="onboarding-content-box text-right">
-        <div class="mx-auto w-fit px-4 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-400/30 backdrop-blur-md text-emerald-300 text-[11px] font-bold shadow-lg flex items-center gap-2 floating-element">
-            <span>✨ היעד שלך: חופש כלכלי בנסיעה בטוחה</span>
+        <div class="space-y-1 text-center py-1">
+            <h1 class="text-3xl font-black tracking-tight gradient-text drop-shadow-[0_10px_20px_rgba(127,232,198,0.3)]">Pulse</h1>
+            <p class="text-xs font-bold text-slate-200">הדרך שלך לחופש כלכלי</p>
         </div>
-        <div class="space-y-2 text-center py-2 floating-element" style="animation-delay: 0.2s;">
-            <h1 class="text-3xl font-black tracking-tight gradient-text drop-shadow-[0_10px_20px_rgba(127,232,198,0.3)]">ברוכים הבאים</h1>
-            <p class="text-sm font-bold text-slate-100">אל הדרך אל החופש הכלכלי</p>
-            <p class="text-[11px] text-slate-300">צא למסע עם <span class="gradient-text font-bold">Pulse</span> ושלוט בעתיד שלך</p>
+
+        <!-- כפתור שחזור גיבוי מרכזי וראשי בראש המסך -->
+        <div class="summary-card p-3.5 space-y-2 border border-emerald-500/40 bg-emerald-500/10 rounded-2xl text-center shadow-xl">
+            <p class="text-[11px] font-bold text-emerald-300"><i class="fa-solid fa-cloud-arrow-down ml-1"></i> יש לך קובץ גיבוי קיים?</p>
+            <button onclick="document.getElementById('onboardingImportFile').click()" class="w-full py-3 px-4 rounded-xl font-bold text-xs bg-gradient-to-l from-emerald-500 to-teal-600 text-white shadow-lg cursor-pointer flex items-center justify-center gap-2 hover:opacity-95 transition">
+                <i class="fa-solid fa-upload"></i> שחזר נתונים מיד (דלג על הגדרות)
+            </button>
+            <input type="file" id="onboardingImportFile" accept=".json" class="hidden" onchange="importBackupFromOnboarding(event)" />
         </div>
-        <div class="space-y-2.5">
-            <div class="field-shell flex items-center px-4 py-3">
+
+        <div class="flex items-center my-1">
+            <div class="flex-1 border-t border-[var(--border)]"></div>
+            <span class="px-3 text-[10px] text-slate-400 font-medium">או התחל משתמש חדש מאפס</span>
+            <div class="flex-1 border-t border-[var(--border)]"></div>
+        </div>
+
+        <div class="space-y-2">
+            <div class="field-shell flex items-center px-4 py-2.5">
                 <input id="userNameInput" type="text" placeholder="איך לקרוא לך? (הכנס שם)..." class="amount-input text-center font-bold text-sm" />
             </div>
-            <div class="field-shell flex items-center px-4 py-3">
+            <div class="field-shell flex items-center px-4 py-2.5">
                 <span class="text-base font-bold ml-2 text-emerald-400">₪</span>
                 <input id="initialBalanceInput" type="tel" inputmode="decimal" placeholder="יתרה התחלתית בעו״ש..." class="amount-input text-center text-sm" />
             </div>
         </div>
-        <button onclick="goToOnboardingStep2()" class="w-full py-3.5 px-5 rounded-2xl font-bold text-sm shadow-xl cursor-pointer bg-gradient-to-l from-emerald-500 to-teal-600 text-white hover:opacity-95 transition flex items-center justify-between group border border-emerald-400/30 shadow-[0_10px_25px_rgba(46,184,138,0.3)]">
-            <span class="text-[11px] opacity-90 font-medium">המשך לניהול קטגוריות</span>
+        
+        <button onclick="goToOnboardingStep2()" class="w-full py-3 px-5 rounded-2xl font-bold text-sm shadow-xl cursor-pointer bg-[var(--card-2)] border border-[var(--border)] text-slate-200 hover:text-white hover:border-emerald-400/50 transition flex items-center justify-between group">
+            <span class="text-[11px] opacity-90 font-medium">הגדר קטגוריות והתחל</span>
             <span class="flex items-center gap-2">
                 <span>הבא</span>
                 <i class="fa-solid fa-arrow-left text-xs animated-arrow"></i>
             </span>
         </button>
-
-        <!-- כפתור שחזור גיבוי מהיר כבר במסך הפתיחה -->
-        <button onclick="document.getElementById('onboardingImportFile').click()" class="w-full py-3 px-4 rounded-2xl font-bold text-xs bg-[var(--card)] border border-[var(--border)] text-blue-400 hover:bg-blue-500/10 transition flex items-center justify-center gap-2 cursor-pointer shadow-md">
-            <i class="fa-solid fa-upload"></i> יש לי קובץ גיבוי – שחזר נתונים מיד
-        </button>
-        <input type="file" id="onboardingImportFile" accept=".json" class="hidden" onchange="importBackupFromOnboarding(event)" />
     </div>
 </div>
 

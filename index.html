@@ -371,6 +371,12 @@
                 <i class="fa-solid fa-arrow-left text-xs animated-arrow"></i>
             </span>
         </button>
+
+        <!-- כפתור שחזור גיבוי מהיר כבר במסך הפתיחה -->
+        <button onclick="document.getElementById('onboardingImportFile').click()" class="w-full py-3 px-4 rounded-2xl font-bold text-xs bg-[var(--card)] border border-[var(--border)] text-blue-400 hover:bg-blue-500/10 transition flex items-center justify-center gap-2 cursor-pointer shadow-md">
+            <i class="fa-solid fa-upload"></i> יש לי קובץ גיבוי – שחזר נתונים מיד
+        </button>
+        <input type="file" id="onboardingImportFile" accept=".json" class="hidden" onchange="importBackupFromOnboarding(event)" />
     </div>
 </div>
 
@@ -1114,6 +1120,35 @@ function saveInitialSetupFinal() {
   renderHome();
 }
 
+// שחזור גיבוי ישירות ממסך הפתיחה
+function importBackupFromOnboarding(event) {
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if(imported && imported.userName !== undefined && imported.transactions) {
+        state = imported;
+        persist();
+        document.getElementById('onboarding-screen-1').classList.add('hidden');
+        document.getElementById('onboarding-screen-2').classList.add('hidden');
+        setDynamicGreeting();
+        buildFinancialDayDropdown();
+        buildRecDayDropdown();
+        buildColorPalettes();
+        renderHome();
+        alert("הגיבוי שוחזר בהצלחה!");
+      } else {
+        alert("קובץ הגיבוי אינו תקין.");
+      }
+    } catch(err) {
+      alert("שגיאה בקריאת קובץ הגיבוי.");
+    }
+  };
+  reader.readAsText(file);
+}
+
 function openGeneralHelpModal() { document.getElementById('generalHelpModal').classList.remove('hidden'); }
 function closeGeneralHelpModal() { document.getElementById('generalHelpModal').classList.add('hidden'); }
 function openChatHelpModal() { document.getElementById('chatHelpModal').classList.remove('hidden'); }
@@ -1157,7 +1192,7 @@ function changeCurrency(curr) {
   renderAnalytics();
 }
 
-// גיבוי ושחזור נתונים
+// גיבוי ושחזור נתונים מתפריט ההגדרות
 function exportBackup() {
   const dataStr = JSON.stringify(state, null, 2);
   const blob = new Blob([dataStr], { type: 'application/json' });

@@ -15,8 +15,6 @@
 <meta name="theme-color" content="#05070B">
 
 <script src="https://cdn.tailwindcss.com"></script>
-<!-- Supabase SDK לחיבור מסד הנתונים בענן -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -849,11 +847,6 @@
 </div>
 
 <script>
-// הגדרת Supabase (התחברות ישירה לענן שלך)
-const supabaseUrl = 'https://zxexgpognjnaocchwgxi.supabase.co';
-const supabaseKey = 'sb_publishable_o8o7xzTe_fqswXqe2d2Exw_585G2'; 
-const _supabase = window.supabase ? window.supabase.createClient(supabaseUrl, supabaseKey) : null;
-
 const defaultCustomExpenseCats = [
   {name:'קניות', color:'#FF8D82', budget: 0}, 
   {name:'חברים', color:'#FFB382', budget: 0}, 
@@ -910,88 +903,10 @@ function getLocalDateString(d) {
   return `${year}-${month}-${day}`;
 }
 
-// טעינת נתונים מ-Supabase בעליית האפליקציה
-async function loadDataFromSupabase() {
-  if (!_supabase) return false;
-  try {
-    const { data: settingsData } = await _supabase.from('user_settings').select('*').limit(1);
-    if (settingsData && settingsData.length > 0) {
-      const s = settingsData[0];
-      state.userName = s.user_name || '';
-      state.baseline = s.baseline !== null ? s.baseline : null;
-      state.financialDay = s.financial_day || 1;
-      state.savingsGoal = s.savings_goal || 1500;
-      state.currency = s.currency || '₪';
-      state.language = s.language || 'he';
-    } else {
-      return false;
-    }
-
-    const { data: catData } = await _supabase.from('categories').select('*');
-    if (catData && catData.length > 0) {
-      state.expenseCats = catData.filter(c => c.type === 'expense').map(c => ({ name: c.name, color: c.color, budget: c.budget }));
-      state.incomeCats = catData.filter(c => c.type === 'income').map(c => ({ name: c.name, color: c.color, budget: c.budget }));
-    }
-
-    const { data: recData } = await _supabase.from('recurring_items').select('*');
-    if (recData) {
-      state.recurringItems = recData.map(r => ({ name: r.name, type: r.type, amount: r.amount, day: r.day, lastAppliedPeriod: r.last_applied_period }));
-    }
-
-    const { data: txData } = await _supabase.from('transactions').select('*');
-    if (txData) {
-      state.transactions = txData.map(t => ({ id: t.id, type: t.type, amount: t.amount, cat: t.cat, desc: t.desc, color: t.color, date: t.date }));
-    }
-    return true;
-  } catch (err) {
-    console.error('שגיאה בטעינת נתונים מ-Supabase:', err);
-    return false;
-  }
-}
-
-// שמירת נתונים ל-Supabase ול-localStorage
-async function persist() {
+// שמירת נתונים ל-localStorage בלבד
+function persist() {
   sortTransactions();
   localStorage.setItem('pulse_state_v53', JSON.stringify(state));
-
-  if (!_supabase) return;
-  try {
-    await _supabase.from('user_settings').upsert({
-      id: 1,
-      user_name: state.userName,
-      baseline: state.baseline,
-      financial_day: state.financialDay,
-      savings_goal: state.savingsGoal,
-      currency: state.currency,
-      language: state.language
-    });
-
-    await _supabase.from('categories').delete().neq('id', 0);
-    const catRows = [
-      ...state.expenseCats.map(c => ({ name: c.name, type: 'expense', color: c.color, budget: c.budget || 0 })),
-      ...state.incomeCats.map(c => ({ name: c.name, type: 'income', color: c.color, budget: c.budget || 0 }))
-    ];
-    if(catRows.length > 0) await _supabase.from('categories').insert(catRows);
-
-    await _supabase.from('recurring_items').delete().neq('id', 0);
-    if(state.recurringItems && state.recurringItems.length > 0) {
-      const recRows = state.recurringItems.map(r => ({
-        name: r.name, type: r.type, amount: r.amount, day: r.day, last_applied_period: r.lastAppliedPeriod
-      }));
-      await _supabase.from('recurring_items').insert(recRows);
-    }
-
-    await _supabase.from('transactions').delete().neq('id', 0);
-    if(state.transactions && state.transactions.length > 0) {
-      const txRows = state.transactions.map(t => ({
-        id: typeof t.id === 'number' ? t.id : Date.now(),
-        type: t.type, amount: t.amount, cat: t.cat, desc: t.desc, color: t.color, date: t.date
-      }));
-      await _supabase.from('transactions').insert(txRows);
-    }
-  } catch (err) {
-    console.error('שגיאה בסנכרון ל-Supabase:', err);
-  }
 }
 
 window.onload = async function() {
@@ -1004,17 +919,13 @@ window.onload = async function() {
     }
   }, 1600);
 
-  let loadedFromCloud = await loadDataFromSupabase();
-
-  if (!loadedFromCloud || !state.userName || state.baseline === null || state.baseline === undefined) {
-    let saved = localStorage.getItem('pulse_state_v53');
-    if(!saved) {
-      let oldSaved = localStorage.getItem('pulse_state_v52');
-      if(oldSaved) saved = oldSaved;
-    }
-    if(saved) {
-      state = JSON.parse(saved);
-    }
+  let saved = localStorage.getItem('pulse_state_v53');
+  if(!saved) {
+    let oldSaved = localStorage.getItem('pulse_state_v52');
+    if(oldSaved) saved = oldSaved;
+  }
+  if(saved) {
+    state = JSON.parse(saved);
   }
 
   state.expenseCats.forEach(c => { if(c.budget === undefined) c.budget = 0; });

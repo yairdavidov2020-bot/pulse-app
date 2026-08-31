@@ -895,10 +895,17 @@
 </div>
 
 <script>
-// --- אתחול Supabase ---
-const supabaseUrl = 'https://fgxqcrbihyjdfqiyttyv.supabase.co';
-const supabaseKey = 'sb_publishable_VKJ_DG8mhzBVxv-PfbvMDQ_SA_2E0Rs';
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+// --- אתחול Supabase בצורה בטוחה ---
+let supabase = null;
+try {
+  if (window.supabase) {
+    const supabaseUrl = 'https://fgxqcrbihyjdfqiyttyv.supabase.co';
+    const supabaseKey = 'sb_publishable_VKJ_DG8mhzBVxv-PfbvMDQ_SA_2E0Rs';
+    supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+  }
+} catch (err) {
+  console.warn("לא ניתן להתחבר ל-Supabase כרגע:", err);
+}
 
 const defaultCustomExpenseCats = [
   {name:'קניות', color:'#FF8D82', budget: 0}, 

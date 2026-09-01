@@ -361,7 +361,7 @@
             <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-microphone ml-1"></i> העוזר הקולי והכתבנית</h3>
             <button onclick="closeChatHelpModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
-        <p class="text-[11px] text-slate-300 leading-relaxed">העוזר הקולי מזהה אוטומטית בין יחיד לרבים (למשל: אמרת <b>מסעדה</b> – המערכת מקשרת זאת מיד לתת-הקטגוריה הרצויה ומסדרת את הכל בשבילך).</p>
+        <p class="text-[11px] text-slate-300 leading-relaxed">העוזר הקולי מזהה אוטומטית בין יחיד לרבים ומפנה בדיוק לתת-הקטגוריה המתאימה ביותר.</p>
         <button onclick="closeChatHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי</button>
     </div>
 </div>
@@ -519,7 +519,6 @@
       <main class="px-3 pb-1 pt-1 flex-1 flex flex-col justify-between h-full overflow-hidden gap-1.5">
         <section class="flex flex-col justify-center flex-1">
           <div class="flex gap-2 mr-auto w-fit mb-1">
-            <!-- כפתור שימוש יעיל המפעיל את חלון אנימציית ההדרכה -->
             <button onclick="openTutorialModal()" class="text-[9px] font-medium px-2 py-0.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-between gap-1 shadow-sm cursor-pointer">
               <span><i class="fa-solid fa-lightbulb ml-1"></i> שימוש יעיל</span>
             </button>
@@ -748,7 +747,6 @@ async function saveDataToSupabase(appState) {
   } catch (err) {}
 }
 
-// קטגוריות משנה המותאמות בדיוק לצורה הטבעית (יחיד או רבים) כנהוג בעברית
 const profileSubCategoriesMap = {
   'soldier_male': {
     'אוכל': ['שקם', 'מסעדה', 'משלוח', 'קפה', 'בשרייה', 'חלביה'],
@@ -837,7 +835,6 @@ function persist() {
   saveDataToSupabase(state);
 }
 
-// פונקציית הצגת התראה דינמית לשמירת עסקה
 function showToast(message) {
   const toast = document.getElementById('toastNotification');
   const textEl = document.getElementById('toastText');
@@ -1393,20 +1390,26 @@ function processSmartText() {
   input.value = '';
 }
 
-// זיהוי חכם מותאם ליחיד/רבים
+// מנגנון השוואת תת-קטגוריה מדויק ומבוקר (ללא נפילות לערכים ראשונים)
 function isSubMatch(text, sub) {
-  if (text.includes(sub)) return true;
-  if (sub.endsWith('ות')) {
-    const base = sub.slice(0, -2);
-    if (text.includes(base + 'ה') || text.includes(base + 'ת') || text.includes(base)) return true;
-  } else if (sub.endsWith('ים')) {
-    const base = sub.slice(0, -2);
-    if (text.includes(base) || text.includes(base + 'ה')) return true;
-  } else if (sub.endsWith('ה')) {
-    const base = sub.slice(0, -1);
-    if (text.includes(base + 'ות') || text.includes(base)) return true;
+  let cleanSub = sub.trim();
+  if (text.includes(cleanSub)) return true;
+
+  // טיפול בצורות יחיד/רבים ונטייה בעברית בצורה מדויקת
+  if (cleanSub.endsWith('ה')) {
+    let base = cleanSub.slice(0, -1); // מסעדה -> מסעד
+    if (text.includes(base + 'ה') || text.includes(base + 'ות') || text.includes(base + 'ת')) return true;
+  } else if (cleanSub.endsWith('ות')) {
+    let base = cleanSub.slice(0, -2);
+    if (text.includes(base + 'ה') || text.includes(cleanSub)) return true;
+  } else if (cleanSub.endsWith('ים')) {
+    let base = cleanSub.slice(0, -2);
+    if (text.includes(base) || text.includes(base + 'ים')) return true;
+  } else if (cleanSub.endsWith('ח')) {
+    // משלוח -> משלוחים
+    if (text.includes(cleanSub) || text.includes(cleanSub + 'ים')) return true;
   }
-  if (text.includes(sub.slice(0, -1))) return true;
+
   return false;
 }
 
@@ -1427,12 +1430,13 @@ function processVoiceCommandDirectly(text){
   let matchedCat = null;
   let matchedSub = null;
 
+  // סריקה מדויקת של כל הקטגוריות ותתי-הקטגוריות
   for (let catName of Object.keys(subMap)) {
     const subs = subMap[catName];
     for (let sub of subs) {
       if (isSubMatch(text, sub)) {
         matchedCat = catName;
-        matchedSub = sub;
+        matchedSub = sub; // שומר את התת-קטגוריה המדויקת שזוהתה
         break;
       }
     }

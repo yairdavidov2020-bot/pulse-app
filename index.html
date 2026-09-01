@@ -939,7 +939,7 @@ function getLocalDateString(d) {
 
 function persist() {
   sortTransactions();
-  localStorage.setItem('pulse_state_v60', JSON.stringify(state));
+  localStorage.setItem('pulse_state_v61', JSON.stringify(state));
   saveDataToSupabase(state);
 }
 
@@ -985,7 +985,7 @@ async function factoryReset() {
         await supabaseClient.from('app_data').delete().eq('id', state.handle);
       } catch(e) {}
     }
-    localStorage.removeItem('pulse_state_v60');
+    localStorage.removeItem('pulse_state_v61');
     location.reload();
   }
 }
@@ -1105,19 +1105,19 @@ window.onload = async function() {
     if(splash) { splash.style.opacity = '0'; setTimeout(() => splash.remove(), 700); }
   }, 1600);
 
-  let saved = localStorage.getItem('pulse_state_v60');
+  let saved = localStorage.getItem('pulse_state_v61');
   if(saved) {
     try {
       state = JSON.parse(saved);
     } catch(e) {
-      localStorage.removeItem('pulse_state_v60');
+      localStorage.removeItem('pulse_state_v61');
     }
   }
 
   if (state.handle && supabaseClient) {
     try {
       const cloudData = await loadDataFromSupabase();
-      if (cloudData && cloudData.userName) { state = cloudData; localStorage.setItem('pulse_state_v60', JSON.stringify(state)); }
+      if (cloudData && cloudData.userName) { state = cloudData; localStorage.setItem('pulse_state_v61', JSON.stringify(state)); }
     } catch(e) {}
   }
 
@@ -1200,9 +1200,14 @@ async function startCinematicBuild() {
   const finDay = parseInt(document.getElementById('wizFinancialDay').value) || 1;
   const savGoal = parseFloat(document.getElementById('wizSavingsGoal').value) || 1500;
 
-  if(!handle || !/^[A-Za-z0-9_]{4,}$/.test(handle)) { alert("שם המשתמש חייב להיות באנגלית בלבד ולפחות 4 תווים."); return; }
-  if(!name) { alert("נא להזין את שמך"); return; }
-  if(isNaN(balance)) { alert("נא להזין יתרה התחלתית תקינה"); return; }
+  const handleRegex = /^[A-Za-z0-9_]{4,}$/;
+  if(!handle || !handleRegex.test(handle)) { 
+    alert("שם המשתמש חייב להיות באנגלית בלבד ולפחות 4 תווים."); 
+    wizardNextStep(1);
+    return; 
+  }
+  if(!name) { alert("נא להזין את שמך"); wizardNextStep(1); return; }
+  if(isNaN(balance)) { alert("נא להזין יתרה התחלתית תקינה"); wizardNextStep(2); return; }
 
   state.handle = handle; 
   state.userName = name; 

@@ -140,7 +140,6 @@
 
   .onboarding-content-box { position: relative; z-index: 2; width: 100%; max-width: 380px; margin: auto; display: flex; flex-direction: column; gap: 14px; max-height: 90vh; overflow-y: auto; }
 
-  /* הודעת אישור תנועה ממוקמת בתחתית המסך */
   #toastNotification {
     position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%) translateY(20px);
     z-index: 999999; background: rgba(16, 185, 129, 0.95); border: 1px solid rgba(52, 211, 153, 0.6);
@@ -173,12 +172,10 @@
 </head>
 <body>
 
-<!-- הודעת אישור דינמית (Toast) במיקום בטוח למטה -->
 <div id="toastNotification">
   <span id="toastText">הפעולה בוצעה בהצלחה!</span>
 </div>
 
-<!-- מסך טעינה בכניסה ראשונית -->
 <div id="appSplashScreen" class="fixed inset-0 z-[999999] bg-[#05070B] flex flex-col items-center justify-center transition-all duration-700">
     <div class="flex flex-col items-center space-y-4">
         <div class="relative flex items-center justify-center">
@@ -197,7 +194,6 @@
     </div>
 </div>
 
-<!-- מודל תזכורת הוצאות -->
 <div id="reminderModal" class="modal-overlay hidden">
     <div class="summary-card p-6 max-w-xs w-full space-y-4 shadow-2xl text-center relative overflow-hidden border border-emerald-400/40">
         <div class="absolute -top-12 -left-12 w-32 h-32 bg-emerald-500/20 rounded-full blur-2xl"></div>
@@ -212,7 +208,6 @@
     </div>
 </div>
 
-<!-- מודל הוראות קבע ומנויים -->
 <div id="recurringModal" class="modal-overlay hidden">
     <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl max-h-[85vh] overflow-y-auto text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
@@ -252,7 +247,6 @@
     </div>
 </div>
 
-<!-- מודל סרטון אנימציית הדרכה (שימוש יעיל) -->
 <div id="tutorialModal" class="modal-overlay hidden">
     <div class="summary-card p-5 max-w-sm w-full space-y-4 shadow-2xl text-center relative overflow-hidden border border-emerald-400/50">
         <div class="absolute -top-16 -right-16 w-36 h-36 bg-emerald-500/20 rounded-full blur-3xl"></div>
@@ -262,7 +256,7 @@
             </div>
             <h3 class="text-lg font-black gradient-text">איך שולטים בכסף ב-Pulse?</h3>
             <div class="space-y-2 text-right text-[11px] text-slate-300 bg-[var(--card-2)] p-3 rounded-2xl border border-[var(--border)]">
-                <p class="flex items-center gap-2"><i class="fa-solid fa-microphone text-emerald-400 text-sm"></i> <b>הכתבה חופשית:</b> אמור או הקלד כל קטגוריה שתרצה. אם היא לא קיימת, המערכת תקפיץ חלון הוספה אוטומטי!</p>
+                <p class="flex items-center gap-2"><i class="fa-solid fa-microphone text-emerald-400 text-sm"></i> <b>הכתבה חופשית:</b> אמור או הקלד כל קטגוריה שתרצה. המערכת מזהה אוטומטית מאלפי מילות מפתח!</p>
                 <p class="flex items-center gap-2"><i class="fa-solid fa-chart-pie text-blue-400 text-sm"></i> <b>תמונת מצב:</b> עקוב אחרי עוגת הפילוח והיעדים שלך בצורה ויזואלית.</p>
                 <p class="flex items-center gap-2"><i class="fa-solid fa-table text-violet-400 text-sm"></i> <b>טבלה חודשית:</b> כל ההוצאות מסודרות כמו באקסל מתקדם.</p>
             </div>
@@ -321,8 +315,9 @@
             <div class="grid grid-cols-2 gap-2">
                 <button onclick="selectLifeStage('teen', this)" class="wizard-option-btn selected">נער/ה 🛹</button>
                 <button onclick="selectLifeStage('soldier', this)" class="wizard-option-btn">חייל/ת 🪖</button>
+                <button onclick="selectLifeStage('young_adult', this)" class="wizard-option-btn">צעירים/משוחררים 🌴</button>
                 <button onclick="selectLifeStage('student', this)" class="wizard-option-btn">סטודנט/ית 🎓</button>
-                <button onclick="selectLifeStage('adult', this)" class="wizard-option-btn">מבוגר/ת 💼</button>
+                <button onclick="selectLifeStage('adult', this)" class="wizard-option-btn col-span-2">מבוגר/ת 💼</button>
             </div>
         </div>
 
@@ -400,7 +395,7 @@
             <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-microphone ml-1"></i> העוזר הקולי והכתבנית</h3>
             <button onclick="closeChatHelpModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
-        <p class="text-[11px] text-slate-300 leading-relaxed">העוזר הקולי מזהה אוטומטית מילות מפתח או יחיד/רבים ומפנה בדיוק לתת-הקטגוריה המתאימה.</p>
+        <p class="text-[11px] text-slate-300 leading-relaxed">העוזר הקולי מזהה אוטומטית מאות קטגוריות ותתי-קטגוריות מכל תחום בחיים ומסדר הכל לבד.</p>
         <button onclick="closeChatHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי</button>
     </div>
 </div>
@@ -456,17 +451,24 @@
     </div>
 </div>
 
+<!-- מודל צפייה בלבד והוספת קטגוריות (ללא אופציית מחיקה/עריכה) -->
 <div id="categoriesModal" class="modal-overlay hidden">
-    <div class="summary-card p-3 max-w-xs w-full space-y-2 shadow-2xl max-h-[85vh] overflow-y-auto">
-        <div class="flex items-center justify-between border-b border-[var(--border)] pb-1.5">
-            <h3 class="text-xs font-bold text-violet-400">ניהול קטגוריות ותקציבים</h3>
-            <button onclick="closeCategoriesModal()" class="icon-btn" style="width:28px;height:28px;"><i class="fa-solid fa-xmark text-sm font-black"></i></button>
+    <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl max-h-[85vh] overflow-y-auto text-right">
+        <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
+            <h3 class="text-xs font-bold text-violet-400"><i class="fa-solid fa-tags ml-1"></i> קטגוריות מערכת מוגנות</h3>
+            <button onclick="closeCategoriesModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
-        <div class="flex bg-[var(--card-2)] p-1 rounded-xl border border-[var(--border)] gap-1">
-            <button onclick="switchCatTab('expense')" id="catTabExpense" class="flex-1 py-1 rounded-lg text-[10px] font-bold bg-[var(--card)] text-emerald-400">הוצאות</button>
-            <button onclick="switchCatTab('income')" id="catTabIncome" class="flex-1 py-1 rounded-lg text-[10px] font-bold text-slate-400">הכנסות</button>
+        <p class="text-[10px] text-slate-300 leading-relaxed">קטגוריות המערכת קבועות מראש ומוגנות (לא ניתן למחוק או לערוך אותן). באפשרותך לצפות בהן או להוסיף קטגוריה משלך למטה:</p>
+        
+        <div id="modalCatList" class="space-y-1.5 max-h-[160px] overflow-y-auto"></div>
+
+        <div class="border-t border-[var(--border)] pt-2 space-y-2">
+            <p class="text-[11px] font-bold text-slate-200">הוספת קטגוריה ראשית חדשה:</p>
+            <div class="field-shell px-3 py-1.5">
+                <input id="newCatInput" type="text" placeholder="שם הקטגוריה החדשה..." class="w-full bg-transparent outline-none text-[11px] font-bold" style="color:var(--text)" />
+            </div>
+            <button onclick="addNewCustomCategory()" class="save-btn w-full py-2 rounded-xl font-bold text-xs cursor-pointer">הוסף קטגוריה</button>
         </div>
-        <div id="modalCatList" class="space-y-1 max-h-[140px] overflow-y-auto"></div>
     </div>
 </div>
 
@@ -496,8 +498,9 @@
             <button onclick="menuGoTable()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-violet-400 transition text-[12px] font-bold cursor-pointer">
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-table text-violet-400 w-4"></i> טבלה חודשית (אקסל)</span>
             </button>
+            <!-- גישה לקטגוריות יושבת בתוך התפריט הראשי במקום סגור ומוגן -->
             <button onclick="menuOpenCategories()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-violet-400 transition text-[12px] font-bold cursor-pointer">
-                <span class="flex items-center gap-2.5"><i class="fa-solid fa-tags text-violet-400 w-4"></i> קטגוריות ותקציבים</span>
+                <span class="flex items-center gap-2.5"><i class="fa-solid fa-tags text-violet-400 w-4"></i> ניהול קטגוריות מערכת</span>
             </button>
             <button onclick="menuOpenRecurring()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-emerald-400 transition text-[12px] font-bold cursor-pointer">
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-rotate text-emerald-400 w-4"></i> הוראות קבע ומנויים</span>
@@ -516,9 +519,9 @@
                             <option value="he">עברית (Hebrew)</option>
                             <option value="en">אנגלית (English)</option>
                             <option value="ar">ערבית (العربية)</option>
-                            <option value="ru">רוסית (Русский)</option>
-                            <option value="es">ספרדית (Español)</option>
-                            <option value="fr">צרפתית (Français)</option>
+                            <option value="ru">Русский (Russian)</option>
+                            <option value="es">Español (Spanish)</option>
+                            <option value="fr">Français (French)</option>
                         </select>
                     </div>
                     <div>
@@ -619,11 +622,6 @@
             <div class="flex items-center gap-1.5">
               <h2 class="text-[10px] font-semibold">הכתבה חכמה ותנועות</h2>
               <button onclick="openChatHelpModal()" class="w-3.5 h-3.5 rounded-full bg-[var(--card)] border border-[var(--border)] text-[8px] font-bold flex items-center justify-center text-emerald-400 cursor-pointer">?</button>
-            </div>
-            <div class="flex items-center gap-1.5">
-              <button onclick="openCategoriesModal()" class="text-[9px] font-semibold px-2 py-0.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-violet-400 transition flex items-center gap-1 cursor-pointer">
-                <i class="fa-solid fa-tags"></i> קטגוריות
-              </button>
             </div>
           </div>
 
@@ -789,77 +787,33 @@ async function saveDataToSupabase(appState) {
   } catch (err) {}
 }
 
-const profileSubCategoriesMap = {
-  'soldier_male': {
-    'אוכל': ['שקם', 'מסעדה', 'משלוח', 'קפה', 'בשרייה', 'חלביה'],
-    'בילויים': ['בר', 'מסיבה', 'מתנה'],
-    'ציוד': ['תרמי', 'טקטי', 'פקלקפה', 'נעליים', 'מדרסים'],
-    'תחבורה': ['מונית', 'דלק', 'חניה', 'ליסינג'],
-    'תקשורת': ['סלולר', 'ספוטיפיי', 'נטפליקס', 'yes / HOT / Partner', 'אייקלוד'],
-    'טיפוח': ['מספרה', 'קרם', 'היגיינה', 'פארם'],
-    'חיסכון': ['טיול', 'רישיון', 'רכב', 'כללי']
-  },
-  'soldier_female': {
-    'אוכל': ['שקם', 'מסעדה', 'משלוח', 'קפה', 'בשרייה', 'חלביה'],
-    'בילויים': ['בר', 'מסיבה', 'מתנה'],
-    'ציוד': ['תרמי', 'טקטי', 'נעליים', 'מדרסים'],
-    'תחבורה': ['מונית', 'דלק', 'חניה', 'ליסינג'],
-    'תקשורת': ['סלולר', 'ספוטיפיי', 'נטפליקס', 'yes / HOT / Partner', 'אייקלוד'],
-    'טיפוח': ['שיער', 'גבות', 'ריסים', 'איפור', 'קרם', 'היגיינה', 'פארם'],
-    'חיסכון': ['טיול', 'רישיון', 'רכב', 'כללי']
-  },
-  'teen_male': {
-    'אוכל': ['מסעדה', 'משלוח', 'קפה'],
-    'בילויים': ['גיימינג', 'סקינס', 'סרט', 'אטרקציה', 'מסיבה'],
-    'שופינג': ['בגדים', 'נעל', 'תיק', 'תכשיט', 'כיסוי', 'גאדג\'ט', 'פארם'],
-    'תחבורה': ['רבקו', 'קורקינט', 'אופניים', 'מונית', 'רכבת'],
-    'תקשורת': ['סלולר', 'ספוטיפיי', 'נטפליקס', 'דיסקורד', 'אייקלוד'],
-    'טיפוח': ['מספרה', 'היגיינה'],
-    'חיסכון': ['טלפון', 'רישיון', 'טיול', 'כללי']
-  },
-  'teen_female': {
-    'אוכל': ['מסעדה', 'משלוח', 'קפה'],
-    'בילויים': ['הופעה', 'מסיבה', 'ספא', 'סרט'],
-    'שופינג': ['בגדים', 'נעל', 'תיק', 'תכשיט', 'איפור', 'אביזר', 'פארם'],
-    'תחבורה': ['רבקו', 'קורקינט', 'מונית', 'רכבת'],
-    'תקשורת': ['סלולר', 'ספוטיפיי', 'נטפליקס', 'אייקלוד'],
-    'טיפוח': ['ציפורניים', 'גבות', 'ריסים', 'קרם', 'שיער'],
-    'חיסכון': ['טלפון', 'רישיון', 'טיול', 'כללי']
-  },
-  'student_male': {
-    'אוכל': ['סופר', 'קפיטריה', 'מסעדה', 'משלוח', 'קפה'],
-    'דיור': ['שכירות', 'חשמל', 'מים', 'ארנונה', 'ועד', 'אינטרנט', 'גז'],
-    'לימודים': ['מכללה', 'ציוד', 'הדפסה', 'ספר', 'קורס', 'תוכנה'],
-    'בילויים': ['בר', 'מסיבה', 'סרט', 'דייט'],
-    'שופינג': ['בגדים', 'נעל', 'מתנה', 'פארם'],
-    'תחבורה': ['רבקו', 'רכבת', 'דלק', 'חניה', 'מונית'],
-    'תקשורת': ['סלולר', 'ספוטיפיי', 'נטפליקס', 'אייקלוד'],
-    'טיפוח': ['מספרה', 'היגיינה'],
-    'חיסכון': ['רכב', 'חופשה', 'חירום', 'כללי']
-  },
-  'adult_male': {
-    'אוכל': ['סופר', 'מסעדה', 'משלוח', 'קפה'],
-    'חשבונות': ['משכנתא', 'שכירות', 'חשמל', 'מים', 'ארנונה', 'ועד', 'אינטרנט', 'גז', 'ביטוח'],
-    'תחבורה': ['רבקו', 'דלק', 'חניה', 'ליסינג', 'ביטוח', 'טיפול', 'מונית'],
-    'משפחה': ['גן', 'צהרון', 'חינוך', 'חוג', 'ביגוד', 'ציוד', 'מתנה'],
-    'בריאות': ['תרופה', 'משקפיים', 'טיפול', 'רופא'],
-    'תקשורת': ['סלולר', 'ספוטיפיי', 'נטפליקס', 'אייקלוד', 'סיבים'],
-    'שופינג': ['בגדים', 'נעל', 'אלקטרוניקה', 'לבית', 'פארם'],
-    'בילויים': ['בר', 'חופשה', 'הופעה', 'סרט'],
-    'טיפוח': ['מספרה', 'היגיינה'],
-    'חיסכון': ['פנסיה', 'השתלמות', 'חירום', 'השקעות', 'כללי']
-  }
-};
-
-const smartSynonyms = {
-  'בירה': { cat: 'בילויים', sub: 'בר' },
-  'דרינק': { cat: 'בילויים', sub: 'בר' },
-  'פאב': { cat: 'בילויים', sub: 'בר' },
-  'יין': { cat: 'בילויים', sub: 'בר' },
-  'קוקטייל': { cat: 'בילויים', sub: 'בר' },
-  'פיצה': { cat: 'אוכל', sub: 'משלוח' },
-  'שווארמה': { cat: 'אוכל', sub: 'מסעדה' },
-  'המבורגר': { cat: 'אוכל', sub: 'מסעדה' }
+// מאגר-על פסיכי מקיף ומוגזם (מילה אחת לכל קטגוריה ותת-קטגוריה)
+const masterCategoriesMap = {
+  'אוכל': ['סופר', 'מסעדה', 'משלוח', 'קפה', 'שקם', 'קצבייה', 'חטיפים', 'מאפייה', 'גלידה', 'פירות', 'ירקות', 'משקאות', 'שווארמה', 'פיצה', 'סושי', 'בשר', 'חלב', 'בישול', 'מכולת', 'מעדנייה', 'דגים', 'עופות', 'פיצוחים', 'תבלינים', 'שימורים', 'דגנים', 'בורקס', 'עוגות', 'שוקולד', 'מתוקים', 'טייקאוויי', 'קפיטריה', 'מזנון', 'חומוסיות', 'פלאפל', 'סביח', 'המבורגר', 'נודלס', 'פסטה', 'סלטים', 'מיצים', 'שייקים', 'קונדיטוריה', 'יין', 'בירה', 'אלכוהול', 'לחם', 'גבינה', 'ביצים', 'שמן'],
+  'בילויים': ['בר', 'מסיבה', 'מתנה', 'הופעה', 'סרט', 'טיול', 'גיימינג', 'פאב', 'קריוקי', 'הצגה', 'מוזיאון', 'באולינג', 'קארטינג', 'בריחה', 'דייט', 'מועדון', 'פסטיבל', 'סטנדאפ', 'קונצרט', 'קרקס', 'תיאטרון', 'אמפי', 'פיקניק', 'קמפינג', 'שייט', 'צניחה', 'ספא', 'אטרקציה', 'פארק', 'לונה פארק', 'ביליארד', 'לייזרטג'],
+  'שופינג': ['בגדים', 'נעליים', 'תיק', 'תכשיט', 'גאדגט', 'פארם', 'שעון', 'משקפיים', 'כובע', 'מעיל', 'חגורה', 'ארנק', 'בשמים', 'חולצה', 'מכנס', 'גרביים', 'תחתונים', 'פיגמה', 'שמלה', 'חצאית', 'חליפה', 'עניבה', 'צעעיף', 'כפפות', 'מטריה', 'מזוודה', 'שרשרת', 'צמיד', 'טבעת', 'עגילים', 'איפור', 'קרם', 'שמפו', 'סבון'],
+  'תחבורה': ['רבקו', 'דלק', 'חניה', 'מונית', 'רכבת', 'קורקינט', 'ליסינג', 'אוטובוס', 'מטוס', 'סירה', 'אופניים', 'ביטוח', 'טיפול', 'שטיפה', 'טסט', 'קנסות', 'מטרונית', 'שיתופי', 'ליים', 'ווינד', 'בירד', 'אגרה', 'פנצריה', 'גורר', 'חילוץ'],
+  'תקשורת': ['סלולר', 'ספוטיפיי', 'נטפליקס', 'אייקלוד', 'סיבים', 'דיסקורד', 'אמזון', 'יוטיוב', 'פלייסטיישן', 'סטים', 'פטריאון', 'אדובי', 'זום', 'וואטסאפ', 'טלגרם', 'אינסטגרם', 'טיקטוק', 'פייסבוק', 'לינקדין', 'טוויטר', 'סלקום', 'פלאפון', 'פרטנר', 'הוט', 'גולן', 'רימון', 'אקספון', 'מייקרוסופט', 'גוגל', 'אפל', 'דרופבוקס'],
+  'טלוויזיה': ['יס', 'הוט', 'פרטנר', 'סלקום', 'סטינג', 'נקסט', 'פריטיבי', 'עידן', 'שידור', 'כבלים', 'לווויין', 'סטרימינג', 'ערוצים', 'ממיר', 'אנטנה'],
+  'דיור': ['שכירות', 'משכנתא', 'חשמל', 'מים', 'ארנונה', 'אינטרנט', 'גז', 'ועד', 'שיפוץ', 'רהיטים', 'מקרר', 'מכונה', 'מזגן', 'מנורה', 'מנעולן', 'אינסטלטור', 'צבע', 'טפט', 'שטיח', 'ווילון', 'מיטה', 'ארון', 'שולחן', 'כיסא', 'שידה', 'ספה', 'כורסה', 'מזרון', 'כרית', 'שמיכה', 'מגבת', 'תנור', 'מדיח', 'מיקרוגל', 'שואב', 'קומקום', 'טוסטר', 'בלנדר', 'מעבד', 'דוד', 'פלדלת', 'מפתח', 'שער', 'חצר', 'גינה', 'מרפסת', 'מחסן'],
+  'טיפוח': ['מספרה', 'שיער', 'ציפורניים', 'גבות', 'היגיינה', 'זקן', 'החלקה', 'שעווה', 'דאודורנט', 'ספא', 'עיסוי', 'מניקור', 'פדיקור', 'פן', 'תספורת', 'שפתון', 'מסקרה', 'צללית', 'מייקאפ', 'מרכך', 'מסכה', 'פילינג', 'לק', 'גל', 'גילוח', 'תער', 'לייזר'],
+  'ציוד': ['תרמי', 'טקטי', 'פקלקפה', 'כלים', 'תיקים', 'אולר', 'פנס', 'שקש', 'אוהל', 'וסט', 'פאוץ', 'מימייה', 'קסדה', 'ברכיות', 'מרפקיות', 'משקפיים', 'שכפצ', 'חבל', 'קרבינה', 'שפצור', 'מצפן', 'משקפת', 'פקק', 'קופסה', 'רשת', 'אבזם', 'איזולירבנד', 'פלפל', 'שקית', 'תרמיל', 'קיטבג', 'ארגז', 'פטיש', 'מברג', 'מפתח', 'פלייר', 'מסור', 'מטר', 'סולם', 'מקדחה'],
+  'בריאות': ['תרופות', 'רופא', 'שיניים', 'מדרסים', 'ויטמינים', 'פיזיותרפיה', 'עיניים', 'בדיקה', 'מרשם', 'תחבושת', 'אלכוהול', 'חיסכון', 'פלסטר', 'יוד', 'אקמול', 'נורופן', 'אופטלגין', 'טיפות', 'סירופ', 'משחה', 'מדחום', 'לחץ', 'דם', 'אקג', 'אולטרסאונד', 'צילום', 'מיון', 'פסיכולוג', 'פסיכיאטר', 'דיאטנים', 'כירופרקט', 'אופטומטריסט', 'שיננית', 'אורתודונט'],
+  'לימודים': ['מכללה', 'קורס', 'ספר', 'הדפסה', 'מחברת', 'עט', 'פסיכומטרי', 'אנגלית', 'תואר', 'סדנה', 'מרצה', 'אוניברסיטה', 'מורה', 'שיעור', 'מבחן', 'בחינה', 'תעודה', 'דיפלומה', 'קלמר', 'מחק', 'סרגל', 'מחשבון', 'דפים', 'מרקר', 'שדכן', 'סיכות', 'לפטופ', 'טאבלט', 'הרצאה'],
+  'משפחה': ['גן', 'צהרון', 'חוג', 'בייביסיטר', 'מתנות', 'טיטולים', 'עגלה', 'צעצוע', 'חיתול', 'לידה', 'ברית', 'מעון', 'פעוטון', 'משפחתון', 'סבתא', 'מטפלת', 'קייטנה', 'מוצץ', 'בקבוק', 'סינר', 'אמבטיה', 'מגבונים', 'טרמפולינה', 'נדנדה', 'מובייל', 'פאזל', 'קוביות'],
+  'חיות': ['וטרינר', 'פנסון', 'חול', 'קולר', 'רצועה', 'משחק', 'עצם', 'חטיף', 'חתול', 'כלב', 'ארנב', 'תוכי', 'דג', 'אקווריום', 'כלוב', 'קערה', 'מברשת', 'תילוע', 'עיקור', 'סירוס', 'דוגווקר'],
+  'חופש': ['טיסות', 'מלון', 'אטרקציה', 'מטח', 'צימר', 'קמפינג', 'מזוודה', 'דרכון', 'סיור', 'דיוטי', 'חוף', 'נופש', 'אירוח', 'אכסניה', 'הוסטל', 'וילה', 'סוויטה', 'בריכה', 'ים', 'סקי', 'שלג', 'הרים', 'מדבר', 'טיולון', 'מפה', 'כרטיס', 'ויזה', 'שדה', 'קרוז', 'שייט'],
+  'חיסכון': ['פנסיה', 'השקעות', 'חירום', 'כללי', 'קריפטו', 'מניות', 'מדדים', 'מעשרות', 'תרומות', 'הלוואה', 'עמלות', 'גמל', 'השתלמות', 'קרן', 'פיקדון', 'ריבית', 'תשואה', 'מטבעות', 'ביטקוין', 'אתריום', 'מנהל', 'ייעוץ', 'צדקה', 'פסח', 'מעשר', 'תרומה', 'הלוואות', 'סגירת', 'מינוס', 'חובות'],
+  'ספורט': ['מכון', 'חדר כושר', 'מאמן', 'קרוספיט', 'כדורגל', 'כדורסל', 'ריצה', 'יוגה', 'פילאטיס', 'חלבון', 'שייק', 'חדר', 'משקולות', 'הליכון', 'קפיצה', 'כדור', 'רשת', 'שער', 'סל', 'מגרש', 'מסלול', 'שעון', 'דופק', 'קריאטין', 'שייקר', 'מנוי'],
+  'עסקים': ['משרד', 'רואה', 'עורך', 'פרסום', 'מותג', 'אתר', 'לוגו', 'תוכנה', 'מסע', 'הנהלת', 'חשבונות', 'מס', 'מעמ', 'ביטוח', 'שיווק', 'קמפיין', 'עובדים', 'משכורת', 'ניירות', 'מעטפות', 'חותמת', 'חשבונית', 'קבלה', 'חוזה'],
+  'רכב': ['טעינה', 'מוסך', 'פנצריה', 'אגרה', 'חלפים', 'מצבר', 'מגבים', 'שמן', 'מים', 'בלמים', 'צמיגים', 'פנסים', 'מראות', 'שמשה', 'פחחות', 'צבע', 'שנתי', 'חובה', 'מקיף', 'גרירה', 'חלופי', 'שלט'],
+  'הימורים': ['לוטו', 'טוטו', 'גירוד', 'פוקר', 'קזינו', 'הימור', 'הגרלה', 'ווינר', 'מפעל', 'הפיס', 'קלפים', 'רולטה', 'בלאקגזק', 'מכונות', 'מזל', 'סוסים', 'מירוצים'],
+  'אירועים': ['חתונה', 'ברית', 'יומולדת', 'חינה', 'אולם', 'צלם', 'קייטרינג', 'מצווה', 'בת', 'אירוסין', 'שבע', 'ברכות', 'שבת', 'חתן', 'רווקים', 'רווקות', 'דיג', 'תקליטן', 'מגנטים', 'בלונים', 'עיצוב', 'פרחים', 'שמלה', 'חליפת', 'הזמנות', 'אישורי', 'הגעה', 'אופן', 'עוגה', 'מגשי', 'אירוח'],
+  'אמנות': ['ציור', 'פיסול', 'קנבס', 'צבעים', 'מכחול', 'חימר', 'רישום', 'סקיצה', 'יצירה', 'גלריה'],
+  'מוסיקה': ['גיטרה', 'פסנתר', 'תופים', 'מיקרופון', 'מגבר', 'מיתרים', 'קלידים', 'חליל', 'כינור', 'אולפן'],
+  'צילום': ['מצלמה', 'עדשה', 'חצובה', 'תאורה', 'פלאש', 'כרטיס', 'רחפן', 'תיק', 'מסנן'],
+  'גינון': ['אדמה', 'שתיל', 'עציץ', 'דשן', 'צינור', 'מזמרה', 'מכסחת', 'אדנית', 'זרעים'],
+  'תיקונים': ['בורג', 'אום', 'דיבל', 'דבק', 'סיליקון', 'מטר', 'פלס', 'רולר', 'שפכטל', 'טיח']
 };
 
 let state = {
@@ -867,14 +821,6 @@ let state = {
   onboardingCompleted: false, financialDay: 1, savingsGoal: 1500, currency: '₪', language: 'he',
   recurringItems: [], expenseCats: [], incomeCats: [{name:'משכורת', color:'#7FE8C6', budget:0}], transactions: []
 };
-
-let selectedNewCatColor = '#7FE8C6';
-let pendingSmartTx = null;
-let activeRecognition = null;
-let donutExpanded = false;
-let txExpanded = false;
-let systemSettingsOpen = false;
-let currentCatTab = 'expense';
 
 const availableColors = ['#FF8D82', '#FF9F43', '#FFC85C', '#7FE8C6', '#8FB8FF', '#C7A6FF', '#FF9FD1', '#34D399', '#38BDF8', '#E11D48'];
 
@@ -884,7 +830,7 @@ function getLocalDateString(d) {
 
 function persist() {
   sortTransactions();
-  localStorage.setItem('pulse_state_v55', JSON.stringify(state));
+  localStorage.setItem('pulse_state_v57', JSON.stringify(state));
   saveDataToSupabase(state);
 }
 
@@ -930,7 +876,7 @@ async function factoryReset() {
         await supabaseClient.from('app_data').delete().eq('id', state.handle);
       } catch(e) {}
     }
-    localStorage.removeItem('pulse_state_v55');
+    localStorage.removeItem('pulse_state_v57');
     location.reload();
   }
 }
@@ -950,6 +896,7 @@ function toggleSystemSettingsContent() {
     chevron.style.transform = 'rotate(0deg)';
   }
 }
+let systemSettingsOpen = false;
 
 function initDailyReminder() {
   if ("Notification" in window && Notification.permission !== "granted") Notification.requestPermission();
@@ -968,7 +915,6 @@ function closeReminderModal() { document.getElementById('reminderModal').classLi
 function openTutorialModal() { document.getElementById('tutorialModal').classList.remove('hidden'); }
 function closeTutorialModal() { document.getElementById('tutorialModal').classList.add('hidden'); }
 
-// ניהול מודל הוראות קבע
 function menuOpenRecurring() {
   closeMenuModal();
   document.getElementById('recurringModal').classList.remove('hidden');
@@ -1050,34 +996,29 @@ window.onload = async function() {
     if(splash) { splash.style.opacity = '0'; setTimeout(() => splash.remove(), 700); }
   }, 1600);
 
-  // טעינה נקייה ומאובטחת עם מפתח חדש
-  let saved = localStorage.getItem('pulse_state_v55');
+  let saved = localStorage.getItem('pulse_state_v57');
   if(saved) {
     try {
       state = JSON.parse(saved);
     } catch(e) {
-      // במקרה של שגיאה בנתונים קודמים, מאפס למצב נקי למניעת תקיעה
-      localStorage.removeItem('pulse_state_v55');
+      localStorage.removeItem('pulse_state_v57');
     }
   }
 
   if (state.handle && supabaseClient) {
     try {
       const cloudData = await loadDataFromSupabase();
-      if (cloudData && cloudData.userName) { state = cloudData; localStorage.setItem('pulse_state_v55', JSON.stringify(state)); }
+      if (cloudData && cloudData.userName) { state = cloudData; localStorage.setItem('pulse_state_v57', JSON.stringify(state)); }
     } catch(e) {}
   }
 
   if(!state.expenseCats || state.expenseCats.length === 0) {
-    state.expenseCats = [
-      {name:'אוכל', color:'#FF8D82', budget:0},
-      {name:'בילויים', color:'#FFB382', budget:0},
-      {name:'ציוד', color:'#8FB8FF', budget:0},
-      {name:'תחבורה', color:'#C7A6FF', budget:0},
-      {name:'תקשורת', color:'#FFC85C', budget:0},
-      {name:'טיפוח', color:'#FF9FD1', budget:0},
-      {name:'חיסכון', color:'#34D399', budget:0}
-    ];
+    const keys = Object.keys(masterCategoriesMap);
+    state.expenseCats = keys.map((catName, idx) => ({
+      name: catName,
+      color: availableColors[idx % availableColors.length],
+      budget: 0
+    }));
   }
   sortTransactions();
   
@@ -1129,9 +1070,6 @@ async function startCinematicBuild() {
   document.getElementById('onboarding-step-2').classList.add('hidden');
   document.getElementById('onboarding-step-3').classList.remove('hidden');
 
-  let mapKey = `${tempWizard.lifeStage}_${tempWizard.gender}`;
-  if(!profileSubCategoriesMap[mapKey]) mapKey = 'soldier_male';
-
   state.handle = handle; 
   state.userName = name; 
   state.baseline = balance;
@@ -1139,8 +1077,8 @@ async function startCinematicBuild() {
   state.gender = tempWizard.gender;
   state.onboardingCompleted = true;
   
-  const subMap = profileSubCategoriesMap[mapKey];
-  state.expenseCats = Object.keys(subMap).map((catName, idx) => ({
+  const keys = Object.keys(masterCategoriesMap);
+  state.expenseCats = keys.map((catName, idx) => ({
     name: catName,
     color: availableColors[idx % availableColors.length],
     budget: 0
@@ -1150,7 +1088,7 @@ async function startCinematicBuild() {
 
   const steps = [
     { progress: 25, title: "מאמת את פרטי הפרופיל...", sub: `שלום ${name}, מחבר את הפרופיל...` },
-    { progress: 60, title: "בונה את טבלת האקסל והקטגוריות...", sub: "מארגן תתי-קטגוריות ותקציבים..." },
+    { progress: 60, title: "טוען את מאגר-העל והקטגוריות...", sub: "מסדר את כל המערכת במיוחד בשבילך..." },
     { progress: 100, title: "הדשבורד האישי שלך מוכן!", sub: "הכל תפור בול בשבילך." }
   ];
 
@@ -1336,6 +1274,8 @@ function renderAnalytics() {
 
   const total = totalExpenseVal || 1;
   let acc = 0; const stops = [];
+  
+  // מציגים בתרשימים אך ורק קטגוריות שנעשה בהן שימוש (amt > 0)
   state.expenseCats.forEach((cat) => {
     const amt = spend[cat.name] || 0;
     if(amt > 0) {
@@ -1355,9 +1295,12 @@ function renderAnalytics() {
 
   const legend = document.getElementById('legendList');
   legend.innerHTML = '';
+  let usedCategoriesCount = 0;
+  
   state.expenseCats.forEach(cat => {
     const amt = spend[cat.name] || 0;
     if(amt > 0) {
+      usedCategoriesCount++;
       const pct = Math.round((amt / total) * 100);
       const row = document.createElement('div');
       row.className = 'flex items-center justify-between text-[11px] py-1 px-2 rounded-lg bg-[var(--card-2)] border border-[var(--border)]';
@@ -1374,6 +1317,10 @@ function renderAnalytics() {
       legend.appendChild(row);
     }
   });
+
+  if(usedCategoriesCount === 0) {
+    legend.innerHTML = '<p class="text-[10px] text-slate-400 text-center py-2">אין הוצאות פעילות בחודש זה עדיין</p>';
+  }
 
   const currentTxs = state.transactions.filter(t => isWithinFinancialMonth(t.date, 0));
   const recurringCount = state.recurringItems ? state.recurringItems.length : 0;
@@ -1481,13 +1428,11 @@ function renderTableScreen() {
   const select = document.getElementById('tableMonthSelect');
   const offset = select ? parseInt(select.value) || 0 : 0;
 
-  const mapKey = `${state.lifeStage}_${state.gender}`;
-  const subMap = profileSubCategoriesMap[mapKey] || profileSubCategoriesMap['soldier_male'];
-
   let totalMonthExpense = 0;
+  let renderedCount = 0;
 
   state.expenseCats.forEach(cat => {
-    const subCats = subMap[cat.name] || ['כללי'];
+    const subCats = masterCategoriesMap[cat.name] || ['כללי'];
     const subCatTotals = {};
     subCats.forEach(s => subCatTotals[s] = 0);
     let catTotal = 0;
@@ -1512,34 +1457,45 @@ function renderTableScreen() {
       });
     }
 
-    const card = document.createElement('div');
-    card.className = 'summary-card p-3 space-y-2';
+    // מציגים בטבלת האקסל אך ורק קטגוריות שנעשה בהן שימוש בפועל בחודש זה (catTotal > 0)
+    if(catTotal > 0) {
+      renderedCount++;
+      const card = document.createElement('div');
+      card.className = 'summary-card p-3 space-y-2';
 
-    let subRowsHtml = '';
-    subCats.forEach(sub => {
-      const amt = subCatTotals[sub] || 0;
-      subRowsHtml += `
-        <div class="flex items-center justify-between text-[11px] py-1 px-2 rounded-lg bg-[var(--card-2)] border border-[var(--border)]">
-          <span class="text-slate-300 flex items-center gap-1.5"><i class="fa-solid fa-angle-left text-[9px] text-emerald-400"></i> ${sub}</span>
-          <span class="tabular font-semibold text-slate-200">${fmt(amt)}</span>
+      let subRowsHtml = '';
+      subCats.forEach(sub => {
+        const amt = subCatTotals[sub] || 0;
+        if(amt > 0) {
+          subRowsHtml += `
+            <div class="flex items-center justify-between text-[11px] py-1 px-2 rounded-lg bg-[var(--card-2)] border border-[var(--border)]">
+              <span class="text-slate-300 flex items-center gap-1.5"><i class="fa-solid fa-angle-left text-[9px] text-emerald-400"></i> ${sub}</span>
+              <span class="tabular font-semibold text-slate-200">${fmt(amt)}</span>
+            </div>
+          `;
+        }
+      });
+
+      card.innerHTML = `
+        <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full" style="background:${cat.color}"></span>
+            <span class="text-xs font-bold text-slate-100">${cat.name}</span>
+          </div>
+          <span class="tabular text-xs font-black text-rose-400">${fmt(catTotal)}</span>
+        </div>
+        <div class="space-y-1 pt-1">
+          ${subRowsHtml}
         </div>
       `;
-    });
-
-    card.innerHTML = `
-      <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-        <div class="flex items-center gap-2">
-          <span class="w-3 h-3 rounded-full" style="background:${cat.color}"></span>
-          <span class="text-xs font-bold text-slate-100">${cat.name}</span>
-        </div>
-        <span class="tabular text-xs font-black text-rose-400">${fmt(catTotal)}</span>
-      </div>
-      <div class="space-y-1 pt-1">
-        ${subRowsHtml}
-      </div>
-    `;
-    container.appendChild(card);
+      container.appendChild(card);
+    }
   });
+
+  if(renderedCount === 0) {
+    container.innerHTML = '<p class="text-xs text-slate-400 text-center py-6">אין הוצאות פעילות בחודש הנבחר להצגה בטבלה.</p>';
+    return;
+  }
 
   const summaryHeader = document.createElement('div');
   summaryHeader.className = 'summary-card p-3 bg-gradient-to-l from-emerald-500/15 to-blue-500/15 border border-emerald-400/30 flex items-center justify-between';
@@ -1599,20 +1555,6 @@ function processSmartText() {
 function isSubMatch(text, sub) {
   let cleanSub = sub.trim();
   if (text.includes(cleanSub)) return true;
-
-  if (cleanSub.endsWith('ה')) {
-    let base = cleanSub.slice(0, -1);
-    if (text.includes(base + 'ה') || text.includes(base + 'ות') || text.includes(base + 'ת')) return true;
-  } else if (cleanSub.endsWith('ות')) {
-    let base = cleanSub.slice(0, -2);
-    if (text.includes(base + 'ה') || text.includes(cleanSub)) return true;
-  } else if (cleanSub.endsWith('ים')) {
-    let base = cleanSub.slice(0, -2);
-    if (text.includes(base) || text.includes(base + 'ים')) return true;
-  } else if (cleanSub.endsWith('ח')) {
-    if (text.includes(cleanSub) || text.includes(cleanSub + 'ים')) return true;
-  }
-
   return false;
 }
 
@@ -1627,32 +1569,19 @@ function processVoiceCommandDirectly(text){
 
   if(!amount || isNaN(amount)) { alert("לא זיהיתי סכום ברור."); return; }
 
-  const mapKey = `${state.lifeStage}_${state.gender}`;
-  const subMap = profileSubCategoriesMap[mapKey] || profileSubCategoriesMap['soldier_male'];
-
   let matchedCat = null;
   let matchedSub = null;
 
-  for (let keyword of Object.keys(smartSynonyms)) {
-    if (text.includes(keyword)) {
-      matchedCat = smartSynonyms[keyword].cat;
-      matchedSub = smartSynonyms[keyword].sub;
-      break;
-    }
-  }
-
-  if (!matchedCat) {
-    for (let catName of Object.keys(subMap)) {
-      const subs = subMap[catName];
-      for (let sub of subs) {
-        if (isSubMatch(text, sub)) {
-          matchedCat = catName;
-          matchedSub = sub;
-          break;
-        }
+  for (let catName of Object.keys(masterCategoriesMap)) {
+    const subs = masterCategoriesMap[catName];
+    for (let sub of subs) {
+      if (isSubMatch(text, sub)) {
+        matchedCat = catName;
+        matchedSub = sub;
+        break;
       }
-      if (matchedCat) break;
     }
+    if (matchedCat) break;
   }
 
   if (!matchedCat) {
@@ -1708,11 +1637,9 @@ function confirmVoiceTransaction() {
   pendingSmartTx.subCat = subCatVal;
   pendingSmartTx.color = catObj.color;
 
-  const mapKey = `${state.lifeStage}_${state.gender}`;
-  if (!profileSubCategoriesMap[mapKey]) profileSubCategoriesMap[mapKey] = {};
-  if (!profileSubCategoriesMap[mapKey][chosenMainCat]) profileSubCategoriesMap[mapKey][chosenMainCat] = [];
-  if (!profileSubCategoriesMap[mapKey][chosenMainCat].includes(subCatVal)) {
-    profileSubCategoriesMap[mapKey][chosenMainCat].push(subCatVal);
+  if (!masterCategoriesMap[chosenMainCat]) masterCategoriesMap[chosenMainCat] = [];
+  if (!masterCategoriesMap[chosenMainCat].includes(subCatVal)) {
+    masterCategoriesMap[chosenMainCat].push(subCatVal);
   }
 
   state.transactions.push({ id: Date.now(), ...pendingSmartTx });
@@ -1733,6 +1660,8 @@ function cancelVoiceTransaction() {
 
 function openCategoriesModal() { document.getElementById('categoriesModal').classList.remove('hidden'); renderModalCategoryList(); }
 function closeCategoriesModal() { document.getElementById('categoriesModal').classList.add('hidden'); }
+
+// הצגה בלבד (ללא אופציית מחיקה או עריכה, רק צפייה והוספה)
 function renderModalCategoryList() {
   const container = document.getElementById('modalCatList');
   if(!container) return;
@@ -1745,11 +1674,27 @@ function renderModalCategoryList() {
         <span class="w-2.5 h-2.5 rounded-full" style="background:${c.color}"></span>
         <span class="text-[10px] font-bold">${c.name}</span>
       </div>
-      <span class="text-[9px] text-slate-400">תקציב: ₪${c.budget || 0}</span>
+      <span class="text-[9px] text-slate-400">מוגן (קבוע במערכת)</span>
     `;
     container.appendChild(row);
   });
 }
+
+function addNewCustomCategory() {
+  const catName = document.getElementById('newCatInput').value.trim();
+  if(!catName) { alert("נא להזין שם קטגוריה."); return; }
+  if(state.expenseCats.find(c => c.name === catName)) { alert("קטגוריה זו כבר קיימת."); return; }
+
+  const color = availableColors[state.expenseCats.length % availableColors.length];
+  state.expenseCats.push({ name: catName, color, budget: 0 });
+  if(!masterCategoriesMap[catName]) masterCategoriesMap[catName] = ['כללי'];
+
+  persist();
+  renderModalCategoryList();
+  document.getElementById('newCatInput').value = '';
+  showToast("קטגוריה חדשה נוספה בהצלחה!");
+}
+
 function promptSavingsGoal() {
   const val = prompt("הכנס יעד חיסכון חודשי חדש:", state.savingsGoal || 1500);
   if(val !== null && !isNaN(parseFloat(val))) { state.savingsGoal = parseFloat(val); persist(); renderHome(); }

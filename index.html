@@ -140,7 +140,7 @@
 
   .onboarding-content-box { position: relative; z-index: 2; width: 100%; max-width: 380px; margin: auto; display: flex; flex-direction: column; gap: 14px; max-height: 90vh; overflow-y: auto; }
 
-  /* הודעת אישור תנועה ממוקמת בתחתית המסך כדי שלא תוסתר על ידי מצלמת הסלפי */
+  /* הודעת אישור תנועה ממוקמת בתחתית המסך */
   #toastNotification {
     position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%) translateY(20px);
     z-index: 999999; background: rgba(16, 185, 129, 0.95); border: 1px solid rgba(52, 211, 153, 0.6);
@@ -209,6 +209,46 @@
             <p class="text-xs text-slate-300 leading-relaxed">היי! זה הזמן לעצור רגע, לעדכן את ההוצאות וההכנסות של היום ולהישאר בשליטה מלאה 💡</p>
         </div>
         <button onclick="closeReminderModal()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs shadow-lg cursor-pointer relative z-10">הבנתי, יאללה מעדכן!</button>
+    </div>
+</div>
+
+<!-- מודל הוראות קבע ומנויים -->
+<div id="recurringModal" class="modal-overlay hidden">
+    <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl max-h-[85vh] overflow-y-auto text-right">
+        <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
+            <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-rotate ml-1"></i> הוראות קבע ומנויים</h3>
+            <button onclick="closeRecurringModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
+        </div>
+        <p class="text-[10px] text-slate-300">הוראות קבע יורדות ומחושבות אוטומטית כחלק מההוצאות וההכנסות החודשיות שלך:</p>
+        <div class="space-y-1.5 max-h-[140px] overflow-y-auto" id="recurringListContainer"></div>
+        
+        <div class="border-t border-[var(--border)] pt-2 space-y-2">
+            <p class="text-[11px] font-bold text-slate-200">הוספת הוראת קבע חדשה:</p>
+            <div class="field-shell px-3 py-1.5">
+                <input id="recTitle" type="text" placeholder="שם (למשל: נטפליקס, שכירות)..." class="w-full bg-transparent outline-none text-[11px] font-bold" style="color:var(--text)" />
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <div class="field-shell px-3 py-1.5 flex items-center">
+                    <span class="text-xs font-bold ml-1 text-emerald-400">₪</span>
+                    <input id="recAmount" type="tel" inputmode="decimal" placeholder="סכום..." class="w-full bg-transparent outline-none text-[11px] font-bold" style="color:var(--text)" />
+                </div>
+                <div class="field-shell px-3 py-1.5">
+                    <select id="recType" class="w-full bg-transparent outline-none text-[11px] font-bold" style="color:var(--text)">
+                        <option value="expense">הוצאה קבועה</option>
+                        <option value="income">הכנסה קבועה</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <div class="field-shell px-3 py-1.5">
+                    <select id="recCategory" class="w-full bg-transparent outline-none text-[11px] font-bold" style="color:var(--text)"></select>
+                </div>
+                <div class="field-shell px-3 py-1.5">
+                    <input id="recDay" type="number" min="1" max="31" placeholder="יום בחודש" class="w-full bg-transparent outline-none text-[11px] font-bold" style="color:var(--text)" value="1" />
+                </div>
+            </div>
+            <button onclick="addNewRecurringItem()" class="save-btn w-full py-2 rounded-xl font-bold text-xs cursor-pointer">הוסף הוראת קבע</button>
+        </div>
     </div>
 </div>
 
@@ -458,6 +498,9 @@
             </button>
             <button onclick="menuOpenCategories()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-violet-400 transition text-[12px] font-bold cursor-pointer">
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-tags text-violet-400 w-4"></i> קטגוריות ותקציבים</span>
+            </button>
+            <button onclick="menuOpenRecurring()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-emerald-400 transition text-[12px] font-bold cursor-pointer">
+                <span class="flex items-center gap-2.5"><i class="fa-solid fa-rotate text-emerald-400 w-4"></i> הוראות קבע ומנויים</span>
             </button>
 
             <!-- הגדרות מערכת -->
@@ -746,7 +789,6 @@ async function saveDataToSupabase(appState) {
   } catch (err) {}
 }
 
-// קטגוריות ללא וודקה, בושם ודאודורנט מכלל הפרופילים והגילאים
 const profileSubCategoriesMap = {
   'soldier_male': {
     'אוכל': ['שקם', 'מסעדה', 'משלוח', 'קפה', 'בשרייה', 'חלביה'],
@@ -809,7 +851,6 @@ const profileSubCategoriesMap = {
   }
 };
 
-// מילון מילות מפתח חכם (Smart Synonyms) למיפוי אוטומטי של בירה/דרינק/פיצה
 const smartSynonyms = {
   'בירה': { cat: 'בילויים', sub: 'בר' },
   'דרינק': { cat: 'בילויים', sub: 'בר' },
@@ -926,6 +967,83 @@ function initDailyReminder() {
 function closeReminderModal() { document.getElementById('reminderModal').classList.add('hidden'); }
 function openTutorialModal() { document.getElementById('tutorialModal').classList.remove('hidden'); }
 function closeTutorialModal() { document.getElementById('tutorialModal').classList.add('hidden'); }
+
+// ניהול מודל הוראות קבע
+function menuOpenRecurring() {
+  closeMenuModal();
+  document.getElementById('recurringModal').classList.remove('hidden');
+  renderRecurringList();
+  
+  // טעינת קטגוריות לסלקט בהוראת הקבע
+  const sel = document.getElementById('recCategory');
+  sel.innerHTML = '';
+  state.expenseCats.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c.name;
+    opt.textContent = c.name;
+    sel.appendChild(opt);
+  });
+}
+function closeRecurringModal() { document.getElementById('recurringModal').classList.add('hidden'); }
+
+function renderRecurringList() {
+  const container = document.getElementById('recurringListContainer');
+  if(!container) return;
+  container.innerHTML = '';
+  if(!state.recurringItems || state.recurringItems.length === 0) {
+    container.innerHTML = '<p class="text-[10px] text-slate-400 text-center py-2">אין הוראות קבע מוגדרות כרגע</p>';
+    return;
+  }
+  state.recurringItems.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'flex items-center justify-between p-2 rounded-lg bg-[var(--card-2)] border border-[var(--border)] text-[11px]';
+    const col = item.type === 'income' ? 'var(--mint)' : 'var(--coral)';
+    const sign = item.type === 'income' ? '+' : '−';
+    row.innerHTML = `
+      <div>
+        <p class="font-bold text-slate-100">${item.title} (${item.cat})</p>
+        <p class="text-[9px] text-slate-400">יורד ב-${item.day} לחודש</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="tabular font-bold" style="color:${col}">${sign}${fmt(item.amount)}</span>
+        <button onclick="deleteRecurringItem(${item.id})" class="text-rose-400 text-xs p-1 cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>
+      </div>
+    `;
+    container.appendChild(row);
+  });
+}
+
+function addNewRecurringItem() {
+  const title = document.getElementById('recTitle').value.trim();
+  const amount = parseFloat(document.getElementById('recAmount').value);
+  const type = document.getElementById('recType').value;
+  const cat = document.getElementById('recCategory').value;
+  const day = parseInt(document.getElementById('recDay').value) || 1;
+
+  if(!title || isNaN(amount) || amount <= 0) {
+    alert("נא למלא כותרת וסכום תקינים.");
+    return;
+  }
+
+  if(!state.recurringItems) state.recurringItems = [];
+  state.recurringItems.push({ id: Date.now(), title, amount, type, cat, day });
+  persist();
+  renderRecurringList();
+  renderHome();
+  renderAnalytics();
+  showToast("הוראת קבע נוספה בהצלחה!");
+  document.getElementById('recTitle').value = '';
+  document.getElementById('recAmount').value = '';
+}
+
+function deleteRecurringItem(id) {
+  state.recurringItems = state.recurringItems.filter(i => i.id !== id);
+  persist();
+  renderRecurringList();
+  renderHome();
+  renderAnalytics();
+  showToast("הוראת קבע הוסרה בהצלחה");
+}
 
 window.onload = async function() {
   setTimeout(() => {
@@ -1128,13 +1246,27 @@ function isWithinFinancialMonth(txDateStr, offsetMonths = 0) {
 
 function totals(){
   let income=0, expense=0;
+  // חישוב תנועות רגילות
   state.transactions.forEach(t=>{
     if(isWithinFinancialMonth(t.date, 0)) {
       if(t.type==='income') income+=t.amount; else expense+=t.amount;
     }
   });
+  // הוספת הוראות קבע חודשיות לחודש הנוכחי (offset 0)
+  if(state.recurringItems) {
+    state.recurringItems.forEach(r => {
+      if(r.type === 'income') income += r.amount; else expense += r.amount;
+    });
+  }
+
   let allInc = 0, allExp = 0;
   state.transactions.forEach(t => t.type==='income' ? allInc+=t.amount : allExp+=t.amount);
+  if(state.recurringItems) {
+    state.recurringItems.forEach(r => {
+      if(r.type === 'income') allInc += r.amount; else allExp += r.amount;
+    });
+  }
+
   const balance = (state.baseline || 0) + allInc - allExp;
   return { income, expense, balance };
 }
@@ -1159,10 +1291,25 @@ function renderAnalytics() {
     }
   });
 
+  // הוספת הוראות קבע חודשיות להוצאות/הכנסות והפילוח בחודש הנוכחי
+  if(state.recurringItems) {
+    state.recurringItems.forEach(r => {
+      if(r.type === 'expense') {
+        currentExpense += r.amount;
+        spend[r.cat] = (spend[r.cat] || 0) + r.amount;
+      } else {
+        currentIncome += r.amount;
+      }
+    });
+  }
+
   let prevExpense = 0;
   state.transactions.forEach(t => {
     if(isWithinFinancialMonth(t.date, -1) && t.type === 'expense') prevExpense += t.amount;
   });
+  if(state.recurringItems) {
+    state.recurringItems.forEach(r => { if(r.type === 'expense') prevExpense += r.amount; });
+  }
 
   const compBox = document.getElementById('monthlyComparisonBox');
   if(prevExpense === 0) {
@@ -1225,13 +1372,14 @@ function renderAnalytics() {
   });
 
   const currentTxs = state.transactions.filter(t => isWithinFinancialMonth(t.date, 0));
-  document.getElementById('txCountBadge').textContent = `${currentTxs.length} תנועות`;
+  const recurringCount = state.recurringItems ? state.recurringItems.length : 0;
+  document.getElementById('txCountBadge').textContent = `${currentTxs.length + recurringCount} תנועות`;
   
   const previewRow = document.getElementById('txPreviewRow');
-  if(currentTxs.length === 0) {
+  if(currentTxs.length === 0 && recurringCount === 0) {
     previewRow.innerHTML = '<span class="text-[10px] text-slate-500">אין תנועות בחודש זה עדיין</span>';
   } else {
-    const latest = currentTxs[0];
+    const latest = currentTxs.length > 0 ? currentTxs[0] : { cat: state.recurringItems[0].cat, subCat: state.recurringItems[0].title, type: state.recurringItems[0].type, amount: state.recurringItems[0].amount, color: '#7FE8C6' };
     const sign = latest.type === 'income' ? '+' : '−';
     const col = latest.type === 'income' ? 'var(--mint)' : 'var(--coral)';
     previewRow.innerHTML = `
@@ -1248,7 +1396,31 @@ function renderAnalytics() {
 
   const txList = document.getElementById('txList');
   txList.innerHTML = '';
-  if(currentTxs.length === 0) {
+  
+  // הצגת הוראות קבע ברשימת התנועות
+  if(state.recurringItems && state.recurringItems.length > 0) {
+    state.recurringItems.forEach(r => {
+      const row = document.createElement('div');
+      row.className = 'tx-row';
+      const col = r.type === 'income' ? 'var(--mint)' : 'var(--coral)';
+      const sign = r.type === 'income' ? '+' : '−';
+      row.innerHTML = `
+        <div class="flex items-center gap-2.5">
+          <span class="w-2.5 h-2.5 rounded-full flex-shrink-0 bg-violet-400"></span>
+          <div>
+            <p class="text-[11px] font-bold text-slate-100">${r.cat} <span class="text-[9px] text-violet-400">(הוראת קבע: ${r.title})</span></p>
+            <p class="text-[9px] text-slate-400">בכל ${r.day לחודש</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="tabular text-[11px] font-bold" style="color:${col}">${sign}${fmt(r.amount)}</span>
+        </div>
+      `;
+      txList.appendChild(row);
+    });
+  }
+
+  if(currentTxs.length === 0 && (!state.recurringItems || state.recurringItems.length === 0)) {
     txList.innerHTML = '<p class="text-[11px] text-center text-slate-500 py-2">אין תנועות להצגה</p>';
   } else {
     currentTxs.forEach(t => {
@@ -1317,6 +1489,7 @@ function renderTableScreen() {
     subCats.forEach(s => subCatTotals[s] = 0);
     let catTotal = 0;
 
+    // תנועות רגילות
     state.transactions.forEach(t => {
       if(t.type === 'expense' && t.cat === cat.name && isWithinFinancialMonth(t.date, offset)) {
         const sub = t.subCat && subCats.includes(t.subCat) ? t.subCat : subCats[0];
@@ -1325,6 +1498,18 @@ function renderTableScreen() {
         totalMonthExpense += t.amount;
       }
     });
+
+    // הוראות קבע (מופיעות בכל חודש)
+    if(state.recurringItems && offset === 0) {
+      state.recurringItems.forEach(r => {
+        if(r.type === 'expense' && r.cat === cat.name) {
+          const sub = subCats[0];
+          subCatTotals[sub] += r.amount;
+          catTotal += r.amount;
+          totalMonthExpense += r.amount;
+        }
+      });
+    }
 
     const card = document.createElement('div');
     card.className = 'summary-card p-3 space-y-2';
@@ -1447,7 +1632,6 @@ function processVoiceCommandDirectly(text){
   let matchedCat = null;
   let matchedSub = null;
 
-  // 1. בדיקה מול מילון מילות המפתח החכם (Smart Synonyms)
   for (let keyword of Object.keys(smartSynonyms)) {
     if (text.includes(keyword)) {
       matchedCat = smartSynonyms[keyword].cat;
@@ -1456,7 +1640,6 @@ function processVoiceCommandDirectly(text){
     }
   }
 
-  // 2. אם לא נמצא במילון, סריקה מדויקת של קטגוריות ותתי-הקטגוריות
   if (!matchedCat) {
     for (let catName of Object.keys(subMap)) {
       const subs = subMap[catName];

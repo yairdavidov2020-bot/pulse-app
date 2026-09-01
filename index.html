@@ -119,11 +119,12 @@
   .modal-overlay { position:fixed; inset:0; z-index:50; background:rgba(10,12,17,0.95); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:16px; transition: opacity .25s ease; }
   .modal-overlay.hidden { display:none !important; }
 
-  /* תפריט ראשי נפתח מצד שמאל (Slide-in from Left) */
+  /* תפריט ראשי נפתח מצד שמאל עם מרווח עליון למצלמה הקדמית */
   #menuModal { justify-content: flex-start !important; padding: 0 !important; background: rgba(10,12,17,0.75); }
   #menuModal .menu-sidebar-panel {
     width: 290px; height: 100%; max-height: 100dvh; border-radius: 0; border-right: 1px solid var(--border);
-    background: var(--bg); display: flex; flex-direction: column; padding: 16px; overflow-y: auto;
+    background: var(--bg); display: flex; flex-direction: column; 
+    padding: max(calc(env(safe-area-inset-top) + 16px), 36px) 16px 20px 16px; overflow-y: auto;
     animation: slideInLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
   @keyframes slideInLeft { from { transform: translateX(-100%); } to { transform: translateX(0); } }
@@ -157,11 +158,8 @@
   .donut::after{ content:""; position:absolute; inset:16px; border-radius:50%; background:var(--card); }
   .donut-center{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2; }
 
-  .tx-row{ display:flex; align-items:center; justify-content:space-between; padding:5px 0; border-bottom:1px solid var(--border); }
+  .tx-row{ display:flex; align-items:center; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border); }
   .tx-row:last-child{ border-bottom:none; }
-
-  @keyframes pulse-arrow { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-6px); } }
-  .animated-arrow { animation: pulse-arrow 1.5s ease-in-out infinite; }
 </style>
 </head>
 <body>
@@ -200,7 +198,7 @@
     </div>
 </div>
 
-<!-- ==================== ONBOARDING WIZARD ==================== -->
+<!-- ONBOARDING WIZARD -->
 <div id="onboarding-step-0" class="full-page-onboarding hidden">
     <div class="road-city-bg">
         <svg class="w-full h-full" viewBox="0 0 400 800" preserveAspectRatio="none">
@@ -228,7 +226,7 @@
         <div class="space-y-3 pt-2">
             <button onclick="wizardNextStep(1)" class="w-full py-3.5 rounded-2xl font-bold text-sm shadow-xl cursor-pointer bg-gradient-to-l from-emerald-500 to-teal-600 text-white hover:opacity-95 transition flex items-center justify-center gap-2">
                 <span>התחל שאלון פתיחה קצרצר</span>
-                <i class="fa-solid fa-arrow-left text-xs animated-arrow"></i>
+                <i class="fa-solid fa-arrow-left text-xs"></i>
             </button>
             <label class="w-full py-2.5 px-4 rounded-xl font-bold text-xs cursor-pointer bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-center gap-2">
                 <i class="fa-solid fa-file-arrow-up"></i> שחזור גיבוי מקומי קודם
@@ -266,7 +264,7 @@
 
         <button onclick="wizardNextStep(2)" class="w-full py-3 rounded-2xl font-bold text-xs shadow-xl cursor-pointer bg-gradient-to-l from-emerald-500 to-teal-600 text-white hover:opacity-95 transition flex items-center justify-between px-5 mt-2">
             <span>המשך לפרטי חשבון</span>
-            <i class="fa-solid fa-arrow-left text-xs animated-arrow"></i>
+            <i class="fa-solid fa-arrow-left text-xs"></i>
         </button>
     </div>
 </div>
@@ -332,20 +330,20 @@
             <p class="text-xs text-slate-300 leading-relaxed">נסה מיד להקליד או לומר בקול את הפקודה הבאה:</p>
         </div>
         <div class="bg-[var(--card-2)] p-3.5 rounded-xl border border-emerald-400/40 text-center">
-            <p class="text-sm font-bold text-emerald-400">"הוצאתי 40 שקל על קפה ומאפה"</p>
+            <p class="text-sm font-bold text-emerald-400">"שתיתי וודקה עם חברים 80 שקל"</p>
         </div>
         <button onclick="finishOnboarding()" class="save-btn w-full py-3 rounded-2xl font-bold text-xs shadow-xl cursor-pointer">הבנתי, כנס לאפליקציה!</button>
     </div>
 </div>
 
-<!-- ==================== מודלים ותפריטים ==================== -->
+<!-- MODALS -->
 <div id="generalHelpModal" class="modal-overlay hidden">
     <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl text-right max-h-[85vh] overflow-y-auto">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
             <h3 class="text-xs font-bold text-violet-400"><i class="fa-solid fa-lightbulb ml-1"></i> שימוש יעיל</h3>
             <button onclick="closeGeneralHelpModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
-        <p class="text-[11px] text-slate-300">העוזר הקולי מזהה סכומים ותת-קטגוריות אוטומטית.</p>
+        <p class="text-[11px] text-slate-300">העוזר הקולי מזהה סכומים, קטגוריות ותתי-קטגוריות אוטומטית.</p>
         <button onclick="closeGeneralHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי</button>
     </div>
 </div>
@@ -383,7 +381,6 @@
     </div>
 </div>
 
-<!-- מודל אישור תנועה / הוספת קטגוריה חדשה אם חסרה -->
 <div id="voiceDescModal" class="modal-overlay hidden">
     <div class="summary-card p-4 max-w-xs w-full space-y-3 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
@@ -392,13 +389,13 @@
         <div class="space-y-2 text-[11px]">
             <p id="voiceParsedInfo" class="font-bold text-slate-300"></p>
             <div id="missingCatWarning" class="hidden p-2 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[10px]">
-                הקטגוריה/תת-קטגוריה אינה קיימת במאגר שלך. בחר קטגוריה ראשית קיימת או הוסף חדשה:
+                הקטגוריה אינה קיימת במאגר שלך. בחר קטגוריה ראשית ועדכן את תת-הקטגוריה:
             </div>
-            <div class="field-shell px-3 py-1.5" id="newCatCreationBox">
+            <div class="field-shell px-3 py-1.5">
                 <select id="selectMainCategory" class="w-full bg-transparent outline-none font-bold text-[11px]" style="color:var(--text)"></select>
             </div>
             <div class="field-shell px-3 py-2">
-                <input id="voiceDescInput" type="text" placeholder="תיאור תנועה..." class="w-full bg-transparent outline-none font-bold" style="color:var(--text)" />
+                <input id="voiceSubCatInput" type="text" placeholder="תת קטגוריה..." class="w-full bg-transparent outline-none font-bold" style="color:var(--text)" />
             </div>
         </div>
         <div class="flex gap-2 pt-1">
@@ -422,17 +419,7 @@
     </div>
 </div>
 
-<div id="recurringModal" class="modal-overlay hidden">
-    <div class="summary-card p-4 max-w-xs w-full space-y-3 shadow-2xl">
-        <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-            <h3 class="text-xs font-bold text-amber-400">הוראות קבע</h3>
-            <button onclick="closeRecurringModal()" class="icon-btn" style="width:28px;height:28px;"><i class="fa-solid fa-xmark text-xs"></i></button>
-        </div>
-        <div id="recurringList" class="space-y-1.5 max-h-[120px] overflow-y-auto"></div>
-    </div>
-</div>
-
-<!-- תפריט ראשי נפתח מצד שמאל (Slide-in from Left) -->
+<!-- תפריט ראשי משמאל עם הגדרות סגורות כברירת מחדל -->
 <div id="menuModal" class="modal-overlay hidden" onclick="if(event.target === this) closeMenuModal()">
     <div class="menu-sidebar-panel space-y-3 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2.5">
@@ -462,34 +449,39 @@
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-tags text-violet-400 w-4"></i> קטגוריות ותקציבים</span>
             </button>
 
-            <!-- הגדרות מערכת -->
-            <div class="p-3 rounded-xl bg-[var(--card)] border border-[var(--border)] space-y-2.5 mt-2">
-                <p class="text-[11px] font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-gear"></i> הגדרות מערכת</p>
-                <div>
-                    <label class="text-[10px] font-semibold text-slate-400 flex items-center gap-1.5 mb-1"><i class="fa-solid fa-globe text-blue-400"></i> בחירת שפה</label>
-                    <select id="langSelect" onchange="changeLanguage(this.value)" class="w-full bg-[var(--card-2)] border border-[var(--border)] p-2 rounded-lg text-[11px] font-bold outline-none cursor-pointer" style="color:var(--text)">
-                        <option value="he">עברית (Hebrew)</option>
-                        <option value="en">אנגלית (English)</option>
-                        <option value="ar">ערבית (العربية)</option>
-                        <option value="ru">רוסית (Русский)</option>
-                        <option value="es">ספרדית (Español)</option>
-                        <option value="fr">צרפתית (Français)</option>
-                    </select>
+            <!-- הגדרות מערכת בחלון סגור שנפתח בלחיצה -->
+            <div class="p-3 rounded-xl bg-[var(--card)] border border-[var(--border)] space-y-2 mt-2">
+                <div class="flex items-center justify-between cursor-pointer" onclick="toggleSystemSettingsContent()">
+                    <p class="text-[11px] font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-gear"></i> הגדרות מערכת</p>
+                    <i id="settingsChevron" class="fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform"></i>
                 </div>
-                <div>
-                    <label class="text-[10px] font-semibold text-slate-400 flex items-center gap-1.5 mb-1"><i class="fa-solid fa-coins text-amber-400"></i> בחירת מטבע</label>
-                    <select id="currencySelect" onchange="changeCurrency(this.value)" class="w-full bg-[var(--card-2)] border border-[var(--border)] p-2 rounded-lg text-[11px] font-bold outline-none cursor-pointer" style="color:var(--text)">
-                        <option value="₪">שקל (₪ ILS)</option>
-                        <option value="$">דולר ($ USD)</option>
-                        <option value="€">אירו (€ EUR)</option>
-                        <option value="£">פאונד (£ GBP)</option>
-                        <option value="¥">ין (¥ JPY)</option>
-                    </select>
-                </div>
+                <div id="systemSettingsContent" class="hidden space-y-2.5 pt-2 border-t border-[var(--border)]">
+                    <div>
+                        <label class="text-[10px] font-semibold text-slate-400 flex items-center gap-1.5 mb-1"><i class="fa-solid fa-globe text-blue-400"></i> בחירת שפה</label>
+                        <select id="langSelect" onchange="changeLanguage(this.value)" class="w-full bg-[var(--card-2)] border border-[var(--border)] p-2 rounded-lg text-[11px] font-bold outline-none cursor-pointer" style="color:var(--text)">
+                            <option value="he">עברית (Hebrew)</option>
+                            <option value="en">אנגלית (English)</option>
+                            <option value="ar">ערבית (العربية)</option>
+                            <option value="ru">רוסית (Русский)</option>
+                            <option value="es">ספרדית (Español)</option>
+                            <option value="fr">צרפתית (Français)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-semibold text-slate-400 flex items-center gap-1.5 mb-1"><i class="fa-solid fa-coins text-amber-400"></i> בחירת מטבע</label>
+                        <select id="currencySelect" onchange="changeCurrency(this.value)" class="w-full bg-[var(--card-2)] border border-[var(--border)] p-2 rounded-lg text-[11px] font-bold outline-none cursor-pointer" style="color:var(--text)">
+                            <option value="₪">שקל (₪ ILS)</option>
+                            <option value="$">דולר ($ USD)</option>
+                            <option value="€">אירו (€ EUR)</option>
+                            <option value="£">פאונד (£ GBP)</option>
+                            <option value="¥">ין (¥ JPY)</option>
+                        </select>
+                    </div>
 
-                <button onclick="factoryReset()" class="w-full py-2.5 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-400 text-[11px] font-bold flex items-center justify-center gap-1.5 hover:bg-rose-500/20 transition cursor-pointer mt-1">
-                    <i class="fa-solid fa-triangle-exclamation"></i> איפוס מלא של האפליקציה (Reset)
-                </button>
+                    <button onclick="factoryReset()" class="w-full py-2.5 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-400 text-[11px] font-bold flex items-center justify-center gap-1.5 hover:bg-rose-500/20 transition cursor-pointer mt-1">
+                        <i class="fa-solid fa-triangle-exclamation"></i> איפוס מלא של האפליקציה (Reset)
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -631,13 +623,13 @@
           </div>
         </section>
 
-        <!-- השוואה לחודש קודם מתוקנת -->
+        <!-- השוואה לחודש קודם -->
         <section class="summary-card p-3">
           <h3 class="text-[12px] font-semibold mb-1 text-slate-300">השוואה לחודש קודם</h3>
           <div id="monthlyComparisonBox" class="text-[11px] space-y-1" style="color:var(--text-dim)"></div>
         </section>
 
-        <!-- פילוח הוצאות (עוגה במצב סגור ופתוח) -->
+        <!-- פילוח הוצאות (עוגה) -->
         <section class="summary-card p-3 cursor-pointer transition select-none" onclick="toggleDonutExpand()">
           <div class="flex items-center justify-between mb-2">
             <div class="flex items-center gap-2">
@@ -650,7 +642,6 @@
             </div>
           </div>
           
-          <!-- עוגה מוצגת תמיד גם במצב סגור -->
           <div class="flex justify-center my-1">
             <div class="donut" id="donutChart">
               <div class="donut-center">
@@ -660,13 +651,12 @@
             </div>
           </div>
 
-          <!-- פירוט מורחב ש נפתח בלחיצה -->
           <div id="donutExpandedContent" class="hidden mt-2.5 pt-2 border-t border-[var(--border)] space-y-2" onclick="event.stopPropagation()">
             <div class="space-y-2" id="legendList"></div>
           </div>
         </section>
 
-        <!-- תנועות החודש הנוכחי מתוקן -->
+        <!-- תנועות החודש הנוכחי -->
         <section class="summary-card p-3 cursor-pointer transition select-none" onclick="toggleTxExpand()">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -686,7 +676,7 @@
       </main>
     </section>
 
-    <!-- SCREEN 3: TABLE (EXCEL HIERARCHICAL VIEW) -->
+    <!-- SCREEN 3: TABLE -->
     <section id="screen-table" class="screen">
       <div class="flex items-center justify-between px-4 pt-3 pb-2 flex-shrink-0 border-b border-[var(--border)]">
         <div>
@@ -818,6 +808,7 @@ let pendingSmartTx = null;
 let activeRecognition = null;
 let donutExpanded = false;
 let txExpanded = false;
+let systemSettingsOpen = false;
 let currentCatTab = 'expense';
 
 const availableColors = ['#FF8D82', '#FF9F43', '#FFC85C', '#7FE8C6', '#8FB8FF', '#C7A6FF', '#FF9FD1', '#34D399', '#38BDF8', '#E11D48'];
@@ -866,6 +857,19 @@ function factoryReset() {
 
 function changeLanguage(lang) { state.language = lang; persist(); alert("שפה עודכנה בהצלחה"); }
 function changeCurrency(curr) { state.currency = curr; persist(); renderHome(); renderAnalytics(); renderTableScreen(); }
+
+function toggleSystemSettingsContent() {
+  systemSettingsOpen = !systemSettingsOpen;
+  const content = document.getElementById('systemSettingsContent');
+  const chevron = document.getElementById('settingsChevron');
+  if(systemSettingsOpen) {
+    content.classList.remove('hidden');
+    chevron.style.transform = 'rotate(180deg)';
+  } else {
+    content.classList.add('hidden');
+    chevron.style.transform = 'rotate(0deg)';
+  }
+}
 
 function initDailyReminder() {
   if ("Notification" in window && Notification.permission !== "granted") Notification.requestPermission();
@@ -1101,7 +1105,6 @@ function renderHome(){
   document.documentElement.style.setProperty('--glow', balance >= 0 ? 'var(--glow-safe)' : 'var(--glow-danger)');
 }
 
-// ==================== מנוע אנליטיקה ועוגת תרשימים (מתוקן) ====================
 function renderAnalytics() {
   let currentExpense = 0, currentIncome = 0;
   const spend = {};
@@ -1113,7 +1116,6 @@ function renderAnalytics() {
     }
   });
 
-  // השוואה לחודש קודם
   let prevExpense = 0;
   state.transactions.forEach(t => {
     if(isWithinFinancialMonth(t.date, -1) && t.type === 'expense') prevExpense += t.amount;
@@ -1134,17 +1136,13 @@ function renderAnalytics() {
     `;
   }
 
-  // עוגת תרשימים
   const totalExpenseVal = Object.values(spend).reduce((a,b)=>a+b,0);
   document.getElementById('previewDonutTotal').textContent = fmt(totalExpenseVal);
   document.getElementById('donutCenterTotal').textContent = fmt(totalExpenseVal);
 
   const total = totalExpenseVal || 1;
-  const mapKey = `${state.lifeStage}_${state.gender}`;
-  const subMap = profileSubCategoriesMap[mapKey] || profileSubCategoriesMap['soldier_male'];
-
   let acc = 0; const stops = [];
-  state.expenseCats.forEach((cat, idx) => {
+  state.expenseCats.forEach((cat) => {
     const amt = spend[cat.name] || 0;
     if(amt > 0) {
       const start = (acc / total) * 100;
@@ -1161,7 +1159,6 @@ function renderAnalytics() {
     donutEl.style.background = 'var(--card-2)';
   }
 
-  // מקרא פירוט לעוגה
   const legend = document.getElementById('legendList');
   legend.innerHTML = '';
   state.expenseCats.forEach(cat => {
@@ -1184,7 +1181,6 @@ function renderAnalytics() {
     }
   });
 
-  // תנועות החודש הנוכחי
   const currentTxs = state.transactions.filter(t => isWithinFinancialMonth(t.date, 0));
   document.getElementById('txCountBadge').textContent = `${currentTxs.length} תנועות`;
   
@@ -1197,13 +1193,17 @@ function renderAnalytics() {
     const col = latest.type === 'income' ? 'var(--mint)' : 'var(--coral)';
     previewRow.innerHTML = `
       <div class="flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full" style="background:${latest.color}"></span>
-        <span class="font-medium truncate max-w-[180px]">${latest.desc || latest.subCat || latest.cat}</span>
+        <span class="w-2.5 h-2.5 rounded-full" style="background:${latest.color}"></span>
+        <div>
+          <p class="text-[11px] font-bold">${latest.cat}</p>
+          <p class="text-[9px] text-slate-400">${latest.subCat || 'כללי'}</p>
+        </div>
       </div>
       <span class="tabular font-bold" style="color:${col}">${sign}${fmt(latest.amount)}</span>
     `;
   }
 
+  // תנועות החודש הנוכחי - קטגוריה ראשית בבולט, תת קטגוריה בקטן מתחת, סכום בצד השני
   const txList = document.getElementById('txList');
   txList.innerHTML = '';
   if(currentTxs.length === 0) {
@@ -1215,16 +1215,16 @@ function renderAnalytics() {
       const sign = t.type === 'income' ? '+' : '−';
       const col = t.type === 'income' ? 'var(--mint)' : 'var(--coral)';
       row.innerHTML = `
-        <div class="flex items-center gap-2">
-          <span class="w-2.5 h-2.5 rounded-full" style="background:${t.color}"></span>
+        <div class="flex items-center gap-2.5">
+          <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:${t.color}"></span>
           <div>
-            <p class="text-[11px] font-bold">${t.desc || t.subCat || t.cat}</p>
-            <p class="text-[9px] text-slate-400">${t.cat} (${t.subCat || 'כללי'}) • ${t.date || 'היום'}</p>
+            <p class="text-[11px] font-bold text-slate-100">${t.cat}</p>
+            <p class="text-[9px] text-slate-400">${t.subCat || 'כללי'} • ${t.date || 'היום'}</p>
           </div>
         </div>
         <div class="flex items-center gap-2">
           <span class="tabular text-[11px] font-bold" style="color:${col}">${sign}${fmt(t.amount)}</span>
-          <button onclick="deleteTransaction(${t.id})" class="text-[10px] text-rose-400 cursor-pointer">מחק</button>
+          <button onclick="deleteTransaction(${t.id})" class="text-[10px] text-rose-400 cursor-pointer p-1" title="מחק"><i class="fa-solid fa-trash-can"></i></button>
         </div>
       `;
       txList.appendChild(row);
@@ -1321,7 +1321,6 @@ function renderTableScreen() {
   container.prepend(summaryHeader);
 }
 
-// זיהוי קולי חכם כולל הוספת קטגוריות חסרות למאגר
 function toggleVoiceRecognition() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) { alert("דפדפן אינו תומך בזיהוי קולי."); return; }
@@ -1385,7 +1384,6 @@ function parseVoiceCommandForDescModal(text){
   let matchedCat = null;
   let matchedSub = null;
 
-  // חפש תת קטגוריה או מילת מפתח (כמו וודקה -> אלכוהול -> בילויים)
   for (let catName of Object.keys(subMap)) {
     const subs = subMap[catName];
     for (let sub of subs) {
@@ -1398,7 +1396,6 @@ function parseVoiceCommandForDescModal(text){
     if (matchedCat) break;
   }
 
-  // אם לא נמצאה במפה, בדוק אם הקטגוריה הראשית קיימת
   if (!matchedCat) {
     for (let cat of state.expenseCats) {
       if (text.includes(cat.name)) {
@@ -1420,36 +1417,36 @@ function parseVoiceCommandForDescModal(text){
   });
 
   if (!matchedCat) {
-    // הקטגוריה או תת הקטגוריה אינן קיימות - הקפץ התראה ובקש שיוך
     warningBox.classList.remove('hidden');
     pendingSmartTx = { type: 'expense', amount, cat: state.expenseCats[0].name, subCat: text.trim(), color: state.expenseCats[0].color, date: getLocalDateString(new Date()) };
+    document.getElementById('voiceSubCatInput').value = text.trim();
   } else {
     warningBox.classList.add('hidden');
+    mainCatSelect.value = matchedCat;
     const catObj = state.expenseCats.find(c => c.name === matchedCat) || state.expenseCats[0];
-    pendingSmartTx = { type: 'expense', amount, cat: matchedCat, subCat: matchedSub, color: catObj.color, date: getLocalDateString(new Date()) };
+    pendingSmartTx = { type: 'expense', amount, cat: matchedCat, subCat: matchedSub || 'כללי', color: catObj.color, date: getLocalDateString(new Date()) };
+    document.getElementById('voiceSubCatInput').value = matchedSub || 'כללי';
   }
 
-  document.getElementById('voiceParsedInfo').innerHTML = `זוהה סכום: <span class="text-emerald-400 font-bold">${fmt(amount)}</span><br>טקסט: <span class="text-violet-400">${text}</span>`;
-  document.getElementById('voiceDescInput').value = text;
+  document.getElementById('voiceParsedInfo').innerHTML = `סכום שזוהה: <span class="text-emerald-400 font-bold">${fmt(amount)}</span>`;
   document.getElementById('voiceDescModal').classList.remove('hidden');
 }
 
 function confirmVoiceTransaction() {
   if(!pendingSmartTx) return;
   const chosenMainCat = document.getElementById('selectMainCategory').value;
-  const descVal = document.getElementById('voiceDescInput').value.trim();
+  const subCatVal = document.getElementById('voiceSubCatInput').value.trim() || 'כללי';
 
   const catObj = state.expenseCats.find(c => c.name === chosenMainCat) || state.expenseCats[0];
   pendingSmartTx.cat = chosenMainCat;
+  pendingSmartTx.subCat = subCatVal;
   pendingSmartTx.color = catObj.color;
-  pendingSmartTx.desc = descVal ? descVal : `${pendingSmartTx.cat} - ${pendingSmartTx.subCat}`;
 
-  // הוסף את תת הקטגוריה למאגר אם אינה קיימת שם
   const mapKey = `${state.lifeStage}_${state.gender}`;
   if (!profileSubCategoriesMap[mapKey]) profileSubCategoriesMap[mapKey] = {};
   if (!profileSubCategoriesMap[mapKey][chosenMainCat]) profileSubCategoriesMap[mapKey][chosenMainCat] = [];
-  if (!profileSubCategoriesMap[mapKey][chosenMainCat].includes(pendingSmartTx.subCat)) {
-    profileSubCategoriesMap[mapKey][chosenMainCat].push(pendingSmartTx.subCat);
+  if (!profileSubCategoriesMap[mapKey][chosenMainCat].includes(subCatVal)) {
+    profileSubCategoriesMap[mapKey][chosenMainCat].push(subCatVal);
   }
 
   state.transactions.push({ id: Date.now(), ...pendingSmartTx });

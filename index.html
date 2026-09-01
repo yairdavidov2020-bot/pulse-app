@@ -246,21 +246,44 @@
     </div>
 </div>
 
+<!-- מודל ההדרכה והשימוש היעיל המקיף -->
 <div id="tutorialModal" class="modal-overlay hidden">
-    <div class="summary-card p-5 max-w-sm w-full space-y-4 shadow-2xl text-center relative overflow-hidden border border-emerald-400/50">
+    <div class="summary-card p-5 max-w-md w-full space-y-4 shadow-2xl text-right relative overflow-hidden border border-emerald-400/50 max-h-[90vh] overflow-y-auto">
         <div class="absolute -top-16 -right-16 w-36 h-36 bg-emerald-500/20 rounded-full blur-3xl"></div>
         <div class="relative z-10 space-y-3">
-            <div class="w-16 h-16 rounded-3xl bg-gradient-to-tr from-emerald-500/20 to-teal-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 text-3xl mx-auto shadow-2xl animate-bounce">
-                <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
+                <h3 class="text-sm font-black gradient-text flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles"></i> מדריך שימוש מקיף - Pulse</h3>
+                <button onclick="closeTutorialModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
             </div>
-            <h3 class="text-lg font-black gradient-text">איך שולטים בכסף ב-Pulse?</h3>
-            <div class="space-y-2 text-right text-[11px] text-slate-300 bg-[var(--card-2)] p-3 rounded-2xl border border-[var(--border)]">
-                <p class="flex items-center gap-2"><i class="fa-solid fa-microphone text-emerald-400 text-sm"></i> <b>הכתבה חופשית:</b> אמור או הקלד כל קטגוריה שתרצה. המערכת מזהה אוטומטית מאלפי מילות מפתח!</p>
-                <p class="flex items-center gap-2"><i class="fa-solid fa-chart-pie text-blue-400 text-sm"></i> <b>תמונת מצב:</b> עקוב אחרי עוגת הפילוח והיעדים שלך בצורה ויזואלית.</p>
-                <p class="flex items-center gap-2"><i class="fa-solid fa-table text-violet-400 text-sm"></i> <b>טבלה חודשית:</b> כל ההוצאות מסודרות כמו באקסל מתקדם.</p>
+            
+            <div class="space-y-3 text-[11px] text-slate-300">
+                <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
+                    <p class="font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-microphone"></i> 1. ללא בחירת קטגוריות — פשוט מדברים</p>
+                    <p class="leading-relaxed">החידוש המרכזי ב-Pulse: **אין צורך לבחור קטגוריות ידנית**. פשוט מקלידים או אומרים בשפה חופשית (למשל: "קניות בסופר 150 שקל"), והמערכת מזהה לבד מתוך מאגר-העל ומסדרת הכל ברגע.</p>
+                </div>
+
+                <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
+                    <p class="font-bold text-blue-400 flex items-center gap-1.5"><i class="fa-solid fa-chart-pie"></i> 2. תמונת מצב ותרשימים דינמיים</p>
+                    <p class="leading-relaxed">מסך תמונת המצב מציג את עוגת הפילוח וההשוואה לחודש הקודם. **העוגה מציגה אך ורק קטגוריות שנעשה בהן שימוש בפועל בחודש הנבחר**, לשמירה על ממשק חד ונקי.</p>
+                </div>
+
+                <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
+                    <p class="font-bold text-violet-400 flex items-center gap-1.5"><i class="fa-solid fa-table"></i> 3. טבלה חודשית (אקסל פיננסי)</p>
+                    <p class="leading-relaxed">מרכז את כל ההוצאות וההכנסות לפי קטגוריות ראשיות ותתי-קטגוריות עם סינון אוטומטי מלא לפי חודשים והשוואות קודמות.</p>
+                </div>
+
+                <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
+                    <p class="font-bold text-amber-400 flex items-center gap-1.5"><i class="fa-solid fa-tags"></i> 4. קטגוריות מוגנות והוראות קבע</p>
+                    <p class="leading-relaxed">קטגוריות המערכת קבועות מראש ומוגנות (לא ניתן למחוק או לערוך אותן, אך ניתן להוסיף קטגוריות משלכם בתפריט הצדדי). כמו כן, ניתן להגדיר הוראות קבע ומנויים שיורדו ויחשבו אוטומטית בכל חודש.</p>
+                </div>
+
+                <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
+                    <p class="font-bold text-emerald-300 flex items-center gap-1.5"><i class="fa-solid fa-lightbulb"></i> 5. הטיפ היומי המתחלף</p>
+                    <p class="leading-relaxed">בכל יום בשנה האפליקציה שולפת עבורכם טיפ פיננסי והתנהגותי חכם וחדש כדי לעזור לכם להישאר בשליטה ובצמיחה מתמדת.</p>
+                </div>
             </div>
         </div>
-        <button onclick="closeTutorialModal()" class="save-btn w-full py-3 rounded-2xl font-bold text-xs shadow-xl cursor-pointer relative z-10">הבנתי לגמרי, בוא נתחיל!</button>
+        <button onclick="closeTutorialModal()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs shadow-xl cursor-pointer relative z-10">הבנתי לגמרי, בוא נמשיך!</button>
     </div>
 </div>
 
@@ -278,14 +301,15 @@
         </svg>
     </div>
 
+    <!-- מסך פתיחה עם דגש אלגנטי על אפס בחירת קטגוריות ודיבור בשפה חופשית -->
     <div class="onboarding-content-box text-center space-y-6 p-2">
         <div class="space-y-3">
             <div class="w-16 h-16 rounded-3xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 text-3xl mx-auto shadow-xl">
-                <i class="fa-solid fa-chart-line"></i>
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
             </div>
             <h1 class="text-3xl font-black tracking-tight gradient-text">ברוכים הבאים ל-Pulse</h1>
             <p class="text-sm font-bold text-slate-200 leading-relaxed px-4">
-                חוויה שתשנה לכם את העולם הפיננסי. ניהול הוצאות שפשוט קורה – מדברים והאפליקציה מסדרת.
+                אפס בחירת קטגוריות. פשוט מדברים או מקלידים בשפה שלך — והאפליקציה כבר תדע לסדר ולפענח הכל לבד.
             </p>
         </div>
 
@@ -302,23 +326,26 @@
     </div>
 </div>
 
-<!-- Step 1: Personal info -->
+<!-- Step 1: Personal info (Username English only, min 4 chars) -->
 <div id="onboarding-step-1" class="full-page-onboarding hidden">
     <div class="onboarding-content-box text-right space-y-4 p-5 bg-[var(--card)] rounded-3xl border border-[var(--border)] shadow-2xl">
         <div class="text-center space-y-1">
             <span class="text-[10px] text-emerald-400 font-bold">שלב 1 מתוך 5</span>
             <h2 class="text-base font-black gradient-text">הכרות אישית</h2>
-            <p class="text-xs text-slate-300">איך לקרוא לך ומה כינוי המשתמש שלך?</p>
+            <p class="text-xs text-slate-300">שם משתמש (אנגלית בלבד, מינימום 4 אותיות) ושם תצוגה:</p>
         </div>
         <div class="space-y-3">
-            <div class="field-shell flex items-center px-4 py-3">
-                <input id="wizHandle" type="text" placeholder="שם משתמש ייחודי (Handle)..." class="amount-input text-center font-bold text-sm" />
+            <div>
+                <div class="field-shell flex items-center px-4 py-3">
+                    <input id="wizHandle" type="text" placeholder="שם משתמש (למשל: yair, david)..." class="amount-input text-center font-bold text-sm" dir="ltr" />
+                </div>
+                <p class="text-[9px] text-slate-400 text-center mt-1">חובה באנגלית בלבד, לפחות 4 תווים</p>
             </div>
             <div class="field-shell flex items-center px-4 py-3">
                 <input id="wizName" type="text" placeholder="שם תצוגה באפליקציה..." class="amount-input text-center font-bold text-sm" />
             </div>
         </div>
-        <button onclick="wizardNextStep(2)" class="w-full py-3 rounded-2xl font-bold text-xs shadow-xl cursor-pointer bg-gradient-to-l from-emerald-500 to-teal-600 text-white hover:opacity-95 transition flex items-center justify-between px-5">
+        <button onclick="validateAndNextStep1()" class="w-full py-3 rounded-2xl font-bold text-xs shadow-xl cursor-pointer bg-gradient-to-l from-emerald-500 to-teal-600 text-white hover:opacity-95 transition flex items-center justify-between px-5">
             <span>המשך ליתרת בסיס</span>
             <i class="fa-solid fa-arrow-left text-xs"></i>
         </button>
@@ -423,6 +450,7 @@
     </div>
 </div>
 
+<!-- Cinematic Build Animation (approx 30 seconds rich multi-step build) -->
 <div id="onboarding-step-6" class="full-page-onboarding hidden">
     <div class="onboarding-content-box text-center space-y-6 p-6 bg-[var(--card)] rounded-3xl border border-emerald-400/40 shadow-2xl">
         <div class="relative flex items-center justify-center my-4">
@@ -432,16 +460,16 @@
             </div>
         </div>
         <div class="space-y-3">
-            <h2 id="buildTitle" class="text-xl font-black gradient-text">מכין את הדשבורד האישי שלך...</h2>
-            <p id="buildSubText" class="text-xs text-slate-300 leading-relaxed min-h-[36px]">מסדר את כל הקטגוריות וההגדרות במיוחד בשבילך...</p>
+            <h2 id="buildTitle" class="text-xl font-black gradient-text">בונה את עולמך הפיננסי...</h2>
+            <p id="buildSubText" class="text-xs text-slate-300 leading-relaxed min-h-[36px]">מאתחל את מאגר-העל והמנועים החכמים...</p>
         </div>
         <div class="space-y-1.5">
             <div class="w-full bg-[var(--card-2)] h-3 rounded-full overflow-hidden border border-[var(--border)] p-0.5">
-                <div id="buildProgressBar" class="bg-gradient-to-r from-emerald-400 to-teal-500 h-full rounded-full transition-all duration-300 shadow-lg" style="width: 5%"></div>
+                <div id="buildProgressBar" class="bg-gradient-to-r from-emerald-400 to-teal-500 h-full rounded-full transition-all duration-500 shadow-lg" style="width: 2%"></div>
             </div>
             <div class="flex justify-between text-[10px] text-slate-400 font-bold tabular">
-                <span id="buildPercentText">5%</span>
-                <span>הכנה אישית</span>
+                <span id="buildPercentText">2%</span>
+                <span>תהליך אופטימיזציה</span>
             </div>
         </div>
     </div>
@@ -859,7 +887,6 @@ async function saveDataToSupabase(appState) {
   } catch (err) {}
 }
 
-// מאגר-על פסיכי מקיף ומוגזם (מילה אחת לכל קטגוריה ותת-קטגוריה)
 const masterCategoriesMap = {
   'אוכל': ['סופר', 'מסעדה', 'משלוח', 'קפה', 'שקם', 'קצבייה', 'חטיפים', 'מאפייה', 'גלידה', 'פירות', 'ירקות', 'משקאות', 'שווארמה', 'פיצה', 'סושי', 'בשר', 'חלב', 'בישול', 'מכולת', 'מעדנייה', 'דגים', 'עופות', 'פיצוחים', 'תבלינים', 'שימורים', 'דגנים', 'בורקס', 'עוגות', 'שוקולד', 'מתוקים', 'טייקאוויי', 'קפיטריה', 'מזנון', 'חומוסיות', 'פלאפל', 'סביח', 'המבורגר', 'נודלס', 'פסטה', 'סלטים', 'מיצים', 'שייקים', 'קונדיטוריה', 'יין', 'בירה', 'אלכוהול', 'לחם', 'גבינה', 'ביצים', 'שמן'],
   'בילויים': ['בר', 'מסיבה', 'מתנה', 'הופעה', 'סרט', 'טיול', 'גיימינג', 'פאב', 'קריוקי', 'הצגה', 'מוזיאון', 'באולינג', 'קארטינג', 'בריחה', 'דייט', 'מועדון', 'פסטיבל', 'סטנדאפ', 'קונצרט', 'קרקס', 'תיאטרון', 'אמפי', 'פיקניק', 'קמפינג', 'שייט', 'צניחה', 'ספא', 'אטרקציה', 'פארק', 'לונה פארק', 'ביליארד', 'לייזרטג'],
@@ -912,7 +939,7 @@ function getLocalDateString(d) {
 
 function persist() {
   sortTransactions();
-  localStorage.setItem('pulse_state_v58', JSON.stringify(state));
+  localStorage.setItem('pulse_state_v60', JSON.stringify(state));
   saveDataToSupabase(state);
 }
 
@@ -958,7 +985,7 @@ async function factoryReset() {
         await supabaseClient.from('app_data').delete().eq('id', state.handle);
       } catch(e) {}
     }
-    localStorage.removeItem('pulse_state_v58');
+    localStorage.removeItem('pulse_state_v60');
     location.reload();
   }
 }
@@ -1078,19 +1105,19 @@ window.onload = async function() {
     if(splash) { splash.style.opacity = '0'; setTimeout(() => splash.remove(), 700); }
   }, 1600);
 
-  let saved = localStorage.getItem('pulse_state_v58');
+  let saved = localStorage.getItem('pulse_state_v60');
   if(saved) {
     try {
       state = JSON.parse(saved);
     } catch(e) {
-      localStorage.removeItem('pulse_state_v58');
+      localStorage.removeItem('pulse_state_v60');
     }
   }
 
   if (state.handle && supabaseClient) {
     try {
       const cloudData = await loadDataFromSupabase();
-      if (cloudData && cloudData.userName) { state = cloudData; localStorage.setItem('pulse_state_v58', JSON.stringify(state)); }
+      if (cloudData && cloudData.userName) { state = cloudData; localStorage.setItem('pulse_state_v60', JSON.stringify(state)); }
     } catch(e) {}
   }
 
@@ -1149,14 +1176,31 @@ function wizardNextStep(stepNum) {
   document.getElementById('onboarding-step-' + stepNum).classList.remove('hidden');
 }
 
+function validateAndNextStep1() {
+  const handleInput = document.getElementById('wizHandle').value.trim();
+  const nameInput = document.getElementById('wizName').value.trim();
+  
+  const handleRegex = /^[A-Za-z0-9_]{4,}$/;
+  if (!handleRegex.test(handleInput)) {
+    alert("שם המשתמש חייב להיות באנגלית בלבד (אותיות אנגלית/מספרים/קו תחתון) ובאורך של לפחות 4 תווים.");
+    return;
+  }
+  if (!nameInput) {
+    alert("נא להזין שם תצוגה באפליקציה.");
+    return;
+  }
+
+  wizardNextStep(2);
+}
+
 async function startCinematicBuild() {
-  const handle = document.getElementById('wizHandle').value.trim().toLowerCase();
+  const handle = document.getElementById('wizHandle').value.trim();
   const name = document.getElementById('wizName').value.trim();
   const balance = parseFloat(document.getElementById('wizBalance').value);
   const finDay = parseInt(document.getElementById('wizFinancialDay').value) || 1;
   const savGoal = parseFloat(document.getElementById('wizSavingsGoal').value) || 1500;
 
-  if(!handle) { alert("נא להזין שם משתמש"); return; }
+  if(!handle || !/^[A-Za-z0-9_]{4,}$/.test(handle)) { alert("שם המשתמש חייב להיות באנגלית בלבד ולפחות 4 תווים."); return; }
   if(!name) { alert("נא להזין את שמך"); return; }
   if(isNaN(balance)) { alert("נא להזין יתרה התחלתית תקינה"); return; }
 
@@ -1182,21 +1226,24 @@ async function startCinematicBuild() {
 
   persist();
 
+  // Cinematic build steps taking ~30 seconds for a rich, immersive feel
   const steps = [
-    { progress: 25, title: "מאמת את פרטי הפרופיל...", sub: `שלום ${name}, מחבר את הפרופיל שלך...` },
-    { progress: 60, title: "טוען את מאגר-העל והקטגוריות...", sub: "מסדר את כל המערכת במיוחד בשבילך..." },
-    { progress: 100, title: "הדשבורד האישי שלך מוכן!", sub: "הכל תפור בול בשבילך." }
+    { progress: 10, title: "מאמת את שם המשתמש והפרופיל...", sub: `בודק את ${handle}, מחבר את הענן ב-Supabase...` },
+    { progress: 30, title: "טוען את מאגר-העל הענק...", sub: "מטעין מעל 100 קטגוריות ותתי-קטגוריות לזיהוי קולי..." },
+    { progress: 55, title: "מגדיר את הדשבורד האישי שלך...", sub: "בונה את עצי הנתונים, תאריכי המחזור הפיננסי ויעדי החיסכון..." },
+    { progress: 80, title: "מכין את העוזר הקולי והגרפים...", sub: "מסדר את מנועי פילוח ההוצאות וטבלאות האקסל..." },
+    { progress: 100, title: "העולם הפיננסי שלך מוכן!", sub: "פותח את הדשבורד האישי..." }
   ];
 
   for (let i = 0; i < steps.length; i++) {
-    await new Promise(r => setTimeout(r, 1000));
+    await new Promise(r => setTimeout(r, 6000));
     document.getElementById('buildProgressBar').style.width = steps[i].progress + '%';
     document.getElementById('buildPercentText').textContent = steps[i].progress + '%';
     document.getElementById('buildTitle').textContent = steps[i].title;
     document.getElementById('buildSubText').textContent = steps[i].sub;
   }
 
-  await new Promise(r => setTimeout(r, 600));
+  await new Promise(r => setTimeout(r, 1000));
   document.getElementById('onboarding-step-6').classList.add('hidden');
   document.getElementById('tutorialModal').classList.remove('hidden');
   setDynamicGreeting();

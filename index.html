@@ -119,15 +119,14 @@
   .modal-overlay { position:fixed; inset:0; z-index:50; background:rgba(10,12,17,0.95); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:16px; transition: opacity .25s ease; }
   .modal-overlay.hidden { display:none !important; }
 
-  /* תפריט נפתח מלמטה (Bottom Sheet) */
-  #menuModal { justify-content: flex-end !important; padding: 0 !important; background: rgba(10,12,17,0.75); }
-  #menuModal .menu-bottom-panel {
-    width: 100%; max-width: 500px; max-height: 85dvh; border-top-left-radius: 24px; border-top-right-radius: 24px;
-    border-top: 1px solid var(--border); background: var(--bg); display: flex; flex-direction: column;
-    padding: 20px 16px calc(24px + env(safe-area-inset-bottom)) 16px; overflow-y: auto;
-    animation: slideUpBottom 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+  /* תפריט ראשי נפתח מצד שמאל (Slide-in from Left) */
+  #menuModal { justify-content: flex-start !important; padding: 0 !important; background: rgba(10,12,17,0.75); }
+  #menuModal .menu-sidebar-panel {
+    width: 290px; height: 100%; max-height: 100dvh; border-radius: 0; border-right: 1px solid var(--border);
+    background: var(--bg); display: flex; flex-direction: column; padding: 16px; overflow-y: auto;
+    animation: slideInLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
-  @keyframes slideUpBottom { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  @keyframes slideInLeft { from { transform: translateX(-100%); } to { transform: translateX(0); } }
 
   .full-page-onboarding {
     position: fixed; inset: 0; z-index: 99999; background: #05070B; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px; overflow-y: auto; transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease;
@@ -154,8 +153,8 @@
   .nav-item.active{ color: var(--text); background: var(--card-2); border: 1px solid var(--border); }
   .nav-item.active svg{ stroke: var(--mint); }
 
-  .donut{ width:110px; height:110px; border-radius:50%; position:relative; margin:0 auto; }
-  .donut::after{ content:""; position:absolute; inset:14px; border-radius:50%; background:var(--card); }
+  .donut{ width:110px; height:110px; border-radius:50%; position:relative; margin:0 auto; box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+  .donut::after{ content:""; position:absolute; inset:16px; border-radius:50%; background:var(--card); }
   .donut-center{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2; }
 
   .tx-row{ display:flex; align-items:center; justify-content:space-between; padding:5px 0; border-bottom:1px solid var(--border); }
@@ -379,18 +378,25 @@
             <h3 class="text-xs font-bold text-emerald-400">הכתבה חכמה</h3>
             <button onclick="closeVoiceHelpModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
-        <p class="text-[11px] text-slate-300">זיהוי אוטומטי של סכום, קטגוריה ותת-קטגוריה.</p>
+        <p class="text-[11px] text-slate-300">זיהוי אוטומטי של סכום וקטגוריות. קטגוריות חסרות יתווספו לבחירתך.</p>
         <button onclick="closeVoiceHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי</button>
     </div>
 </div>
 
+<!-- מודל אישור תנועה / הוספת קטגוריה חדשה אם חסרה -->
 <div id="voiceDescModal" class="modal-overlay hidden">
     <div class="summary-card p-4 max-w-xs w-full space-y-3 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-            <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-pen-nib ml-1"></i> אישור תנועה ותת-קטגוריה</h3>
+            <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-pen-nib ml-1"></i> אישור תנועה וקטגוריה</h3>
         </div>
         <div class="space-y-2 text-[11px]">
             <p id="voiceParsedInfo" class="font-bold text-slate-300"></p>
+            <div id="missingCatWarning" class="hidden p-2 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[10px]">
+                הקטגוריה/תת-קטגוריה אינה קיימת במאגר שלך. בחר קטגוריה ראשית קיימת או הוסף חדשה:
+            </div>
+            <div class="field-shell px-3 py-1.5" id="newCatCreationBox">
+                <select id="selectMainCategory" class="w-full bg-transparent outline-none font-bold text-[11px]" style="color:var(--text)"></select>
+            </div>
             <div class="field-shell px-3 py-2">
                 <input id="voiceDescInput" type="text" placeholder="תיאור תנועה..." class="w-full bg-transparent outline-none font-bold" style="color:var(--text)" />
             </div>
@@ -426,11 +432,11 @@
     </div>
 </div>
 
-<!-- תפריט ראשי עולה מלמטה (Bottom Sheet) -->
+<!-- תפריט ראשי נפתח מצד שמאל (Slide-in from Left) -->
 <div id="menuModal" class="modal-overlay hidden" onclick="if(event.target === this) closeMenuModal()">
-    <div class="menu-bottom-panel space-y-3 shadow-2xl text-right">
+    <div class="menu-sidebar-panel space-y-3 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2.5">
-            <h3 class="text-sm font-bold gradient-text flex items-center gap-2"><i class="fa-solid fa-bars"></i> תפריט ראשי והגדרות</h3>
+            <h3 class="text-sm font-bold gradient-text flex items-center gap-2"><i class="fa-solid fa-bars"></i> תפריט והגדרות</h3>
             <button onclick="closeMenuModal()" class="icon-btn" style="width:28px;height:28px;"><i class="fa-solid fa-xmark text-sm"></i></button>
         </div>
 
@@ -456,7 +462,7 @@
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-tags text-violet-400 w-4"></i> קטגוריות ותקציבים</span>
             </button>
 
-            <!-- הגדרות מערכת בתוך התפריט התחתון -->
+            <!-- הגדרות מערכת -->
             <div class="p-3 rounded-xl bg-[var(--card)] border border-[var(--border)] space-y-2.5 mt-2">
                 <p class="text-[11px] font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-gear"></i> הגדרות מערכת</p>
                 <div>
@@ -588,13 +594,13 @@
                 </h4>
                 <button onclick="openVoiceHelpModal()" class="w-3.5 h-3.5 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[8px] font-bold flex items-center justify-center text-emerald-400 cursor-pointer">?</button>
               </div>
-              <p id="micStatus" class="text-[9px] mt-0.5 leading-tight truncate" style="color:var(--text-dim)">לחץ לאמירת סכום, קטגוריה ותת-קטגוריה</p>
+              <p id="micStatus" class="text-[9px] mt-0.5 leading-tight truncate" style="color:var(--text-dim)">לחץ לאמירת הוצאה עם תת-קטגוריה (למשל: וודקה)</p>
             </div>
           </div>
 
           <div class="summary-card p-2 space-y-1">
             <div class="field-shell flex items-center px-2.5 py-1.5">
-              <input id="smartTextInput" type="text" placeholder="הכתבה... (למשל: הוצאתי 40 שקל בשקם)" class="w-full bg-transparent outline-none text-[10px] font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
+              <input id="smartTextInput" type="text" placeholder="הכתבה... (למשל: שתיתי וודקה עם חברים 80 שקל)" class="w-full bg-transparent outline-none text-[10px] font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
             </div>
             <button onclick="processSmartText()" class="save-btn w-full py-1.5 rounded-xl text-[10px] font-bold cursor-pointer shadow-sm">פענח והוסף תנועה</button>
           </div>
@@ -625,13 +631,15 @@
           </div>
         </section>
 
+        <!-- השוואה לחודש קודם מתוקנת -->
         <section class="summary-card p-3">
           <h3 class="text-[12px] font-semibold mb-1 text-slate-300">השוואה לחודש קודם</h3>
           <div id="monthlyComparisonBox" class="text-[11px] space-y-1" style="color:var(--text-dim)"></div>
         </section>
 
+        <!-- פילוח הוצאות (עוגה במצב סגור ופתוח) -->
         <section class="summary-card p-3 cursor-pointer transition select-none" onclick="toggleDonutExpand()">
-          <div class="flex items-center justify-between">
+          <div class="flex items-center justify-between mb-2">
             <div class="flex items-center gap-2">
               <span class="text-sm">🍩</span>
               <span class="text-[12px] font-semibold">פילוח הוצאות ותקציבים</span>
@@ -641,17 +649,24 @@
               <i id="donutArrowIcon" class="fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform"></i>
             </div>
           </div>
-          <div id="donutExpandedContent" class="hidden mt-2.5 pt-2 border-t border-[var(--border)] space-y-2.5" onclick="event.stopPropagation()">
+          
+          <!-- עוגה מוצגת תמיד גם במצב סגור -->
+          <div class="flex justify-center my-1">
             <div class="donut" id="donutChart">
               <div class="donut-center">
-                <span class="text-[9px]" style="color:var(--text-dim)">סה״כ</span>
-                <span class="tabular text-base font-bold" id="donutTotal" style="color:var(--coral)">0</span>
+                <span class="text-[8px]" style="color:var(--text-dim)">סה״כ</span>
+                <span class="tabular text-xs font-bold" id="donutCenterTotal" style="color:var(--coral)">0</span>
               </div>
             </div>
-            <div class="mt-2.5 space-y-2" id="legendList"></div>
+          </div>
+
+          <!-- פירוט מורחב ש נפתח בלחיצה -->
+          <div id="donutExpandedContent" class="hidden mt-2.5 pt-2 border-t border-[var(--border)] space-y-2" onclick="event.stopPropagation()">
+            <div class="space-y-2" id="legendList"></div>
           </div>
         </section>
 
+        <!-- תנועות החודש הנוכחי מתוקן -->
         <section class="summary-card p-3 cursor-pointer transition select-none" onclick="toggleTxExpand()">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -659,12 +674,13 @@
               <span class="text-[12px] font-semibold">תנועות החודש הנוכחי</span>
             </div>
             <div class="flex items-center gap-2">
+              <span id="txCountBadge" class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-bold">0 תנועות</span>
               <i id="txArrowIcon" class="fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform"></i>
             </div>
           </div>
           <div id="txPreviewRow" class="mt-2 text-[11px] text-slate-300 border-t border-[var(--border)] pt-2 flex items-center justify-between"></div>
           <div id="txExpandedContent" class="hidden mt-2.5 pt-2 border-t border-[var(--border)] space-y-2" onclick="event.stopPropagation()">
-            <div class="max-h-[200px] overflow-y-auto" id="txList"></div>
+            <div class="max-h-[220px] overflow-y-auto space-y-1" id="txList"></div>
           </div>
         </section>
       </main>
@@ -732,7 +748,7 @@ async function saveDataToSupabase(appState) {
 const profileSubCategoriesMap = {
   'soldier_male': {
     'אוכל': ['שקם', 'מסעדות', 'משלוחים', 'בשרייה', 'חלביה'],
-    'בילויים': ['בר', 'מסיבות', 'אלכוהול', 'מתנות'],
+    'בילויים': ['בר', 'אלכוהול', 'וודקה', 'מסיבות', 'מתנות'],
     'ציוד': ['תרמי', 'טקטי', 'פקלקפה', 'נעליים', 'מדרסים'],
     'תחבורה': ['מוניות', 'דלק', 'חניה', 'ליסינג'],
     'תקשורת': ['סלולר', 'ספוטיפיי', 'נטפליקס', 'yes / HOT / Partner', 'אייקלוד'],
@@ -741,7 +757,7 @@ const profileSubCategoriesMap = {
   },
   'soldier_female': {
     'אוכל': ['שקם', 'מסעדות', 'משלוחים', 'בשרייה', 'חלביה'],
-    'בילויים': ['בר', 'מסיבות', 'אלכוהול', 'מתנות'],
+    'בילויים': ['בר', 'אלכוהול', 'וודקה', 'מסיבות', 'מתנות'],
     'ציוד': ['תרמי', 'טקטי', 'נעליים', 'מדרסים'],
     'תחבורה': ['מוניות', 'דלק', 'חניה', 'ליסינג'],
     'תקשורת': ['סלולר', 'ספוטיפיי', 'נטפליקס', 'yes / HOT / Partner', 'אייקלוד'],
@@ -750,43 +766,43 @@ const profileSubCategoriesMap = {
   },
   'teen_male': {
     'אוכל': ['מסעדות', 'משלוחים'],
-    'בילויים': ['גיימינג', 'סקינס', 'סרטים', 'באולינג', 'אטרקציות', 'מסיבות', 'הופעות'],
+    'בילויים': ['אלכוהול', 'וודקה', 'גיימינג', 'סקינס', 'סרטים', 'אטרקציות', 'מסיבות'],
     'שופינג': ['בגדים', 'נעליים', 'תיקים', 'תכשיטים', 'כיסויים', 'גאדג\'טים', 'פארם'],
     'תחבורה': ['רבקו', 'קורקינט', 'אופניים', 'מוניות', 'רכבת'],
-    'תקשורת': ['סלולר', 'ספוטיפיי', 'נטפליקס', 'דיסקורד', 'yes / HOT / Partner', 'אייקלוד'],
-    'טיפוח': ['מספרה', 'בושם', 'דאודורנט', 'קרמים', 'היגיינה'],
+    'תקשורת': ['סלולר', 'ספוטיפיי', 'נטפליקס', 'דיסקורד', 'אייקלוד'],
+    'טיפוח': ['מספרה', 'בושם', 'דאודורנט', 'היגיינה'],
     'חיסכון': ['טלפון', 'רישיון', 'טיול', 'כללי']
   },
   'teen_female': {
     'אוכל': ['מסעדות', 'משלוחים'],
-    'בילויים': ['הופעות', 'מסיבות', 'ספא', 'סרטים', 'אטרקציות'],
+    'בילויים': ['אלכוהול', 'וודקה', 'הופעות', 'מסיבות', 'ספא', 'סרטים'],
     'שופינג': ['בגדים', 'נעליים', 'תיקים', 'תכשיטים', 'איפור', 'אביזרים', 'פארם'],
     'תחבורה': ['רבקו', 'קורקינט', 'מוניות', 'רכבת'],
-    'תקשורת': ['סלולר', 'ספוטיפיי', 'נטפליקס', 'yes / HOT / Partner', 'אייקלוד'],
-    'טיפוח': ['ציפורניים', 'גבות', 'ריסים', 'בושם', 'קרמים', 'שיער', 'היגיינה'],
+    'תקשורת': ['סלולר', 'ספוטיפיי', 'נטפליקס', 'אייקלוד'],
+    'טיפוח': ['ציפורניים', 'גבות', 'ריסים', 'בושם', 'קרמים', 'שיער'],
     'חיסכון': ['טלפון', 'רישיון', 'טיול', 'כללי']
   },
   'student_male': {
     'אוכל': ['סופר', 'קפיטריה', 'מסעדות', 'משלוחים', 'קפה'],
     'דיור': ['שכירות', 'חשמל', 'מים', 'ארנונה', 'ועד', 'אינטרנט', 'גז'],
     'לימודים': ['מכללה', 'ציוד', 'הדפסות', 'ספרים', 'קורסים', 'תוכנות'],
-    'בילויים': ['בר', 'מסיבות', 'אלכוהול', 'סרטים', 'הופעות', 'דייטים'],
-    'שופינג': ['בגדים', 'נעליים', 'מתנות', 'פארם', 'גאדג\'טים'],
+    'בילויים': ['בר', 'אלכוהול', 'וודקה', 'מסיבות', 'סרטים', 'דייטים'],
+    'שופינג': ['בגדים', 'נעליים', 'מתנות', 'פארם'],
     'תחבורה': ['רבקו', 'רכבת', 'דלק', 'חניה', 'מוניות'],
-    'תקשורת': ['סלולר', 'ספוטיפיי', 'נטפליקס', 'yes / HOT / Partner', 'אייקלוד'],
-    'טיפוח': ['מספרה', 'בושם', 'דאודורנט', 'קרמים', 'היגיינה'],
+    'תקשורת': ['סלולר', 'ספוטיפיי', 'נטפליקס', 'אייקלוד'],
+    'טיפוח': ['מספרה', 'בושם', 'דאודורנט', 'היגיינה'],
     'חיסכון': ['רכב', 'חופשה', 'חירום', 'כללי']
   },
   'adult_male': {
     'אוכל': ['סופר', 'מסעדות', 'משלוחים', 'קפה'],
     'חשבונות': ['משכנתא', 'שכירות', 'חשמל', 'מים', 'ארנונה', 'ועד', 'אינטרנט', 'גז', 'ביטוח'],
-    'תחבורה': ['רבקו', 'דלק', 'חניה', 'ליסינג', 'ביטוח', 'טסט', 'טיפולים', 'מוניות'],
+    'תחבורה': ['רבקו', 'דלק', 'חניה', 'ליסינג', 'ביטוח', 'טיפולים', 'מוניות'],
     'משפחה': ['גנים', 'צהרון', 'חינוך', 'חוגים', 'ביגוד', 'ציוד', 'מתנות'],
-    'בריאות': ['תרופות', 'משקפיים', 'טיפולים', 'ביטוח', 'רופא'],
-    'תקשורת': ['סלולר', 'ספוטיפיי', 'נטפליקס', 'yes / HOT / Partner', 'אייקלוד', 'סיבים'],
+    'בריאות': ['תרופות', 'משקפיים', 'טיפולים', 'רופא'],
+    'תקשורת': ['סלולר', 'ספוטיפיי', 'נטפליקס', 'אייקלוד', 'סיבים'],
     'שופינג': ['בגדים', 'נעליים', 'אלקטרוניקה', 'לבית', 'פארם'],
-    'בילויים': ['בר', 'חופשה', 'הופעות', 'סרטים', 'ספא'],
-    'טיפוח': ['מספרה', 'בושם', 'דאודורנט', 'קרמים', 'היגיינה'],
+    'בילויים': ['בר', 'אלכוהול', 'וודקה', 'חופשה', 'הופעות', 'סרטים'],
+    'טיפוח': ['מספרה', 'בושם', 'דאודורנט', 'היגיינה'],
     'חיסכון': ['פנסיה', 'השתלמות', 'חירום', 'השקעות', 'כללי']
   }
 };
@@ -800,9 +816,11 @@ let state = {
 let selectedNewCatColor = '#7FE8C6';
 let pendingSmartTx = null;
 let activeRecognition = null;
+let donutExpanded = false;
+let txExpanded = false;
 let currentCatTab = 'expense';
 
-const availableColors = ['#FF8D82', '#FF9F43', '#FFC85C', '#7FE8C6', '#8FB8FF', '#C7A6FF', '#FF9FD1', '#34D399', '#38BDF8'];
+const availableColors = ['#FF8D82', '#FF9F43', '#FFC85C', '#7FE8C6', '#8FB8FF', '#C7A6FF', '#FF9FD1', '#34D399', '#38BDF8', '#E11D48'];
 
 function getLocalDateString(d) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -846,18 +864,8 @@ function factoryReset() {
   }
 }
 
-function changeLanguage(lang) {
-  state.language = lang;
-  persist();
-  alert("שפה עודכנה בהצלחה");
-}
-
-function changeCurrency(curr) {
-  state.currency = curr;
-  persist();
-  renderHome();
-  renderTableScreen();
-}
+function changeLanguage(lang) { state.language = lang; persist(); alert("שפה עודכנה בהצלחה"); }
+function changeCurrency(curr) { state.currency = curr; persist(); renderHome(); renderAnalytics(); renderTableScreen(); }
 
 function initDailyReminder() {
   if ("Notification" in window && Notification.permission !== "granted") Notification.requestPermission();
@@ -910,7 +918,6 @@ window.onload = async function() {
     await saveDataToSupabase(state);
   }
 
-  // עדכון ערכים בהגדרות אם קיימים
   if(document.getElementById('langSelect')) document.getElementById('langSelect').value = state.language || 'he';
   if(document.getElementById('currencySelect')) document.getElementById('currencySelect').value = state.currency || '₪';
 
@@ -927,7 +934,6 @@ function sortTransactions() {
   }
 }
 
-// Wizard
 let tempWizard = { handle: '', name: '', balance: 0, lifeStage: 'soldier', gender: 'male' };
 function selectLifeStage(stage, btn) { tempWizard.lifeStage = stage; btn.parentNode.querySelectorAll('button').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); }
 function selectGender(gender, btn) { tempWizard.gender = gender; btn.parentNode.querySelectorAll('button').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); }
@@ -1095,6 +1101,160 @@ function renderHome(){
   document.documentElement.style.setProperty('--glow', balance >= 0 ? 'var(--glow-safe)' : 'var(--glow-danger)');
 }
 
+// ==================== מנוע אנליטיקה ועוגת תרשימים (מתוקן) ====================
+function renderAnalytics() {
+  let currentExpense = 0, currentIncome = 0;
+  const spend = {};
+  
+  state.transactions.forEach(t => {
+    if(isWithinFinancialMonth(t.date, 0)) {
+      if(t.type === 'expense') { currentExpense += t.amount; spend[t.cat] = (spend[t.cat] || 0) + t.amount; }
+      else currentIncome += t.amount;
+    }
+  });
+
+  // השוואה לחודש קודם
+  let prevExpense = 0;
+  state.transactions.forEach(t => {
+    if(isWithinFinancialMonth(t.date, -1) && t.type === 'expense') prevExpense += t.amount;
+  });
+
+  const compBox = document.getElementById('monthlyComparisonBox');
+  if(prevExpense === 0) {
+    compBox.innerHTML = `הוצאות החודש הנוכחי: <span class="font-bold tabular">${fmt(currentExpense)}</span> (אין נתונים מחודש קודם)`;
+  } else {
+    const diff = currentExpense - prevExpense;
+    const diffPercent = Math.round((Math.abs(diff) / prevExpense) * 100);
+    const diffText = diff > 0 ? `עליה של ${diffPercent}% בהוצאות` : `ירידה של ${diffPercent}% בהוצאות`;
+    const diffColor = diff > 0 ? 'text-rose-400' : 'text-emerald-400';
+    compBox.innerHTML = `
+      <div class="flex justify-between"><span>החודש הנוכחי:</span><span class="font-bold tabular">${fmt(currentExpense)}</span></div>
+      <div class="flex justify-between"><span>חודש שעבר:</span><span class="font-bold tabular">${fmt(prevExpense)}</span></div>
+      <div class="pt-1 font-bold ${diffColor}">📈 ${diffText} לעומת חודש שעבר</div>
+    `;
+  }
+
+  // עוגת תרשימים
+  const totalExpenseVal = Object.values(spend).reduce((a,b)=>a+b,0);
+  document.getElementById('previewDonutTotal').textContent = fmt(totalExpenseVal);
+  document.getElementById('donutCenterTotal').textContent = fmt(totalExpenseVal);
+
+  const total = totalExpenseVal || 1;
+  const mapKey = `${state.lifeStage}_${state.gender}`;
+  const subMap = profileSubCategoriesMap[mapKey] || profileSubCategoriesMap['soldier_male'];
+
+  let acc = 0; const stops = [];
+  state.expenseCats.forEach((cat, idx) => {
+    const amt = spend[cat.name] || 0;
+    if(amt > 0) {
+      const start = (acc / total) * 100;
+      acc += amt;
+      const end = (acc / total) * 100;
+      stops.push(`${cat.color} ${start}% ${end}%`);
+    }
+  });
+
+  const donutEl = document.getElementById('donutChart');
+  if(stops.length > 0) {
+    donutEl.style.background = `conic-gradient(${stops.join(', ')})`;
+  } else {
+    donutEl.style.background = 'var(--card-2)';
+  }
+
+  // מקרא פירוט לעוגה
+  const legend = document.getElementById('legendList');
+  legend.innerHTML = '';
+  state.expenseCats.forEach(cat => {
+    const amt = spend[cat.name] || 0;
+    if(amt > 0) {
+      const pct = Math.round((amt / total) * 100);
+      const row = document.createElement('div');
+      row.className = 'flex items-center justify-between text-[11px] py-1 px-2 rounded-lg bg-[var(--card-2)] border border-[var(--border)]';
+      row.innerHTML = `
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full" style="background:${cat.color}"></span>
+          <span class="font-bold">${cat.name}</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] text-slate-400">${pct}%</span>
+          <span class="tabular font-semibold">${fmt(amt)}</span>
+        </div>
+      `;
+      legend.appendChild(row);
+    }
+  });
+
+  // תנועות החודש הנוכחי
+  const currentTxs = state.transactions.filter(t => isWithinFinancialMonth(t.date, 0));
+  document.getElementById('txCountBadge').textContent = `${currentTxs.length} תנועות`;
+  
+  const previewRow = document.getElementById('txPreviewRow');
+  if(currentTxs.length === 0) {
+    previewRow.innerHTML = '<span class="text-[10px] text-slate-500">אין תנועות בחודש זה עדיין</span>';
+  } else {
+    const latest = currentTxs[0];
+    const sign = latest.type === 'income' ? '+' : '−';
+    const col = latest.type === 'income' ? 'var(--mint)' : 'var(--coral)';
+    previewRow.innerHTML = `
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full" style="background:${latest.color}"></span>
+        <span class="font-medium truncate max-w-[180px]">${latest.desc || latest.subCat || latest.cat}</span>
+      </div>
+      <span class="tabular font-bold" style="color:${col}">${sign}${fmt(latest.amount)}</span>
+    `;
+  }
+
+  const txList = document.getElementById('txList');
+  txList.innerHTML = '';
+  if(currentTxs.length === 0) {
+    txList.innerHTML = '<p class="text-[11px] text-center text-slate-500 py-2">אין תנועות להצגה</p>';
+  } else {
+    currentTxs.forEach(t => {
+      const row = document.createElement('div');
+      row.className = 'tx-row';
+      const sign = t.type === 'income' ? '+' : '−';
+      const col = t.type === 'income' ? 'var(--mint)' : 'var(--coral)';
+      row.innerHTML = `
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full" style="background:${t.color}"></span>
+          <div>
+            <p class="text-[11px] font-bold">${t.desc || t.subCat || t.cat}</p>
+            <p class="text-[9px] text-slate-400">${t.cat} (${t.subCat || 'כללי'}) • ${t.date || 'היום'}</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="tabular text-[11px] font-bold" style="color:${col}">${sign}${fmt(t.amount)}</span>
+          <button onclick="deleteTransaction(${t.id})" class="text-[10px] text-rose-400 cursor-pointer">מחק</button>
+        </div>
+      `;
+      txList.appendChild(row);
+    });
+  }
+}
+
+function toggleDonutExpand() {
+  donutExpanded = !donutExpanded;
+  const content = document.getElementById('donutExpandedContent');
+  const arrow = document.getElementById('donutArrowIcon');
+  if(donutExpanded) { content.classList.remove('hidden'); arrow.style.transform = 'rotate(180deg)'; }
+  else { content.classList.add('hidden'); arrow.style.transform = 'rotate(0deg)'; }
+}
+
+function toggleTxExpand() {
+  txExpanded = !txExpanded;
+  const content = document.getElementById('txExpandedContent');
+  const arrow = document.getElementById('txArrowIcon');
+  if(txExpanded) { content.classList.remove('hidden'); arrow.style.transform = 'rotate(180deg)'; }
+  else { content.classList.add('hidden'); arrow.style.transform = 'rotate(0deg)'; }
+}
+
+function deleteTransaction(id) {
+  state.transactions = state.transactions.filter(t => t.id !== id);
+  persist();
+  renderAnalytics();
+  renderHome();
+}
+
 function renderTableScreen() {
   const container = document.getElementById('excelTableContainer');
   if(!container) return;
@@ -1161,6 +1321,7 @@ function renderTableScreen() {
   container.prepend(summaryHeader);
 }
 
+// זיהוי קולי חכם כולל הוספת קטגוריות חסרות למאגר
 function toggleVoiceRecognition() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) { alert("דפדפן אינו תומך בזיהוי קולי."); return; }
@@ -1195,7 +1356,7 @@ function resetVoiceUI(){
   const btn = document.getElementById('micBtn');
   if(btn) btn.classList.remove('listening');
   const status = document.getElementById('micStatus');
-  if(status) status.textContent = 'לחץ על המיקרופון ואמר סכום, קטגוריה ותת-קטגוריה';
+  if(status) status.textContent = 'לחץ על המיקרופון ואמר הוצאות ותת-קטגוריה';
   activeRecognition = null;
 }
 
@@ -1221,9 +1382,10 @@ function parseVoiceCommandForDescModal(text){
   const mapKey = `${state.lifeStage}_${state.gender}`;
   const subMap = profileSubCategoriesMap[mapKey] || profileSubCategoriesMap['soldier_male'];
 
-  let matchedCat = state.expenseCats[0].name;
-  let matchedSub = 'כללי';
+  let matchedCat = null;
+  let matchedSub = null;
 
+  // חפש תת קטגוריה או מילת מפתח (כמו וודקה -> אלכוהול -> בילויים)
   for (let catName of Object.keys(subMap)) {
     const subs = subMap[catName];
     for (let sub of subs) {
@@ -1233,30 +1395,62 @@ function parseVoiceCommandForDescModal(text){
         break;
       }
     }
+    if (matchedCat) break;
   }
 
-  if (matchedSub === 'כללי') {
+  // אם לא נמצאה במפה, בדוק אם הקטגוריה הראשית קיימת
+  if (!matchedCat) {
     for (let cat of state.expenseCats) {
       if (text.includes(cat.name)) {
         matchedCat = cat.name;
-        matchedSub = subMap[cat.name] ? subMap[cat.name][0] : 'כללי';
+        matchedSub = 'כללי';
         break;
       }
     }
   }
 
-  const catObj = state.expenseCats.find(c => c.name === matchedCat) || state.expenseCats[0];
-  pendingSmartTx = { type: 'expense', amount, cat: matchedCat, subCat: matchedSub, color: catObj.color, date: getLocalDateString(new Date()) };
+  const warningBox = document.getElementById('missingCatWarning');
+  const mainCatSelect = document.getElementById('selectMainCategory');
+  mainCatSelect.innerHTML = '';
+  state.expenseCats.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c.name;
+    opt.textContent = c.name;
+    mainCatSelect.appendChild(opt);
+  });
 
-  document.getElementById('voiceParsedInfo').innerHTML = `זוהה: <span class="text-emerald-400 font-bold">${fmt(amount)}</span><br>קטגוריה: <span class="text-violet-400">${matchedCat}</span> (${matchedSub})`;
+  if (!matchedCat) {
+    // הקטגוריה או תת הקטגוריה אינן קיימות - הקפץ התראה ובקש שיוך
+    warningBox.classList.remove('hidden');
+    pendingSmartTx = { type: 'expense', amount, cat: state.expenseCats[0].name, subCat: text.trim(), color: state.expenseCats[0].color, date: getLocalDateString(new Date()) };
+  } else {
+    warningBox.classList.add('hidden');
+    const catObj = state.expenseCats.find(c => c.name === matchedCat) || state.expenseCats[0];
+    pendingSmartTx = { type: 'expense', amount, cat: matchedCat, subCat: matchedSub, color: catObj.color, date: getLocalDateString(new Date()) };
+  }
+
+  document.getElementById('voiceParsedInfo').innerHTML = `זוהה סכום: <span class="text-emerald-400 font-bold">${fmt(amount)}</span><br>טקסט: <span class="text-violet-400">${text}</span>`;
   document.getElementById('voiceDescInput').value = text;
   document.getElementById('voiceDescModal').classList.remove('hidden');
 }
 
 function confirmVoiceTransaction() {
   if(!pendingSmartTx) return;
+  const chosenMainCat = document.getElementById('selectMainCategory').value;
   const descVal = document.getElementById('voiceDescInput').value.trim();
+
+  const catObj = state.expenseCats.find(c => c.name === chosenMainCat) || state.expenseCats[0];
+  pendingSmartTx.cat = chosenMainCat;
+  pendingSmartTx.color = catObj.color;
   pendingSmartTx.desc = descVal ? descVal : `${pendingSmartTx.cat} - ${pendingSmartTx.subCat}`;
+
+  // הוסף את תת הקטגוריה למאגר אם אינה קיימת שם
+  const mapKey = `${state.lifeStage}_${state.gender}`;
+  if (!profileSubCategoriesMap[mapKey]) profileSubCategoriesMap[mapKey] = {};
+  if (!profileSubCategoriesMap[mapKey][chosenMainCat]) profileSubCategoriesMap[mapKey][chosenMainCat] = [];
+  if (!profileSubCategoriesMap[mapKey][chosenMainCat].includes(pendingSmartTx.subCat)) {
+    profileSubCategoriesMap[mapKey][chosenMainCat].push(pendingSmartTx.subCat);
+  }
 
   state.transactions.push({ id: Date.now(), ...pendingSmartTx });
   persist();
@@ -1295,9 +1489,6 @@ function promptSavingsGoal() {
   const val = prompt("הכנס יעד חיסכון חודשי חדש:", state.savingsGoal || 1500);
   if(val !== null && !isNaN(parseFloat(val))) { state.savingsGoal = parseFloat(val); persist(); renderHome(); }
 }
-function toggleDonutExpand() {}
-function toggleTxExpand() {}
-function renderAnalytics() {}
 </script>
 </body>
 </html>

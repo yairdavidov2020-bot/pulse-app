@@ -119,12 +119,15 @@
   .modal-overlay { position:fixed; inset:0; z-index:50; background:rgba(10,12,17,0.95); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:16px; transition: opacity .25s ease; }
   .modal-overlay.hidden { display:none !important; }
 
-  #menuModal { justify-content: flex-start !important; padding: 0 !important; background: rgba(10,12,17,0.75); }
-  #menuModal .menu-sidebar-panel {
-    width: 290px; height: 100%; max-height: 100dvh; border-radius: 0; border-left: 1px solid var(--border);
-    background: var(--bg); display: flex; flex-direction: column; padding: 16px; overflow-y: auto; animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+  /* תפריט נפתח מלמטה (Bottom Sheet) */
+  #menuModal { justify-content: flex-end !important; padding: 0 !important; background: rgba(10,12,17,0.75); }
+  #menuModal .menu-bottom-panel {
+    width: 100%; max-width: 500px; max-height: 85dvh; border-top-left-radius: 24px; border-top-right-radius: 24px;
+    border-top: 1px solid var(--border); background: var(--bg); display: flex; flex-direction: column;
+    padding: 20px 16px calc(24px + env(safe-area-inset-bottom)) 16px; overflow-y: auto;
+    animation: slideUpBottom 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
-  @keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+  @keyframes slideUpBottom { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
   .full-page-onboarding {
     position: fixed; inset: 0; z-index: 99999; background: #05070B; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px; overflow-y: auto; transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease;
@@ -423,12 +426,14 @@
     </div>
 </div>
 
+<!-- תפריט ראשי עולה מלמטה (Bottom Sheet) -->
 <div id="menuModal" class="modal-overlay hidden" onclick="if(event.target === this) closeMenuModal()">
-    <div class="menu-sidebar-panel space-y-3 shadow-2xl text-right">
+    <div class="menu-bottom-panel space-y-3 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2.5">
-            <h3 class="text-sm font-bold gradient-text flex items-center gap-2"><i class="fa-solid fa-bars"></i> תפריט ראשי</h3>
+            <h3 class="text-sm font-bold gradient-text flex items-center gap-2"><i class="fa-solid fa-bars"></i> תפריט ראשי והגדרות</h3>
             <button onclick="closeMenuModal()" class="icon-btn" style="width:28px;height:28px;"><i class="fa-solid fa-xmark text-sm"></i></button>
         </div>
+
         <div class="summary-card p-3 flex items-center gap-3 bg-[var(--card-2)] border border-[var(--border)] rounded-xl">
             <div class="w-10 h-10 rounded-full bg-emerald-500/25 border border-emerald-400/30 flex items-center justify-center text-emerald-400 font-bold text-sm" id="sidebarUserInitial">?</div>
             <div class="min-w-0 flex-1 text-right">
@@ -436,6 +441,7 @@
                 <p id="sidebarUserBalance" class="text-[10px] text-emerald-400 font-semibold tabular mt-0.5">יתרה: ₪0</p>
             </div>
         </div>
+        
         <div class="space-y-1.5 pt-1">
             <button onclick="menuGoHome()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-emerald-400 transition text-[12px] font-bold cursor-pointer">
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-house text-emerald-400 w-4"></i> בית</span>
@@ -447,8 +453,38 @@
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-table text-violet-400 w-4"></i> טבלה חודשית (אקסל)</span>
             </button>
             <button onclick="menuOpenCategories()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-violet-400 transition text-[12px] font-bold cursor-pointer">
-                <span class="flex items-center gap-2.5"><i class="fa-solid fa-tags text-violet-400 w-4"></i> קטגוריות</span>
+                <span class="flex items-center gap-2.5"><i class="fa-solid fa-tags text-violet-400 w-4"></i> קטגוריות ותקציבים</span>
             </button>
+
+            <!-- הגדרות מערכת בתוך התפריט התחתון -->
+            <div class="p-3 rounded-xl bg-[var(--card)] border border-[var(--border)] space-y-2.5 mt-2">
+                <p class="text-[11px] font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-gear"></i> הגדרות מערכת</p>
+                <div>
+                    <label class="text-[10px] font-semibold text-slate-400 flex items-center gap-1.5 mb-1"><i class="fa-solid fa-globe text-blue-400"></i> בחירת שפה</label>
+                    <select id="langSelect" onchange="changeLanguage(this.value)" class="w-full bg-[var(--card-2)] border border-[var(--border)] p-2 rounded-lg text-[11px] font-bold outline-none cursor-pointer" style="color:var(--text)">
+                        <option value="he">עברית (Hebrew)</option>
+                        <option value="en">אנגלית (English)</option>
+                        <option value="ar">ערבית (العربية)</option>
+                        <option value="ru">רוסית (Русский)</option>
+                        <option value="es">ספרדית (Español)</option>
+                        <option value="fr">צרפתית (Français)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-[10px] font-semibold text-slate-400 flex items-center gap-1.5 mb-1"><i class="fa-solid fa-coins text-amber-400"></i> בחירת מטבע</label>
+                    <select id="currencySelect" onchange="changeCurrency(this.value)" class="w-full bg-[var(--card-2)] border border-[var(--border)] p-2 rounded-lg text-[11px] font-bold outline-none cursor-pointer" style="color:var(--text)">
+                        <option value="₪">שקל (₪ ILS)</option>
+                        <option value="$">דולר ($ USD)</option>
+                        <option value="€">אירו (€ EUR)</option>
+                        <option value="£">פאונד (£ GBP)</option>
+                        <option value="¥">ין (¥ JPY)</option>
+                    </select>
+                </div>
+
+                <button onclick="factoryReset()" class="w-full py-2.5 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-400 text-[11px] font-bold flex items-center justify-center gap-1.5 hover:bg-rose-500/20 transition cursor-pointer mt-1">
+                    <i class="fa-solid fa-triangle-exclamation"></i> איפוס מלא של האפליקציה (Reset)
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -693,7 +729,6 @@ async function saveDataToSupabase(appState) {
   } catch (err) {}
 }
 
-// מפות קטגוריות ותת-קטגוריות מפורטות
 const profileSubCategoriesMap = {
   'soldier_male': {
     'אוכל': ['שקם', 'מסעדות', 'משלוחים', 'בשרייה', 'חלביה'],
@@ -804,6 +839,26 @@ function importBackup(event) {
   reader.readAsText(file);
 }
 
+function factoryReset() {
+  if(confirm("האם אתה בטוח שברצונך לאפס את כל הנתונים ולהתחיל מחדש?")) {
+    localStorage.removeItem('pulse_state_v54');
+    location.reload();
+  }
+}
+
+function changeLanguage(lang) {
+  state.language = lang;
+  persist();
+  alert("שפה עודכנה בהצלחה");
+}
+
+function changeCurrency(curr) {
+  state.currency = curr;
+  persist();
+  renderHome();
+  renderTableScreen();
+}
+
 function initDailyReminder() {
   if ("Notification" in window && Notification.permission !== "granted") Notification.requestPermission();
   setInterval(() => {
@@ -855,6 +910,10 @@ window.onload = async function() {
     await saveDataToSupabase(state);
   }
 
+  // עדכון ערכים בהגדרות אם קיימים
+  if(document.getElementById('langSelect')) document.getElementById('langSelect').value = state.language || 'he';
+  if(document.getElementById('currencySelect')) document.getElementById('currencySelect').value = state.currency || '₪';
+
   setDynamicGreeting();
   buildFinancialDayDropdown();
   buildTableMonthDropdown();
@@ -896,7 +955,6 @@ async function startCinematicBuild() {
   state.handle = handle; state.userName = name; state.baseline = balance;
   state.lifeStage = tempWizard.lifeStage; state.gender = tempWizard.gender;
   
-  // בניית קטגוריות ראשיות מתוך המפה
   const subMap = profileSubCategoriesMap[mapKey];
   state.expenseCats = Object.keys(subMap).map((catName, idx) => ({
     name: catName,
@@ -1037,7 +1095,6 @@ function renderHome(){
   document.documentElement.style.setProperty('--glow', balance >= 0 ? 'var(--glow-safe)' : 'var(--glow-danger)');
 }
 
-// ==================== טבלה חודשית (אקסל היררכי) ====================
 function renderTableScreen() {
   const container = document.getElementById('excelTableContainer');
   if(!container) return;
@@ -1049,7 +1106,6 @@ function renderTableScreen() {
   const mapKey = `${state.lifeStage}_${state.gender}`;
   const subMap = profileSubCategoriesMap[mapKey] || profileSubCategoriesMap['soldier_male'];
 
-  // איסוף הוצאות לפי קטגוריה ראשית ותת-קטגוריה בחודש הנבחר
   let totalMonthExpense = 0;
 
   state.expenseCats.forEach(cat => {
@@ -1096,7 +1152,6 @@ function renderTableScreen() {
     container.appendChild(card);
   });
 
-  // כרטיס סיכום חודשי למעלה
   const summaryHeader = document.createElement('div');
   summaryHeader.className = 'summary-card p-3 bg-gradient-to-l from-emerald-500/15 to-blue-500/15 border border-emerald-400/30 flex items-center justify-between';
   summaryHeader.innerHTML = `
@@ -1106,7 +1161,6 @@ function renderTableScreen() {
   container.prepend(summaryHeader);
 }
 
-// צד קולי ותתי קטגוריות
 function toggleVoiceRecognition() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) { alert("דפדפן אינו תומך בזיהוי קולי."); return; }
@@ -1170,7 +1224,6 @@ function parseVoiceCommandForDescModal(text){
   let matchedCat = state.expenseCats[0].name;
   let matchedSub = 'כללי';
 
-  // זיהוי חכם של תת-קטגוריה מתוך המילים שנאמרו
   for (let catName of Object.keys(subMap)) {
     const subs = subMap[catName];
     for (let sub of subs) {
@@ -1182,7 +1235,6 @@ function parseVoiceCommandForDescModal(text){
     }
   }
 
-  // אם לא נמצאה תת-קטגוריה ספציפית אך נמצאה קטגוריה ראשית
   if (matchedSub === 'כללי') {
     for (let cat of state.expenseCats) {
       if (text.includes(cat.name)) {
@@ -1220,7 +1272,6 @@ function cancelVoiceTransaction() {
   resetVoiceUI();
 }
 
-// עזרים נוספים
 function openCategoriesModal() { document.getElementById('categoriesModal').classList.remove('hidden'); renderModalCategoryList(); }
 function closeCategoriesModal() { document.getElementById('categoriesModal').classList.add('hidden'); }
 function renderModalCategoryList() {

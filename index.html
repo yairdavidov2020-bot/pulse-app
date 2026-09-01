@@ -86,7 +86,7 @@
   .field-shell:focus-within{ border-color: var(--mint); }
 
   .wizard-option-btn {
-    display: flex; align-items: center; justify-content: space-between; padding: 10px 14px;
+    display: flex; align-items: center; justify-content: space-between; padding: 12px 14px;
     border-radius: 12px; background: var(--card-2); border: 1px solid var(--border);
     color: var(--text); font-weight: 600; font-size: 12px; cursor: pointer; transition: all 0.2s;
   }
@@ -129,9 +129,8 @@
   @keyframes slideInLeft { from { transform: translateX(-100%); } to { transform: translateX(0); } }
 
   .full-page-onboarding {
-    position: fixed; inset: 0; z-index: 99999; background: #05070B; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px; overflow-y: auto; transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease;
+    position: fixed; inset: 0; z-index: 99999; background: #05070B; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px; overflow-y: auto;
   }
-  .full-page-onboarding.closing { transform: translateY(-100%) scale(1.05); opacity: 0; pointer-events: none; }
   .full-page-onboarding.hidden { display: none !important; }
 
   .road-city-bg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
@@ -265,7 +264,7 @@
     </div>
 </div>
 
-<!-- ONBOARDING WIZARD -->
+<!-- 5-STEP CLEAN ONBOARDING WIZARD -->
 <div id="onboarding-step-0" class="full-page-onboarding hidden">
     <div class="road-city-bg">
         <svg class="w-full h-full" viewBox="0 0 400 800" preserveAspectRatio="none">
@@ -292,7 +291,7 @@
 
         <div class="space-y-3 pt-2">
             <button onclick="wizardNextStep(1)" class="w-full py-3.5 rounded-2xl font-bold text-sm shadow-xl cursor-pointer bg-gradient-to-l from-emerald-500 to-teal-600 text-white hover:opacity-95 transition flex items-center justify-center gap-2">
-                <span>התחל שאלון פתיחה קצרצר</span>
+                <span>התחל הגדרה מהירה</span>
                 <i class="fa-solid fa-arrow-left text-xs"></i>
             </button>
             <label class="w-full py-2.5 px-4 rounded-xl font-bold text-xs cursor-pointer bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-center gap-2">
@@ -303,68 +302,128 @@
     </div>
 </div>
 
+<!-- Step 1: Personal info -->
 <div id="onboarding-step-1" class="full-page-onboarding hidden">
-    <div class="onboarding-content-box text-right space-y-3 p-4 bg-[var(--card)] rounded-3xl border border-[var(--border)] shadow-2xl">
+    <div class="onboarding-content-box text-right space-y-4 p-5 bg-[var(--card)] rounded-3xl border border-[var(--border)] shadow-2xl">
         <div class="text-center space-y-1">
-            <h2 class="text-lg font-black gradient-text">התאמה אישית של הפרופיל</h2>
-            <p class="text-xs text-slate-300">בחר את השלב שלך בחיים ואת הפרופיל שלך:</p>
+            <span class="text-[10px] text-emerald-400 font-bold">שלב 1 מתוך 5</span>
+            <h2 class="text-base font-black gradient-text">הכרות אישית</h2>
+            <p class="text-xs text-slate-300">איך לקרוא לך ומה כינוי המשתמש שלך?</p>
         </div>
-
-        <div class="space-y-1.5">
-            <label class="text-[11px] font-bold text-emerald-400">1. שלב בחיים:</label>
-            <div class="grid grid-cols-2 gap-2">
-                <button onclick="selectLifeStage('teen', this)" class="wizard-option-btn selected">נער/ה 🛹</button>
-                <button onclick="selectLifeStage('soldier', this)" class="wizard-option-btn">חייל/ת 🪖</button>
-                <button onclick="selectLifeStage('young_adult', this)" class="wizard-option-btn">צעירים/משוחררים 🌴</button>
-                <button onclick="selectLifeStage('student', this)" class="wizard-option-btn">סטודנט/ית 🎓</button>
-                <button onclick="selectLifeStage('adult', this)" class="wizard-option-btn col-span-2">מבוגר/ת 💼</button>
+        <div class="space-y-3">
+            <div class="field-shell flex items-center px-4 py-3">
+                <input id="wizHandle" type="text" placeholder="שם משתמש ייחודי (Handle)..." class="amount-input text-center font-bold text-sm" />
+            </div>
+            <div class="field-shell flex items-center px-4 py-3">
+                <input id="wizName" type="text" placeholder="שם תצוגה באפליקציה..." class="amount-input text-center font-bold text-sm" />
             </div>
         </div>
-
-        <div class="space-y-1.5 pt-1">
-            <label class="text-[11px] font-bold text-emerald-400">2. מגדר / פרופיל אישי:</label>
-            <div class="grid grid-cols-3 gap-2">
-                <button onclick="selectGender('male', this)" class="wizard-option-btn selected justify-center">גבר</button>
-                <button onclick="selectGender('female', this)" class="wizard-option-btn justify-center">אישה</button>
-                <button onclick="selectGender('family', this)" class="wizard-option-btn justify-center">זוג/משפחה 👑</button>
-            </div>
-        </div>
-
-        <button onclick="wizardNextStep(2)" class="w-full py-3 rounded-2xl font-bold text-xs shadow-xl cursor-pointer bg-gradient-to-l from-emerald-500 to-teal-600 text-white hover:opacity-95 transition flex items-center justify-between px-5 mt-2">
-            <span>המשך לפרטי חשבון</span>
+        <button onclick="wizardNextStep(2)" class="w-full py-3 rounded-2xl font-bold text-xs shadow-xl cursor-pointer bg-gradient-to-l from-emerald-500 to-teal-600 text-white hover:opacity-95 transition flex items-center justify-between px-5">
+            <span>המשך ליתרת בסיס</span>
             <i class="fa-solid fa-arrow-left text-xs"></i>
         </button>
     </div>
 </div>
 
+<!-- Step 2: Base balance -->
 <div id="onboarding-step-2" class="full-page-onboarding hidden">
     <div class="onboarding-content-box text-right space-y-4 p-5 bg-[var(--card)] rounded-3xl border border-[var(--border)] shadow-2xl">
         <div class="text-center space-y-1">
-            <h2 class="text-base font-black gradient-text">פרטים אחרונים לסיום</h2>
-            <p class="text-xs text-slate-300">כדי שנתחיל ברגל ימין ובדייקנות:</p>
+            <span class="text-[10px] text-emerald-400 font-bold">שלב 2 מתוך 5</span>
+            <h2 class="text-base font-black gradient-text">יתרת בסיס בעו״ש</h2>
+            <p class="text-xs text-slate-300">מה היתרה הנוכחית בחשבון?</p>
         </div>
-
-        <div class="space-y-2.5">
-            <div class="field-shell flex items-center px-4 py-3">
-                <input id="wizHandle" type="text" placeholder="שם משתמש ייחודי..." class="amount-input text-center font-bold text-sm" />
-            </div>
-            <div class="field-shell flex items-center px-4 py-3">
-                <input id="wizName" type="text" placeholder="איך לקרוא לך באפליקציה?" class="amount-input text-center font-bold text-sm" />
-            </div>
+        <div class="space-y-3">
             <div class="field-shell flex items-center px-4 py-3">
                 <span class="text-base font-bold ml-2 text-emerald-400">₪</span>
-                <input id="wizBalance" type="tel" inputmode="decimal" placeholder="יתרה התחלתית בעו״ש..." class="amount-input text-center text-sm" />
+                <input id="wizBalance" type="tel" inputmode="decimal" placeholder="סכום בעו״ש..." class="amount-input text-center text-sm" />
             </div>
         </div>
+        <button onclick="wizardNextStep(3)" class="w-full py-3 rounded-2xl font-bold text-xs shadow-xl cursor-pointer bg-gradient-to-l from-emerald-500 to-teal-600 text-white hover:opacity-95 transition flex items-center justify-between px-5">
+            <span>המשך למחזור פיננסי</span>
+            <i class="fa-solid fa-arrow-left text-xs"></i>
+        </button>
+    </div>
+</div>
 
-        <button onclick="startCinematicBuild()" class="w-full py-3.5 rounded-2xl font-bold text-sm shadow-xl cursor-pointer bg-gradient-to-l from-emerald-500 to-teal-600 text-white hover:opacity-95 transition flex items-center justify-between px-5">
-            <span>בנה לי את העולמות הפיננסיים</span>
+<!-- Step 3: Financial cycle day -->
+<div id="onboarding-step-3" class="full-page-onboarding hidden">
+    <div class="onboarding-content-box text-right space-y-4 p-5 bg-[var(--card)] rounded-3xl border border-[var(--border)] shadow-2xl">
+        <div class="text-center space-y-1">
+            <span class="text-[10px] text-emerald-400 font-bold">שלב 3 מתוך 5</span>
+            <h2 class="text-base font-black gradient-text">מחזור חודשי</h2>
+            <p class="text-xs text-slate-300">באיזה תאריך בחודש מתחיל החודש הפיננסי שלך (משכורת/קצבה)?</p>
+        </div>
+        <div class="space-y-3">
+            <div class="field-shell px-4 py-3">
+                <select id="wizFinancialDay" class="w-full bg-transparent outline-none text-center font-bold text-sm cursor-pointer" style="color:var(--text)">
+                    <option value="1">1 לחודש</option>
+                    <option value="5">5 לחודש</option>
+                    <option value="10">10 לחודש</option>
+                    <option value="15">15 לחודש</option>
+                    <option value="20">20 לחודש</option>
+                    <option value="25">25 לחודש</option>
+                </select>
+            </div>
+        </div>
+        <button onclick="wizardNextStep(4)" class="w-full py-3 rounded-2xl font-bold text-xs shadow-xl cursor-pointer bg-gradient-to-l from-emerald-500 to-teal-600 text-white hover:opacity-95 transition flex items-center justify-between px-5">
+            <span>המשך ליעד חיסכון</span>
+            <i class="fa-solid fa-arrow-left text-xs"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Step 4: Monthly savings goal -->
+<div id="onboarding-step-4" class="full-page-onboarding hidden">
+    <div class="onboarding-content-box text-right space-y-4 p-5 bg-[var(--card)] rounded-3xl border border-[var(--border)] shadow-2xl">
+        <div class="text-center space-y-1">
+            <span class="text-[10px] text-emerald-400 font-bold">שלב 4 מתוך 5</span>
+            <h2 class="text-base font-black gradient-text">יעד חיסכון חודשי</h2>
+            <p class="text-xs text-slate-300">כמה תרצה לשים בצד בכל חודש?</p>
+        </div>
+        <div class="space-y-3">
+            <div class="field-shell flex items-center px-4 py-3">
+                <span class="text-base font-bold ml-2 text-emerald-400">₪</span>
+                <input id="wizSavingsGoal" type="tel" inputmode="decimal" placeholder="1500..." value="1500" class="amount-input text-center text-sm" />
+            </div>
+        </div>
+        <button onclick="wizardNextStep(5)" class="w-full py-3 rounded-2xl font-bold text-xs shadow-xl cursor-pointer bg-gradient-to-l from-emerald-500 to-teal-600 text-white hover:opacity-95 transition flex items-center justify-between px-5">
+            <span>המשך למטרה מרכזית</span>
+            <i class="fa-solid fa-arrow-left text-xs"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Step 5: Main Financial Goal -->
+<div id="onboarding-step-5" class="full-page-onboarding hidden">
+    <div class="onboarding-content-box text-right space-y-4 p-5 bg-[var(--card)] rounded-3xl border border-[var(--border)] shadow-2xl">
+        <div class="text-center space-y-1">
+            <span class="text-[10px] text-emerald-400 font-bold">שלב 5 מתוך 5</span>
+            <h2 class="text-base font-black gradient-text">המטרה הכלכלית המרכזית</h2>
+            <p class="text-xs text-slate-300">מה המטרה הכי חשובה לך כרגע בניהול הכסף?</p>
+        </div>
+        <div class="space-y-2">
+            <button onclick="selectMainGoal('peace', this)" class="wizard-option-btn selected w-full">
+                <span>🧘‍♂️ ראש שקט (לסיים חודש בלי הפתעות)</span>
+            </button>
+            <button onclick="selectMainGoal('saving', this)" class="wizard-option-btn w-full">
+                <span>🎯 חיסכון ליעד (לטייל, לרכוש פרויקט גדול)</span>
+            </button>
+            <button onclick="selectMainGoal('awareness', this)" class="wizard-option-btn w-full">
+                <span>📊 מודעות (לראות לאן הכסף זורם ביום-יום)</span>
+            </button>
+            <button onclick="selectMainGoal('control', this)" class="wizard-option-btn w-full">
+                <span>🛡️ שליטה קפדנית (לעצור זליגה של הוצאות)</span>
+            </button>
+        </div>
+        <button onclick="startCinematicBuild()" class="w-full py-3.5 rounded-2xl font-bold text-sm shadow-xl cursor-pointer bg-gradient-to-l from-emerald-500 to-teal-600 text-white hover:opacity-95 transition flex items-center justify-between px-5 mt-2">
+            <span>בנה לי את האפליקציה</span>
             <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
         </button>
     </div>
 </div>
 
-<div id="onboarding-step-3" class="full-page-onboarding hidden">
+<div id="onboarding-step-6" class="full-page-onboarding hidden">
     <div class="onboarding-content-box text-center space-y-6 p-6 bg-[var(--card)] rounded-3xl border border-emerald-400/40 shadow-2xl">
         <div class="relative flex items-center justify-center my-4">
             <div class="absolute -inset-10 rounded-full bg-emerald-500/25 blur-2xl animate-pulse"></div>
@@ -373,8 +432,8 @@
             </div>
         </div>
         <div class="space-y-3">
-            <h2 id="buildTitle" class="text-xl font-black gradient-text">מנתח את הפרופיל שלך...</h2>
-            <p id="buildSubText" class="text-xs text-slate-300 leading-relaxed min-h-[36px]">מתאים את מערך הקטגוריות והתקציבים במיוחד עבורך...</p>
+            <h2 id="buildTitle" class="text-xl font-black gradient-text">מכין את הדשבורד האישי שלך...</h2>
+            <p id="buildSubText" class="text-xs text-slate-300 leading-relaxed min-h-[36px]">מסדר את כל הקטגוריות וההגדרות במיוחד בשבילך...</p>
         </div>
         <div class="space-y-1.5">
             <div class="w-full bg-[var(--card-2)] h-3 rounded-full overflow-hidden border border-[var(--border)] p-0.5">
@@ -498,7 +557,6 @@
             <button onclick="menuGoTable()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-violet-400 transition text-[12px] font-bold cursor-pointer">
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-table text-violet-400 w-4"></i> טבלה חודשית (אקסל)</span>
             </button>
-            <!-- גישה לקטגוריות יושבת בתוך התפריט הראשי במקום סגור ומוגן -->
             <button onclick="menuOpenCategories()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-violet-400 transition text-[12px] font-bold cursor-pointer">
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-tags text-violet-400 w-4"></i> ניהול קטגוריות מערכת</span>
             </button>
@@ -584,6 +642,20 @@
             <p class="text-sm font-bold tracking-wide text-slate-300">יתרה בעו״ש</p>
             <h1 class="tabular text-[42px] sm:text-[48px] font-black mt-1 leading-none tracking-tight" id="balanceValue">0</h1>
             <svg class="ecg-line" viewBox="0 0 340 24" preserveAspectRatio="none"><path d="M0,12 L60,12 L72,2 L84,22 L96,12 L150,12 L162,4 L174,12 L340,12" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </section>
+
+        <!-- כרטיס טיפ יומי מתחלף -->
+        <section class="summary-card p-2 flex items-start gap-2 bg-gradient-to-l from-emerald-500/10 to-blue-500/10 border border-emerald-400/30 my-0.5">
+          <div class="w-6 h-6 rounded-lg bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 text-xs flex-shrink-0 mt-0.5">
+            <i class="fa-solid fa-lightbulb"></i>
+          </div>
+          <div class="flex-1 min-w-0 text-right">
+            <div class="flex items-center justify-between mb-0.5">
+              <span class="text-[9px] font-bold text-emerald-400">הטיפ היומי 💡</span>
+              <span id="tipDayNumber" class="text-[8px] text-slate-400 tabular"></span>
+            </div>
+            <p id="dailyTipText" class="text-[10px] text-slate-200 leading-tight font-medium">טוען טיפ יומי...</p>
           </div>
         </section>
 
@@ -791,10 +863,10 @@ async function saveDataToSupabase(appState) {
 const masterCategoriesMap = {
   'אוכל': ['סופר', 'מסעדה', 'משלוח', 'קפה', 'שקם', 'קצבייה', 'חטיפים', 'מאפייה', 'גלידה', 'פירות', 'ירקות', 'משקאות', 'שווארמה', 'פיצה', 'סושי', 'בשר', 'חלב', 'בישול', 'מכולת', 'מעדנייה', 'דגים', 'עופות', 'פיצוחים', 'תבלינים', 'שימורים', 'דגנים', 'בורקס', 'עוגות', 'שוקולד', 'מתוקים', 'טייקאוויי', 'קפיטריה', 'מזנון', 'חומוסיות', 'פלאפל', 'סביח', 'המבורגר', 'נודלס', 'פסטה', 'סלטים', 'מיצים', 'שייקים', 'קונדיטוריה', 'יין', 'בירה', 'אלכוהול', 'לחם', 'גבינה', 'ביצים', 'שמן'],
   'בילויים': ['בר', 'מסיבה', 'מתנה', 'הופעה', 'סרט', 'טיול', 'גיימינג', 'פאב', 'קריוקי', 'הצגה', 'מוזיאון', 'באולינג', 'קארטינג', 'בריחה', 'דייט', 'מועדון', 'פסטיבל', 'סטנדאפ', 'קונצרט', 'קרקס', 'תיאטרון', 'אמפי', 'פיקניק', 'קמפינג', 'שייט', 'צניחה', 'ספא', 'אטרקציה', 'פארק', 'לונה פארק', 'ביליארד', 'לייזרטג'],
-  'שופינג': ['בגדים', 'נעליים', 'תיק', 'תכשיט', 'גאדגט', 'פארם', 'שעון', 'משקפיים', 'כובע', 'מעיל', 'חגורה', 'ארנק', 'בשמים', 'חולצה', 'מכנס', 'גרביים', 'תחתונים', 'פיגמה', 'שמלה', 'חצאית', 'חליפה', 'עניבה', 'צעעיף', 'כפפות', 'מטריה', 'מזוודה', 'שרשרת', 'צמיד', 'טבעת', 'עגילים', 'איפור', 'קרם', 'שמפו', 'סבון'],
+  'שופינג': ['בגדים', 'נעליים', 'תיק', 'תכשיט', 'גאדגט', 'פארם', 'שעון', 'משקפיים', 'כובע', 'מעיל', 'חגורה', 'ארנק', 'בשמים', 'חולצה', 'מכנס', 'גרביים', 'תחתונים', 'פיגמה', 'שמלה', 'חצאית', 'חליפה', 'עניבה', 'צעיף', 'כפפות', 'מטריה', 'מזוודה', 'שרשרת', 'צמיד', 'טבעת', 'עגילים', 'איפור', 'קרם', 'שמפו', 'סבון'],
   'תחבורה': ['רבקו', 'דלק', 'חניה', 'מונית', 'רכבת', 'קורקינט', 'ליסינג', 'אוטובוס', 'מטוס', 'סירה', 'אופניים', 'ביטוח', 'טיפול', 'שטיפה', 'טסט', 'קנסות', 'מטרונית', 'שיתופי', 'ליים', 'ווינד', 'בירד', 'אגרה', 'פנצריה', 'גורר', 'חילוץ'],
   'תקשורת': ['סלולר', 'ספוטיפיי', 'נטפליקס', 'אייקלוד', 'סיבים', 'דיסקורד', 'אמזון', 'יוטיוב', 'פלייסטיישן', 'סטים', 'פטריאון', 'אדובי', 'זום', 'וואטסאפ', 'טלגרם', 'אינסטגרם', 'טיקטוק', 'פייסבוק', 'לינקדין', 'טוויטר', 'סלקום', 'פלאפון', 'פרטנר', 'הוט', 'גולן', 'רימון', 'אקספון', 'מייקרוסופט', 'גוגל', 'אפל', 'דרופבוקס'],
-  'טלוויזיה': ['יס', 'הוט', 'פרטנר', 'סלקום', 'סטינג', 'נקסט', 'פריטיבי', 'עידן', 'שידור', 'כבלים', 'לווויין', 'סטרימינג', 'ערוצים', 'ממיר', 'אנטנה'],
+  'טלוויזיה': ['יס', 'הוט', 'פרטנר', 'סלקום', 'סטינג', 'נקסט', 'פריטיבי', 'עידן', 'שידור', 'כבלים', 'לוויין', 'סטרימינג', 'ערוצים', 'ממיר', 'אנטנה'],
   'דיור': ['שכירות', 'משכנתא', 'חשמל', 'מים', 'ארנונה', 'אינטרנט', 'גז', 'ועד', 'שיפוץ', 'רהיטים', 'מקרר', 'מכונה', 'מזגן', 'מנורה', 'מנעולן', 'אינסטלטור', 'צבע', 'טפט', 'שטיח', 'ווילון', 'מיטה', 'ארון', 'שולחן', 'כיסא', 'שידה', 'ספה', 'כורסה', 'מזרון', 'כרית', 'שמיכה', 'מגבת', 'תנור', 'מדיח', 'מיקרוגל', 'שואב', 'קומקום', 'טוסטר', 'בלנדר', 'מעבד', 'דוד', 'פלדלת', 'מפתח', 'שער', 'חצר', 'גינה', 'מרפסת', 'מחסן'],
   'טיפוח': ['מספרה', 'שיער', 'ציפורניים', 'גבות', 'היגיינה', 'זקן', 'החלקה', 'שעווה', 'דאודורנט', 'ספא', 'עיסוי', 'מניקור', 'פדיקור', 'פן', 'תספורת', 'שפתון', 'מסקרה', 'צללית', 'מייקאפ', 'מרכך', 'מסכה', 'פילינג', 'לק', 'גל', 'גילוח', 'תער', 'לייזר'],
   'ציוד': ['תרמי', 'טקטי', 'פקלקפה', 'כלים', 'תיקים', 'אולר', 'פנס', 'שקש', 'אוהל', 'וסט', 'פאוץ', 'מימייה', 'קסדה', 'ברכיות', 'מרפקיות', 'משקפיים', 'שכפצ', 'חבל', 'קרבינה', 'שפצור', 'מצפן', 'משקפת', 'פקק', 'קופסה', 'רשת', 'אבזם', 'איזולירבנד', 'פלפל', 'שקית', 'תרמיל', 'קיטבג', 'ארגז', 'פטיש', 'מברג', 'מפתח', 'פלייר', 'מסור', 'מטר', 'סולם', 'מקדחה'],
@@ -816,9 +888,19 @@ const masterCategoriesMap = {
   'תיקונים': ['בורג', 'אום', 'דיבל', 'דבק', 'סיליקון', 'מטר', 'פלס', 'רולר', 'שפכטל', 'טיח']
 };
 
+const tipsList = [
+  "רוצה לקנות משהו יקר? חכה 48 שעות לפני שאתה מוציא את האשראי. לרוב, הדחף הרגעי עובר.",
+  "הוצאות קטנות מצטברות: קפה ומאפה כל יום זה כמעט 600 שקל בחודש!",
+  "ניקוי מנויים: אחת לחצי שנה עשה מעבר על כרטיס האשראי ובדוק אילו מנויים אתה לא באמת פותח.",
+  "קניות בסופר: לעולם אל תלך לסופר רעב או בלי רשימה מסודרת.",
+  "אוטומציה של חיסכון: הגדר העברה אוטומטית לחיסכון ביום שבו נכנסת המשכורת.",
+  "בדיקת כפילויות ביטוח: ודא שאין לך ביטוחים כפולים שאתה משלם עליהם סתם.",
+  "השקעה בעצמך: קורס מקצועי או שיפור מיומנויות הם ההשקעות המשתלמות ביותר לעתיד שלך."
+];
+
 let state = {
-  handle: '', userName: '', baseline: null, lifeStage: 'soldier', gender: 'male',
-  onboardingCompleted: false, financialDay: 1, savingsGoal: 1500, currency: '₪', language: 'he',
+  handle: '', userName: '', baseline: null, financialDay: 1, savingsGoal: 1500, mainGoal: 'peace',
+  currency: '₪', language: 'he', onboardingCompleted: false,
   recurringItems: [], expenseCats: [], incomeCats: [{name:'משכורת', color:'#7FE8C6', budget:0}], transactions: []
 };
 
@@ -830,7 +912,7 @@ function getLocalDateString(d) {
 
 function persist() {
   sortTransactions();
-  localStorage.setItem('pulse_state_v57', JSON.stringify(state));
+  localStorage.setItem('pulse_state_v58', JSON.stringify(state));
   saveDataToSupabase(state);
 }
 
@@ -876,7 +958,7 @@ async function factoryReset() {
         await supabaseClient.from('app_data').delete().eq('id', state.handle);
       } catch(e) {}
     }
-    localStorage.removeItem('pulse_state_v57');
+    localStorage.removeItem('pulse_state_v58');
     location.reload();
   }
 }
@@ -996,19 +1078,19 @@ window.onload = async function() {
     if(splash) { splash.style.opacity = '0'; setTimeout(() => splash.remove(), 700); }
   }, 1600);
 
-  let saved = localStorage.getItem('pulse_state_v57');
+  let saved = localStorage.getItem('pulse_state_v58');
   if(saved) {
     try {
       state = JSON.parse(saved);
     } catch(e) {
-      localStorage.removeItem('pulse_state_v57');
+      localStorage.removeItem('pulse_state_v58');
     }
   }
 
   if (state.handle && supabaseClient) {
     try {
       const cloudData = await loadDataFromSupabase();
-      if (cloudData && cloudData.userName) { state = cloudData; localStorage.setItem('pulse_state_v57', JSON.stringify(state)); }
+      if (cloudData && cloudData.userName) { state = cloudData; localStorage.setItem('pulse_state_v58', JSON.stringify(state)); }
     } catch(e) {}
   }
 
@@ -1026,6 +1108,8 @@ window.onload = async function() {
     if(state.userName) document.getElementById('wizName').value = state.userName;
     if(state.handle) document.getElementById('wizHandle').value = state.handle;
     if(state.baseline !== null) document.getElementById('wizBalance').value = state.baseline;
+    if(state.savingsGoal) document.getElementById('wizSavingsGoal').value = state.savingsGoal;
+    if(state.financialDay) document.getElementById('wizFinancialDay').value = state.financialDay;
 
     document.getElementById('onboarding-step-0').classList.remove('hidden');
   } else {
@@ -1040,6 +1124,7 @@ window.onload = async function() {
   buildFinancialDayDropdown();
   buildTableMonthDropdown();
   initDailyReminder();
+  loadDailyTip();
   renderHome();
 };
 
@@ -1049,33 +1134,44 @@ function sortTransactions() {
   }
 }
 
-let tempWizard = { handle: '', name: '', balance: 0, lifeStage: 'soldier', gender: 'male' };
-function selectLifeStage(stage, btn) { tempWizard.lifeStage = stage; btn.parentNode.querySelectorAll('button').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); }
-function selectGender(gender, btn) { tempWizard.gender = gender; btn.parentNode.querySelectorAll('button').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); }
+let tempWizard = { handle: '', name: '', balance: 0, financialDay: 1, savingsGoal: 1500, mainGoal: 'peace' };
+function selectMainGoal(goal, btn) {
+  tempWizard.mainGoal = goal;
+  btn.parentNode.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
 function wizardNextStep(stepNum) {
-  if (stepNum === 1) { document.getElementById('onboarding-step-0').classList.add('hidden'); document.getElementById('onboarding-step-1').classList.remove('hidden'); }
-  else if (stepNum === 2) { document.getElementById('onboarding-step-1').classList.add('hidden'); document.getElementById('onboarding-step-2').classList.remove('hidden'); }
+  for(let i=0; i<=6; i++) {
+    const el = document.getElementById('onboarding-step-' + i);
+    if(el) el.classList.add('hidden');
+  }
+  document.getElementById('onboarding-step-' + stepNum).classList.remove('hidden');
 }
 
 async function startCinematicBuild() {
   const handle = document.getElementById('wizHandle').value.trim().toLowerCase();
   const name = document.getElementById('wizName').value.trim();
   const balance = parseFloat(document.getElementById('wizBalance').value);
+  const finDay = parseInt(document.getElementById('wizFinancialDay').value) || 1;
+  const savGoal = parseFloat(document.getElementById('wizSavingsGoal').value) || 1500;
 
   if(!handle) { alert("נא להזין שם משתמש"); return; }
   if(!name) { alert("נא להזין את שמך"); return; }
   if(isNaN(balance)) { alert("נא להזין יתרה התחלתית תקינה"); return; }
 
-  tempWizard.handle = handle; tempWizard.name = name; tempWizard.balance = balance;
-  document.getElementById('onboarding-step-2').classList.add('hidden');
-  document.getElementById('onboarding-step-3').classList.remove('hidden');
-
   state.handle = handle; 
   state.userName = name; 
   state.baseline = balance;
-  state.lifeStage = tempWizard.lifeStage; 
-  state.gender = tempWizard.gender;
+  state.financialDay = finDay;
+  state.savingsGoal = savGoal;
   state.onboardingCompleted = true;
+  
+  for(let i=0; i<=5; i++) {
+    const el = document.getElementById('onboarding-step-' + i);
+    if(el) el.classList.add('hidden');
+  }
+  document.getElementById('onboarding-step-6').classList.remove('hidden');
   
   const keys = Object.keys(masterCategoriesMap);
   state.expenseCats = keys.map((catName, idx) => ({
@@ -1087,24 +1183,41 @@ async function startCinematicBuild() {
   persist();
 
   const steps = [
-    { progress: 25, title: "מאמת את פרטי הפרופיל...", sub: `שלום ${name}, מחבר את הפרופיל...` },
+    { progress: 25, title: "מאמת את פרטי הפרופיל...", sub: `שלום ${name}, מחבר את הפרופיל שלך...` },
     { progress: 60, title: "טוען את מאגר-העל והקטגוריות...", sub: "מסדר את כל המערכת במיוחד בשבילך..." },
     { progress: 100, title: "הדשבורד האישי שלך מוכן!", sub: "הכל תפור בול בשבילך." }
   ];
 
   for (let i = 0; i < steps.length; i++) {
-    await new Promise(r => setTimeout(r, 1200));
+    await new Promise(r => setTimeout(r, 1000));
     document.getElementById('buildProgressBar').style.width = steps[i].progress + '%';
     document.getElementById('buildPercentText').textContent = steps[i].progress + '%';
     document.getElementById('buildTitle').textContent = steps[i].title;
     document.getElementById('buildSubText').textContent = steps[i].sub;
   }
 
-  await new Promise(r => setTimeout(r, 800));
-  document.getElementById('onboarding-step-3').classList.add('hidden');
+  await new Promise(r => setTimeout(r, 600));
+  document.getElementById('onboarding-step-6').classList.add('hidden');
   document.getElementById('tutorialModal').classList.remove('hidden');
   setDynamicGreeting();
+  buildFinancialDayDropdown();
+  loadDailyTip();
   renderHome();
+}
+
+function loadDailyTip() {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  const diff = (now - start) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
+  const oneDay = 1000 * 60 * 60 * 24;
+  const dayOfYear = Math.floor(diff / oneDay);
+  
+  const selectedTip = tipsList[dayOfYear % tipsList.length];
+  const tipEl = document.getElementById('dailyTipText');
+  const dayEl = document.getElementById('tipDayNumber');
+  
+  if(tipEl) tipEl.textContent = selectedTip;
+  if(dayEl) dayEl.textContent = `טיפ #${(dayOfYear % tipsList.length) + 1}`;
 }
 
 function openChatHelpModal() { document.getElementById('chatHelpModal').classList.remove('hidden'); }
@@ -1145,6 +1258,14 @@ function buildFinancialDayDropdown() {
     if(i === (state.financialDay || 1)) opt.selected = true;
     select.appendChild(opt);
   }
+}
+
+function saveFinancialDay(val) {
+  state.financialDay = parseInt(val) || 1;
+  persist();
+  renderHome();
+  renderAnalytics();
+  showToast("תאריך תחילת חודש עודכן");
 }
 
 function buildTableMonthDropdown() {
@@ -1272,10 +1393,16 @@ function renderAnalytics() {
   document.getElementById('previewDonutTotal').textContent = fmt(totalExpenseVal);
   document.getElementById('donutCenterTotal').textContent = fmt(totalExpenseVal);
 
+  const { balance } = totals();
+  const savingsGoal = state.savingsGoal || 1500;
+  const progressPct = Math.min(100, Math.max(0, Math.round((balance / savingsGoal) * 100)));
+  document.getElementById('savingsProgressBar').style.width = progressPct + '%';
+  document.getElementById('savingsCurrentStatus').textContent = `סך הון פעיל: ${fmt(balance)}`;
+  document.getElementById('savingsGoalTarget').textContent = `יעד: ${fmt(savingsGoal)}`;
+
   const total = totalExpenseVal || 1;
   let acc = 0; const stops = [];
   
-  // מציגים בתרשימים אך ורק קטגוריות שנעשה בהן שימוש (amt > 0)
   state.expenseCats.forEach((cat) => {
     const amt = spend[cat.name] || 0;
     if(amt > 0) {
@@ -1396,6 +1523,9 @@ function renderAnalytics() {
   }
 }
 
+let donutExpanded = false;
+let txExpanded = false;
+
 function toggleDonutExpand() {
   donutExpanded = !donutExpanded;
   const content = document.getElementById('donutExpandedContent');
@@ -1457,7 +1587,6 @@ function renderTableScreen() {
       });
     }
 
-    // מציגים בטבלת האקסל אך ורק קטגוריות שנעשה בהן שימוש בפועל בחודש זה (catTotal > 0)
     if(catTotal > 0) {
       renderedCount++;
       const card = document.createElement('div');
@@ -1505,6 +1634,9 @@ function renderTableScreen() {
   `;
   container.prepend(summaryHeader);
 }
+
+let activeRecognition = null;
+let pendingSmartTx = null;
 
 function toggleVoiceRecognition() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -1661,7 +1793,6 @@ function cancelVoiceTransaction() {
 function openCategoriesModal() { document.getElementById('categoriesModal').classList.remove('hidden'); renderModalCategoryList(); }
 function closeCategoriesModal() { document.getElementById('categoriesModal').classList.add('hidden'); }
 
-// הצגה בלבד (ללא אופציית מחיקה או עריכה, רק צפייה והוספה)
 function renderModalCategoryList() {
   const container = document.getElementById('modalCatList');
   if(!container) return;
@@ -1697,7 +1828,7 @@ function addNewCustomCategory() {
 
 function promptSavingsGoal() {
   const val = prompt("הכנס יעד חיסכון חודשי חדש:", state.savingsGoal || 1500);
-  if(val !== null && !isNaN(parseFloat(val))) { state.savingsGoal = parseFloat(val); persist(); renderHome(); }
+  if(val !== null && !isNaN(parseFloat(val))) { state.savingsGoal = parseFloat(val); persist(); renderHome(); renderAnalytics(); }
 }
 </script>
 </body>

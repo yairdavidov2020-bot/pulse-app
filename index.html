@@ -301,7 +301,7 @@
         </svg>
     </div>
 
-    <!-- מסך פתיחה עם דגש אלגנטי על אפס בחירת קטגוריות ודיבור בשפה חופשית -->
+    <!-- מסך פתיחה עם המשפט שהוגדר -->
     <div class="onboarding-content-box text-center space-y-6 p-2">
         <div class="space-y-3">
             <div class="w-16 h-16 rounded-3xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 text-3xl mx-auto shadow-xl">
@@ -309,7 +309,7 @@
             </div>
             <h1 class="text-3xl font-black tracking-tight gradient-text">ברוכים הבאים ל-Pulse</h1>
             <p class="text-sm font-bold text-slate-200 leading-relaxed px-4">
-                אפס בחירת קטגוריות. פשוט מדברים או מקלידים בשפה שלך — והאפליקציה כבר תדע לסדר ולפענח הכל לבד.
+                בלי הרבה כאבי ראש פשוט מדברים או מקלידים בשפה שלכם ו-Pulse תעשה את השאר.
             </p>
         </div>
 
@@ -939,7 +939,7 @@ function getLocalDateString(d) {
 
 function persist() {
   sortTransactions();
-  localStorage.setItem('pulse_state_v61', JSON.stringify(state));
+  localStorage.setItem('pulse_state_v62', JSON.stringify(state));
   saveDataToSupabase(state);
 }
 
@@ -985,7 +985,7 @@ async function factoryReset() {
         await supabaseClient.from('app_data').delete().eq('id', state.handle);
       } catch(e) {}
     }
-    localStorage.removeItem('pulse_state_v61');
+    localStorage.removeItem('pulse_state_v62');
     location.reload();
   }
 }
@@ -1105,19 +1105,19 @@ window.onload = async function() {
     if(splash) { splash.style.opacity = '0'; setTimeout(() => splash.remove(), 700); }
   }, 1600);
 
-  let saved = localStorage.getItem('pulse_state_v61');
+  let saved = localStorage.getItem('pulse_state_v62');
   if(saved) {
     try {
       state = JSON.parse(saved);
     } catch(e) {
-      localStorage.removeItem('pulse_state_v61');
+      localStorage.removeItem('pulse_state_v62');
     }
   }
 
   if (state.handle && supabaseClient) {
     try {
       const cloudData = await loadDataFromSupabase();
-      if (cloudData && cloudData.userName) { state = cloudData; localStorage.setItem('pulse_state_v61', JSON.stringify(state)); }
+      if (cloudData && cloudData.userName) { state = cloudData; localStorage.setItem('pulse_state_v62', JSON.stringify(state)); }
     } catch(e) {}
   }
 

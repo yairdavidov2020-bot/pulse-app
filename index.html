@@ -119,7 +119,7 @@
   .modal-overlay { position:fixed; inset:0; z-index:50; background:rgba(10,12,17,0.95); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:16px; transition: opacity .25s ease; }
   .modal-overlay.hidden { display:none !important; }
 
-  /* תפריט ראשי נפתח מצד שמאל עם מרווח עליון למצלמה הקדמית */
+  /* תפריט ראשי משמאל עם מרווח עליון למצלמה הקדמית */
   #menuModal { justify-content: flex-start !important; padding: 0 !important; background: rgba(10,12,17,0.75); }
   #menuModal .menu-sidebar-panel {
     width: 290px; height: 100%; max-height: 100dvh; border-radius: 0; border-right: 1px solid var(--border);
@@ -195,6 +195,25 @@
             <p class="text-xs text-slate-300 leading-relaxed">היי! זה הזמן לעצור רגע, לעדכן את ההוצאות וההכנסות של היום ולהישאר בשליטה מלאה 💡</p>
         </div>
         <button onclick="closeReminderModal()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs shadow-lg cursor-pointer relative z-10">הבנתי, יאללה מעדכן!</button>
+    </div>
+</div>
+
+<!-- מודל סרטון אנימציית הדרכה למשתמש חדש -->
+<div id="tutorialModal" class="modal-overlay hidden">
+    <div class="summary-card p-5 max-w-sm w-full space-y-4 shadow-2xl text-center relative overflow-hidden border border-emerald-400/50">
+        <div class="absolute -top-16 -right-16 w-36 h-36 bg-emerald-500/20 rounded-full blur-3xl"></div>
+        <div class="relative z-10 space-y-3">
+            <div class="w-16 h-16 rounded-3xl bg-gradient-to-tr from-emerald-500/20 to-teal-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 text-3xl mx-auto shadow-2xl animate-bounce">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+            </div>
+            <h3 class="text-lg font-black gradient-text">איך שולטים בכסף ב-Pulse?</h3>
+            <div class="space-y-2 text-right text-[11px] text-slate-300 bg-[var(--card-2)] p-3 rounded-2xl border border-[var(--border)]">
+                <p class="flex items-center gap-2"><i class="fa-solid fa-microphone text-emerald-400 text-sm"></i> <b>הכתבה קולית:</b> פשוט לחץ על המיקרופון ואמר לדוגמה: <span class="text-emerald-300 font-bold">"הוצאתי 35 שקל על קפה ומאפה"</span>.</p>
+                <p class="flex items-center gap-2"><i class="fa-solid fa-chart-pie text-blue-400 text-sm"></i> <b>תמונת מצב:</b> עקוב אחרי עוגת הפילוח והיעדים שלך בצורה ויזואלית.</p>
+                <p class="flex items-center gap-2"><i class="fa-solid fa-table text-violet-400 text-sm"></i> <b>טבלה חודשית:</b> כל ההוצאות מסודרות כמו באקסל מתקדם.</p>
+            </div>
+        </div>
+        <button onclick="closeTutorialModal()" class="save-btn w-full py-3 rounded-2xl font-bold text-xs shadow-xl cursor-pointer relative z-10">הבנתי לגמרי, בוא נתחיל!</button>
     </div>
 </div>
 
@@ -320,22 +339,6 @@
     </div>
 </div>
 
-<div id="onboarding-step-4" class="full-page-onboarding hidden">
-    <div class="onboarding-content-box text-right space-y-4 p-5 bg-[var(--card)] rounded-3xl border border-[var(--border)] shadow-2xl">
-        <div class="text-center space-y-1">
-            <div class="w-12 h-12 rounded-2xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-blue-400 text-xl mx-auto mb-2">
-                <i class="fa-solid fa-microphone"></i>
-            </div>
-            <h2 class="text-base font-black gradient-text">טיפ ראשון: הכתבה קולית חכמה</h2>
-            <p class="text-xs text-slate-300 leading-relaxed">נסה מיד להקליד או לומר בקול את הפקודה הבאה:</p>
-        </div>
-        <div class="bg-[var(--card-2)] p-3.5 rounded-xl border border-emerald-400/40 text-center">
-            <p class="text-sm font-bold text-emerald-400">"שתיתי וודקה עם חברים 80 שקל"</p>
-        </div>
-        <button onclick="finishOnboarding()" class="save-btn w-full py-3 rounded-2xl font-bold text-xs shadow-xl cursor-pointer">הבנתי, כנס לאפליקציה!</button>
-    </div>
-</div>
-
 <!-- MODALS -->
 <div id="generalHelpModal" class="modal-overlay hidden">
     <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl text-right max-h-[85vh] overflow-y-auto">
@@ -376,7 +379,7 @@
             <h3 class="text-xs font-bold text-emerald-400">הכתבה חכמה</h3>
             <button onclick="closeVoiceHelpModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
-        <p class="text-[11px] text-slate-300">זיהוי אוטומטי של סכום וקטגוריות. קטגוריות חסרות יתווספו לבחירתך.</p>
+        <p class="text-[11px] text-slate-300">הפעולה מתבצעת אוטומטית. דוגמה: "הוצאתי 35 שקל על קפה ומאפה".</p>
         <button onclick="closeVoiceHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי</button>
     </div>
 </div>
@@ -384,12 +387,12 @@
 <div id="voiceDescModal" class="modal-overlay hidden">
     <div class="summary-card p-4 max-w-xs w-full space-y-3 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-            <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-pen-nib ml-1"></i> אישור תנועה וקטגוריה</h3>
+            <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-pen-nib ml-1"></i> השלמת קטגוריה חסרה</h3>
         </div>
         <div class="space-y-2 text-[11px]">
             <p id="voiceParsedInfo" class="font-bold text-slate-300"></p>
-            <div id="missingCatWarning" class="hidden p-2 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[10px]">
-                הקטגוריה אינה קיימת במאגר שלך. בחר קטגוריה ראשית ועדכן את תת-הקטגוריה:
+            <div class="p-2 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[10px]">
+                לא הצלחנו לשייך אוטומטית. בחר קטגוריה ראשית ותת-קטגוריה:
             </div>
             <div class="field-shell px-3 py-1.5">
                 <select id="selectMainCategory" class="w-full bg-transparent outline-none font-bold text-[11px]" style="color:var(--text)"></select>
@@ -419,7 +422,7 @@
     </div>
 </div>
 
-<!-- תפריט ראשי משמאל עם הגדרות סגורות כברירת מחדל -->
+<!-- תפריט ראשי משמאל -->
 <div id="menuModal" class="modal-overlay hidden" onclick="if(event.target === this) closeMenuModal()">
     <div class="menu-sidebar-panel space-y-3 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2.5">
@@ -449,7 +452,7 @@
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-tags text-violet-400 w-4"></i> קטגוריות ותקציבים</span>
             </button>
 
-            <!-- הגדרות מערכת בחלון סגור שנפתח בלחיצה -->
+            <!-- הגדרות מערכת -->
             <div class="p-3 rounded-xl bg-[var(--card)] border border-[var(--border)] space-y-2 mt-2">
                 <div class="flex items-center justify-between cursor-pointer" onclick="toggleSystemSettingsContent()">
                     <p class="text-[11px] font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-gear"></i> הגדרות מערכת</p>
@@ -586,13 +589,13 @@
                 </h4>
                 <button onclick="openVoiceHelpModal()" class="w-3.5 h-3.5 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[8px] font-bold flex items-center justify-center text-emerald-400 cursor-pointer">?</button>
               </div>
-              <p id="micStatus" class="text-[9px] mt-0.5 leading-tight truncate" style="color:var(--text-dim)">לחץ לאמירת הוצאה עם תת-קטגוריה (למשל: וודקה)</p>
+              <p id="micStatus" class="text-[9px] mt-0.5 leading-tight truncate" style="color:var(--text-dim)">למשל: "הוצאתי 35 שקל על קפה ומאפה"</p>
             </div>
           </div>
 
           <div class="summary-card p-2 space-y-1">
             <div class="field-shell flex items-center px-2.5 py-1.5">
-              <input id="smartTextInput" type="text" placeholder="הכתבה... (למשל: שתיתי וודקה עם חברים 80 שקל)" class="w-full bg-transparent outline-none text-[10px] font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
+              <input id="smartTextInput" type="text" placeholder="הכתבה... (למשל: הוצאתי 35 שקל על קפה ומאפה)" class="w-full bg-transparent outline-none text-[10px] font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
             </div>
             <button onclick="processSmartText()" class="save-btn w-full py-1.5 rounded-xl text-[10px] font-bold cursor-pointer shadow-sm">פענח והוסף תנועה</button>
           </div>
@@ -737,7 +740,7 @@ async function saveDataToSupabase(appState) {
 
 const profileSubCategoriesMap = {
   'soldier_male': {
-    'אוכל': ['שקם', 'מסעדות', 'משלוחים', 'בשרייה', 'חלביה'],
+    'אוכל': ['שקם', 'מסעדות', 'משלוחים', 'קפה', 'בשרייה', 'חלביה'],
     'בילויים': ['בר', 'אלכוהול', 'וודקה', 'מסיבות', 'מתנות'],
     'ציוד': ['תרמי', 'טקטי', 'פקלקפה', 'נעליים', 'מדרסים'],
     'תחבורה': ['מוניות', 'דלק', 'חניה', 'ליסינג'],
@@ -746,7 +749,7 @@ const profileSubCategoriesMap = {
     'חיסכון': ['טיול', 'רישיון', 'רכב', 'כללי']
   },
   'soldier_female': {
-    'אוכל': ['שקם', 'מסעדות', 'משלוחים', 'בשרייה', 'חלביה'],
+    'אוכל': ['שקם', 'מסעדות', 'משלוחים', 'קפה', 'בשרייה', 'חלביה'],
     'בילויים': ['בר', 'אלכוהול', 'וודקה', 'מסיבות', 'מתנות'],
     'ציוד': ['תרמי', 'טקטי', 'נעליים', 'מדרסים'],
     'תחבורה': ['מוניות', 'דלק', 'חניה', 'ליסינג'],
@@ -755,7 +758,7 @@ const profileSubCategoriesMap = {
     'חיסכון': ['טיול', 'רישיון', 'רכב', 'כללי']
   },
   'teen_male': {
-    'אוכל': ['מסעדות', 'משלוחים'],
+    'אוכל': ['מסעדות', 'משלוחים', 'קפה'],
     'בילויים': ['אלכוהול', 'וודקה', 'גיימינג', 'סקינס', 'סרטים', 'אטרקציות', 'מסיבות'],
     'שופינג': ['בגדים', 'נעליים', 'תיקים', 'תכשיטים', 'כיסויים', 'גאדג\'טים', 'פארם'],
     'תחבורה': ['רבקו', 'קורקינט', 'אופניים', 'מוניות', 'רכבת'],
@@ -764,7 +767,7 @@ const profileSubCategoriesMap = {
     'חיסכון': ['טלפון', 'רישיון', 'טיול', 'כללי']
   },
   'teen_female': {
-    'אוכל': ['מסעדות', 'משלוחים'],
+    'אוכל': ['מסעדות', 'משלוחים', 'קפה'],
     'בילויים': ['אלכוהול', 'וודקה', 'הופעות', 'מסיבות', 'ספא', 'סרטים'],
     'שופינג': ['בגדים', 'נעליים', 'תיקים', 'תכשיטים', 'איפור', 'אביזרים', 'פארם'],
     'תחבורה': ['רבקו', 'קורקינט', 'מוניות', 'רכבת'],
@@ -849,7 +852,7 @@ function importBackup(event) {
 }
 
 function factoryReset() {
-  if(confirm("האם אתה בטוח שברצונך לאפס את כל הנתונים ולהתחיל מחדש?")) {
+  if(confirm("האם אתה בטוח שברצונך לאפס את כל הנתונים, כולל שם המשתמש והפרופיל?")) {
     localStorage.removeItem('pulse_state_v54');
     location.reload();
   }
@@ -885,6 +888,7 @@ function initDailyReminder() {
   }, 30000);
 }
 function closeReminderModal() { document.getElementById('reminderModal').classList.add('hidden'); }
+function closeTutorialModal() { document.getElementById('tutorialModal').classList.add('hidden'); }
 
 window.onload = async function() {
   setTimeout(() => {
@@ -990,13 +994,7 @@ async function startCinematicBuild() {
 
   await new Promise(r => setTimeout(r, 800));
   document.getElementById('onboarding-step-3').classList.add('hidden');
-  document.getElementById('onboarding-step-4').classList.remove('hidden');
-}
-
-function finishOnboarding() {
-  const step4 = document.getElementById('onboarding-step-4');
-  step4.classList.add('closing');
-  setTimeout(() => step4.remove(), 800);
+  document.getElementById('tutorialModal').classList.remove('hidden');
   setDynamicGreeting();
   renderHome();
 }
@@ -1203,7 +1201,6 @@ function renderAnalytics() {
     `;
   }
 
-  // תנועות החודש הנוכחי - קטגוריה ראשית בבולט, תת קטגוריה בקטן מתחת, סכום בצד השני
   const txList = document.getElementById('txList');
   txList.innerHTML = '';
   if(currentTxs.length === 0) {
@@ -1343,7 +1340,7 @@ function toggleVoiceRecognition() {
     activeRecognition.onresult = (e) => {
       const text = e.results[0][0].transcript;
       status.textContent = `שמעתי: "${text}"`;
-      parseVoiceCommandForDescModal(text);
+      processVoiceCommandDirectly(text);
     };
     activeRecognition.onerror = () => { resetVoiceUI(); status.textContent = "שגיאה במיקרופון"; };
     activeRecognition.onend = () => { btn.classList.remove('listening'); };
@@ -1355,7 +1352,7 @@ function resetVoiceUI(){
   const btn = document.getElementById('micBtn');
   if(btn) btn.classList.remove('listening');
   const status = document.getElementById('micStatus');
-  if(status) status.textContent = 'לחץ על המיקרופון ואמר הוצאות ותת-קטגוריה';
+  if(status) status.textContent = 'למשל: "הוצאתי 35 שקל על קפה ומאפה"';
   activeRecognition = null;
 }
 
@@ -1363,11 +1360,11 @@ function processSmartText() {
   const input = document.getElementById('smartTextInput');
   const text = input.value.trim();
   if(!text) return;
-  parseVoiceCommandForDescModal(text);
+  processVoiceCommandDirectly(text);
   input.value = '';
 }
 
-function parseVoiceCommandForDescModal(text){
+function processVoiceCommandDirectly(text){
   let amount = 0;
   const currencyMatch = text.match(/(\d+[\.,]?\d*)\s*(שקל|שקלים|₪|\$)/);
   if (currencyMatch) amount = parseFloat(currencyMatch[1].replace(',', '.'));
@@ -1406,30 +1403,36 @@ function parseVoiceCommandForDescModal(text){
     }
   }
 
-  const warningBox = document.getElementById('missingCatWarning');
-  const mainCatSelect = document.getElementById('selectMainCategory');
-  mainCatSelect.innerHTML = '';
-  state.expenseCats.forEach(c => {
-    const opt = document.createElement('option');
-    opt.value = c.name;
-    opt.textContent = c.name;
-    mainCatSelect.appendChild(opt);
-  });
-
   if (!matchedCat) {
-    warningBox.classList.remove('hidden');
+    const mainCatSelect = document.getElementById('selectMainCategory');
+    mainCatSelect.innerHTML = '';
+    state.expenseCats.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.name;
+      opt.textContent = c.name;
+      mainCatSelect.appendChild(opt);
+    });
     pendingSmartTx = { type: 'expense', amount, cat: state.expenseCats[0].name, subCat: text.trim(), color: state.expenseCats[0].color, date: getLocalDateString(new Date()) };
     document.getElementById('voiceSubCatInput').value = text.trim();
+    document.getElementById('voiceParsedInfo').innerHTML = `סכום שזוהה: <span class="text-emerald-400 font-bold">${fmt(amount)}</span>`;
+    document.getElementById('voiceDescModal').classList.remove('hidden');
   } else {
-    warningBox.classList.add('hidden');
-    mainCatSelect.value = matchedCat;
     const catObj = state.expenseCats.find(c => c.name === matchedCat) || state.expenseCats[0];
-    pendingSmartTx = { type: 'expense', amount, cat: matchedCat, subCat: matchedSub || 'כללי', color: catObj.color, date: getLocalDateString(new Date()) };
-    document.getElementById('voiceSubCatInput').value = matchedSub || 'כללי';
+    const newTx = {
+      id: Date.now(),
+      type: 'expense',
+      amount: amount,
+      cat: matchedCat,
+      subCat: matchedSub || 'כללי',
+      color: catObj.color,
+      date: getLocalDateString(new Date())
+    };
+    state.transactions.push(newTx);
+    persist();
+    renderHome();
+    renderAnalytics();
+    resetVoiceUI();
   }
-
-  document.getElementById('voiceParsedInfo').innerHTML = `סכום שזוהה: <span class="text-emerald-400 font-bold">${fmt(amount)}</span>`;
-  document.getElementById('voiceDescModal').classList.remove('hidden');
 }
 
 function confirmVoiceTransaction() {
@@ -1452,6 +1455,7 @@ function confirmVoiceTransaction() {
   state.transactions.push({ id: Date.now(), ...pendingSmartTx });
   persist();
   renderHome();
+  renderAnalytics();
   document.getElementById('voiceDescModal').classList.add('hidden');
   pendingSmartTx = null;
   resetVoiceUI();

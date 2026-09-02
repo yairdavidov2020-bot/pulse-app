@@ -85,13 +85,6 @@
   html.light .field-shell { background: rgba(240, 242, 245, 0.9); border-color: rgba(0,0,0,0.1); }
   .field-shell:focus-within{ border-color: var(--mint); }
 
-  .toggle-switch { position: relative; display: inline-block; width: 46px; height: 24px; cursor: pointer; flex-shrink: 0; }
-  .toggle-switch input { opacity: 0; width: 0; height: 0; }
-  .toggle-slider { position: absolute; inset: 0; background: #334155; border-radius: 24px; transition: 0.3s; border: 1px solid var(--border); }
-  .toggle-slider::before { content: ""; position: absolute; height: 18px; width: 18px; left: 3px; bottom: 2px; background: white; border-radius: 50%; transition: 0.3s; }
-  .toggle-switch input:checked + .toggle-slider { background: #3b82f6; }
-  .toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
-
   .wizard-option-btn {
     display: flex; align-items: center; justify-content: space-between; padding: 12px 14px;
     border-radius: 12px; background: var(--card-2); border: 1px solid var(--border);
@@ -304,7 +297,6 @@
             <button onclick="closeTravelModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
         
-        <!-- Explanation Block Integrated Here -->
         <div class="space-y-2 text-[10px] text-slate-300 leading-relaxed bg-[var(--card-2)] p-2.5 rounded-xl border border-[var(--border)]">
             <p class="font-bold text-blue-300">🌍 ניהול הוצאות בחו״ל ובמטבע זר</p>
             <p>כאשר מצב הנסיעות מופעל, תוכל להקליד או להגיד הוצאות בכל מטבע זר, והמערכת תמיר אותן אוטומטית לשקלים ותתייג אותן כהוצאות טיול.</p>
@@ -351,11 +343,7 @@
             <div class="space-y-3 text-[11px] text-slate-300">
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-microphone"></i> 1. ללא בחירת קטגוריות — פשוט מדברים</p>
-                    <p class="leading-relaxed">החידוש המרכזי ב-Pulse: **אין צורך לבחור קטגוריות ידנית**. פשוט מקלידים או אומרים בשפה חופשית (למשל: "50 דולר במסעדה אתמול").</p>
-                </div>
-                <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
-                    <p class="font-bold text-blue-400 flex items-center gap-1.5"><i class="fa-solid fa-piggy-bank"></i> 2. קופות חיסכון ומצב נסיעות</p>
-                    <p class="leading-relaxed">נהל קופות חיסכון וירטואליות עם מחיקה ויזואלית קלה, והפעל מצב נסיעות עם מתג מהיר וסיכום טיול אוטומטי בסיומו!</p>
+                    <p class="leading-relaxed">החידוש המרכזי ב-Pulse: **אין צורך לבחור קטגוריות ידנית**. פשוט מקלידים או אומרים בשפה חופשית (למשל: "50 דולר לקפה").</p>
                 </div>
             </div>
         </div>
@@ -556,7 +544,7 @@
             <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-microphone ml-1"></i> העוזר הקולי והצ׳אט החכם</h3>
             <button onclick="closeChatHelpModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
-        <p class="text-[11px] text-slate-300 leading-relaxed">העוזר הקולי והצ׳אט החכם מזהים אוטומטית מאות קטגוריות, מטבעות זרים ותאריכים ומסדרת הכל לבד בשניות.</p>
+        <p class="text-[11px] text-slate-300 leading-relaxed">העוזר הקולי והצ׳אט החכם מזהים אוטומטית קטגוריות, מטבעות זרים ותאריכים ומסדרים הכל לבד בשניות.</p>
         <button onclick="closeChatHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי</button>
     </div>
 </div>
@@ -588,36 +576,6 @@
     </div>
 </div>
 
-<div id="voiceDescModal" class="modal-overlay hidden">
-    <div class="summary-card p-4 max-w-xs w-full space-y-3 shadow-2xl text-right">
-        <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-            <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-pen-nib ml-1"></i> השלמת קטגוריה חסרה</h3>
-        </div>
-        <div class="space-y-2 text-[11px]">
-            <p id="voiceParsedInfo" class="font-bold text-slate-300"></p>
-            <div class="p-2 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[10px]">
-                לא הצלחנו לשייך אוטומטית. בחר קטגוריה קיימת או הוסף קטגוריה חדשה בקלות:
-            </div>
-            <div class="field-shell px-3 py-1.5">
-                <select id="selectMainCategory" class="w-full bg-transparent outline-none font-bold text-[11px]" style="color:var(--text)"></select>
-            </div>
-            <div class="flex gap-2">
-                <div class="field-shell px-3 py-1.5 flex-1">
-                    <input id="newCatQuickInput" type="text" placeholder="או הוסף קטגוריה חדשה כאן..." class="w-full bg-transparent outline-none font-bold text-[11px]" style="color:var(--text)" />
-                </div>
-                <button onclick="addNewCatQuickly()" class="px-3 py-1.5 rounded-xl bg-violet-500/20 border border-violet-500/40 text-violet-300 font-bold text-[11px] cursor-pointer">הוסף</button>
-            </div>
-            <div class="field-shell px-3 py-2">
-                <input id="voiceSubCatInput" type="text" placeholder="תת קטגוריה נקייה (ללא סכום)..." class="w-full bg-transparent outline-none font-bold" style="color:var(--text)" />
-            </div>
-        </div>
-        <div class="flex gap-2 pt-1">
-            <button onclick="confirmVoiceTransaction()" class="save-btn flex-1 py-2 rounded-xl font-bold text-xs">שמור תנועה</button>
-            <button onclick="cancelVoiceTransaction()" class="px-3 py-2 rounded-xl bg-[var(--card-2)] border border-[var(--border)] text-rose-400 text-xs font-bold">ביטול</button>
-        </div>
-    </div>
-</div>
-
 <div id="categoriesModal" class="modal-overlay hidden">
     <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl max-h-[85vh] overflow-y-auto text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
@@ -625,7 +583,6 @@
             <button onclick="closeCategoriesModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
         
-        <!-- Tabs for Expense / Income Categories -->
         <div class="flex gap-1 bg-[var(--card-2)] p-1 rounded-xl border border-[var(--border)]">
             <button onclick="switchCatTab('expense')" id="btnCatExp" class="flex-1 py-1.5 text-[11px] font-bold rounded-lg bg-emerald-500/20 text-emerald-400 transition">הוצאות</button>
             <button onclick="switchCatTab('income')" id="btnCatInc" class="flex-1 py-1.5 text-[11px] font-bold rounded-lg text-slate-400 transition">הכנסות</button>
@@ -695,7 +652,6 @@
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-rotate text-emerald-400 w-4"></i> הוראות קבע ומנויים</span>
             </button>
 
-            <!-- Budget Period Menu Setting -->
             <div class="summary-card p-3 space-y-2 mt-2 bg-[var(--card-2)] border border-[var(--border)] rounded-xl">
                 <p class="text-[11px] font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-calendar-days"></i> תקופת תקציב מותאמת אישית</p>
                 <div class="field-shell px-2 py-1">
@@ -766,7 +722,6 @@
           </div>
         </section>
 
-        <!-- Main Screen Travel Mode Active Indicator Card (Only shown when active) -->
         <section id="homeTravelIndicatorCard" class="summary-card p-2.5 flex items-center justify-between transition-all duration-300 bg-gradient-to-l from-blue-500/20 to-indigo-500/20 border-blue-400/40 hidden">
             <div class="flex items-center gap-2.5">
                 <div class="w-7 h-7 rounded-xl bg-blue-500/25 border border-blue-400/40 flex items-center justify-center text-blue-400 text-xs">
@@ -1032,7 +987,6 @@ async function quickLogin() {
   }
 }
 
-// Master Categories Map - 1 word sub-categories, Bar removed from Food, added strictly to Entertainment
 const masterCategoriesMap = {
   'אוכל': [
     'סופר', 'מסעדה', 'משלוח', 'קפה', 'שקם', 'קצבייה', 'חטיפים', 'מאפייה', 'גלידה', 'פירות', 'ירקות', 'משקאות', 
@@ -1240,7 +1194,6 @@ function closeReminderModal() { document.getElementById('reminderModal').classLi
 function openTutorialModal() { document.getElementById('tutorialModal').classList.remove('hidden'); }
 function closeTutorialModal() { document.getElementById('tutorialModal').classList.add('hidden'); }
 
-// --- GOAL BUCKETS LOGIC ---
 function menuOpenGoalBuckets() {
   closeMenuModal();
   document.getElementById('goalBucketsModal').classList.remove('hidden');
@@ -1328,7 +1281,6 @@ function deleteGoalBucket(id) {
   }
 }
 
-// --- TRAVEL MODE LOGIC ---
 function menuOpenTravelModal() {
   closeMenuModal();
   document.getElementById('travelToggleCheckbox').checked = state.isTravelMode;
@@ -1399,7 +1351,6 @@ function menuOpenRecurring() {
   renderRecurringList();
   const sel = document.getElementById('recCategory');
   sel.innerHTML = '';
-  // Combine expense and income cats for recurring items if needed, or expense cats
   state.expenseCats.forEach(c => {
     const opt = document.createElement('option'); opt.value = c.name; opt.textContent = c.name; sel.appendChild(opt);
   });
@@ -1422,7 +1373,7 @@ function renderRecurringList() {
     row.innerHTML = `
       <div>
         <p class="font-bold text-slate-100">${item.title} (${item.cat})</p>
-        <p class="text-[9px] text-slate-400">יורד ב-${item.day} לחודש</p>
+        <p class="text-[9px] text-slate-400">יורד ב-${item.day} לחודש הפיננסי</p>
       </div>
       <div class="flex items-center gap-2">
         <span class="tabular font-bold" style="color:${col}">${sign}${fmt(item.amount)}</span>
@@ -1524,10 +1475,9 @@ window.onload = async function() {
 
 function sortTransactions() {
   if (state.transactions && state.transactions.length > 0) {
-    state.transactions.sort((a, b) => b.date.localeCompare(a.date) || b.id - idSort(b, a));
+    state.transactions.sort((a, b) => b.date.localeCompare(a.date) || b.id - a.id);
   }
 }
-function idSort(b, a) { return b.id - a.id; }
 
 let tempWizard = { handle: '', name: '', balance: 0, financialDay: 1, savingsGoal: 1500, mainGoal: 'peace' };
 function selectMainGoal(goal, btn) {
@@ -1728,7 +1678,6 @@ function renderHome(){
   document.getElementById('totalExpense').textContent = fmt(expense);
   document.documentElement.style.setProperty('--glow', balance >= 0 ? 'var(--glow-safe)' : 'var(--glow-danger)');
 
-  // Main screen travel indicator card (Only shown when travel mode is active)
   const homeTravelCard = document.getElementById('homeTravelIndicatorCard');
   const homeTravelSub = document.getElementById('homeTravelIndicatorSub');
   const smartInput = document.getElementById('smartTextInput');
@@ -1767,7 +1716,6 @@ function renderAnalytics() {
     });
   }
 
-  // Travel Widget Render
   const travelWidget = document.getElementById('travelWidgetSection');
   if(state.isTravelMode) {
     travelWidget.classList.remove('hidden');
@@ -1859,30 +1807,38 @@ function renderAnalytics() {
 
   if(usedCategoriesCount === 0) legend.innerHTML = '<p class="text-[10px] text-slate-400 text-center py-2">אין הוצאות פעילות בתקופה זו</p>';
 
-  // Combine current transactions and recurring items in chronological order
   const currentTxs = state.transactions.filter(t => isWithinFinancialMonth(t.date, 0));
   let combinedList = [];
   currentTxs.forEach(t => combinedList.push({ ...t, isRecurringTx: false }));
 
   if(state.recurringItems) {
     const { startPeriod } = getFinancialPeriodDates(0);
+    const fDay = parseInt(state.financialDay) || 1;
     state.recurringItems.forEach(r => {
-      let rDate = new Date(startPeriod);
-      rDate.setDate(r.day);
-      combinedList.push({
-        id: 'rec_' + r.id,
-        type: r.type,
-        amount: r.amount,
-        cat: r.cat,
-        subCat: `הוראת קבע: ${r.title}`,
-        color: '#C7A6FF',
-        date: getLocalDateString(rDate),
-        isRecurringTx: true
-      });
+      let rYear = startPeriod.getFullYear();
+      let rMonth = startPeriod.getMonth();
+      if (r.day < fDay) {
+        rMonth += 1;
+      }
+      let rDate = new Date(rYear, rMonth, r.day);
+      let rDateStr = getLocalDateString(rDate);
+
+      // Include if within financial month
+      if (isWithinFinancialMonth(rDateStr, 0)) {
+        combinedList.push({
+          id: 'rec_' + r.id,
+          type: r.type,
+          amount: r.amount,
+          cat: r.cat,
+          subCat: `הוראת קבע: ${r.title}`,
+          color: '#C7A6FF',
+          date: rDateStr,
+          isRecurringTx: true
+        });
+      }
     });
   }
 
-  // Sort chronologically (newest first or oldest first? Transactions list shows newest first, let's sort by date descending)
   combinedList.sort((a, b) => b.date.localeCompare(a.date));
 
   const recurringCount = state.recurringItems ? state.recurringItems.length : 0;
@@ -2005,12 +1961,20 @@ function renderTableScreen() {
     });
 
     if(state.recurringItems && offset === 0) {
+      const { startPeriod } = getFinancialPeriodDates(0);
+      const fDay = parseInt(state.financialDay) || 1;
       state.recurringItems.forEach(r => {
         if(r.type === 'expense' && r.cat === cat.name) {
-          const sub = subCats[0];
-          subCatTotals[sub] += r.amount;
-          catTotal += r.amount;
-          totalMonthExpense += r.amount;
+          let rYear = startPeriod.getFullYear();
+          let rMonth = startPeriod.getMonth();
+          if (r.day < fDay) rMonth += 1;
+          let rDateStr = getLocalDateString(new Date(rYear, rMonth, r.day));
+          if(isWithinFinancialMonth(rDateStr, 0)) {
+            const sub = subCats[0];
+            subCatTotals[sub] += r.amount;
+            catTotal += r.amount;
+            totalMonthExpense += r.amount;
+          }
         }
       });
     }
@@ -2074,7 +2038,6 @@ function renderTableScreen() {
 }
 
 let activeRecognition = null;
-let pendingSmartTx = null;
 
 function toggleVoiceRecognition() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -2122,16 +2085,6 @@ function processSmartText() {
   input.value = '';
 }
 
-function isSubMatch(text, sub) { return text.includes(sub.trim()); }
-
-function cleanSubCategoryText(rawText) {
-  return rawText
-    .replace(/(\d+[\.,]?\d*)/g, '')
-    .replace(/(שקל|שקלים|₪|\$|€|£|דולר|דולרים|יורו|פאונד|באט)/g, '')
-    .replace(/(אתמול|שלשום|היום)/g, '')
-    .trim() || rawText.trim();
-}
-
 function parseDateFromText(text) {
   const now = new Date();
   let targetDate = new Date(now);
@@ -2141,7 +2094,15 @@ function parseDateFromText(text) {
   return getLocalDateString(now);
 }
 
-function processVoiceCommandDirectly(text){
+function cleanSubCategoryText(rawText) {
+  return rawText
+    .replace(/(\d+[\.,]?\d*)/g, '')
+    .replace(/(שקל|שקלים|₪|\$|€|£|דולר|דולרים|יורו|פאונד|באט)/g, '')
+    .replace(/(אתמול|שלשום|היום)/g, '')
+    .trim() || rawText.trim();
+}
+
+function processVoiceCommandDirectly(text) {
   let rawAmount = 0;
   let currencyMultiplier = 1;
   let currencyLabel = '₪';
@@ -2163,95 +2124,53 @@ function processVoiceCommandDirectly(text){
   const originalStr = currencyMultiplier !== 1 ? `${rawAmount} ${currencyLabel}` : null;
   const parsedDate = parseDateFromText(text);
 
+  const cleanDesc = cleanSubCategoryText(text);
+  const words = cleanDesc.split(/\s+/).map(w => w.replace(/^[בלכמהו]/, ''));
+
   let matchedCat = null;
   let matchedSub = null;
 
   for (let catName of Object.keys(masterCategoriesMap)) {
     const subs = masterCategoriesMap[catName];
     for (let sub of subs) {
-      if (isSubMatch(text, sub)) { matchedCat = catName; matchedSub = sub; break; }
+      if (words.includes(sub)) {
+        matchedCat = catName;
+        matchedSub = sub;
+        break;
+      }
     }
     if (matchedCat) break;
   }
 
   if (!matchedCat) {
-    for (let cat of state.expenseCats) {
-      if (text.includes(cat.name)) { matchedCat = cat.name; matchedSub = cleanSubCategoryText(text); break; }
-    }
+    matchedCat = state.expenseCats[0].name;
+    matchedSub = cleanDesc || 'כללי';
   }
 
-  if (!matchedCat) {
-    populateVoiceCategorySelect();
-    const cleanSub = cleanSubCategoryText(text);
-    pendingSmartTx = { 
-      type: 'expense', amount: convertedAmount, originalCurrencyStr: originalStr, 
-      cat: state.expenseCats[0].name, subCat: cleanSub, color: state.expenseCats[0].color, date: parsedDate, isTravel: state.isTravelMode 
-    };
-    document.getElementById('voiceSubCatInput').value = cleanSub;
-    document.getElementById('voiceParsedInfo').innerHTML = `סכום שזוהה: <span class="text-emerald-400 font-bold">${fmt(convertedAmount)}</span>${originalStr ? ` (${originalStr})` : ''}`;
-    document.getElementById('voiceDescModal').classList.remove('hidden');
-  } else {
-    const catObj = state.expenseCats.find(c => c.name === matchedCat) || state.expenseCats[0];
-    const newTx = {
-      id: Date.now(), type: 'expense', amount: convertedAmount, originalCurrencyStr: originalStr,
-      cat: matchedCat, subCat: matchedSub || 'כללי', color: catObj.color, date: parsedDate, isTravel: state.isTravelMode
-    };
-    state.transactions.push(newTx);
-    persist();
-    renderHome(); renderAnalytics(); resetVoiceUI();
-    showToast(`✅ נשמר בהצלחה: ${fmt(convertedAmount)} (${matchedCat})`);
+  const catObj = state.expenseCats.find(c => c.name === matchedCat) || state.expenseCats[0];
+  const newTx = {
+    id: Date.now(),
+    type: 'expense',
+    amount: convertedAmount,
+    originalCurrencyStr: originalStr,
+    cat: matchedCat,
+    subCat: matchedSub,
+    color: catObj.color,
+    date: parsedDate,
+    isTravel: state.isTravelMode
+  };
+
+  if (!masterCategoriesMap[matchedCat]) masterCategoriesMap[matchedCat] = [];
+  if (!masterCategoriesMap[matchedCat].includes(matchedSub)) {
+    masterCategoriesMap[matchedCat].push(matchedSub);
   }
-}
 
-function populateVoiceCategorySelect() {
-  const mainCatSelect = document.getElementById('selectMainCategory');
-  mainCatSelect.innerHTML = '';
-  state.expenseCats.forEach(c => {
-    const opt = document.createElement('option'); opt.value = c.name; opt.textContent = c.name; mainCatSelect.appendChild(opt);
-  });
-}
-
-function addNewCatQuickly() {
-  const quickInput = document.getElementById('newCatQuickInput');
-  const catName = quickInput.value.trim();
-  if(!catName) { alert("נא להזין שם קטגוריה."); return; }
-  if(state.expenseCats.find(c => c.name === catName)) { alert("קטגוריה קיימת."); return; }
-
-  const color = availableColors[state.expenseCats.length % availableColors.length];
-  state.expenseCats.push({ name: catName, color, budget: 0 });
-  if(!masterCategoriesMap[catName]) masterCategoriesMap[catName] = ['כללי'];
+  state.transactions.push(newTx);
   persist();
-  populateVoiceCategorySelect();
-  document.getElementById('selectMainCategory').value = catName;
-  quickInput.value = '';
-  showToast(`קטגוריה "${catName}" נוספה!`);
-}
-
-function confirmVoiceTransaction() {
-  if(!pendingSmartTx) return;
-  const chosenMainCat = document.getElementById('selectMainCategory').value;
-  const subCatVal = cleanSubCategoryText(document.getElementById('voiceSubCatInput').value) || 'כללי';
-  const catObj = state.expenseCats.find(c => c.name === chosenMainCat) || state.expenseCats[0];
-  
-  pendingSmartTx.cat = chosenMainCat;
-  pendingSmartTx.subCat = subCatVal;
-  pendingSmartTx.color = catObj.color;
-
-  if (!masterCategoriesMap[chosenMainCat]) masterCategoriesMap[chosenMainCat] = [];
-  if (!masterCategoriesMap[chosenMainCat].includes(subCatVal)) masterCategoriesMap[chosenMainCat].push(subCatVal);
-
-  state.transactions.push({ id: Date.now(), ...pendingSmartTx });
-  persist();
-  renderHome(); renderAnalytics();
-  document.getElementById('voiceDescModal').classList.add('hidden');
-  pendingSmartTx = null; resetVoiceUI();
-  showToast(`✅ נשמר בהצלחה: ${fmt(pendingSmartTx.amount)} (${chosenMainCat})`);
-}
-
-function cancelVoiceTransaction() {
-  pendingSmartTx = null;
-  document.getElementById('voiceDescModal').classList.add('hidden');
+  renderHome();
+  renderAnalytics();
   resetVoiceUI();
+  showToast(`✅ נשמר בהצלחה: ${fmt(convertedAmount)} (${matchedCat} - ${matchedSub})`);
 }
 
 function openCategoriesModal() { document.getElementById('categoriesModal').classList.remove('hidden'); renderModalCategoryList(); renderModalIncomeCategoryList(); }

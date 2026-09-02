@@ -589,6 +589,10 @@
             <button onclick="menuOpenRecurring()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-emerald-400 transition text-[12px] font-bold cursor-pointer">
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-rotate text-emerald-400 w-4"></i> הוראות קבע ומנויים</span>
             </button>
+            <!-- כפתור הפעלת התראות דפדפן חדש -->
+            <button onclick="requestNotificationPermission()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-emerald-400 transition text-[12px] font-bold cursor-pointer">
+                <span class="flex items-center gap-2.5"><i class="fa-solid fa-bell text-emerald-400 w-4"></i> הפעל התראות דפדפן</span>
+            </button>
 
             <!-- Budget Period Menu Setting -->
             <div class="summary-card p-3 space-y-2 mt-2 bg-[var(--card-2)] border border-[var(--border)] rounded-xl">
@@ -846,6 +850,48 @@
 </div>
 
 <script>
+// רישום Service Worker לעבודה אופליין
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then((reg) => console.log('Service Worker registered successfully:', reg.scope))
+      .catch((err) => console.log('Service Worker registration failed:', err));
+  });
+}
+
+// פונקציות התראות דפדפן חכמות
+function requestNotificationPermission() {
+  if ("Notification" in window) {
+    Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        showToast("התראות דפדפן הופעלו בהצלחה! 🔔");
+        sendSystemNotification("Pulse - תזכורת יומית", "מעכשיו תקבל תזכורות בזמן אמת לשליטה מלאה בהוצאות!");
+      } else {
+        showToast("התראות דפדפן נדחו.");
+      }
+    });
+  } else {
+    alert("הדפדפן שלך אינו תומך בהתראות מערכת.");
+  }
+}
+
+function sendSystemNotification(title, bodyText) {
+  if ("Notification" in window && Notification.permission === "granted") {
+    try {
+      navigator.serviceWorker.ready.then((registration) => {
+        registration.showNotification(title, {
+          body: bodyText,
+          icon: 'icon.png',
+          badge: 'icon.png',
+          dir: 'rtl'
+        });
+      });
+    } catch (e) {
+      new Notification(title, { body: bodyText, dir: 'rtl' });
+    }
+  }
+}
+
 const SUPABASE_URL = 'https://eptvlnqekogdakvyloeg.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Z5vHRP5UVmChVqGZ_1psRg_5DSYye5J';
 let supabaseClient = null;
@@ -1018,7 +1064,9 @@ function toggleSystemSettingsContent() {
 let systemSettingsOpen = false;
 
 function initDailyReminder() {
-  if ("Notification" in window && Notification.permission !== "granted") Notification.requestPermission();
+  if ("Notification" in window && Notification.permission !== "granted") {
+    // ניתן לבקש הרשאה או להשאיר זאת ידנית דרך התפריט
+  }
   setInterval(() => {
     const now = new Date();
     if (now.getHours() === 20 && now.getMinutes() === 0) {
@@ -1026,6 +1074,10 @@ function initDailyReminder() {
       if (localStorage.getItem(`pulse_reminder_${todayStr}`) !== 'true') {
         localStorage.setItem(`pulse_reminder_${todayStr}`, 'true');
         document.getElementById('reminderModal').classList.remove('hidden');
+        sendSystemNotification(
+          "תזכורת הוצאות יומית 💡", 
+          "היי! זה הזמן לעצור רגע, לעדכן את ההוצאות וההכנסות של היום ולהישאר בשליטה מלאה."
+        );
       }
     }
   }, 30000);
@@ -1377,7 +1429,6 @@ function isWithinFinancialMonth(txDateStr, offsetMonths = 0) {
   if(!txDateStr) return true;
   const txDate = new Date(txDateStr + 'T00:00:00');
   const { startPeriod, endPeriod } = getFinancialPeriodDates(offsetMonths);
-  // שימוש ב- <= מבטיח שהתנועות עד יום ההורדה (למשל ה-15) כולל ייכללו בחישוב
   return txDate >= startPeriod && txDate <= endPeriod;
 }
 
@@ -1629,7 +1680,6 @@ function renderTableScreen() {
   const select = document.getElementById('tableMonthSelect');
   const offset = select ? parseInt(select.value) || 0 : 0;
 
-  // הצגת טווח התאריכים המדויק בכותרת המשנה
   const { startPeriod, endPeriod } = getFinancialPeriodDates(offset);
   const subtitleEl = document.getElementById('tableDateRangeSubtitle');
   if(subtitleEl) {

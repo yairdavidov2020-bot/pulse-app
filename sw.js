@@ -284,8 +284,13 @@
     </div>
 </div>
 
-<!-- 5-STEP CLEAN ONBOARDING WIZARD WITH LOGIN BUTTON -->
+<!-- 5-STEP CLEAN ONBOARDING WIZARD WITH TOP-RIGHT LOGIN BUTTON -->
 <div id="onboarding-step-0" class="full-page-onboarding hidden">
+    <!-- כפתור התחברות בפינה העליונה הימנית -->
+    <button onclick="loginWithExistingUser()" class="absolute top-4 right-4 z-30 py-2 px-3 rounded-xl font-bold text-xs cursor-pointer bg-[var(--card)] border border-[var(--border)] text-emerald-400 hover:text-white transition flex items-center gap-1.5 shadow-xl">
+        <i class="fa-solid fa-cloud-arrow-down"></i> יש לך חשבון? התחבר
+    </button>
+
     <div class="road-city-bg">
         <svg class="w-full h-full" viewBox="0 0 400 800" preserveAspectRatio="none">
             <defs>
@@ -313,10 +318,6 @@
             <button onclick="wizardNextStep(1)" class="w-full py-3.5 rounded-2xl font-bold text-sm shadow-xl cursor-pointer bg-gradient-to-l from-emerald-500 to-teal-600 text-white hover:opacity-95 transition flex items-center justify-center gap-2">
                 <span>התחל הגדרה מהירה</span>
                 <i class="fa-solid fa-arrow-left text-xs"></i>
-            </button>
-            <!-- כפתור התחברות מהיר עם שם משתמש קיים מהענן -->
-            <button onclick="loginWithExistingUser()" class="w-full py-2.5 px-4 rounded-xl font-bold text-xs cursor-pointer bg-[var(--card)] border border-[var(--border)] text-emerald-400 hover:text-white transition flex items-center justify-center gap-2 shadow-md">
-                <i class="fa-solid fa-cloud-arrow-down"></i> יש לך כבר חשבון? התחבר עם שם משתמש
             </button>
             <label class="w-full py-2.5 px-4 rounded-xl font-bold text-xs cursor-pointer bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-center gap-2">
                 <i class="fa-solid fa-file-arrow-up"></i> שחזור גיבוי מקומי קודם

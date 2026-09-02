@@ -544,9 +544,9 @@
             <h3 class="text-xs font-bold text-violet-400"><i class="fa-solid fa-tags ml-1"></i> קטגוריות מערכת מוגנות</h3>
             <button onclick="closeCategoriesModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
-        <p class="text-[10px] text-slate-300 leading-relaxed">לחץ על כל קטגוריה ראשית כדי לצפות בכל תתי-הקטגוריות שלה מתחתיה:</p>
+        <p class="text-[10px] text-slate-300 leading-relaxed">הקטגוריות הראשיות מנהלות ברקע למעלה מ-1,500 תתי-קטגוריות מוגדרות מראש לשליטה מלאה בלי להעמיס על המסך:</p>
         
-        <div id="modalCatList" class="space-y-1.5 max-h-[190px] overflow-y-auto"></div>
+        <div id="modalCatList" class="space-y-1.5 max-h-[220px] overflow-y-auto"></div>
 
         <div class="border-t border-[var(--border)] pt-2 space-y-2">
             <p class="text-[11px] font-bold text-slate-200">הוספת קטגוריה ראשית חדשה:</p>
@@ -873,7 +873,7 @@ async function saveDataToSupabase(appState) {
   } catch (err) {}
 }
 
-// 100+ UNIQUE SUB-CATEGORIES PER MAIN CATEGORY (NO DUPLICATES, COMPREHENSIVE)
+// 100+ UNIQUE SUB-CATEGORIES PER MAIN CATEGORY (OPTIMIZED DICTIONARY BACKGROUND)
 const masterCategoriesMap = {
   'אוכל': [
     'סופר', 'מסעדה', 'משלוח', 'קפה', 'שקם', 'קצבייה', 'חטיפים', 'מאפייה', 'גלידה', 'פירות', 'ירקות', 'משקאות', 
@@ -1288,7 +1288,7 @@ function getLocalDateString(d) {
 
 function persist() {
   sortTransactions();
-  localStorage.setItem('pulse_state_v62', JSON.stringify(state));
+  localStorage.setItem('pulse_state_v63', JSON.stringify(state));
   saveDataToSupabase(state);
 }
 
@@ -1334,7 +1334,7 @@ async function factoryReset() {
         await supabaseClient.from('app_data').delete().eq('id', state.handle);
       } catch(e) {}
     }
-    localStorage.removeItem('pulse_state_v62');
+    localStorage.removeItem('pulse_state_v63');
     location.reload();
   }
 }
@@ -1452,21 +1452,21 @@ window.onload = async function() {
   setTimeout(() => {
     const splash = document.getElementById('appSplashScreen');
     if(splash) { splash.style.opacity = '0'; setTimeout(() => splash.remove(), 700); }
-  }, 3500);
+  }, 2500);
 
-  let saved = localStorage.getItem('pulse_state_v62');
+  let saved = localStorage.getItem('pulse_state_v63');
   if(saved) {
     try {
       state = JSON.parse(saved);
     } catch(e) {
-      localStorage.removeItem('pulse_state_v62');
+      localStorage.removeItem('pulse_state_v63');
     }
   }
 
   if (state.handle && supabaseClient) {
     try {
       const cloudData = await loadDataFromSupabase();
-      if (cloudData && cloudData.userName) { state = cloudData; localStorage.setItem('pulse_state_v62', JSON.stringify(state)); }
+      if (cloudData && cloudData.userName) { state = cloudData; localStorage.setItem('pulse_state_v63', JSON.stringify(state)); }
     } catch(e) {}
   }
 
@@ -1581,22 +1581,21 @@ async function startCinematicBuild() {
   persist();
 
   const steps = [
-    { progress: 10, title: "מאמת את שם המשתמש והפרופיל...", sub: `בודק את ${handle}, מחבר את הנתונים לענן...` },
-    { progress: 30, title: "טוען את מאגר-העל הענק...", sub: "מטעין מעל 100 קטגוריות ותתי-קטגוריות לזיהוי קולי..." },
-    { progress: 55, title: "מגדיר את הדשבורד האישי שלך...", sub: "בונה את עצי הנתונים, תקופות התקציב ויעדי החיסכון..." },
-    { progress: 80, title: "מכין את העוזר הקולי והגרפים...", sub: "מסדר את מנועי פילוח ההוצאות וטבלאות האקסל..." },
-    { progress: 100, title: "העולם הפיננסי שלך מוכן!", sub: "פותח את הדשבורד האישי..." }
+    { progress: 20, title: "מאמת את שם המשתמש...", sub: `מתחבר לענן עבור ${handle}...` },
+    { progress: 50, title: "טוען את מאגר-העל החכם...", sub: "מכין את מנועי זיהוי התת-קטגוריות..." },
+    { progress: 80, title: "מגדיר את הדשבורד...", sub: "מסדר את עצי הנתונים והגרפים..." },
+    { progress: 100, title: "העולם הפיננסי שלך מוכן!", sub: "פותח את האפליקציה..." }
   ];
 
   for (let i = 0; i < steps.length; i++) {
-    await new Promise(r => setTimeout(r, 6000));
+    await new Promise(r => setTimeout(r, 400));
     document.getElementById('buildProgressBar').style.width = steps[i].progress + '%';
     document.getElementById('buildPercentText').textContent = steps[i].progress + '%';
     document.getElementById('buildTitle').textContent = steps[i].title;
     document.getElementById('buildSubText').textContent = steps[i].sub;
   }
 
-  await new Promise(r => setTimeout(r, 1000));
+  await new Promise(r => setTimeout(r, 400));
   document.getElementById('onboarding-step-6').classList.add('hidden');
   document.getElementById('tutorialModal').classList.remove('hidden');
   setDynamicGreeting();
@@ -2099,7 +2098,7 @@ function processSmartText() {
   input.value = '';
 }
 
-// STRICT WORD-BOUNDARY MATCHING (Prevents false forced matches)
+// STRICT WORD-BOUNDARY MATCHING
 function isSubMatch(text, sub) {
   let cleanSub = sub.trim();
   try {
@@ -2188,7 +2187,6 @@ function processVoiceCommandDirectly(text){
     if (matchedCat) break;
   }
 
-  // IF NO TRUE MATCH FOUND, DO NOT FORCE WRONG MATCH -> TRIGGER FALLBACK MODAL SEAMLESSLY
   if (!matchedCat) {
     populateVoiceCategorySelect();
     const cleanSub = cleanSubCategoryText(text);
@@ -2278,6 +2276,7 @@ function cancelVoiceTransaction() {
 function openCategoriesModal() { document.getElementById('categoriesModal').classList.remove('hidden'); renderModalCategoryList(); }
 function closeCategoriesModal() { document.getElementById('categoriesModal').classList.add('hidden'); }
 
+// LAZY RENDERING FOR MODAL CATEGORIES (Prevents memory overload)
 function renderModalCategoryList() {
   const container = document.getElementById('modalCatList');
   if(!container) return;
@@ -2295,34 +2294,35 @@ function renderModalCategoryList() {
         <span class="text-[11px] font-bold text-slate-100">${c.name}</span>
       </div>
       <div class="flex items-center gap-2">
-        <span class="text-[9px] text-slate-400">(${subs.length} תתי-קטגוריות)</span>
+        <span class="text-[9px] text-slate-400">(${subs.length} תתי-קטגוריות מאורגנות)</span>
         <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform"></i>
       </div>
     `;
 
     const subContainer = document.createElement('div');
-    subContainer.className = 'hidden px-3 py-2 border-t border-[var(--border)] space-y-1 bg-[var(--bg)] max-h-[120px] overflow-y-auto';
-    if(subs.length === 0) {
-      subContainer.innerHTML = '<p class="text-[9px] text-slate-400">אין תתי-קטגוריות</p>';
-    } else {
-      subs.forEach(sub => {
-        const subItem = document.createElement('div');
-        subItem.className = 'text-[10px] text-slate-300 flex items-center gap-1.5 py-0.5';
-        subItem.innerHTML = `<i class="fa-solid fa-angle-left text-[8px] text-emerald-400"></i> ${sub}`;
-        subContainer.appendChild(subItem);
-      });
-    }
-
+    subContainer.className = 'hidden px-3 py-2 border-t border-[var(--border)] space-y-1 bg-[var(--bg)] max-h-[140px] overflow-y-auto subcat-dropdown';
+    
+    let rendered = false;
     header.onclick = () => {
       const isHidden = subContainer.classList.contains('hidden');
       document.querySelectorAll('.subcat-dropdown').forEach(el => el.classList.add('hidden'));
       document.querySelectorAll('.category-chevron').forEach(el => el.style.transform = 'rotate(0deg)');
+      
       if(isHidden) {
+        if(!rendered) {
+          subContainer.innerHTML = '';
+          subs.forEach(sub => {
+            const subItem = document.createElement('div');
+            subItem.className = 'text-[10px] text-slate-300 flex items-center gap-1.5 py-0.5';
+            subItem.innerHTML = `<i class="fa-solid fa-angle-left text-[8px] text-emerald-400"></i> ${sub}`;
+            subContainer.appendChild(subItem);
+          });
+          rendered = true;
+        }
         subContainer.classList.remove('hidden');
         header.querySelector('i').style.transform = 'rotate(180deg)';
       }
     };
-    subContainer.classList.add('subcat-dropdown');
     header.querySelector('i').classList.add('category-chevron');
 
     itemWrap.appendChild(header);

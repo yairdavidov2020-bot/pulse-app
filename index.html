@@ -271,12 +271,12 @@
 
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-violet-400 flex items-center gap-1.5"><i class="fa-solid fa-table"></i> 3. טבלה חודשית (אקסל פיננסי)</p>
-                    <p class="leading-relaxed">מרכז את כל ההוצאות וההכנסות לפי קטגוריות ראשיות ותתי-קטגוריות עם סינון אוטומטי מלא לפי חודשים ותקופות.</p>
+                    <p class="leading-relaxed">מרכז את כל ההוצאות וההכנסות לפי קטגוריות ראשיות ותתי-קטגוריות עם סינון אוטומטי מלא לפי חודשים ותקופות, כולל אפשרות אופציונלית להגדרת תקציב ובדיקת עמידה ביעד.</p>
                 </div>
 
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-amber-400 flex items-center gap-1.5"><i class="fa-solid fa-tags"></i> 4. קטגוריות מוגנות והוראות קבע</p>
-                    <p class="leading-relaxed">קטגוריות המערכת קבועות מראש ומוגנות (לא ניתן למחוק או לערוך אותן, אך ניתן להוסיף קטגוריות משלכם בתפריט הצדדי). כמו כן, ניתן להגדיר הוראות קבע ומנויים שיורדו ויחשבו אוטומטית בכל תקופה.</p>
+                    <p class="leading-relaxed">קטגוריות המערכת קבועות מראש ומוגנות. ניתן להוסיף קטגוריות משלכם, להגדיר תקציב אופציונלי דרך טבלת האקסל, ולנהל הוראות קבע ומנויים.</p>
                 </div>
             </div>
         </div>
@@ -477,7 +477,7 @@
             <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-microphone ml-1"></i> העוזר הקולי והצ׳אט החכם</h3>
             <button onclick="closeChatHelpModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
-        <p class="text-[11px] text-slate-300 leading-relaxed">העוזר הקולי והצ׳אט החכם מזהים אוטומטית מאות קטגוריות, תתי-קטגוריות ותאריכים (במילים או במספרים) מכל תחום בחיים ומסדרת הכל לבד בשניות.</p>
+        <p class="text-[11px] text-slate-300 leading-relaxed">העוזר הקולי והצ׳אט החכם מזהים אוטומטית מאות קטגוריות, תתי-קטגוריות ותאריכים מכל תחום בחיים ומסדרת הכל לבד בשניות.</p>
         <button onclick="closeChatHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי</button>
     </div>
 </div>
@@ -900,7 +900,7 @@ async function quickLogin() {
   }
 }
 
-// Clean master categories map with zero cross-category overlaps and at least 40 unique subcategories per main category
+// Master categories including 'מתנה לבת זוג / אמא / אשה'
 const masterCategoriesMap = {
   'אוכל': [
     'סופר', 'מסעדה', 'משלוח', 'קפה', 'שקם', 'קצבייה', 'חטיפים', 'מאפייה', 'גלידה', 'פירות', 'ירקות', 'משקאות', 
@@ -921,7 +921,7 @@ const masterCategoriesMap = {
     'וויסקי', 'וודקה', 'טקילה', 'רום', 'קוניאק', 'ערק', 'יין אדום', 'יין לבן', 'מרלו', 'קברנה', 'סטלה', 'הייניקן', 
     'קורונה', 'גינס'
   ],
-  'מתנות לבת זוג / אמא / אשה': [
+  'מתנה לבת זוג / אמא / אשה': [
     'שרשרת זהב', 'צמיד יהלומים', 'טבעת אירוסין', 'עגילי פנינה', 'תליון לב', 'בושם יוקרתי', 'שזרת פרחים ענקית', 
     'מארז טיפוח מפנק', 'נר ריחני יוקרתי', 'שעון יד אלגנטי', 'גיפט קארד לספא', 'שבת בצימר יוקרתי', 'כרטיסים להצגת בכורה', 
     'בלוני הליום בצורת לב', 'מארז שוקולד בלגי', 'שמלת ערב מעוצבת', 'תיק יד מעור', 'ארנק ממותג', 'תמונה ממוסגרת אישית', 
@@ -1287,6 +1287,14 @@ window.onload = async function() {
       budget: 0
     }));
   }
+  
+  // Ensure 'מתנה לבת זוג / אמא / אשה' exists in expenseCats if loaded from old state
+  Object.keys(masterCategoriesMap).forEach(key => {
+    if(!state.expenseCats.find(c => c.name === key)) {
+      state.expenseCats.push({ name: key, color: availableColors[state.expenseCats.length % availableColors.length], budget: 0 });
+    }
+  });
+
   sortTransactions();
   
   if(!state.onboardingCompleted || !state.handle || state.baseline === null || state.baseline === undefined) {
@@ -1764,6 +1772,19 @@ function deleteTransaction(id) {
   showToast("התנועה נמחקה בהצלחה");
 }
 
+function editCategoryBudget(catName) {
+  const catObj = state.expenseCats.find(c => c.name === catName);
+  if(!catObj) return;
+  const current = catObj.budget || 0;
+  const val = prompt(`הכנס תקציב חודשי אופציונלי לקטגוריה "${catName}" (הארק ריק או 0 לביטול):`, current);
+  if(val !== null) {
+    catObj.budget = parseFloat(val) || 0;
+    persist();
+    renderTableScreen();
+    showToast("התקציב עודכן בהצלחה!");
+  }
+}
+
 function renderTableScreen() {
   const container = document.getElementById('excelTableContainer');
   if(!container) return;
@@ -1801,7 +1822,7 @@ function renderTableScreen() {
       });
     }
 
-    if(catTotal > 0) {
+    if(catTotal > 0 || (cat.budget && cat.budget > 0)) {
       renderedCount++;
       const card = document.createElement('div');
       card.className = 'summary-card p-3 space-y-2';
@@ -1819,6 +1840,27 @@ function renderTableScreen() {
         }
       });
 
+      const budget = cat.budget || 0;
+      let budgetStatusHtml = '';
+      if(budget > 0) {
+        const isExceeded = catTotal > budget;
+        const statusText = isExceeded ? 'חורג מהיעד 🔴' : 'עומד ביעד 🟢';
+        const statusColor = isExceeded ? 'text-rose-400 font-bold' : 'text-emerald-400 font-bold';
+        budgetStatusHtml = `
+          <div class="flex items-center justify-between text-[10px] pt-1.5 border-t border-[var(--border)] mt-1">
+            <span class="text-slate-300">תקציב: ${fmt(budget)} | <span class="${statusColor}">${statusText}</span></span>
+            <button onclick="editCategoryBudget('${cat.name}')" class="text-violet-400 underline cursor-pointer font-bold">ערוך תקציב</button>
+          </div>
+        `;
+      } else {
+        budgetStatusHtml = `
+          <div class="flex items-center justify-between text-[10px] pt-1.5 border-t border-[var(--border)] mt-1">
+            <span class="text-slate-500">ללא תקציב (אופציונלי)</span>
+            <button onclick="editCategoryBudget('${cat.name}')" class="text-emerald-400 underline cursor-pointer font-bold">+ הגדר תקציב</button>
+          </div>
+        `;
+      }
+
       card.innerHTML = `
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
           <div class="flex items-center gap-2">
@@ -1830,6 +1872,7 @@ function renderTableScreen() {
         <div class="space-y-1 pt-1">
           ${subRowsHtml}
         </div>
+        ${budgetStatusHtml}
       `;
       container.appendChild(card);
     }

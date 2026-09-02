@@ -848,7 +848,9 @@ async function loadDataFromSupabase() {
   if (!supabaseClient) return null;
   try {
     const userKey = state.handle || state.userName || 'user';
-    const { data } = await supabaseClient.from('app_data').select('payload').eq('id', userKey).single();
+    const fetchPromise = supabaseClient.from('app_data').select('payload').eq('id', userKey).single();
+    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject('timeout'), 2500));
+    const { data } = await Promise.race([fetchPromise, timeoutPromise]);
     return data ? data.payload : null;
   } catch (err) { return null; }
 }
@@ -861,7 +863,6 @@ async function saveDataToSupabase(appState) {
   } catch (err) {}
 }
 
-// Master Categories Map with 100+ strictly unique single-word subcategories per main category (zero cross-category duplication)
 const masterCategoriesMap = {
   'אוכל': [
     'סופר', 'מסעדה', 'משלוח', 'קפה', 'שקם', 'קצבייה', 'חטיפים', 'מאפייה', 'גלידה', 'פירות', 'ירקות', 'משקאות', 
@@ -1296,10 +1297,11 @@ function deleteRecurringItem(id) {
 }
 
 window.onload = async function() {
+  // Safe fail-safe splash screen removal (guaranteed removal after max 2.5s)
   setTimeout(() => {
     const splash = document.getElementById('appSplashScreen');
     if(splash) { splash.style.opacity = '0'; setTimeout(() => splash.remove(), 700); }
-  }, 3500);
+  }, 1200);
 
   let saved = localStorage.getItem('pulse_state_v62');
   if(saved) {
@@ -1337,7 +1339,7 @@ window.onload = async function() {
     document.getElementById('onboarding-step-0').classList.remove('hidden');
   } else {
     document.getElementById('onboarding-step-0').classList.add('hidden');
-    await saveDataToSupabase(state);
+    saveDataToSupabase(state);
   }
 
   if(document.getElementById('langSelect')) document.getElementById('langSelect').value = state.language || 'he';
@@ -1428,22 +1430,22 @@ async function startCinematicBuild() {
   persist();
 
   const steps = [
-    { progress: 10, title: "מאמת את שם המשתמש והפרופיל...", sub: `בודק את ${handle}, מחבר את הנתונים לענן...` },
-    { progress: 30, title: "טוען את מאגר-העל הענק...", sub: "מטעין 100+ תתי-קטגוריות ייחודיות ללא כפילויות..." },
-    { progress: 55, title: "מגדיר את הדשבורד האישי שלך...", sub: "בונה את עצי הנתונים, תקופות התקציב ויעדי החיסכון..." },
-    { progress: 80, title: "מכין את העוזר הקולי והגרפים...", sub: "מסדר את מנועי פילוח ההוצאות וטבלאות האקסל..." },
+    { progress: 20, title: "מאמת את שם המשתמש והפרופיל...", sub: `בודק את ${handle}, מחבר את הנתונים לענן...` },
+    { progress: 45, title: "טוען את מאגר-העל הענק...", sub: "מטעין 100+ תתי-קטגוריות ייחודיות ללא כפילויות..." },
+    { progress: 70, title: "מגדיר את הדשבורד האישי שלך...", sub: "בונה את עצי הנתונים, תקופות התקציב ויעדי החיסכון..." },
+    { progress: 90, title: "מכין את העוזר הקולי והגרפים...", sub: "מסדר את מנועי פילוח ההוצאות וטבלאות האקסל..." },
     { progress: 100, title: "העולם הפיננסי שלך מוכן!", sub: "פותח את הדשבורד האישי..." }
   ];
 
   for (let i = 0; i < steps.length; i++) {
-    await new Promise(r => setTimeout(r, 6000));
+    await new Promise(r => setTimeout(r, 400));
     document.getElementById('buildProgressBar').style.width = steps[i].progress + '%';
     document.getElementById('buildPercentText').textContent = steps[i].progress + '%';
     document.getElementById('buildTitle').textContent = steps[i].title;
     document.getElementById('buildSubText').textContent = steps[i].sub;
   }
 
-  await new Promise(r => setTimeout(r, 1000));
+  await new Promise(r => setTimeout(r, 400));
   document.getElementById('onboarding-step-6').classList.add('hidden');
   document.getElementById('tutorialModal').classList.remove('hidden');
   setDynamicGreeting();

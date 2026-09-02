@@ -175,7 +175,6 @@
   <span id="toastText">הפעולה בוצעה בהצלחה!</span>
 </div>
 
-<!-- Longer and enriched Opening Splash Screen -->
 <div id="appSplashScreen" class="fixed inset-0 z-[999999] bg-[#05070B] flex flex-col items-center justify-center transition-all duration-700">
     <div class="flex flex-col items-center space-y-4 px-6 text-center max-w-sm">
         <div class="relative flex items-center justify-center">
@@ -262,7 +261,7 @@
             <div class="space-y-3 text-[11px] text-slate-300">
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-microphone"></i> 1. ללא בחירת קטגוריות — פשוט מדברים</p>
-                    <p class="leading-relaxed">החידוש המרכזי ב-Pulse: **אין צורך לבחור קטגוריות ידנית**. פשוט מקלידים או אומרים בשפה חופשית (למשל: "קניות בסופר 150 שקל"), והמערכת מזהה לבד מתוך מאגר-העל ומסדרת הכל ברגע.</p>
+                    <p class="leading-relaxed">החידוש המרכזי ב-Pulse: **אין צורך לבחור קטגוריות ידנית**. פשוט מקלידים או אומרים בשפה חופשית (למשל: "קניות בסופר 150 שקל אתמול"), והמערכת מזהה לבד מתוך מאגר-העל את התאריך והקטגוריה ומסדרת הכל ברגע.</p>
                 </div>
 
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
@@ -477,7 +476,7 @@
             <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-microphone ml-1"></i> העוזר הקולי והצ׳אט החכם</h3>
             <button onclick="closeChatHelpModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
-        <p class="text-[11px] text-slate-300 leading-relaxed">העוזר הקולי והצ׳אט החכם מזהים אוטומטית מאות קטגוריות ותתי-קטגוריות מכל תחום בחיים ומסדרים הכל לבד בשניות.</p>
+        <p class="text-[11px] text-slate-300 leading-relaxed">העוזר הקולי והצ׳אט החכם מזהים אוטומטית מאות קטגוריות, תתי-קטגוריות ותאריכים (במילים או במספרים) מכל תחום בחיים ומסדרים הכל לבד בשניות.</p>
         <button onclick="closeChatHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי</button>
     </div>
 </div>
@@ -503,8 +502,8 @@
             <h3 class="text-xs font-bold text-emerald-400">הכתבה חכמה</h3>
             <button onclick="closeVoiceHelpModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
-        <p class="text-[11px] text-slate-300 leading-relaxed">אמור או הקלד משפט חופשי. דוגמאות מוצלחות:</p>
-        <p class="text-[11px] font-bold text-emerald-300 bg-[var(--card-2)] p-2 rounded-lg border border-[var(--border)]">"שילמתי 120 שקל במסעדה"</p>
+        <p class="text-[11px] text-slate-300 leading-relaxed">אמור או הקלד משפט חופשי כולל תאריך. דוגמאות מוצלחות:</p>
+        <p class="text-[11px] font-bold text-emerald-300 bg-[var(--card-2)] p-2 rounded-lg border border-[var(--border)]">"שילמתי 120 שקל במסעדה אתמול"</p>
         <button onclick="closeVoiceHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי</button>
     </div>
 </div>
@@ -678,7 +677,6 @@
           </div>
         </section>
 
-        <!-- Daily Tip without hashtag/number -->
         <section class="summary-card p-2 flex items-start gap-2 bg-gradient-to-l from-emerald-500/10 to-blue-500/10 border border-emerald-400/30 my-0.5">
           <div class="w-6 h-6 rounded-lg bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 text-xs flex-shrink-0 mt-0.5">
             <i class="fa-solid fa-lightbulb"></i>
@@ -729,13 +727,13 @@
                 </h4>
                 <button onclick="openVoiceHelpModal()" class="w-3.5 h-3.5 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[8px] font-bold flex items-center justify-center text-emerald-400 cursor-pointer">?</button>
               </div>
-              <p id="micStatus" class="text-[9px] mt-0.5 leading-tight truncate" style="color:var(--text-dim)">למשל: "קניות בסופר 150 שקל"</p>
+              <p id="micStatus" class="text-[9px] mt-0.5 leading-tight truncate" style="color:var(--text-dim)">למשל: "קניות בסופר 150 שקל אתמול"</p>
             </div>
           </div>
 
           <div class="summary-card p-2 space-y-1">
             <div class="field-shell flex items-center px-2.5 py-1.5">
-              <input id="smartTextInput" type="text" placeholder="הכתבה... (למשל: קניות בסופר 150 שקל)" class="w-full bg-transparent outline-none text-[10px] font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
+              <input id="smartTextInput" type="text" placeholder="הכתבה... (למשל: קניות בסופר 150 שקל אתמול)" class="w-full bg-transparent outline-none text-[10px] font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
             </div>
             <button onclick="processSmartText()" class="save-btn w-full py-1.5 rounded-xl text-[10px] font-bold cursor-pointer shadow-sm">פענח והוסף תנועה</button>
           </div>
@@ -1112,7 +1110,6 @@ function deleteRecurringItem(id) {
 }
 
 window.onload = async function() {
-  // Longer splash screen timeout (3.5 seconds)
   setTimeout(() => {
     const splash = document.getElementById('appSplashScreen');
     if(splash) { splash.style.opacity = '0'; setTimeout(() => splash.remove(), 700); }
@@ -1306,7 +1303,6 @@ function setDynamicGreeting() {
   const title = document.getElementById('greetingTitle');
   if(!title) return;
   const hour = new Date().getHours();
-  // Greeting ranges: 06:00-12:00 בוקר טוב, 12:00-19:00 צהריים טובים, 19:00-00:00 ערב טוב, 00:00-06:00 לילה טוב
   let timeGreeting = "לילה טוב";
   if (hour >= 6 && hour < 12) timeGreeting = "בוקר טוב";
   else if (hour >= 12 && hour < 19) timeGreeting = "צהריים טובים";
@@ -1535,7 +1531,7 @@ function renderAnalytics() {
         <span class="w-2.5 h-2.5 rounded-full" style="background:${latest.color}"></span>
         <div>
           <p class="text-[11px] font-bold">${latest.cat}</p>
-          <p class="text-[9px] text-slate-400">${latest.subCat || 'כללי'}</p>
+          <p class="text-[9px] text-slate-400">${latest.subCat || 'כללי'} • ${latest.date || ''}</p>
         </div>
       </div>
       <span class="tabular font-bold" style="color:${col}">${sign}${fmt(latest.amount)}</span>
@@ -1742,7 +1738,7 @@ function resetVoiceUI(){
   const btn = document.getElementById('micBtn');
   if(btn) btn.classList.remove('listening');
   const status = document.getElementById('micStatus');
-  if(status) status.textContent = 'למשל: "קניות בסופר 150 שקל"';
+  if(status) status.textContent = 'למשל: "קניות בסופר 150 שקל אתמול"';
   activeRecognition = null;
 }
 
@@ -1760,13 +1756,57 @@ function isSubMatch(text, sub) {
   return false;
 }
 
-// Clean subcategory text by stripping out numbers and currency symbols
 function cleanSubCategoryText(rawText) {
   let cleaned = rawText
     .replace(/(\d+[\.,]?\d*)/g, '')
     .replace(/(שקל|שקלים|₪|\$|€|£|¥)/g, '')
+    .replace(/(אתמול|שלשום|היום)/g, '')
+    .replace(/ב-\d{1,2}\s*לחודש/g, '')
+    .replace(/\d{1,2}[\.\/]\d{1,2}([\.\/]\d{2,4})?/g, '')
     .trim();
   return cleaned || rawText.trim();
+}
+
+// Advanced date parser from natural text (words and numbers)
+function parseDateFromText(text) {
+  const now = new Date();
+  let targetDate = new Date(now);
+
+  if (text.includes('אתמול')) {
+    targetDate.setDate(now.getDate() - 1);
+    return getLocalDateString(targetDate);
+  }
+  if (text.includes('שלשום')) {
+    targetDate.setDate(now.getDate() - 2);
+    return getLocalDateString(targetDate);
+  }
+  if (text.includes('היום')) {
+    return getLocalDateString(now);
+  }
+
+  // Match numeric dates like 15.8, 15/08, 15.08.2026
+  const dateRegex = /(\d{1,2})[\.\/](\d{1,2})(?:[\.\/](\d{2,4}))?/;
+  const match = text.match(dateRegex);
+  if (match) {
+    const day = parseInt(match[1]);
+    const month = parseInt(match[2]) - 1;
+    let year = match[3] ? parseInt(match[3]) : now.getFullYear();
+    if (year < 100) year += 2000;
+    const customDate = new Date(year, month, day);
+    if (!isNaN(customDate.getTime())) {
+      return getLocalDateString(customDate);
+    }
+  }
+
+  // Match phrases like "ב-15 לחודש" or "15 לחודש"
+  const dayMatch = text.match(/ב?-?(\d{1,2})\s*לחודש/);
+  if (dayMatch) {
+    const day = parseInt(dayMatch[1]);
+    const customDate = new Date(now.getFullYear(), now.getMonth(), day);
+    return getLocalDateString(customDate);
+  }
+
+  return getLocalDateString(now);
 }
 
 function processVoiceCommandDirectly(text){
@@ -1779,6 +1819,8 @@ function processVoiceCommandDirectly(text){
   }
 
   if(!amount || isNaN(amount)) { alert("לא זיהיתי סכום ברור."); return; }
+
+  const parsedDate = parseDateFromText(text);
 
   let matchedCat = null;
   let matchedSub = null;
@@ -1808,9 +1850,9 @@ function processVoiceCommandDirectly(text){
   if (!matchedCat) {
     populateVoiceCategorySelect();
     const cleanSub = cleanSubCategoryText(text);
-    pendingSmartTx = { type: 'expense', amount, cat: state.expenseCats[0].name, subCat: cleanSub, color: state.expenseCats[0].color, date: getLocalDateString(new Date()) };
+    pendingSmartTx = { type: 'expense', amount, cat: state.expenseCats[0].name, subCat: cleanSub, color: state.expenseCats[0].color, date: parsedDate };
     document.getElementById('voiceSubCatInput').value = cleanSub;
-    document.getElementById('voiceParsedInfo').innerHTML = `סכום שזוהה: <span class="text-emerald-400 font-bold">${fmt(amount)}</span>`;
+    document.getElementById('voiceParsedInfo').innerHTML = `סכום שזוהה: <span class="text-emerald-400 font-bold">${fmt(amount)}</span> (תאריך: ${parsedDate})`;
     document.getElementById('voiceDescModal').classList.remove('hidden');
   } else {
     const catObj = state.expenseCats.find(c => c.name === matchedCat) || state.expenseCats[0];
@@ -1821,14 +1863,14 @@ function processVoiceCommandDirectly(text){
       cat: matchedCat,
       subCat: matchedSub || 'כללי',
       color: catObj.color,
-      date: getLocalDateString(new Date())
+      date: parsedDate
     };
     state.transactions.push(newTx);
     persist();
     renderHome();
     renderAnalytics();
     resetVoiceUI();
-    showToast(`✅ נשמר בהצלחה: ${fmt(amount)} (${matchedCat} - ${matchedSub})`);
+    showToast(`✅ נשמר בהצלחה: ${fmt(amount)} (${matchedCat}) בתאריך ${parsedDate}`);
   }
 }
 
@@ -1894,7 +1936,6 @@ function cancelVoiceTransaction() {
 function openCategoriesModal() { document.getElementById('categoriesModal').classList.remove('hidden'); renderModalCategoryList(); }
 function closeCategoriesModal() { document.getElementById('categoriesModal').classList.add('hidden'); }
 
-// Render Category List with click-to-expand subcategories
 function renderModalCategoryList() {
   const container = document.getElementById('modalCatList');
   if(!container) return;

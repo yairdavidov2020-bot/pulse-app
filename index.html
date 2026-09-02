@@ -69,10 +69,10 @@
   .glow-wrap{ position:relative; display:flex; justify-content:center; width:100%; }
   .glow-halo{ position:absolute; inset:-15px 10% auto 10%; height:100px; border-radius:50%; filter:blur(25px); background:radial-gradient(circle, var(--glow) 0%, transparent 68%); opacity:.45; transition:background 1s ease; }
   
-  .balance-card{ position:relative; width:100%; border:1px solid var(--border); background:linear-gradient(180deg, var(--card) 0%, var(--card-2) 100%); border-radius:18px; padding:16px 14px; text-align:center; z-index:1; display:flex; flex-direction:column; justify-content:center; height:100%; }
+  .balance-card{ position:relative; width:100%; border:1px solid var(--border); background:linear-gradient(180deg, var(--card) 0%, var(--card-2) 100%); border-radius:18px; padding:14px 12px; text-align:center; z-index:1; display:flex; flex-direction:column; justify-content:center; height:100%; }
   .balance-card::before{ content:""; position:absolute; inset:0; border-radius:18px; padding:1px; background:linear-gradient(135deg, var(--glow) 0%, transparent 45%, transparent 55%, var(--glow) 100%); opacity:.5; -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; }
   
-  .ecg-line{ width:100%; height:16px; margin-top:4px; overflow:hidden; }
+  .ecg-line{ width:100%; height:14px; margin-top:2px; overflow:hidden; }
   .ecg-line path{ stroke: #2EB88A; stroke-dasharray:340; animation:ecg-sweep 2s linear infinite; }
   @keyframes ecg-sweep{ from{stroke-dashoffset:340;} to{stroke-dashoffset:0;} }
 
@@ -161,11 +161,11 @@
   .nav-item.active{ color: var(--text); background: var(--card-2); border: 1px solid var(--border); }
   .nav-item.active svg{ stroke: var(--mint); }
 
-  .donut{ width:110px; height:110px; border-radius:50%; position:relative; margin:0 auto; box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
-  .donut::after{ content:""; position:absolute; inset:16px; border-radius:50%; background:var(--card); }
+  .donut{ width:100px; height:100px; border-radius:50%; position:relative; margin:0 auto; box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+  .donut::after{ content:""; position:absolute; inset:15px; border-radius:50%; background:var(--card); }
   .donut-center{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2; }
 
-  .tx-row{ display:flex; align-items:center; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border); }
+  .tx-row{ display:flex; align-items:center; justify-content:space-between; padding:5px 0; border-bottom:1px solid var(--border); }
   .tx-row:last-child{ border-bottom:none; }
 </style>
 </head>
@@ -315,6 +315,18 @@
     </div>
 </div>
 
+<!-- TRAVEL SUMMARY MODAL -->
+<div id="travelSummaryModal" class="modal-overlay hidden">
+    <div class="summary-card p-5 max-w-sm w-full space-y-4 shadow-2xl text-right border border-blue-400/40">
+        <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
+            <h3 class="text-sm font-black text-blue-400 flex items-center gap-2"><i class="fa-solid fa-plane-circle-check"></i> סיכום נסיעות וטיול</h3>
+            <button onclick="closeTravelSummaryModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
+        </div>
+        <div id="travelSummaryContent" class="space-y-2.5 text-[11px] text-slate-300"></div>
+        <button onclick="closeTravelSummaryModal()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs shadow-xl cursor-pointer">סגור סיכום וחזור למצב רגיל</button>
+    </div>
+</div>
+
 <div id="tutorialModal" class="modal-overlay hidden">
     <div class="summary-card p-5 max-w-md w-full space-y-4 shadow-2xl text-right relative overflow-hidden border border-emerald-400/50 max-h-[90vh] overflow-y-auto">
         <div class="absolute -top-16 -right-16 w-36 h-36 bg-emerald-500/20 rounded-full blur-3xl"></div>
@@ -327,21 +339,15 @@
             <div class="space-y-3 text-[11px] text-slate-300">
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-microphone"></i> 1. ללא בחירת קטגוריות — פשוט מדברים</p>
-                    <p class="leading-relaxed">החידוש המרכזי ב-Pulse: **אין צורך לבחור קטגוריות ידנית**. פשוט מקלידים או אומרים בשפה חופשית (למשל: "קניות בסופר 150 שקל אתמול"), והמערכת מזהה לבד.</p>
+                    <p class="leading-relaxed">החידוש המרכזי ב-Pulse: **אין צורך לבחור קטגוריות ידנית**. פשוט מקלידים או אומרים בשפה חופשית (למשל: "50 דולר במסעדה אתמול").</p>
                 </div>
-
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
-                    <p class="font-bold text-blue-400 flex items-center gap-1.5"><i class="fa-solid fa-piggy-bank"></i> 2. קופות חיסכון וירטואליות ומצב נסיעות</p>
-                    <p class="leading-relaxed">הקצה כסף למטרות בנפרד מהיתרה הכללית, ונהל הוצאות במטבע זר (דולר, יורו, באט) עם המרה אוטומטית מלאה לשקלים!</p>
-                </div>
-
-                <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
-                    <p class="font-bold text-violet-400 flex items-center gap-1.5"><i class="fa-solid fa-table"></i> 3. טבלה חודשית ואקסל פיננסי</p>
-                    <p class="leading-relaxed">מרכז את כל ההוצאות וההכנסות לפי קטגוריות ראשיות ותתי-קטגוריות עם סינון אוטומטי מלא לפי חודשים ותקופות.</p>
+                    <p class="font-bold text-blue-400 flex items-center gap-1.5"><i class="fa-solid fa-piggy-bank"></i> 2. קופות חיסכון ומצב נסיעות</p>
+                    <p class="leading-relaxed">נהל קופות חיסכון וירטואליות עם מחיקה ויזואלית קלה, והפעל מצב נסיעות עם כפתור כיבוי וסיכום טיול אוטומטי בסיומו!</p>
                 </div>
             </div>
         </div>
-        <button onclick="closeTutorialModal()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs shadow-xl cursor-pointer relative z-10">הבנתי לגמרי, בוא נמשיך!</button>
+        <button onclick="closeTutorialModal()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs shadow-xl cursor-pointer relative z-10">הבנתי לגמרי!</button>
     </div>
 </div>
 
@@ -713,9 +719,9 @@
 
     <!-- SCREEN 1: HOME -->
     <section id="screen-home" class="screen active">
-      <main class="px-3 pb-1 pt-1 flex-1 flex flex-col justify-between h-full overflow-hidden gap-1.5">
+      <main class="px-3 pb-1 pt-1 flex-1 flex flex-col justify-between h-full overflow-hidden gap-1">
         <section class="flex flex-col justify-center flex-1">
-          <div class="flex gap-2 mr-auto w-fit mb-1">
+          <div class="flex gap-2 mr-auto w-fit mb-0.5">
             <button onclick="openTutorialModal()" class="text-[9px] font-medium px-2 py-0.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-between gap-1 shadow-sm cursor-pointer">
               <span><i class="fa-solid fa-lightbulb ml-1"></i> שימוש יעיל</span>
             </button>
@@ -724,46 +730,55 @@
             </button>
           </div>
           <div class="px-0.5">
-            <h2 id="greetingTitle" class="text-[13px] font-bold tracking-tight leading-tight">שלום</h2>
+            <h2 id="greetingTitle" class="text-[12px] font-bold tracking-tight leading-tight">שלום</h2>
             <p class="text-[9px] text-slate-400">תמונת המצב הפיננסית שלך להיום</p>
           </div>
         </section>
 
+        <!-- Active Travel Banner if Travel Mode is On -->
+        <div id="homeTravelActiveBanner" class="hidden summary-card p-2.5 bg-gradient-to-l from-blue-500/20 to-indigo-500/20 border border-blue-400/40 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-blue-400 animate-ping"></span>
+                <span class="text-[10px] font-bold text-blue-300">✈️ מצב נסיעות פעיל ברקע</span>
+            </div>
+            <button onclick="triggerEndTravelMode()" class="text-[10px] font-bold bg-blue-500 text-white px-2.5 py-1 rounded-lg shadow cursor-pointer hover:bg-blue-600 transition">סיים וסכם נסיעה</button>
+        </div>
+
         <section class="glow-wrap flex-[1.6] flex flex-col justify-center">
           <div class="glow-halo" id="glowHalo"></div>
           <div class="balance-card">
-            <p class="text-xs font-bold tracking-wide text-slate-300">יתרה בעו״ש | <span id="freeCashSubText" class="text-emerald-400">פנוי: ₪0</span></p>
-            <h1 class="tabular text-[38px] sm:text-[44px] font-black mt-1 leading-none tracking-tight" id="balanceValue">0</h1>
+            <p class="text-[11px] font-bold tracking-wide text-slate-300">יתרה בעו״ש | <span id="freeCashSubText" class="text-emerald-400">פנוי: ₪0</span></p>
+            <h1 class="tabular text-[34px] sm:text-[40px] font-black mt-0.5 leading-none tracking-tight" id="balanceValue">0</h1>
             <svg class="ecg-line" viewBox="0 0 340 24" preserveAspectRatio="none"><path d="M0,12 L60,12 L72,2 L84,22 L96,12 L150,12 L162,4 L174,12 L340,12" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
         </section>
 
         <section class="summary-card p-2 flex items-start gap-2 bg-gradient-to-l from-emerald-500/10 to-blue-500/10 border border-emerald-400/30 my-0.5">
-          <div class="w-6 h-6 rounded-lg bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 text-xs flex-shrink-0 mt-0.5">
+          <div class="w-5 h-5 rounded-lg bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 text-[10px] flex-shrink-0 mt-0.5">
             <i class="fa-solid fa-lightbulb"></i>
           </div>
           <div class="flex-1 min-w-0 text-right">
             <div class="flex items-center justify-between mb-0.5">
               <span class="text-[9px] font-bold text-emerald-400">הטיפ היומי 💡</span>
             </div>
-            <p id="dailyTipText" class="text-[10px] text-slate-200 leading-tight font-medium">טוען טיפ יומי...</p>
+            <p id="dailyTipText" class="text-[9px] text-slate-200 leading-tight font-medium">טוען טיפ יומי...</p>
           </div>
         </section>
 
         <section class="grid grid-cols-2 gap-2 flex-1 items-center">
-          <div class="summary-card p-3 h-full flex flex-col justify-center">
+          <div class="summary-card p-2.5 h-full flex flex-col justify-center">
             <div class="flex items-center gap-1.5">
-              <span class="w-3.5 h-3.5 rounded-full flex items-center justify-center" style="background:var(--mint-bg)"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2.6" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
-              <span class="text-xs font-bold text-slate-300">הכנסות החודש</span>
+              <span class="w-3 h-3 rounded-full flex items-center justify-center" style="background:var(--mint-bg)"><svg width="6" height="6" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2.6" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
+              <span class="text-[11px] font-bold text-slate-300">הכנסות החודש</span>
             </div>
-            <p class="tabular text-xl sm:text-2xl font-black mt-1" style="color:var(--mint)" id="totalIncome">0</p>
+            <p class="tabular text-lg sm:text-xl font-black mt-1" style="color:var(--mint)" id="totalIncome">0</p>
           </div>
-          <div class="summary-card p-3 h-full flex flex-col justify-center">
+          <div class="summary-card p-2.5 h-full flex flex-col justify-center">
             <div class="flex items-center gap-1.5">
-              <span class="w-3.5 h-3.5 rounded-full flex items-center justify-center" style="background:var(--coral-bg)"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="var(--coral)" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg></span>
-              <span class="text-xs font-bold text-slate-300">הוצאות החודש</span>
+              <span class="w-3 h-3 rounded-full flex items-center justify-center" style="background:var(--coral-bg)"><svg width="6" height="6" viewBox="0 0 24 24" fill="none" stroke="var(--coral)" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg></span>
+              <span class="text-[11px] font-bold text-slate-300">הוצאות החודש</span>
             </div>
-            <p class="tabular text-xl sm:text-2xl font-black mt-1" style="color:var(--coral)" id="totalExpense">0</p>
+            <p class="tabular text-lg sm:text-xl font-black mt-1" style="color:var(--coral)" id="totalExpense">0</p>
           </div>
         </section>
 
@@ -778,7 +793,7 @@
           <div class="ai-voice-box mb-1 shadow-md">
             <button id="micBtn" class="mic-btn" onclick="toggleVoiceRecognition()" title="הכתבה קולית">
               <span class="mic-ring"></span><span class="mic-ring d2"></span>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
             </button>
             <div class="flex-1 min-w-0">
               <div class="flex items-center justify-between">
@@ -825,14 +840,17 @@
           </div>
         </section>
 
-        <!-- Travel Mode Widget if Active -->
+        <!-- Travel Widget -->
         <section id="travelWidgetSection" class="summary-card p-3 bg-gradient-to-l from-blue-500/10 to-indigo-500/10 border border-blue-400/30 hidden">
           <div class="flex items-center justify-between mb-1.5">
             <div class="flex items-center gap-1.5">
               <span class="text-sm">✈️</span>
               <span class="text-[12px] font-bold text-blue-400">מצב נסיעות פעיל</span>
             </div>
-            <button onclick="openTravelModal()" class="text-[10px] font-bold text-blue-300 bg-[var(--card-2)] px-2.5 py-0.5 rounded-lg border border-[var(--border)] cursor-pointer">הגדרות נסיעה</button>
+            <div class="flex items-center gap-1.5">
+                <button onclick="triggerEndTravelMode()" class="text-[9px] font-bold bg-blue-500 text-white px-2 py-0.5 rounded-md shadow cursor-pointer">סיים נסיעה</button>
+                <button onclick="openTravelModal()" class="text-[10px] font-bold text-blue-300 bg-[var(--card-2)] px-2.5 py-0.5 rounded-lg border border-[var(--border)] cursor-pointer">הגדרות</button>
+            </div>
           </div>
           <div class="w-full bg-[var(--card-2)] h-2 rounded-full overflow-hidden border border-[var(--border)] mb-1">
             <div id="travelProgressBar" class="bg-blue-400 h-full transition-all duration-500" style="width: 0%"></div>
@@ -967,7 +985,7 @@ async function quickLogin() {
     const { data } = await supabaseClient.from('app_data').select('payload').eq('id', cleanHandle).single();
     if (data && data.payload) {
       state = data.payload;
-      localStorage.setItem('pulse_state_v63', JSON.stringify(state));
+      localStorage.setItem('pulse_state_v64', JSON.stringify(state));
       showToast("התחברת בהצלחה!");
       setTimeout(() => location.reload(), 800);
     } else {
@@ -1028,7 +1046,7 @@ let state = {
   handle: '', userName: '', baseline: null, financialDay: 1, savingsGoal: 1500, mainGoal: 'peace',
   currency: '₪', language: 'he', onboardingCompleted: false,
   recurringItems: [], expenseCats: [], incomeCats: [{name:'משכורת', color:'#7FE8C6', budget:0}], transactions: [],
-  goalBuckets: [], // [{ id, title, target, allocated }]
+  goalBuckets: [], 
   isTravelMode: false,
   travelBudget: 5000
 };
@@ -1041,7 +1059,7 @@ function getLocalDateString(d) {
 
 function persist() {
   sortTransactions();
-  localStorage.setItem('pulse_state_v63', JSON.stringify(state));
+  localStorage.setItem('pulse_state_v64', JSON.stringify(state));
   saveDataToSupabase(state);
 }
 
@@ -1058,7 +1076,7 @@ async function factoryReset() {
     if (supabaseClient && state.handle) {
       try { await supabaseClient.from('app_data').delete().eq('id', state.handle); } catch(e) {}
     }
-    localStorage.removeItem('pulse_state_v63');
+    localStorage.removeItem('pulse_state_v64');
     location.reload();
   }
 }
@@ -1121,8 +1139,8 @@ function renderGoalBucketsList() {
         <div class="bg-emerald-400 h-full transition-all duration-300" style="width:${pct}%"></div>
       </div>
       <div class="flex items-center justify-between pt-1">
-        <button onclick="openAllocateModal(${b.id})" class="text-[10px] font-bold text-blue-400 underline cursor-pointer">+ הוסף / משוך כסף</button>
-        <button onclick="deleteGoalBucket(${b.id})" class="text-[10px] text-rose-400 cursor-pointer"><i class="fa-solid fa-trash-can"></i> מחיקה</button>
+        <button onclick="openAllocateModal(${b.id})" class="text-[10px] font-bold text-blue-400 underline cursor-pointer">+ הוסף / משוך</button>
+        <button onclick="deleteGoalBucket(${b.id})" class="text-[10px] text-rose-400 font-bold bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded-lg cursor-pointer hover:bg-rose-500/20 transition"><i class="fa-solid fa-trash-can ml-1"></i> מחק קופה</button>
       </div>
     `;
     container.appendChild(row);
@@ -1171,11 +1189,13 @@ function confirmAllocate() {
 }
 
 function deleteGoalBucket(id) {
-  state.goalBuckets = state.goalBuckets.filter(b => b.id !== id);
-  persist();
-  renderGoalBucketsList();
-  renderHome();
-  showToast("הקופה הוסרה");
+  if(confirm("האם אתה בטוח שברצונך למחוק את קופת החיסכון הזו?")) {
+    state.goalBuckets = state.goalBuckets.filter(b => b.id !== id);
+    persist();
+    renderGoalBucketsList();
+    renderHome();
+    showToast("הקופה הוסרה בהצלחה");
+  }
 }
 
 // --- TRAVEL MODE LOGIC ---
@@ -1190,6 +1210,7 @@ function closeTravelModal() { document.getElementById('travelModal').classList.a
 function toggleTravelModeState(val) {
   state.isTravelMode = val;
   persist();
+  renderHome();
 }
 
 function saveTravelSettings() {
@@ -1197,8 +1218,49 @@ function saveTravelSettings() {
   state.isTravelMode = document.getElementById('travelToggleCheckbox').checked;
   persist();
   closeTravelModal();
+  renderHome();
   renderAnalytics();
-  showToast("הגדרות מצב נסיעות עודכנו!");
+  showToast(state.isTravelMode ? "מצב נסיעות הופעל בהצלחה! ✈️" : "מצב נסיעות כובה.");
+}
+
+function triggerEndTravelMode() {
+  let travelSpent = 0;
+  let travelCount = 0;
+  state.transactions.forEach(t => {
+    if(t.type === 'expense' && t.isTravel) {
+      travelSpent += t.amount;
+      travelCount++;
+    }
+  });
+
+  const budget = state.travelBudget || 5000;
+  const remaining = budget - travelSpent;
+
+  const content = document.getElementById('travelSummaryContent');
+  content.innerHTML = `
+    <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1.5">
+      <div class="flex justify-between"><span>תקציב הטיול שהוגדר:</span><span class="font-bold tabular">${fmt(budget)}</span></div>
+      <div class="flex justify-between"><span>סך הוצאות בטיול:</span><span class="font-bold tabular text-rose-400">${fmt(travelSpent)}</span></div>
+      <div class="flex justify-between"><span>מספר תנועות בטיול:</span><span class="font-bold tabular">${travelCount} תנועות</span></div>
+      <div class="flex justify-between border-t border-[var(--border)] pt-1.5 font-bold">
+        <span>יתרה לסיום הטיול:</span>
+        <span class="tabular ${remaining >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${fmt(remaining)}</span>
+      </div>
+    </div>
+    <p class="text-[10px] text-slate-400 text-center">מצב הנסיעות כובה כעת בהצלחה, והנתונים נשמרו בהיסטוריית החשבון.</p>
+  `;
+
+  // Turn off travel mode
+  state.isTravelMode = false;
+  persist();
+  renderHome();
+  renderAnalytics();
+
+  document.getElementById('travelSummaryModal').classList.remove('hidden');
+}
+
+function closeTravelSummaryModal() {
+  document.getElementById('travelSummaryModal').classList.add('hidden');
 }
 
 function menuOpenRecurring() {
@@ -1274,15 +1336,15 @@ window.onload = async function() {
     if(splash) { splash.style.opacity = '0'; setTimeout(() => splash.remove(), 700); }
   }, 3500);
 
-  let saved = localStorage.getItem('pulse_state_v63');
+  let saved = localStorage.getItem('pulse_state_v64');
   if(saved) {
-    try { state = JSON.parse(saved); } catch(e) { localStorage.removeItem('pulse_state_v63'); }
+    try { state = JSON.parse(saved); } catch(e) { localStorage.removeItem('pulse_state_v64'); }
   }
 
   if (state.handle && supabaseClient) {
     try {
       const cloudData = await loadDataFromSupabase();
-      if (cloudData && cloudData.userName) { state = cloudData; localStorage.setItem('pulse_state_v63', JSON.stringify(state)); }
+      if (cloudData && cloudData.userName) { state = cloudData; localStorage.setItem('pulse_state_v64', JSON.stringify(state)); }
     } catch(e) {}
   }
 
@@ -1511,7 +1573,6 @@ function totals(){
 
   const balance = (state.baseline || 0) + allInc - allExp;
   
-  // Virtual goal buckets allocation sum
   let totalAllocatedBuckets = 0;
   if(state.goalBuckets) {
     state.goalBuckets.forEach(b => totalAllocatedBuckets += (b.allocated || 0));
@@ -1530,6 +1591,14 @@ function renderHome(){
   document.getElementById('totalIncome').textContent = fmt(income);
   document.getElementById('totalExpense').textContent = fmt(expense);
   document.documentElement.style.setProperty('--glow', balance >= 0 ? 'var(--glow-safe)' : 'var(--glow-danger)');
+
+  // Show/Hide Travel Active Banner on Home Screen
+  const travelBanner = document.getElementById('homeTravelActiveBanner');
+  if(state.isTravelMode) {
+    travelBanner.classList.remove('hidden');
+  } else {
+    travelBanner.classList.add('hidden');
+  }
 }
 
 function renderAnalytics() {
@@ -1556,7 +1625,7 @@ function renderAnalytics() {
     travelWidget.classList.remove('hidden');
     let travelSpent = 0;
     state.transactions.forEach(t => {
-      if(t.type === 'expense' && (t.isTravel || state.isTravelMode)) travelSpent += t.amount;
+      if(t.type === 'expense' && t.isTravel) travelSpent += t.amount;
     });
     const travelBudget = state.travelBudget || 5000;
     const tPct = Math.min(100, Math.round((travelSpent / travelBudget) * 100));
@@ -1699,11 +1768,12 @@ function renderAnalytics() {
       const sign = t.type === 'income' ? '+' : '−';
       const col = t.type === 'income' ? 'var(--mint)' : 'var(--coral)';
       const origText = t.originalCurrencyStr ? ` <span class="text-[9px] text-blue-400">(${t.originalCurrencyStr})</span>` : '';
+      const travelBadge = t.isTravel ? ` <span class="text-[8px] bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded">טיול</span>` : '';
       row.innerHTML = `
         <div class="flex items-center gap-2.5">
           <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:${t.color}"></span>
           <div>
-            <p class="text-[11px] font-bold text-slate-100">${t.cat}${origText}</p>
+            <p class="text-[11px] font-bold text-slate-100">${t.cat}${origText}${travelBadge}</p>
             <p class="text-[9px] text-slate-400">${t.subCat || 'כללי'} • ${t.date || 'היום'}</p>
           </div>
         </div>
@@ -1924,7 +1994,6 @@ function processVoiceCommandDirectly(text){
   let currencyMultiplier = 1;
   let currencyLabel = '₪';
 
-  // Check for foreign currency keywords or symbols
   for (let key of Object.keys(exchangeRates)) {
     if (text.includes(key)) {
       currencyMultiplier = exchangeRates[key];

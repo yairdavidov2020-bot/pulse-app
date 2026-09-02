@@ -271,7 +271,7 @@
             <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-rotate ml-1"></i> הוראות קבע ומנויים</h3>
             <button onclick="closeRecurringModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
-        <p class="text-[10px] text-slate-300">הוראות קבע יורדות ומחושבות אוטומטית כחלק מההוצאות וההכנסות החודשיות שלך:</p>
+        <p class="text-[10px] text-slate-300">הוראות קבע יורדות ומחושבות אוטומטית כחלק מההוצאות וההכנסות החודשיות והיתרה שלך:</p>
         <div class="space-y-1.5 max-h-[140px] overflow-y-auto" id="recurringListContainer"></div>
         
         <div class="border-t border-[var(--border)] pt-2 space-y-2">
@@ -561,7 +561,7 @@
             <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-microphone ml-1"></i> העוזר הקולי והצ׳אט החכם</h3>
             <button onclick="closeChatHelpModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
-        <p class="text-[11px] text-slate-300 leading-relaxed">העוזר הקולי והצ׳אט החכם מזהים אוטומטית מאות קטגוריות, מטבעות זרים ותאריכים ומסדרת הכל לבד בשניות.</p>
+        <p class="text-[11px] text-slate-300 leading-relaxed">העוזר הקולי והצ׳אט החכם מזהים אוטומטית מאות קטגוריות, מטבעות זרים ותאריכים ומסדרת הكل לבד בשניות.</p>
         <button onclick="closeChatHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי</button>
     </div>
 </div>
@@ -1780,7 +1780,24 @@ function totals(){
 
   let allInc = 0, allExp = 0;
   state.transactions.forEach(t => t.type==='income' ? allInc+=t.amount : allExp+=t.amount);
-  // Add all past/future recurring proportionally or just simple sum for all time balance
+  
+  // הוספת הוראות קבע שמועדן חל עד היום (כולל חודשים קודמים מאז יצירתן) לחישוב היתרה הכללית
+  const todayStr = getLocalDateString(new Date());
+  for (let m = -12; m <= 0; m++) {
+    const monthRecs = getRecurringItemsForCurrentMonth(m);
+    monthRecs.forEach(r => {
+      if (r.date <= todayStr) {
+        const recIdNum = parseInt(r.id.split('_')[1]) || 0;
+        const recDateObj = new Date(r.date);
+        const createDateObj = new Date(recIdNum);
+        if (recDateObj >= new Date(createDateObj.getFullYear(), createDateObj.getMonth(), 1)) {
+          if (r.type === 'income') allInc += r.amount;
+          else allExp += r.amount;
+        }
+      }
+    });
+  }
+
   const balance = (state.baseline || 0) + allInc - allExp;
   
   let totalAllocatedBuckets = 0;

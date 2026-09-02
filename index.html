@@ -561,7 +561,7 @@
             <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-microphone ml-1"></i> העוזר הקולי והצ׳אט החכם</h3>
             <button onclick="closeChatHelpModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
-        <p class="text-[11px] text-slate-300 leading-relaxed">העוזר הקולי והצ׳אט החכם מזהים אוטומטית מאות קטגוריות, מטבעות זרים ותאריכים ומסדרת הكل לבד בשניות.</p>
+        <p class="text-[11px] text-slate-300 leading-relaxed">העוזר הקולי והצ׳אט החכם מזהים אוטומטית מאות קטגוריות, מטבעות זרים ותאריכים ומסדרת הכל לבד בשניות.</p>
         <button onclick="closeChatHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי</button>
     </div>
 </div>
@@ -1744,15 +1744,24 @@ function isWithinFinancialMonth(txDateStr, offsetMonths = 0) {
 }
 
 function getRecurringItemsForCurrentMonth(offsetMonths = 0) {
-  const { startPeriod } = getFinancialPeriodDates(offsetMonths);
-  const year = startPeriod.getFullYear();
-  const month = startPeriod.getMonth();
+  const { startPeriod, endPeriod } = getFinancialPeriodDates(offsetMonths);
+  const fDay = parseInt(state.financialDay) || 1;
   const recList = [];
   if(state.recurringItems) {
     state.recurringItems.forEach(r => {
-      let recDate = new Date(year, month, r.day || 1);
+      let recYear, recMonth;
+      const day = r.day || 1;
+      // אם יום החודש קטן מהיום הקובע (למשל 1 לחודש כשהמחזור מתחיל ב-10), הוא שייך לחודש הסיום של המחזור
+      if (day < fDay) {
+        recYear = endPeriod.getFullYear();
+        recMonth = endPeriod.getMonth();
+      } else {
+        recYear = startPeriod.getFullYear();
+        recMonth = startPeriod.getMonth();
+      }
+      let recDate = new Date(recYear, recMonth, day);
       recList.push({
-        id: 'rec_' + r.id + '_' + year + '_' + month,
+        id: 'rec_' + r.id + '_' + recYear + '_' + recMonth,
         type: r.type,
         amount: r.amount,
         cat: r.cat,

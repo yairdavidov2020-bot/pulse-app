@@ -168,6 +168,17 @@
   .tx-row{ display:flex; align-items:center; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border); }
   .tx-row:last-child{ border-bottom:none; }
 </style>
+
+<script>
+  // מנגנון הגנה עצמאי לחלוטין שמסיר את מסך הפתיחה בכל מקרה אחרי חצי שנייה
+  setTimeout(() => {
+    const splash = document.getElementById('appSplashScreen');
+    if(splash) { 
+      splash.style.opacity = '0'; 
+      setTimeout(() => splash.remove(), 400); 
+    }
+  }, 400);
+</script>
 </head>
 <body>
 
@@ -175,7 +186,7 @@
   <span id="toastText">הפעולה בוצעה בהצלחה!</span>
 </div>
 
-<div id="appSplashScreen" class="fixed inset-0 z-[999999] bg-[#05070B] flex flex-col items-center justify-center transition-all duration-700">
+<div id="appSplashScreen" class="fixed inset-0 z-[999999] bg-[#05070B] flex flex-col items-center justify-center transition-all duration-500">
     <div class="flex flex-col items-center space-y-4 px-6 text-center max-w-sm">
         <div class="relative flex items-center justify-center">
             <div class="absolute -inset-6 rounded-full bg-emerald-500/20 blur-xl animate-pulse"></div>
@@ -849,7 +860,7 @@ async function loadDataFromSupabase() {
   try {
     const userKey = state.handle || state.userName || 'user';
     const fetchPromise = supabaseClient.from('app_data').select('payload').eq('id', userKey).single();
-    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject('timeout'), 2500));
+    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject('timeout'), 1500));
     const { data } = await Promise.race([fetchPromise, timeoutPromise]);
     return data ? data.payload : null;
   } catch (err) { return null; }
@@ -1135,9 +1146,11 @@ function getLocalDateString(d) {
 }
 
 function persist() {
-  sortTransactions();
-  localStorage.setItem('pulse_state_v62', JSON.stringify(state));
-  saveDataToSupabase(state);
+  try {
+    sortTransactions();
+    localStorage.setItem('pulse_state_v62', JSON.stringify(state));
+    saveDataToSupabase(state);
+  } catch(e) {}
 }
 
 function showToast(message) {
@@ -1297,60 +1310,71 @@ function deleteRecurringItem(id) {
 }
 
 window.onload = async function() {
-  // Safe fail-safe splash screen removal (guaranteed removal after max 2.5s)
-  setTimeout(() => {
-    const splash = document.getElementById('appSplashScreen');
-    if(splash) { splash.style.opacity = '0'; setTimeout(() => splash.remove(), 700); }
-  }, 1200);
-
-  let saved = localStorage.getItem('pulse_state_v62');
-  if(saved) {
-    try {
-      state = JSON.parse(saved);
-    } catch(e) {
-      localStorage.removeItem('pulse_state_v62');
+  try {
+    let saved = localStorage.getItem('pulse_state_v62');
+    if(!saved) {
+      for(let i=0; i<localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if(key && key.startsWith('pulse_state_')) {
+          saved = localStorage.getItem(key);
+          if(saved) {
+            localStorage.setItem('pulse_state_v62', saved);
+            break;
+          }
+        }
+      }
     }
+
+    if(saved) {
+      try {
+        state = JSON.parse(saved);
+      } catch(e) {
+        localStorage.removeItem('pulse_state_v62');
+      }
+    }
+
+    if (state.handle && supabaseClient) {
+      try {
+        const cloudData = await loadDataFromSupabase();
+        if (cloudData && cloudData.userName) { state = cloudData; localStorage.setItem('pulse_state_v62', JSON.stringify(state)); }
+      } catch(e) {}
+    }
+
+    if(!state.expenseCats || state.expenseCats.length === 0) {
+      const keys = Object.keys(masterCategoriesMap);
+      state.expenseCats = keys.map((catName, idx) => ({
+        name: catName,
+        color: availableColors[idx % availableColors.length],
+        budget: 0
+      }));
+    }
+    sortTransactions();
+    
+    if(!state.onboardingCompleted || !state.handle || state.baseline === null || state.baseline === undefined) {
+      if(state.userName) document.getElementById('wizName').value = state.userName;
+      if(state.handle) document.getElementById('wizHandle').value = state.handle;
+      if(state.baseline !== null) document.getElementById('wizBalance').value = state.baseline;
+      if(state.savingsGoal) document.getElementById('wizSavingsGoal').value = state.savingsGoal;
+      if(state.financialDay) document.getElementById('wizFinancialDay').value = state.financialDay;
+
+      document.getElementById('onboarding-step-0').classList.remove('hidden');
+    } else {
+      document.getElementById('onboarding-step-0').classList.add('hidden');
+      saveDataToSupabase(state);
+    }
+
+    if(document.getElementById('langSelect')) document.getElementById('langSelect').value = state.language || 'he';
+    if(document.getElementById('currencySelect')) document.getElementById('currencySelect').value = state.currency || '₪';
+
+    setDynamicGreeting();
+    buildFinancialDayDropdowns();
+    buildTableMonthDropdown();
+    initDailyReminder();
+    loadDailyTip();
+    renderHome();
+  } catch(err) {
+    console.error(err);
   }
-
-  if (state.handle && supabaseClient) {
-    try {
-      const cloudData = await loadDataFromSupabase();
-      if (cloudData && cloudData.userName) { state = cloudData; localStorage.setItem('pulse_state_v62', JSON.stringify(state)); }
-    } catch(e) {}
-  }
-
-  if(!state.expenseCats || state.expenseCats.length === 0) {
-    const keys = Object.keys(masterCategoriesMap);
-    state.expenseCats = keys.map((catName, idx) => ({
-      name: catName,
-      color: availableColors[idx % availableColors.length],
-      budget: 0
-    }));
-  }
-  sortTransactions();
-  
-  if(!state.onboardingCompleted || !state.handle || state.baseline === null || state.baseline === undefined) {
-    if(state.userName) document.getElementById('wizName').value = state.userName;
-    if(state.handle) document.getElementById('wizHandle').value = state.handle;
-    if(state.baseline !== null) document.getElementById('wizBalance').value = state.baseline;
-    if(state.savingsGoal) document.getElementById('wizSavingsGoal').value = state.savingsGoal;
-    if(state.financialDay) document.getElementById('wizFinancialDay').value = state.financialDay;
-
-    document.getElementById('onboarding-step-0').classList.remove('hidden');
-  } else {
-    document.getElementById('onboarding-step-0').classList.add('hidden');
-    saveDataToSupabase(state);
-  }
-
-  if(document.getElementById('langSelect')) document.getElementById('langSelect').value = state.language || 'he';
-  if(document.getElementById('currencySelect')) document.getElementById('currencySelect').value = state.currency || '₪';
-
-  setDynamicGreeting();
-  buildFinancialDayDropdowns();
-  buildTableMonthDropdown();
-  initDailyReminder();
-  loadDailyTip();
-  renderHome();
 };
 
 function sortTransactions() {
@@ -1430,22 +1454,21 @@ async function startCinematicBuild() {
   persist();
 
   const steps = [
-    { progress: 20, title: "מאמת את שם המשתמש והפרופיל...", sub: `בודק את ${handle}, מחבר את הנתונים לענן...` },
-    { progress: 45, title: "טוען את מאגר-העל הענק...", sub: "מטעין 100+ תתי-קטגוריות ייחודיות ללא כפילויות..." },
-    { progress: 70, title: "מגדיר את הדשבורד האישי שלך...", sub: "בונה את עצי הנתונים, תקופות התקציב ויעדי החיסכון..." },
-    { progress: 90, title: "מכין את העוזר הקולי והגרפים...", sub: "מסדר את מנועי פילוח ההוצאות וטבלאות האקסל..." },
+    { progress: 25, title: "מאמת את שם המשתמש והפרופיל...", sub: `בודק את ${handle}, מחבר את הנתונים לענן...` },
+    { progress: 50, title: "טוען את מאגר-העל הענק...", sub: "מטעין 100+ תתי-קטגוריות ייחודיות ללא כפילויות..." },
+    { progress: 75, title: "מגדיר את הדשבורד האישי שלך...", sub: "בונה את עצי הנתונים, תקופות התקציב ויעדי החיסכון..." },
     { progress: 100, title: "העולם הפיננסי שלך מוכן!", sub: "פותח את הדשבורד האישי..." }
   ];
 
   for (let i = 0; i < steps.length; i++) {
-    await new Promise(r => setTimeout(r, 400));
+    await new Promise(r => setTimeout(r, 200));
     document.getElementById('buildProgressBar').style.width = steps[i].progress + '%';
     document.getElementById('buildPercentText').textContent = steps[i].progress + '%';
     document.getElementById('buildTitle').textContent = steps[i].title;
     document.getElementById('buildSubText').textContent = steps[i].sub;
   }
 
-  await new Promise(r => setTimeout(r, 400));
+  await new Promise(r => setTimeout(r, 250));
   document.getElementById('onboarding-step-6').classList.add('hidden');
   document.getElementById('tutorialModal').classList.remove('hidden');
   setDynamicGreeting();

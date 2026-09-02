@@ -286,8 +286,8 @@
 
 <!-- 5-STEP CLEAN ONBOARDING WIZARD WITH TOP-RIGHT LOGIN BUTTON -->
 <div id="onboarding-step-0" class="full-page-onboarding hidden">
-    <!-- כפתור התחברות בפינה העליונה הימנית -->
-    <button onclick="loginWithExistingUser()" class="absolute top-4 right-4 z-30 py-2 px-3 rounded-xl font-bold text-xs cursor-pointer bg-[var(--card)] border border-[var(--border)] text-emerald-400 hover:text-white transition flex items-center gap-1.5 shadow-xl">
+    <!-- כפתור התחברות מעוצב בפינה העליונה הימנית עם התאמה לאזור הבטוח -->
+    <button onclick="loginWithExistingUser()" style="top: max(env(safe-area-inset-top), 16px); right: max(env(safe-area-inset-right), 16px);" class="absolute z-30 py-2 px-3 rounded-xl font-bold text-xs cursor-pointer bg-[var(--card)] border border-[var(--border)] text-emerald-400 hover:text-white transition flex items-center gap-1.5 shadow-xl">
         <i class="fa-solid fa-cloud-arrow-down"></i> יש לך חשבון? התחבר
     </button>
 

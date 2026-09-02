@@ -85,7 +85,6 @@
   html.light .field-shell { background: rgba(240, 242, 245, 0.9); border-color: rgba(0,0,0,0.1); }
   .field-shell:focus-within{ border-color: var(--mint); }
 
-  /* iOS Style Toggle Switch */
   .toggle-switch { position: relative; display: inline-block; width: 46px; height: 24px; cursor: pointer; flex-shrink: 0; }
   .toggle-switch input { opacity: 0; width: 0; height: 0; }
   .toggle-slider { position: absolute; inset: 0; background: #334155; border-radius: 24px; transition: 0.3s; border: 1px solid var(--border); }
@@ -356,7 +355,7 @@
             <div class="space-y-3 text-[11px] text-slate-300">
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-microphone"></i> 1. ללא בחירת קטגוריות — פשוט מדברים</p>
-                    <p class="leading-relaxed">החידוש המרכזי ב-Pulse: **אין צורך לבחור קטגוריות ידנית**. פשוט מקלידים או אומרים בשפה חופשית (למשל: "50 שקל במסעדה אתמול").</p>
+                    <p class="leading-relaxed">החידוש המרכזי ב-Pulse: **אין צורך לבחור קטגוריות ידנית**. פשוט מקלידים או אומרים בשפה חופשית (למשל: "50 שקל במסעדה ב-18.8").</p>
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-blue-400 flex items-center gap-1.5"><i class="fa-solid fa-piggy-bank"></i> 2. קופות חיסכון ומצב נסיעות</p>
@@ -587,8 +586,8 @@
             <h3 class="text-xs font-bold text-emerald-400">הכתבה חכמה</h3>
             <button onclick="closeVoiceHelpModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
-        <p class="text-[11px] text-slate-300 leading-relaxed">אמור או הקלד משפט חופשי כולל מטבע זר. דוגמאות מוצלחות:</p>
-        <p class="text-[11px] font-bold text-emerald-300 bg-[var(--card-2)] p-2 rounded-lg border border-[var(--border)]" id="voiceExampleBox">"שילמתי 50 שקל במסעדה אתמול"</p>
+        <p class="text-[11px] text-slate-300 leading-relaxed">אמור או הקלד משפט חופשי כולל מטבע זר ותאריך (לדוגמה: 18.8). דוגמאות מוצלחות:</p>
+        <p class="text-[11px] font-bold text-emerald-300 bg-[var(--card-2)] p-2 rounded-lg border border-[var(--border)]" id="voiceExampleBox">"שילמתי 50 שקל במסעדה ב-18.8"</p>
         <button onclick="closeVoiceHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי</button>
     </div>
 </div>
@@ -601,7 +600,7 @@
         <div class="space-y-2 text-[11px]">
             <p id="voiceParsedInfo" class="font-bold text-slate-300"></p>
             <div class="p-2 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[10px]">
-                לא הצלחנו לשייך אוטומטית. בחר קטגוריה קיימת או הוסף קטגוריה חדשה בקלות:
+                לא הצלחנו למצוא קטגוריה תואמת ברשימה. בחר קטגוריה קיימת או הוסף קטגוריה חדשה בקלות:
             </div>
             <div class="field-shell px-3 py-1.5">
                 <select id="selectMainCategory" class="w-full bg-transparent outline-none font-bold text-[11px]" style="color:var(--text)"></select>
@@ -631,7 +630,6 @@
             <button onclick="closeCategoriesModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
         
-        <!-- Tabs for Expense vs Income Categories -->
         <div class="flex gap-2 p-1 bg-[var(--card-2)] rounded-xl border border-[var(--border)]">
             <button id="catTabExpBtn" onclick="switchCategoryTab('expense')" class="flex-1 py-1.5 rounded-lg text-xs font-bold bg-emerald-500/20 text-emerald-400 transition">הוצאות</button>
             <button id="catTabIncBtn" onclick="switchCategoryTab('income')" class="flex-1 py-1.5 rounded-lg text-xs font-bold text-slate-400 transition">הכנסות</button>
@@ -687,7 +685,6 @@
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-rotate text-emerald-400 w-4"></i> הוראות קבע ומנויים</span>
             </button>
 
-            <!-- Budget Period Menu Setting -->
             <div class="summary-card p-3 space-y-2 mt-2 bg-[var(--card-2)] border border-[var(--border)] rounded-xl">
                 <p class="text-[11px] font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-calendar-days"></i> תקופת תקציב מותאמת אישית</p>
                 <div class="field-shell px-2 py-1">
@@ -758,7 +755,6 @@
           </div>
         </section>
 
-        <!-- Main Screen Travel Mode Toggle Card -->
         <section id="homeTravelControlCard" class="summary-card p-2.5 flex items-center justify-between transition-all duration-300 hidden">
             <div class="flex items-center gap-2.5">
                 <div class="w-7 h-7 rounded-xl bg-blue-500/20 border border-blue-400/40 flex items-center justify-center text-blue-400 text-xs">
@@ -834,13 +830,13 @@
                 </h4>
                 <button onclick="openVoiceHelpModal()" class="w-3.5 h-3.5 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[8px] font-bold flex items-center justify-center text-emerald-400 cursor-pointer">?</button>
               </div>
-              <p id="micStatus" class="text-[9px] mt-0.5 leading-tight truncate" style="color:var(--text-dim)">למשל: "50 שקל במסעדה אתמול"</p>
+              <p id="micStatus" class="text-[9px] mt-0.5 leading-tight truncate" style="color:var(--text-dim)">למשל: "50 שקל במסעדה ב-18.8"</p>
             </div>
           </div>
 
           <div class="summary-card p-2 space-y-1">
             <div class="field-shell flex items-center px-2.5 py-1.5">
-              <input id="smartTextInput" type="text" placeholder="הכתבה... (למשל: 50 שקל במסעדה אתמול)" class="w-full bg-transparent outline-none text-[10px] font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
+              <input id="smartTextInput" type="text" placeholder="הכתבה... (למשל: 50 שקל במסעדה ב-18.8)" class="w-full bg-transparent outline-none text-[10px] font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
             </div>
             <button onclick="processSmartText()" class="save-btn w-full py-1.5 rounded-xl text-[10px] font-bold cursor-pointer shadow-sm">פענח והוסף תנועה</button>
           </div>
@@ -871,7 +867,6 @@
           </div>
         </section>
 
-        <!-- Travel Widget -->
         <section id="travelWidgetSection" class="summary-card p-3 bg-gradient-to-l from-blue-500/10 to-indigo-500/10 border border-blue-400/30 hidden">
           <div class="flex items-center justify-between mb-1.5">
             <div class="flex items-center gap-1.5">
@@ -1273,7 +1268,6 @@ function closeReminderModal() { document.getElementById('reminderModal').classLi
 function openTutorialModal() { document.getElementById('tutorialModal').classList.remove('hidden'); }
 function closeTutorialModal() { document.getElementById('tutorialModal').classList.add('hidden'); }
 
-// --- GOAL BUCKETS LOGIC ---
 function menuOpenGoalBuckets() {
   closeMenuModal();
   document.getElementById('goalBucketsModal').classList.remove('hidden');
@@ -1361,7 +1355,6 @@ function deleteGoalBucket(id) {
   }
 }
 
-// --- TRAVEL MODE LOGIC ---
 function menuOpenTravelModal() {
   closeMenuModal();
   document.getElementById('travelToggleCheckbox').checked = state.isTravelMode;
@@ -1751,7 +1744,6 @@ function getRecurringItemsForCurrentMonth(offsetMonths = 0) {
     state.recurringItems.forEach(r => {
       let recYear, recMonth;
       const day = r.day || 1;
-      // אם יום החודש קטן מהיום הקובע (למשל 1 לחודש כשהמחזור מתחיל ב-10), הוא שייך לחודש הסיום של המחזור
       if (day < fDay) {
         recYear = endPeriod.getFullYear();
         recMonth = endPeriod.getMonth();
@@ -1790,7 +1782,6 @@ function totals(){
   let allInc = 0, allExp = 0;
   state.transactions.forEach(t => t.type==='income' ? allInc+=t.amount : allExp+=t.amount);
   
-  // הוספת הוראות קבע שמועדן חל עד היום (כולל חודשים קודמים מאז יצירתן) לחישוב היתרה הכללית
   const todayStr = getLocalDateString(new Date());
   for (let m = -12; m <= 0; m++) {
     const monthRecs = getRecurringItemsForCurrentMonth(m);
@@ -1843,15 +1834,15 @@ function renderHome(){
       state.transactions.forEach(t => { if(t.type === 'expense' && t.isTravel) travelSpent += t.amount; });
       if(travelCardSubtitle) travelCardSubtitle.textContent = `הוצאות בטיול: ${fmt(travelSpent)} / תקציב: ${fmt(state.travelBudget || 5000)}`;
       
-      if(micStatus) micStatus.textContent = 'למשל: "50 דולר במסעדה אתמול"';
-      if(smartInput) smartInput.placeholder = 'הכתבה... (למשל: 50 דולר במסעדה אתמול)';
-      if(voiceExampleBox) voiceExampleBox.textContent = '"שילמתי 50 דולר במסעדה אתמול"';
+      if(micStatus) micStatus.textContent = 'למשל: "50 דולר במסעדה ב-18.8"';
+      if(smartInput) smartInput.placeholder = 'הכתבה... (למשל: 50 דולר במסעדה ב-18.8)';
+      if(voiceExampleBox) voiceExampleBox.textContent = '"שילמתי 50 דולר במסעדה ב-18.8"';
   } else {
       if(travelControlCard) travelControlCard.classList.add('hidden');
       
-      if(micStatus) micStatus.textContent = 'למשל: "50 שקל במסעדה אתמול"';
-      if(smartInput) smartInput.placeholder = 'הכתבה... (למשל: 50 שקל במסעדה אתמול)';
-      if(voiceExampleBox) voiceExampleBox.textContent = '"שילמתי 50 שקל במסעדה אתמול"';
+      if(micStatus) micStatus.textContent = 'למשל: "50 שקל במסעדה ב-18.8"';
+      if(smartInput) smartInput.placeholder = 'הכתבה... (למשל: 50 שקל במסעדה ב-18.8)';
+      if(voiceExampleBox) voiceExampleBox.textContent = '"שילמתי 50 שקל במסעדה ב-18.8"';
   }
 }
 
@@ -2202,8 +2193,6 @@ function processSmartText() {
   input.value = '';
 }
 
-function isSubMatch(text, sub) { return text.includes(sub.trim()); }
-
 function cleanSubCategoryText(rawText) {
   return rawText
     .replace(/(\d+[\.,]?\d*)/g, '')
@@ -2212,9 +2201,23 @@ function cleanSubCategoryText(rawText) {
     .trim() || rawText.trim();
 }
 
+// ---- SMART DATE PARSING (First step before category & amount) ----
 function parseDateFromText(text) {
   const now = new Date();
   let targetDate = new Date(now);
+
+  // Match numerical dates like 18.8, 18/8, 18.08.2026, etc.
+  const numDateMatch = text.match(/(\d{1,2})[\./](\d{1,2})(?:[\./](\d{2,4}))?/);
+  if (numDateMatch) {
+    const day = parseInt(numDateMatch[1]);
+    const month = parseInt(numDateMatch[2]) - 1;
+    const year = numDateMatch[3] ? (numDateMatch[3].length === 2 ? 2000 + parseInt(numDateMatch[3]) : parseInt(numDateMatch[3])) : now.getFullYear();
+    if (day >= 1 && day <= 31 && month >= 0 && month <= 11) {
+      targetDate = new Date(year, month, day);
+      return getLocalDateString(targetDate);
+    }
+  }
+
   if (text.includes('אתמול')) { targetDate.setDate(now.getDate() - 1); return getLocalDateString(targetDate); }
   if (text.includes('שלשום')) { targetDate.setDate(now.getDate() - 2); return getLocalDateString(targetDate); }
   if (text.includes('היום')) { return getLocalDateString(now); }
@@ -2231,64 +2234,88 @@ function parseDateFromText(text) {
 }
 
 function processVoiceCommandDirectly(text){
+  let cleanText = text.trim();
+
+  // 1. FIRST: Extract and clean date from the text so it doesn't interfere
+  const parsedDate = parseDateFromText(cleanText);
+  cleanText = cleanText
+    .replace(/(\d{1,2})[\./](\d{1,2})(?:[\./](\d{2,4}))?/g, '')
+    .replace(/ב?-?(\d{1,2}) לחודש/g, '')
+    .replace(/(אתמול|שלשום|היום)/g, '')
+    .trim();
+
+  // 2. SECOND: Extract amount and currency
   let rawAmount = 0;
   let currencyMultiplier = 1;
   let currencyLabel = '₪';
 
   for (let key of Object.keys(exchangeRates)) {
-    if (text.includes(key)) {
+    if (cleanText.includes(key)) {
       currencyMultiplier = exchangeRates[key];
       currencyLabel = key;
       break;
     }
   }
 
-  const matchNum = text.match(/(\d+[\.,]?\d*)/);
-  if (matchNum) rawAmount = parseFloat(matchNum[1].replace(',', '.'));
+  const matchNum = cleanText.match(/(\d+[\.,]?\d*)/);
+  if (matchNum) {
+    rawAmount = parseFloat(matchNum[1].replace(',', '.'));
+    cleanText = cleanText.replace(matchNum[0], '').trim();
+  }
 
   if(!rawAmount || isNaN(rawAmount)) { alert("לא זיהיתי סכום ברור."); return; }
 
   const convertedAmount = Math.round(rawAmount * currencyMultiplier * 100) / 100;
   const originalStr = currencyMultiplier !== 1 ? `${rawAmount} ${currencyLabel}` : null;
-  const parsedDate = parseDateFromText(text);
 
-  let isIncome = text.includes('הכנסה') || text.includes('משכורת') || text.includes('קיבלתי') || text.includes('הרווחתי');
-  
+  let isIncome = cleanText.includes('הכנסה') || cleanText.includes('משכורת') || cleanText.includes('קיבלתי') || cleanText.includes('הרווחתי');
+  cleanText = cleanText.replace(/(הכנסה|משכורת|קיבלתי|הרווחתי|שילמתי|קניתי|ב)/g, '').trim();
+
   let matchedCat = null;
   let matchedSub = null;
 
-  const targetMap = isIncome ? state.incomeCats : masterCategoriesMap;
-
+  // 3. THIRD: Strict Category Matching from defined lists only
   if (isIncome) {
     for (let c of state.incomeCats) {
-      if (text.includes(c.name)) { matchedCat = c.name; matchedSub = c.name; break; }
+      if (cleanText.includes(c.name)) { matchedCat = c.name; matchedSub = c.name; break; }
     }
     if (!matchedCat) matchedCat = state.incomeCats[0].name;
   } else {
+    // Check strict match against predefined subcategories in masterCategoriesMap
     for (let catName of Object.keys(masterCategoriesMap)) {
       const subs = masterCategoriesMap[catName];
       for (let sub of subs) {
-        if (isSubMatch(text, sub)) { matchedCat = catName; matchedSub = sub; break; }
+        if (sub.length > 1 && cleanText.includes(sub)) {
+          matchedCat = catName;
+          matchedSub = sub;
+          break;
+        }
       }
       if (matchedCat) break;
     }
 
+    // If not found in subcategories, check exact main category names
     if (!matchedCat) {
       for (let cat of state.expenseCats) {
-        if (text.includes(cat.name)) { matchedCat = cat.name; matchedSub = cleanSubCategoryText(text); break; }
+        if (cleanText.includes(cat.name)) {
+          matchedCat = cat.name;
+          matchedSub = 'כללי';
+          break;
+        }
       }
     }
   }
 
+  // 4. FOURTH: Fallback if category was not recognized strictly
   if (!matchedCat && !isIncome) {
     populateVoiceCategorySelect();
-    const cleanSub = cleanSubCategoryText(text);
+    const cleanSub = cleanSubCategoryText(cleanText);
     pendingSmartTx = { 
       type: 'expense', amount: convertedAmount, originalCurrencyStr: originalStr, 
-      cat: state.expenseCats[0].name, subCat: cleanSub, color: state.expenseCats[0].color, date: parsedDate, isTravel: state.isTravelMode 
+      cat: state.expenseCats[0].name, subCat: cleanSub || 'כללי', color: state.expenseCats[0].color, date: parsedDate, isTravel: state.isTravelMode 
     };
-    document.getElementById('voiceSubCatInput').value = cleanSub;
-    document.getElementById('voiceParsedInfo').innerHTML = `סכום שזוהה: <span class="text-emerald-400 font-bold">${fmt(convertedAmount)}</span>${originalStr ? ` (${originalStr})` : ''}`;
+    document.getElementById('voiceSubCatInput').value = cleanSub || '';
+    document.getElementById('voiceParsedInfo').innerHTML = `סכום שזוהה: <span class="text-emerald-400 font-bold">${fmt(convertedAmount)}</span>${originalStr ? ` (${originalStr})` : ''} | תאריך: <span class="text-blue-400 font-bold">${parsedDate}</span>`;
     document.getElementById('voiceDescModal').classList.remove('hidden');
   } else {
     const type = isIncome ? 'income' : 'expense';
@@ -2412,7 +2439,7 @@ function renderModalCategoryList() {
     subs.forEach(sub => {
       const subItem = document.createElement('div');
       subItem.className = 'text-[10px] text-slate-300 flex items-center justify-between py-0.5';
-      const isCustomSub = currentCategoryTab === 'expense' && !masterCategoriesMap[c.name]?.includes(sub); // Custom sub
+      const isCustomSub = currentCategoryTab === 'expense' && !masterCategoriesMap[c.name]?.includes(sub);
       const deleteSub = isCustomSub ? `<button onclick="deleteSubCategory('${c.name}', '${sub}')" class="text-rose-400 text-[9px] cursor-pointer" title="מחק תת קטגוריה"><i class="fa-solid fa-xmark"></i></button>` : '';
       subItem.innerHTML = `<span class="flex items-center gap-1.5"><i class="fa-solid fa-angle-left text-[8px] text-emerald-400"></i> ${sub}</span> ${deleteSub}`;
       subContainer.appendChild(subItem);

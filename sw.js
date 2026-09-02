@@ -1,24 +1,20 @@
-const CACHE_NAME = 'pulse-cache-v1';
-const ASSETS_TO_CACHE = [
-  './',
-  './index.html',
-  'https://cdn.tailwindcss.com',
-  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2',
-  'https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
+const CACHE_NAME = 'pulse-cache-v3';
+const LOCAL_ASSETS = [
+  '/pulse-app/',
+  '/pulse-app/index.html'
 ];
 
-// התקנת ה-Service Worker ושמירת הקבצים במטמון
+// שלב ההתקנה - שמירת הקבצים עם הנתיב המלא של התיקייה בגיטה
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
-    })
+      return cache.addAll(LOCAL_ASSETS);
+    }).catch(err => console.log('Cache add failed:', err))
   );
   self.skipWaiting();
 });
 
-// הפעלת ה-Service Worker וניקוי מטמון ישן אם קיים
+// ניקוי מטמון ישן בעת הפעלה
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -34,12 +30,18 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// טיפול בבקשות רשת (בזמן אופליין או אונליין)
+// טיפול בבקשות רשת ותמיכה באופליין במסך הבית
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      return cachedResponse || fetch(event.request).catch(() => {
-        // אם אין אינטרנט והקובץ אינו במטמון
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+      return fetch(event.request).catch(() => {
+        // במצב אופליין, מחזיר את ה-index.html מהמטמון של התיקייה
+        if (event.request.mode === 'navigate') {
+          return caches.match('/pulse-app/index.html');
+        }
       });
     })
   );

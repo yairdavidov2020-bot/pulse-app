@@ -355,7 +355,7 @@
             <div class="space-y-3 text-[11px] text-slate-300">
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-microphone"></i> 1. ללא בחירת קטגוריות — פשוט מדברים</p>
-                    <p class="leading-relaxed">החידוש המרכזי ב-Pulse: **אין צורך לבחור קטגוריות ידנית**. פשוט מקלידים או אומרים בשפה חופשית (למשל: "50 שקל במסעדה אתמול").</p>
+                    <p class="leading-relaxed">החידוש המרכזי ב-Pulse: **אין צורך לבחור קטגוריות ידנית**. פשוט מקלידים או אומרים בשפה חופשית (למשל: "50 שקל במסעדה ב-19.8").</p>
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-blue-400 flex items-center gap-1.5"><i class="fa-solid fa-piggy-bank"></i> 2. קופות חיסכון ומצב נסיעות</p>
@@ -587,7 +587,7 @@
             <button onclick="closeVoiceHelpModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
         <p class="text-[11px] text-slate-300 leading-relaxed">אמור או הקלד משפט חופשי כולל תאריך ומטבע זר. דוגמאות מוצלחות:</p>
-        <p class="text-[11px] font-bold text-emerald-300 bg-[var(--card-2)] p-2 rounded-lg border border-[var(--border)]" id="voiceExampleBox">"שילמתי 50 שקל במסעדה ב-19.8"</p>
+        <p class="text-[11px] font-bold text-emerald-300 bg-[var(--card-2)] p-2 rounded-lg border border-[var(--border)]" id="voiceExampleBox">"15.8 פרחים 80 שקל"</p>
         <button onclick="closeVoiceHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי</button>
     </div>
 </div>
@@ -824,13 +824,13 @@
                 </h4>
                 <button onclick="openVoiceHelpModal()" class="w-3.5 h-3.5 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[8px] font-bold flex items-center justify-center text-emerald-400 cursor-pointer">?</button>
               </div>
-              <p id="micStatus" class="text-[9px] mt-0.5 leading-tight truncate" style="color:var(--text-dim)">למשל: "50 שקל במסעדה ב-19.8"</p>
+              <p id="micStatus" class="text-[9px] mt-0.5 leading-tight truncate" style="color:var(--text-dim)">למשל: "15.8 פרחים 80 שקל"</p>
             </div>
           </div>
 
           <div class="summary-card p-2 space-y-1">
             <div class="field-shell flex items-center px-2.5 py-1.5">
-              <input id="smartTextInput" type="text" placeholder="הכתבה... (למשל: 50 שקל במסעדה ב-19.8)" class="w-full bg-transparent outline-none text-[10px] font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
+              <input id="smartTextInput" type="text" placeholder="הכתבה... (למשל: 15.8 פרחים 80 שקל)" class="w-full bg-transparent outline-none text-[10px] font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
             </div>
             <button onclick="processSmartText()" class="save-btn w-full py-1.5 rounded-xl text-[10px] font-bold cursor-pointer shadow-sm">פענח והוסף תנועה</button>
           </div>
@@ -1803,15 +1803,15 @@ function renderHome(){
       state.transactions.forEach(t => { if(t.type === 'expense' && t.isTravel) travelSpent += t.amount; });
       if(travelCardSubtitle) travelCardSubtitle.textContent = `הוצאות בטיול: ${fmt(travelSpent)} / תקציב: ${fmt(state.travelBudget || 5000)}`;
       
-      if(micStatus) micStatus.textContent = 'למשל: "50 דולר במסעדה ב-19.8"';
-      if(smartInput) smartInput.placeholder = 'הכתבה... (למשל: 50 דולר במסעדה ב-19.8)';
-      if(voiceExampleBox) voiceExampleBox.textContent = '"שילמתי 50 דולר במסעדה ב-19.8"';
+      if(micStatus) micStatus.textContent = 'למשל: "15.8 פרחים 80 דולר"';
+      if(smartInput) smartInput.placeholder = 'הכתבה... (למשל: 15.8 פרחים 80 דולר)';
+      if(voiceExampleBox) voiceExampleBox.textContent = '"15.8 פרחים 80 דולר"';
   } else {
       if(travelControlCard) travelControlCard.classList.add('hidden');
       
-      if(micStatus) micStatus.textContent = 'למשל: "50 שקל במסעדה ב-19.8"';
-      if(smartInput) smartInput.placeholder = 'הכתבה... (למשל: 50 שקל במסעדה ב-19.8)';
-      if(voiceExampleBox) voiceExampleBox.textContent = '"שילמתי 50 שקל במסעדה ב-19.8"';
+      if(micStatus) micStatus.textContent = 'למשל: "15.8 פרחים 80 שקל"';
+      if(smartInput) smartInput.placeholder = 'הכתבה... (למשל: 15.8 פרחים 80 שקל)';
+      if(voiceExampleBox) voiceExampleBox.textContent = '"15.8 פרחים 80 שקל"';
   }
 }
 
@@ -2178,11 +2178,10 @@ function parseDateFromText(text) {
   if (text.includes('שלשום')) { targetDate.setDate(now.getDate() - 2); return getLocalDateString(targetDate); }
   if (text.includes('היום')) { return getLocalDateString(now); }
   
-  // Parse numeric dates like 19.8 or 19/8
   const dateNumMatch = text.match(/(\d{1,2})[\.\/](\d{1,2})/);
   if (dateNumMatch) {
     const day = parseInt(dateNumMatch[1]);
-    const month = parseInt(dateNumMatch[2]) - 1; // 0-indexed for JS Date
+    const month = parseInt(dateNumMatch[2]) - 1;
     if (day >= 1 && day <= 31 && month >= 0 && month <= 11) {
       targetDate.setMonth(month);
       targetDate.setDate(day);
@@ -2214,25 +2213,40 @@ function processVoiceCommandDirectly(text){
     }
   }
 
-  const matchNum = text.match(/(\d+[\.,]?\d*)/);
+  // 1. שולפים תאריך ראשונים
+  const parsedDate = parseDateFromText(text);
+
+  // 2. מסירים את התאריך מהמחרוזת כדי שלא יפריע לחילוץ הסכום
+  let cleanTextForAmount = text.replace(/\b\d{1,2}[\.\/]\d{1,2}\b/g, '');
+
+  // 3. מחפש סכום (עם מטבע או מספר פנוי גם אם אין את המילה שקל)
+  let matchNum = null;
+  const currencyKeys = Object.keys(exchangeRates);
+  const currencyRegex = new RegExp(`(\\d+[\\.,]?\\d*)\\s*(${currencyKeys.join('|')})`);
+  const currencyMatch = cleanTextForAmount.match(currencyRegex);
+  
+  if (currencyMatch) {
+    matchNum = [currencyMatch[1], currencyMatch[1]];
+  } else {
+    matchNum = cleanTextForAmount.match(/(\d+[\.,]?\d*)/);
+  }
+
   if (matchNum) rawAmount = parseFloat(matchNum[1].replace(',', '.'));
 
   if(!rawAmount || isNaN(rawAmount)) { alert("לא זיהיתי סכום ברור."); return; }
 
   const convertedAmount = Math.round(rawAmount * currencyMultiplier * 100) / 100;
   const originalStr = currencyMultiplier !== 1 ? `${rawAmount} ${currencyLabel}` : null;
-  const parsedDate = parseDateFromText(text);
 
   let isIncome = text.includes('הכנסה') || text.includes('משכורת') || text.includes('קיבלתי') || text.includes('הרווחתי');
   
   let matchedCat = null;
   let matchedSub = null;
 
-  // Clean text to extract exact words/tokens for strict matching
-  let descText = text
+  let descText = cleanTextForAmount
     .replace(/(\d+[\.,]?\d*)/g, '')
     .replace(/(שקל|שקלים|₪|\$|€|£|דולר|דולרים|יורו|פאונד|באט|יין|קנדי|אוסטרלי|פרנק|דירהם|דינר|רופי|יואן)/g, '')
-    .replace(/(אתמול|שלשום|היום|\d{1,2}[\.\/]\d{1,2}|ב?-?\d{1,2} לחודש)/g, '')
+    .replace(/(אתמול|שלשום|היום|ב?-?\d{1,2} לחודש)/g, '')
     .replace(/(ב-|ל-|מ-|ה-|שילמתי|קניתי|הוצאתי|על)/g, ' ')
     .trim();
 
@@ -2244,7 +2258,6 @@ function processVoiceCommandDirectly(text){
     }
     if (!matchedCat) matchedCat = state.incomeCats[0].name;
   } else {
-    // STRICT MATCHING: Check if any exact subcategory matches the words or text
     for (let catName of Object.keys(masterCategoriesMap)) {
       const subs = masterCategoriesMap[catName];
       for (let sub of subs) {
@@ -2257,7 +2270,6 @@ function processVoiceCommandDirectly(text){
       if (matchedCat) break;
     }
 
-    // If not found in subcategories, check main category names strictly
     if (!matchedCat) {
       for (let cat of state.expenseCats) {
         if (descText === cat.name || words.includes(cat.name)) {
@@ -2269,7 +2281,6 @@ function processVoiceCommandDirectly(text){
     }
   }
 
-  // STRICT RULE: If no exact match found, DO NOT guess or pick randomly. Open modal to add/select.
   if (!matchedCat && !isIncome) {
     populateVoiceCategorySelect();
     const cleanSub = cleanSubCategoryText(descText || text);

@@ -284,13 +284,8 @@
     </div>
 </div>
 
-<!-- 5-STEP CLEAN ONBOARDING WIZARD WITH TOP-RIGHT LOGIN BUTTON -->
+<!-- 5-STEP CLEAN ONBOARDING WIZARD WITH PROMINENT LOGIN BUTTON -->
 <div id="onboarding-step-0" class="full-page-onboarding hidden">
-    <!-- כפתור התחברות מעוצב בפינה העליונה הימנית עם התאמה לאזור הבטוח -->
-    <button onclick="loginWithExistingUser()" style="top: max(env(safe-area-inset-top), 16px); right: max(env(safe-area-inset-right), 16px);" class="absolute z-30 py-2 px-3 rounded-xl font-bold text-xs cursor-pointer bg-[var(--card)] border border-[var(--border)] text-emerald-400 hover:text-white transition flex items-center gap-1.5 shadow-xl">
-        <i class="fa-solid fa-cloud-arrow-down"></i> יש לך חשבון? התחבר
-    </button>
-
     <div class="road-city-bg">
         <svg class="w-full h-full" viewBox="0 0 400 800" preserveAspectRatio="none">
             <defs>
@@ -303,7 +298,7 @@
         </svg>
     </div>
 
-    <div class="onboarding-content-box text-center space-y-6 p-2">
+    <div class="onboarding-content-box text-center space-y-6 p-4">
         <div class="space-y-3">
             <div class="w-16 h-16 rounded-3xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 text-3xl mx-auto shadow-xl">
                 <i class="fa-solid fa-wand-magic-sparkles"></i>
@@ -315,11 +310,19 @@
         </div>
 
         <div class="space-y-3 pt-2">
+            <!-- כפתור הגדרה מהירה -->
             <button onclick="wizardNextStep(1)" class="w-full py-3.5 rounded-2xl font-bold text-sm shadow-xl cursor-pointer bg-gradient-to-l from-emerald-500 to-teal-600 text-white hover:opacity-95 transition flex items-center justify-center gap-2">
                 <span>התחל הגדרה מהירה</span>
                 <i class="fa-solid fa-arrow-left text-xs"></i>
             </button>
-            <label class="w-full py-2.5 px-4 rounded-xl font-bold text-xs cursor-pointer bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-center gap-2">
+
+            <!-- כפתור התחברות בולט ומרכזי לחשבון קיים -->
+            <button onclick="loginWithExistingUser()" class="w-full py-3 rounded-2xl font-bold text-xs cursor-pointer bg-[var(--card)] border border-emerald-400/40 text-emerald-400 hover:text-white transition flex items-center justify-center gap-2 shadow-xl">
+                <i class="fa-solid fa-cloud-arrow-down"></i> יש לך חשבון קיים? לחץ כאן להתחברות
+            </button>
+
+            <!-- שחזור גיבוי מקומי -->
+            <label class="w-full py-2.5 px-4 rounded-2xl font-bold text-xs cursor-pointer bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-center gap-2">
                 <i class="fa-solid fa-file-arrow-up"></i> שחזור גיבוי מקומי קודם
                 <input type="file" accept=".json,.txt,.pulse" onchange="importBackup(event)" class="hidden" />
             </label>

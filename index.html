@@ -217,7 +217,7 @@
                 <i class="fa-solid fa-wallet"></i>
             </div>
             <h3 class="text-base font-black gradient-text">תזכורת הוצאות יומית</h3>
-            <p class="text-xs text-slate-300 leading-relaxed">היי! זה הזמן לעצור רגע, לעדכן את ההוצאות וההכנסות של היום ולהישאר בשליטה מלאה 💡</p>
+            <p id="reminderModalText" class="text-xs text-slate-300 leading-relaxed">אל תשכח להוסיף את ההוצאות שלך להיום 💡</p>
         </div>
         <button onclick="closeReminderModal()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs shadow-lg cursor-pointer relative z-10">הבנתי, יאללה מעדכן!</button>
     </div>
@@ -1265,21 +1265,81 @@ function toggleSystemSettingsContent() {
 }
 let systemSettingsOpen = false;
 
-function initDailyReminder() {
+// ---- SYSTEM NOTIFICATIONS SCHEDULER (12:00 & 20:00) ----
+function initSystemNotifications() {
   try {
-    if ("Notification" in window && Notification.permission !== "granted") Notification.requestPermission();
+    if ("Notification" in window) {
+      if (Notification.permission === "default") {
+        Notification.requestPermission();
+      }
+    }
+
     setInterval(() => {
       const now = new Date();
-      if (now.getHours() === 20 && now.getMinutes() === 0) {
-        const todayStr = getLocalDateString(now);
-        if (localStorage.getItem(`pulse_reminder_${todayStr}`) !== 'true') {
-          localStorage.setItem(`pulse_reminder_${todayStr}`, 'true');
-          document.getElementById('reminderModal').classList.remove('hidden');
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      const todayStr = getLocalDateString(now);
+      const userName = state.userName || 'דוידי';
+
+      // 12:00 - Daily Tip Notification
+      if (hours === 12 && minutes === 0) {
+        const key = `pulse_notif_12_${todayStr}`;
+        if (localStorage.getItem(key) !== 'true') {
+          localStorage.setItem(key, 'true');
+          showBrowserNotification(
+            "Pulse - טיפ יומי 💡",
+            `${userName} הטיפ היומי שלך כבר כאן לצפייה הקש`,
+            () => {
+              window.focus();
+              openTutorialModal();
+            }
+          );
+        }
+      }
+
+      // 20:00 - Expense Reminder Notification
+      if (hours === 20 && minutes === 0) {
+        const key = `pulse_notif_20_${todayStr}`;
+        if (localStorage.getItem(key) !== 'true') {
+          localStorage.setItem(key, 'true');
+          showBrowserNotification(
+            "Pulse - תזכורת הוצאות 💰",
+            `${userName} אל תשכח להוסיף את ההוצאות שלך להיום`,
+            () => {
+              window.focus();
+              const remModal = document.getElementById('reminderModal');
+              const remText = document.getElementById('reminderModalText');
+              if(remText) remText.textContent = `${userName}, אל תשכח להוסיף את ההוצאות שלך להיום 💡`;
+              if(remModal) remModal.classList.remove('hidden');
+            }
+          );
         }
       }
     }, 30000);
   } catch(e) {}
 }
+
+function showBrowserNotification(title, body, onClickCallback) {
+  if ("Notification" in window && Notification.permission === "granted") {
+    try {
+      const notification = new Notification(title, {
+        body: body,
+        icon: "icon.png"
+      });
+      notification.onclick = function(event) {
+        event.preventDefault();
+        window.focus();
+        if (onClickCallback) onClickCallback();
+        notification.close();
+      };
+    } catch(e) {
+      showToast(body);
+    }
+  } else {
+    showToast(body);
+  }
+}
+
 function closeReminderModal() { document.getElementById('reminderModal').classList.add('hidden'); }
 function openTutorialModal() { document.getElementById('tutorialModal').classList.remove('hidden'); }
 function closeTutorialModal() { document.getElementById('tutorialModal').classList.add('hidden'); }
@@ -1637,7 +1697,7 @@ window.onload = async function() {
     setDynamicGreeting();
     buildFinancialDayDropdowns();
     buildTableMonthDropdown();
-    initDailyReminder();
+    initSystemNotifications();
     loadDailyTip();
     renderHome();
   } catch (err) {
@@ -2467,7 +2527,6 @@ function processVoiceCommandDirectly(text){
     }
   }
 
-  // אם לא צוין מטבע במפורש, אבל מצב נסיעות מופעל - השתמש אוטומטית במטבע של המדינה הנבחרת!
   if (!explicitCurrencyFound && state.isTravelMode && state.travelCurrency) {
     if (exchangeRates[state.travelCurrency]) {
       currencyMultiplier = exchangeRates[state.travelCurrency];

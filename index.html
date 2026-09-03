@@ -243,7 +243,7 @@
         <div class="p-3 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1.5">
             <p class="text-[11px] font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-circle-info"></i> חלון 2: הסבר מפורט</p>
             <p class="text-[10px] text-slate-300 leading-relaxed">
-                כאשר מצב הנסיעות דלוק, כפתור הניהול יופיע במסך הבית שלך. תוכל להקליד או להגיד הוצאות בכל מטבע זר בעולם (דולר, יורו, פאונד, באט, ין ועוד) והמערכת תמיר אותן במדויק. בלחיצה על כיבוי המצב – יוצג מיד סיכום הטיול שלך!
+                כאשר מצב הנסיעות דלוק, כפתור הניהול יופיע במסך הבית שלך. תוכל להקליד או להגיד הוצאות בכל מטבע זר בעולם והמערכת תמיר אותן במדויק (עם שערים חיים מעודכנים). בלחיצה על כיבוי המצב – יוצג מיד סיכום הטיול שלך!
             </p>
         </div>
 
@@ -368,7 +368,7 @@
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-amber-400 flex items-center gap-1.5"><i class="fa-solid fa-piggy-bank"></i> 4. קופות חיסכון ומצב נסיעות</p>
-                    <p class="leading-relaxed">שמור כסף בצד לקופות וירטואליות (כמו טיסה או רכישה) מבלי לפגוע בעו״ש, והפעל מצב נסיעות לניהול הוצאות במטבע זר וסיכום טיול אוטומטי.</p>
+                    <p class="leading-relaxed">שמור כסף בצד לקופות וירטואליות (כמו טיסה או רכישה) מבלי לפגוע בעו״ש, והפעל מצב נסיעות (עם שערי מטבע חיים!) לניהול הוצאות במטבע זר וסיכום טיול אוטומטי.</p>
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-teal-400 flex items-center gap-1.5"><i class="fa-solid fa-table"></i> 5. טבלה חודשית (אקסל פיננסי)</p>
@@ -889,7 +889,7 @@
           <div class="flex items-center justify-between mb-1.5">
             <div class="flex items-center gap-1.5">
               <span class="text-sm">✈️</span>
-              <span class="text-[12px] font-bold text-blue-400">מצב נסיעות פעיל</span>
+              <span class="text-[12px] font-bold text-blue-400">מצב נסיעות פעיל (שערים חיים)</span>
             </div>
             <div class="flex items-center gap-1.5">
                 <button onclick="triggerEndTravelMode()" class="text-[9px] font-bold bg-blue-500 text-white px-2 py-0.5 rounded-md shadow cursor-pointer">סיים נסיעה</button>
@@ -1048,7 +1048,8 @@ const tipsList = [
   "אוטומציה של חיסכון: הגדר העברה אוטומטית לחיסכון ביום שבו נכנסת המשכורת."
 ];
 
-const exchangeRates = {
+// שערי מטבעות עם עדכון חי מהאינטרנט וגיבוי מובנה
+let exchangeRates = {
   '₪': 1, 'שקל': 1, 'שקלים': 1,
   '$': 3.65, 'דולר': 3.65, 'דולרים': 3.65, 'USD': 3.65,
   '€': 3.95, 'יורו': 3.95, 'EUR': 3.95,
@@ -1063,6 +1064,31 @@ const exchangeRates = {
   'רופי': 0.044, 'INR': 0.044,
   'יואן': 0.51, 'CNY': 0.51
 };
+
+async function updateLiveExchangeRates() {
+  try {
+    const res = await fetch('https://open.er-api.com/v6/latest/USD');
+    const data = await res.json();
+    if (data && data.rates && data.rates.ILS) {
+      const usd = data.rates.ILS;
+      exchangeRates['$'] = usd;
+      exchangeRates['דולר'] = usd;
+      exchangeRates['USD'] = usd;
+      if (data.rates.EUR) {
+        const eur = usd / data.rates.EUR;
+        exchangeRates['€'] = eur;
+        exchangeRates['יורו'] = eur;
+        exchangeRates['EUR'] = eur;
+      }
+      if (data.rates.GBP) {
+        const gbp = usd / data.rates.GBP;
+        exchangeRates['£'] = gbp;
+        exchangeRates['פאונד'] = gbp;
+        exchangeRates['GBP'] = gbp;
+      }
+    }
+  } catch(e) {}
+}
 
 let state = {
   handle: '', userName: '', baseline: null, financialDay: 1, savingsGoal: 1500, mainGoal: 'peace',
@@ -1402,6 +1428,8 @@ function deleteRecurringItem(id) {
 
 window.onload = async function() {
   try {
+    await updateLiveExchangeRates();
+
     setTimeout(() => {
       const splash = document.getElementById('appSplashScreen');
       if(splash) { splash.style.opacity = '0'; setTimeout(() => splash.remove(), 700); }
@@ -2018,7 +2046,6 @@ function renderTableScreen() {
   const select = document.getElementById('tableMonthSelect');
   const offset = select ? parseInt(select.value) || 0 : 0;
 
-  // Calculate and display exact date range for the financial period
   const { startPeriod, endPeriod } = getFinancialPeriodDates(offset);
   const startStr = `${String(startPeriod.getDate()).padStart(2,'0')}.${String(startPeriod.getMonth()+1).padStart(2,'0')}.${startPeriod.getFullYear()}`;
   const endMinusOne = new Date(endPeriod);
@@ -2186,7 +2213,7 @@ function processSmartText() {
 function cleanSubCategoryText(rawText) {
   if(!rawText) return 'כללי';
   return rawText
-    .replace(/(\d+[\.,]?\d*)/g, '')
+    .replace(/(\d{1,2}[\.,]?\d*)/g, '')
     .replace(/(שקל|שקלים|₪|\$|€|£|דולר|דולרים|יורו|פאונד|באט|יין|קנדי|אוסטרלי|פרנק|דירהם|דינר|רופי|יואן)/g, '')
     .replace(/(אתמול|שלשום|היום)/g, '')
     .trim() || rawText.trim();
@@ -2256,7 +2283,9 @@ function processVoiceCommandDirectly(text){
   const originalStr = currencyMultiplier !== 1 ? `${rawAmount} ${currencyLabel}` : null;
 
   let isIncome = cleanText.includes('הכנסה') || cleanText.includes('משכורת') || cleanText.includes('קיבלתי') || cleanText.includes('הרווחתי');
-  cleanText = cleanText.replace(/(הכנסה|משכורת|קיבלתי|הרווחתי|שילמתי|קניתי|ב)/g, '').trim();
+  
+  // הוסר ב' בטעות שהיה מוחק אותיות ב' ממילים כמו במסעדה/בפאב
+  cleanText = cleanText.replace(/(הכנסה|משכורת|קיבלתי|הרווחתי|שילמתי|קניתי)/g, '').trim();
 
   let matchedCat = null;
   let matchedSub = null;

@@ -69,10 +69,10 @@
   .glow-wrap{ position:relative; display:flex; justify-content:center; width:100%; }
   .glow-halo{ position:absolute; inset:-15px 10% auto 10%; height:100px; border-radius:50%; filter:blur(25px); background:radial-gradient(circle, var(--glow) 0%, transparent 68%); opacity:.45; transition:background 1s ease; }
   
-  .balance-card{ position:relative; width:100%; border:1px solid var(--border); background:linear-gradient(180deg, var(--card) 0%, var(--card-2) 100%); border-radius:18px; padding:14px 12px; text-align:center; z-index:1; display:flex; flex-direction:column; justify-content:center; height:100%; }
+  .balance-card{ position:relative; width:100%; border:1px solid var(--border); background:linear-gradient(180deg, var(--card) 0%, var(--card-2) 100%); border-radius:18px; padding:16px 14px; text-align:center; z-index:1; display:flex; flex-direction:column; justify-content:center; height:100%; }
   .balance-card::before{ content:""; position:absolute; inset:0; border-radius:18px; padding:1px; background:linear-gradient(135deg, var(--glow) 0%, transparent 45%, transparent 55%, var(--glow) 100%); opacity:.5; -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; }
   
-  .ecg-line{ width:100%; height:14px; margin-top:2px; overflow:hidden; }
+  .ecg-line{ width:100%; height:16px; margin-top:4px; overflow:hidden; }
   .ecg-line path{ stroke: #2EB88A; stroke-dasharray:340; animation:ecg-sweep 2s linear infinite; }
   @keyframes ecg-sweep{ from{stroke-dashoffset:340;} to{stroke-dashoffset:0;} }
 
@@ -84,13 +84,6 @@
   .field-shell{ background:rgba(15, 20, 30, 0.85); border:1px solid rgba(255,255,255,0.15); border-radius:10px; transition: border-color 0.2s; backdrop-filter:blur(10px); }
   html.light .field-shell { background: rgba(240, 242, 245, 0.9); border-color: rgba(0,0,0,0.1); }
   .field-shell:focus-within{ border-color: var(--mint); }
-
-  .toggle-switch { position: relative; display: inline-block; width: 46px; height: 24px; cursor: pointer; flex-shrink: 0; }
-  .toggle-switch input { opacity: 0; width: 0; height: 0; }
-  .toggle-slider { position: absolute; inset: 0; background: #334155; border-radius: 24px; transition: 0.3s; border: 1px solid var(--border); }
-  .toggle-slider::before { content: ""; position: absolute; height: 18px; width: 18px; left: 3px; bottom: 2px; background: white; border-radius: 50%; transition: 0.3s; }
-  .toggle-switch input:checked + .toggle-slider { background: #3b82f6; }
-  .toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
 
   .wizard-option-btn {
     display: flex; align-items: center; justify-content: space-between; padding: 12px 14px;
@@ -168,11 +161,11 @@
   .nav-item.active{ color: var(--text); background: var(--card-2); border: 1px solid var(--border); }
   .nav-item.active svg{ stroke: var(--mint); }
 
-  .donut{ width:100px; height:100px; border-radius:50%; position:relative; margin:0 auto; box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
-  .donut::after{ content:""; position:absolute; inset:15px; border-radius:50%; background:var(--card); }
+  .donut{ width:110px; height:110px; border-radius:50%; position:relative; margin:0 auto; box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+  .donut::after{ content:""; position:absolute; inset:16px; border-radius:50%; background:var(--card); }
   .donut-center{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2; }
 
-  .tx-row{ display:flex; align-items:center; justify-content:space-between; padding:5px 0; border-bottom:1px solid var(--border); }
+  .tx-row{ display:flex; align-items:center; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border); }
   .tx-row:last-child{ border-bottom:none; }
 </style>
 </head>
@@ -217,60 +210,13 @@
     </div>
 </div>
 
-<!-- TRAVEL MODE SETTINGS MODAL -->
-<div id="travelModal" class="modal-overlay hidden">
-    <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl text-right max-h-[85vh] overflow-y-auto border border-blue-400/40">
-        <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-            <h3 class="text-xs font-bold text-blue-400 flex items-center gap-1.5"><i class="fa-solid fa-plane-departure"></i> הגדרות מצב נסיעות (Travel Mode)</h3>
-            <button onclick="closeTravelModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
-        </div>
-        
-        <div class="p-3 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-2.5">
-            <p class="text-[11px] font-bold text-slate-100 flex items-center gap-1.5"><i class="fa-solid fa-sliders text-blue-400"></i> חלון 1: הפעלת מצב ותקציב</p>
-            <div class="flex items-center justify-between py-1">
-                <span class="text-xs font-bold">הפעל מצב נסיעות</span>
-                <input id="travelToggleCheckbox" type="checkbox" onchange="toggleTravelModeState(this.checked)" class="w-4 h-4 accent-emerald-400 cursor-pointer" />
-            </div>
-            <div>
-                <label class="text-[10px] font-semibold text-slate-400 mb-1 block">תקציב לטיול (בשקלים)</label>
-                <div class="field-shell px-3 py-2 flex items-center">
-                    <span class="text-xs font-bold ml-1 text-emerald-400">₪</span>
-                    <input id="travelBudgetInput" type="tel" inputmode="decimal" placeholder="5000..." class="w-full bg-transparent outline-none text-xs font-bold" style="color:var(--text)" />
-                </div>
-            </div>
-        </div>
-
-        <div class="p-3 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1.5">
-            <p class="text-[11px] font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-circle-info"></i> חלון 2: הסבר מפורט</p>
-            <p class="text-[10px] text-slate-300 leading-relaxed">
-                כאשר מצב הנסיעות דלוק, כפתור הניהול יופיע במסך הבית שלך. תוכל להקליד או להגיד הוצאות בכל מטבע זר בעולם (דולר, יורו, פאונד, באט, ין ועוד) והמערכת תמיר אותן במדויק. בלחיצה על כיבוי המצב – יוצג מיד סיכום הטיול שלך!
-            </p>
-        </div>
-
-        <button onclick="saveTravelSettings()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs cursor-pointer shadow-lg">שמור הגדרות נסיעה</button>
-    </div>
-</div>
-
-<!-- TRAVEL SUMMARY MODAL -->
-<div id="travelSummaryModal" class="modal-overlay hidden">
-    <div class="summary-card p-5 max-w-sm w-full space-y-4 shadow-2xl text-right border border-blue-400/40">
-        <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-            <h3 class="text-sm font-black text-blue-400 flex items-center gap-2"><i class="fa-solid fa-plane-circle-check"></i> סיכום נסיעות וטיול</h3>
-            <button onclick="closeTravelSummaryModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
-        </div>
-        <div id="travelSummaryContent" class="space-y-2.5 text-[11px] text-slate-300"></div>
-        <button onclick="closeTravelSummaryModal()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs shadow-xl cursor-pointer">סגור סיכום וחזור למצב רגיל</button>
-    </div>
-</div>
-
-<!-- RECURRING MODAL -->
 <div id="recurringModal" class="modal-overlay hidden">
     <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl max-h-[85vh] overflow-y-auto text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
             <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-rotate ml-1"></i> הוראות קבע ומנויים</h3>
             <button onclick="closeRecurringModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
-        <p class="text-[10px] text-slate-300">הוראות קבע יורדות ומחושבות אוטומטית כחלק מההוצאות וההכנסות החודשיות והיתרה שלך:</p>
+        <p class="text-[10px] text-slate-300">הוראות קבע יורדות ומחושבות אוטומטית כחלק מההוצאות וההכנסות החודשיות שלך:</p>
         <div class="space-y-1.5 max-h-[140px] overflow-y-auto" id="recurringListContainer"></div>
         
         <div class="border-t border-[var(--border)] pt-2 space-y-2">
@@ -284,7 +230,7 @@
                     <input id="recAmount" type="tel" inputmode="decimal" placeholder="סכום..." class="w-full bg-transparent outline-none text-[11px] font-bold" style="color:var(--text)" />
                 </div>
                 <div class="field-shell px-3 py-1.5">
-                    <select id="recType" class="w-full bg-transparent outline-none text-[11px] font-bold" style="color:var(--text)" onchange="updateRecCategories(this.value)">
+                    <select id="recType" class="w-full bg-transparent outline-none text-[11px] font-bold" style="color:var(--text)">
                         <option value="expense">הוצאה קבועה</option>
                         <option value="income">הכנסה קבועה</option>
                     </select>
@@ -303,46 +249,6 @@
     </div>
 </div>
 
-<!-- GOAL BUCKETS MODAL -->
-<div id="goalBucketsModal" class="modal-overlay hidden">
-    <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl max-h-[85vh] overflow-y-auto text-right">
-        <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-            <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-piggy-bank ml-1"></i> קופות חיסכון וירטואליות</h3>
-            <button onclick="closeGoalBucketsModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
-        </div>
-        <p class="text-[10px] text-slate-300">שמור כסף למטרות ספציפיות באופן וירטואלי מבלי לפגוע ביתרת העו״ש הכללית:</p>
-        <div class="space-y-2 max-h-[160px] overflow-y-auto" id="goalBucketsListContainer"></div>
-        
-        <div class="border-t border-[var(--border)] pt-2 space-y-2">
-            <p class="text-[11px] font-bold text-slate-200">הוספת קופה חדשה:</p>
-            <div class="field-shell px-3 py-1.5">
-                <input id="bucketTitle" type="text" placeholder="שם הקופה (למשל: טיסה לתאילנד)..." class="w-full bg-transparent outline-none text-[11px] font-bold" style="color:var(--text)" />
-            </div>
-            <div class="field-shell px-3 py-1.5 flex items-center">
-                <span class="text-xs font-bold ml-1 text-emerald-400">₪</span>
-                <input id="bucketTarget" type="tel" inputmode="decimal" placeholder="יעד בסכום..." class="w-full bg-transparent outline-none text-[11px] font-bold" style="color:var(--text)" />
-            </div>
-            <button onclick="addNewBucket()" class="save-btn w-full py-2 rounded-xl font-bold text-xs cursor-pointer">צור קופת חיסכון</button>
-        </div>
-    </div>
-</div>
-
-<!-- ALLOCATE BUCKET FUNDS MODAL -->
-<div id="allocateModal" class="modal-overlay hidden">
-    <div class="summary-card p-4 max-w-xs w-full space-y-3 shadow-2xl text-right">
-        <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-            <h3 id="allocateModalTitle" class="text-xs font-bold text-emerald-400">הקצאת כסף לקופה</h3>
-            <button onclick="closeAllocateModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
-        </div>
-        <p class="text-[10px] text-slate-300">הכנס סכום להוספה (או מספר שלילי להסרה) לקופה הוירטואלית:</p>
-        <div class="field-shell px-3 py-2 flex items-center">
-            <span class="text-sm font-bold ml-1 text-emerald-400">₪</span>
-            <input id="allocateAmountInput" type="tel" inputmode="decimal" placeholder="סכום..." class="w-full bg-transparent outline-none text-xs font-bold" style="color:var(--text)" />
-        </div>
-        <button onclick="confirmAllocate()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">עדכן קופה</button>
-    </div>
-</div>
-
 <div id="tutorialModal" class="modal-overlay hidden">
     <div class="summary-card p-5 max-w-md w-full space-y-4 shadow-2xl text-right relative overflow-hidden border border-emerald-400/50 max-h-[90vh] overflow-y-auto">
         <div class="absolute -top-16 -right-16 w-36 h-36 bg-emerald-500/20 rounded-full blur-3xl"></div>
@@ -354,20 +260,26 @@
             
             <div class="space-y-3 text-[11px] text-slate-300">
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
-                    <p class="font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-microphone"></i> 1. ללא בחירת קטגוריות — פשוט מדברים</p>
-                    <p class="leading-relaxed">החידוש המרכזי ב-Pulse: **אין צורך לבחור קטגוריות ידנית**. פשוט מקלידים או אומרים בשפה חופשית (למשל: "50 שקל במסעדה ב-18.8").</p>
+                    <p class="font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-microphone"></i> 1. מערכת לומדת חכמה — פשוט מדברים</p>
+                    <p class="leading-relaxed">ב-Pulse אין צורך בבחירת קטגוריות ידנית או מאגר קשיח. פשוט מקלידים או אומרים בשפה חופשית (למשל: "קניות בסופר 150 שקל"). פעם אחת אם המילה חדשה נבחר קטגוריה ראשית, ומעכשיו המערכת תזכור זאת אוטומטית לתמיד.</p>
                 </div>
+
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
-                    <p class="font-bold text-blue-400 flex items-center gap-1.5"><i class="fa-solid fa-piggy-bank"></i> 2. קופות חיסכון ומצב נסיעות</p>
-                    <p class="leading-relaxed">נהל קופות חיסכון וירטואליות עם מחיקה ויזואלית קלה, והפעל מצב נסיעות עם מתג מהיר וסיכום טיול אוטומטי בסיומו!</p>
+                    <p class="font-bold text-blue-400 flex items-center gap-1.5"><i class="fa-solid fa-chart-pie"></i> 2. תמונת מצב ותרשימים דינמיים</p>
+                    <p class="leading-relaxed">מסך תמונת המצב מציג את עוגת הפילוח וההשוואה לתקופה הקודמת בצורה נקייה וממוקדת לפי הקטגוריות הראשיות שלך.</p>
+                </div>
+
+                <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
+                    <p class="font-bold text-violet-400 flex items-center gap-1.5"><i class="fa-solid fa-table"></i> 3. טבלה חודשית (אקסל פיננסי)</p>
+                    <p class="leading-relaxed">מרכז את כל ההוצאות וההכנסות לפי קטגוריות ראשיות והביטויים האישיים שלך עם סינון אוטומטי מלא לפי חודשים ותקופות.</p>
                 </div>
             </div>
         </div>
-        <button onclick="closeTutorialModal()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs shadow-xl cursor-pointer relative z-10">הבנתי לגמרי!</button>
+        <button onclick="closeTutorialModal()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs shadow-xl cursor-pointer relative z-10">הבנתי לגמרי, בוא נמשיך!</button>
     </div>
 </div>
 
-<!-- 5-STEP CLEAN ONBOARDING WIZARD -->
+<!-- ONBOARDING -->
 <div id="onboarding-step-0" class="full-page-onboarding hidden">
     <div class="road-city-bg">
         <svg class="w-full h-full" viewBox="0 0 400 800" preserveAspectRatio="none">
@@ -381,14 +293,14 @@
         </svg>
     </div>
 
-    <div class="onboarding-content-box text-center space-y-6 p-2">
+    <div class="onboarding-content-box text-center space-y-6 p-4">
         <div class="space-y-3">
             <div class="w-16 h-16 rounded-3xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 text-3xl mx-auto shadow-xl">
                 <i class="fa-solid fa-wand-magic-sparkles"></i>
             </div>
             <h1 class="text-3xl font-black tracking-tight gradient-text">ברוכים הבאים ל-Pulse</h1>
             <p class="text-sm font-bold text-slate-200 leading-relaxed px-4">
-                בלי הרבה כאבי ראש פשוט מדברים או מקלידים בשפה שלכם ו-Pulse תעשה את השאר.
+                מערכת חכמה שלומדת אותך ואת סגנון הדיבור שלך בצורה אורגנית.
             </p>
         </div>
 
@@ -397,9 +309,15 @@
                 <span>התחל הגדרה מהירה</span>
                 <i class="fa-solid fa-arrow-left text-xs"></i>
             </button>
-            <button onclick="quickLogin()" class="w-full py-3.5 rounded-2xl font-bold text-sm shadow-xl cursor-pointer bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-center gap-2">
-                <i class="fa-solid fa-right-to-bracket"></i> כבר יש לי חשבון (התחברות מהירה)
+
+            <button onclick="loginWithExistingUser()" class="w-full py-3 rounded-2xl font-bold text-xs cursor-pointer bg-[var(--card)] border border-emerald-400/40 text-emerald-400 hover:text-white transition flex items-center justify-center gap-2 shadow-xl">
+                <i class="fa-solid fa-cloud-arrow-down"></i> יש לך חשבון קיים? לחץ כאן להתחברות
             </button>
+
+            <label class="w-full py-2.5 px-4 rounded-2xl font-bold text-xs cursor-pointer bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-file-arrow-up"></i> שחזור גיבוי מקומי קודם
+                <input type="file" accept=".json,.txt,.pulse" onchange="importBackup(event)" class="hidden" />
+            </label>
         </div>
     </div>
 </div>
@@ -414,9 +332,7 @@
         </div>
         <div class="space-y-3">
             <div>
-                <p class="text-[10px] text-slate-400 mb-1 font-semibold">
-                    באנגלית בלבד, לפחות 4 אותיות. <span class="text-amber-400 font-bold">חשוב לזכור את שם המשתמש!</span>
-                </p>
+                <p class="text-[10px] text-slate-400 mb-1 font-semibold">נא להזין באנגלית בלבד, לפחות 4 אותיות</p>
                 <div class="field-shell flex items-center px-4 py-3">
                     <input id="wizHandle" type="text" placeholder="שם משתמש..." class="amount-input text-center font-bold text-sm" dir="ltr" />
                 </div>
@@ -462,9 +378,7 @@
         <div class="text-center space-y-1">
             <span class="text-[10px] text-emerald-400 font-bold">שלב 3 מתוך 5</span>
             <h2 class="text-base font-black gradient-text">תקופת תקציב מותאמת אישית</h2>
-            <p class="text-xs text-slate-300 leading-relaxed">
-                באיזה יום בחודש נקבעת הורדת האשראי שלך?
-            </p>
+            <p class="text-xs text-slate-300 leading-relaxed">באיזה יום בחודש נקבעת ההורדה שלך?</p>
         </div>
         <div class="space-y-3">
             <div class="field-shell px-4 py-3">
@@ -493,33 +407,24 @@
             </div>
         </div>
         <button onclick="wizardNextStep(5)" class="w-full py-3 rounded-2xl font-bold text-xs shadow-xl cursor-pointer bg-gradient-to-l from-emerald-500 to-teal-600 text-white hover:opacity-95 transition flex items-center justify-between px-5">
-            <span>המשך למטרה מרכזית</span>
+            <span>המשך לסיום</span>
             <i class="fa-solid fa-arrow-left text-xs"></i>
         </button>
     </div>
 </div>
 
-<!-- Step 5: Main Financial Goal -->
+<!-- Step 5: Main Goal -->
 <div id="onboarding-step-5" class="full-page-onboarding hidden">
     <div class="onboarding-content-box text-right space-y-4 p-5 bg-[var(--card)] rounded-3xl border border-[var(--border)] shadow-2xl">
         <div class="text-center space-y-1">
             <span class="text-[10px] text-emerald-400 font-bold">שלב 5 מתוך 5</span>
             <h2 class="text-base font-black gradient-text">המטרה הכלכלית המרכזית</h2>
-            <p class="text-xs text-slate-300">מה המטרה הכי חשובה לך כרגע בניהול הכסף?</p>
+            <p class="text-xs text-slate-300">מה הכי חשוב לך כרגע בניהול הכסף?</p>
         </div>
         <div class="space-y-2">
-            <button onclick="selectMainGoal('peace', this)" class="wizard-option-btn selected w-full">
-                <span>🧘‍♂️ ראש שקט (לסיים חודש בלי הפתעות)</span>
-            </button>
-            <button onclick="selectMainGoal('saving', this)" class="wizard-option-btn w-full">
-                <span>🎯 חיסכון ליעד (לטייל, לרכוש פרויקט גדול)</span>
-            </button>
-            <button onclick="selectMainGoal('awareness', this)" class="wizard-option-btn w-full">
-                <span>📊 מודעות (לראות לאן הכסף זורם ביום-יום)</span>
-            </button>
-            <button onclick="selectMainGoal('control', this)" class="wizard-option-btn w-full">
-                <span>🛡️ שליטה קפדנית (לעצור זליגה של הוצאות)</span>
-            </button>
+            <button onclick="selectMainGoal('peace', this)" class="wizard-option-btn selected w-full"><span>🧘‍♂️ ראש שקט</span></button>
+            <button onclick="selectMainGoal('saving', this)" class="wizard-option-btn w-full"><span>🎯 חיסכון ליעד</span></button>
+            <button onclick="selectMainGoal('awareness', this)" class="wizard-option-btn w-full"><span>📊 מודעות ושליטה</span></button>
         </div>
         <button onclick="startCinematicBuild()" class="w-full py-3.5 rounded-2xl font-bold text-sm shadow-xl cursor-pointer bg-gradient-to-l from-emerald-500 to-teal-600 text-white hover:opacity-95 transition flex items-center justify-between px-5 mt-2">
             <span>בנה לי את האפליקציה</span>
@@ -528,7 +433,7 @@
     </div>
 </div>
 
-<!-- Cinematic Build Animation -->
+<!-- Cinematic Build -->
 <div id="onboarding-step-6" class="full-page-onboarding hidden">
     <div class="onboarding-content-box text-center space-y-6 p-6 bg-[var(--card)] rounded-3xl border border-emerald-400/40 shadow-2xl">
         <div class="relative flex items-center justify-center my-4">
@@ -539,7 +444,7 @@
         </div>
         <div class="space-y-3">
             <h2 id="buildTitle" class="text-xl font-black gradient-text">בונה את עולמך הפיננסי...</h2>
-            <p id="buildSubText" class="text-xs text-slate-300 leading-relaxed min-h-[36px]">מאתחל את מאגר-העל והמנועים החכמים...</p>
+            <p id="buildSubText" class="text-xs text-slate-300 leading-relaxed min-h-[36px]">מאתחל את מנוע הלמידה החכם...</p>
         </div>
         <div class="space-y-1.5">
             <div class="w-full bg-[var(--card-2)] h-3 rounded-full overflow-hidden border border-[var(--border)] p-0.5">
@@ -547,7 +452,7 @@
             </div>
             <div class="flex justify-between text-[10px] text-slate-400 font-bold tabular">
                 <span id="buildPercentText">2%</span>
-                <span>תהליך אופטימיזציה</span>
+                <span>אופטימיזציה אורגנית</span>
             </div>
         </div>
     </div>
@@ -557,10 +462,10 @@
 <div id="chatHelpModal" class="modal-overlay hidden">
     <div class="summary-card p-4 max-w-xs w-full space-y-3 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-            <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-microphone ml-1"></i> העוזר הקולי והצ׳אט החכם</h3>
+            <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-microphone ml-1"></i> העוזר הקולי החכם</h3>
             <button onclick="closeChatHelpModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
-        <p class="text-[11px] text-slate-300 leading-relaxed">העוזר הקולי והצ׳אט החכם מזהים אוטומטית מאות קטגוריות, מטבעות זרים ותאריכים ומסדרת הכל לבד בשניות.</p>
+        <p class="text-[11px] text-slate-300 leading-relaxed">פשוט מדברים או מקלידים בשפה חופשית. המערכת תזהה את הביטוי שלך, ואם הוא חדש תשאל אותך פעם אחת לאיזו קטגוריה ראשית לשייך אותו - ומכאן והלאה תעשה זאת לבד.</p>
         <button onclick="closeChatHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי</button>
     </div>
 </div>
@@ -571,11 +476,7 @@
             <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-mobile-screen-button ml-1"></i> הוספה למסך הבית</h3>
             <button onclick="closePwaModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
-        <p class="text-[11px] text-slate-300 leading-relaxed">הפוך את האפליקציה לזמינה בלחיצת כפתור אחת ממסך הטלפון שלך כמו אפליקציה אמיתית מהחנות:</p>
-        <ul class="text-[10px] text-slate-300 list-disc list-inside space-y-1">
-            <li><b>באייפון (Safari):</b> לחץ על כפתור השיתוף בתחתית ואז <b>"הוסף למסך הבית"</b>.</li>
-            <li><b>באנדרואיד (Chrome):</b> לחץ על שלוש הנקודות בפינה ואז <b>"התקן אפליקציה"</b> או <b>"הוסף למסך הבית"</b>.</li>
-        </ul>
+        <p class="text-[11px] text-slate-300 leading-relaxed">באייפון: לחץ על כפתור השיתוף ואז "הוסף למסך הבית". באנדרואיד: שלוש נקודות ואז "התקן אפליקציה".</p>
         <button onclick="closePwaModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי</button>
     </div>
 </div>
@@ -586,59 +487,54 @@
             <h3 class="text-xs font-bold text-emerald-400">הכתבה חכמה</h3>
             <button onclick="closeVoiceHelpModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
-        <p class="text-[11px] text-slate-300 leading-relaxed">אמור או הקלד משפט חופשי כולל מטבע זר ותאריך (לדוגמה: 18.8). דוגמאות מוצלחות:</p>
-        <p class="text-[11px] font-bold text-emerald-300 bg-[var(--card-2)] p-2 rounded-lg border border-[var(--border)]" id="voiceExampleBox">"שילמתי 50 שקל במסעדה ב-18.8"</p>
+        <p class="text-[11px] text-slate-300 leading-relaxed">דוגמאות מוצלחות: "שילמתי 120 שקל במסעדה אתמול", "קניות בסופר 200 שקל".</p>
         <button onclick="closeVoiceHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי</button>
     </div>
 </div>
 
+<!-- VOICE DESC / NEW PHRASE MODAL -->
 <div id="voiceDescModal" class="modal-overlay hidden">
-    <div class="summary-card p-4 max-w-xs w-full space-y-3 shadow-2xl text-right">
+    <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-            <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-pen-nib ml-1"></i> השלמת קטגוריה חסרה</h3>
+            <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-wand-magic-sparkles ml-1"></i> למידת ביטוי חדש</h3>
         </div>
-        <div class="space-y-2 text-[11px]">
+        <div class="space-y-2.5 text-[11px]">
             <p id="voiceParsedInfo" class="font-bold text-slate-300"></p>
-            <div class="p-2 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[10px]">
-                לא הצלחנו למצוא קטגוריה תואמת מדויקת ברשימה. בחר קטגוריה קיימת או הוסף קטגוריה חדשה בקלות:
+            <div class="p-2.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-[10px] leading-relaxed">
+                💡 ביטוי זה חדש למערכת. בחר לאיזו קטגוריה ראשית לשייך אותו מעכשיו והלאה:
             </div>
-            <div class="field-shell px-3 py-1.5">
-                <select id="selectMainCategory" class="w-full bg-transparent outline-none font-bold text-[11px]" style="color:var(--text)"></select>
-            </div>
-            <div class="flex gap-2">
-                <div class="field-shell px-3 py-1.5 flex-1">
-                    <input id="newCatQuickInput" type="text" placeholder="או הוסף קטגוריה חדשה כאן..." class="w-full bg-transparent outline-none font-bold text-[11px]" style="color:var(--text)" />
+            <div>
+                <label class="text-[10px] text-slate-400 font-semibold mb-1 block">תת-קטגוריה שזוהתה:</label>
+                <div class="field-shell px-3 py-1.5">
+                    <input id="voiceSubCatInput" type="text" class="w-full bg-transparent outline-none font-bold" style="color:var(--text)" />
                 </div>
-                <button onclick="addNewCatQuickly()" class="px-3 py-1.5 rounded-xl bg-violet-500/20 border border-violet-500/40 text-violet-300 font-bold text-[11px] cursor-pointer">הוסף</button>
             </div>
-            <div class="field-shell px-3 py-2">
-                <input id="voiceSubCatInput" type="text" placeholder="תת קטגוריה נקייה (ללא סכום)..." class="w-full bg-transparent outline-none font-bold" style="color:var(--text)" />
+            <div>
+                <label class="text-[10px] text-slate-400 font-semibold mb-1 block">בחר קטגוריה ראשית:</label>
+                <div class="field-shell px-3 py-1.5">
+                    <select id="selectMainCategory" class="w-full bg-transparent outline-none font-bold text-[11px]" style="color:var(--text)"></select>
+                </div>
             </div>
         </div>
         <div class="flex gap-2 pt-1">
-            <button onclick="confirmVoiceTransaction()" class="save-btn flex-1 py-2 rounded-xl font-bold text-xs">שמור תנועה</button>
+            <button onclick="confirmVoiceTransaction()" class="save-btn flex-1 py-2 rounded-xl font-bold text-xs">שמור ולמד לתמיד</button>
             <button onclick="cancelVoiceTransaction()" class="px-3 py-2 rounded-xl bg-[var(--card-2)] border border-[var(--border)] text-rose-400 text-xs font-bold">ביטול</button>
         </div>
     </div>
 </div>
 
-<!-- CATEGORIES MANAGEMENT MODAL -->
 <div id="categoriesModal" class="modal-overlay hidden">
     <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl max-h-[85vh] overflow-y-auto text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-            <h3 class="text-xs font-bold text-violet-400"><i class="fa-solid fa-tags ml-1"></i> ניהול קטגוריות מערכת</h3>
+            <h3 class="text-xs font-bold text-violet-400"><i class="fa-solid fa-tags ml-1"></i> קטגוריות ראשיות</h3>
             <button onclick="closeCategoriesModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
+        <p class="text-[10px] text-slate-300 leading-relaxed">אלו הקטגוריות הראשיות הנקיות שלך באפליקציה:</p>
         
-        <div class="flex gap-2 p-1 bg-[var(--card-2)] rounded-xl border border-[var(--border)]">
-            <button id="catTabExpBtn" onclick="switchCategoryTab('expense')" class="flex-1 py-1.5 rounded-lg text-xs font-bold bg-emerald-500/20 text-emerald-400 transition">הוצאות</button>
-            <button id="catTabIncBtn" onclick="switchCategoryTab('income')" class="flex-1 py-1.5 rounded-lg text-xs font-bold text-slate-400 transition">הכנסות</button>
-        </div>
-
-        <div id="modalCatList" class="space-y-1.5 max-h-[190px] overflow-y-auto"></div>
+        <div id="modalCatList" class="space-y-1.5 max-h-[220px] overflow-y-auto"></div>
 
         <div class="border-t border-[var(--border)] pt-2 space-y-2">
-            <p class="text-[11px] font-bold text-slate-200" id="newCatTitleLabel">הוספת קטגוריית הוצאה חדשה:</p>
+            <p class="text-[11px] font-bold text-slate-200">הוספת קטגוריה ראשית חדשה:</p>
             <div class="field-shell px-3 py-1.5">
                 <input id="newCatInput" type="text" placeholder="שם הקטגוריה החדשה..." class="w-full bg-transparent outline-none text-[11px] font-bold" style="color:var(--text)" />
             </div>
@@ -672,14 +568,8 @@
             <button onclick="menuGoTable()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-violet-400 transition text-[12px] font-bold cursor-pointer">
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-table text-violet-400 w-4"></i> טבלה חודשית (אקסל)</span>
             </button>
-            <button onclick="menuOpenGoalBuckets()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-emerald-400 transition text-[12px] font-bold cursor-pointer">
-                <span class="flex items-center gap-2.5"><i class="fa-solid fa-piggy-bank text-emerald-400 w-4"></i> קופות חיסכון וירטואליות</span>
-            </button>
-            <button onclick="menuOpenTravelModal()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-blue-400 transition text-[12px] font-bold cursor-pointer">
-                <span class="flex items-center gap-2.5"><i class="fa-solid fa-plane-departure text-blue-400 w-4"></i> הגדרות מצב נסיעות</span>
-            </button>
             <button onclick="menuOpenCategories()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-violet-400 transition text-[12px] font-bold cursor-pointer">
-                <span class="flex items-center gap-2.5"><i class="fa-solid fa-tags text-violet-400 w-4"></i> ניהול קטגוריות מערכת</span>
+                <span class="flex items-center gap-2.5"><i class="fa-solid fa-tags text-violet-400 w-4"></i> ניהול קטגוריות ראשיות</span>
             </button>
             <button onclick="menuOpenRecurring()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-emerald-400 transition text-[12px] font-bold cursor-pointer">
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-rotate text-emerald-400 w-4"></i> הוראות קבע ומנויים</span>
@@ -699,13 +589,6 @@
                 </div>
                 <div id="systemSettingsContent" class="hidden space-y-2.5 pt-2 border-t border-[var(--border)]">
                     <div>
-                        <label class="text-[10px] font-semibold text-slate-400 flex items-center gap-1.5 mb-1"><i class="fa-solid fa-globe text-blue-400"></i> בחירת שפה</label>
-                        <select id="langSelect" onchange="changeLanguage(this.value)" class="w-full bg-[var(--card-2)] border border-[var(--border)] p-2 rounded-lg text-[11px] font-bold outline-none cursor-pointer" style="color:var(--text)">
-                            <option value="he">עברית (Hebrew)</option>
-                            <option value="en">אנגלית (English)</option>
-                        </select>
-                    </div>
-                    <div>
                         <label class="text-[10px] font-semibold text-slate-400 flex items-center gap-1.5 mb-1"><i class="fa-solid fa-coins text-amber-400"></i> בחירת מטבע</label>
                         <select id="currencySelect" onchange="changeCurrency(this.value)" class="w-full bg-[var(--card-2)] border border-[var(--border)] p-2 rounded-lg text-[11px] font-bold outline-none cursor-pointer" style="color:var(--text)">
                             <option value="₪">שקל (₪ ILS)</option>
@@ -715,7 +598,7 @@
                         </select>
                     </div>
                     <button onclick="factoryReset()" class="w-full py-2.5 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-400 text-[11px] font-bold flex items-center justify-center gap-1.5 hover:bg-rose-500/20 transition cursor-pointer mt-1">
-                        <i class="fa-solid fa-triangle-exclamation"></i> איפוס מלא של האפליקציה (Reset)
+                        <i class="fa-solid fa-triangle-exclamation"></i> איפוס מלא של האפליקציה
                     </button>
                 </div>
             </div>
@@ -739,9 +622,9 @@
 
     <!-- SCREEN 1: HOME -->
     <section id="screen-home" class="screen active">
-      <main class="px-3 pb-1 pt-1 flex-1 flex flex-col justify-between h-full overflow-hidden gap-1">
+      <main class="px-3 pb-1 pt-1 flex-1 flex flex-col justify-between h-full overflow-hidden gap-1.5">
         <section class="flex flex-col justify-center flex-1">
-          <div class="flex gap-2 mr-auto w-fit mb-0.5">
+          <div class="flex gap-2 mr-auto w-fit mb-1">
             <button onclick="openTutorialModal()" class="text-[9px] font-medium px-2 py-0.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-between gap-1 shadow-sm cursor-pointer">
               <span><i class="fa-solid fa-lightbulb ml-1"></i> שימוש יעיל</span>
             </button>
@@ -750,62 +633,46 @@
             </button>
           </div>
           <div class="px-0.5">
-            <h2 id="greetingTitle" class="text-[12px] font-bold tracking-tight leading-tight">שלום</h2>
+            <h2 id="greetingTitle" class="text-[13px] font-bold tracking-tight leading-tight">שלום</h2>
             <p class="text-[9px] text-slate-400">תמונת המצב הפיננסית שלך להיום</p>
           </div>
-        </section>
-
-        <section id="homeTravelControlCard" class="summary-card p-2.5 flex items-center justify-between transition-all duration-300 hidden">
-            <div class="flex items-center gap-2.5">
-                <div class="w-7 h-7 rounded-xl bg-blue-500/20 border border-blue-400/40 flex items-center justify-center text-blue-400 text-xs">
-                    <i class="fa-solid fa-plane"></i>
-                </div>
-                <div>
-                    <p class="text-[11px] font-bold text-blue-300" id="travelCardTitle">✈️ מצב נסיעות פעיל</p>
-                    <p class="text-[9px] text-slate-400" id="travelCardSubtitle">הוצאות בטיול: ₪0</p>
-                </div>
-            </div>
-            <label class="toggle-switch">
-                <input type="checkbox" id="mainScreenTravelCheckbox" onchange="toggleTravelModeFromMain(this.checked)" checked>
-                <span class="toggle-slider"></span>
-            </label>
         </section>
 
         <section class="glow-wrap flex-[1.6] flex flex-col justify-center">
           <div class="glow-halo" id="glowHalo"></div>
           <div class="balance-card">
-            <p class="text-[11px] font-bold tracking-wide text-slate-300">יתרה בעו״ש | <span id="freeCashSubText" class="text-emerald-400">פנוי: ₪0</span></p>
-            <h1 class="tabular text-[34px] sm:text-[40px] font-black mt-0.5 leading-none tracking-tight" id="balanceValue">0</h1>
+            <p class="text-sm font-bold tracking-wide text-slate-300">יתרה בעו״ש</p>
+            <h1 class="tabular text-[42px] sm:text-[48px] font-black mt-1 leading-none tracking-tight" id="balanceValue">0</h1>
             <svg class="ecg-line" viewBox="0 0 340 24" preserveAspectRatio="none"><path d="M0,12 L60,12 L72,2 L84,22 L96,12 L150,12 L162,4 L174,12 L340,12" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
         </section>
 
         <section class="summary-card p-2 flex items-start gap-2 bg-gradient-to-l from-emerald-500/10 to-blue-500/10 border border-emerald-400/30 my-0.5">
-          <div class="w-5 h-5 rounded-lg bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 text-[10px] flex-shrink-0 mt-0.5">
+          <div class="w-6 h-6 rounded-lg bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 text-xs flex-shrink-0 mt-0.5">
             <i class="fa-solid fa-lightbulb"></i>
           </div>
           <div class="flex-1 min-w-0 text-right">
             <div class="flex items-center justify-between mb-0.5">
               <span class="text-[9px] font-bold text-emerald-400">הטיפ היומי 💡</span>
             </div>
-            <p id="dailyTipText" class="text-[9px] text-slate-200 leading-tight font-medium">טוען טיפ יומי...</p>
+            <p id="dailyTipText" class="text-[10px] text-slate-200 leading-tight font-medium">טוען טיפ יומי...</p>
           </div>
         </section>
 
         <section class="grid grid-cols-2 gap-2 flex-1 items-center">
-          <div class="summary-card p-2.5 h-full flex flex-col justify-center">
+          <div class="summary-card p-3 h-full flex flex-col justify-center">
             <div class="flex items-center gap-1.5">
-              <span class="w-3 h-3 rounded-full flex items-center justify-center" style="background:var(--mint-bg)"><svg width="6" height="6" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2.6" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
-              <span class="text-[11px] font-bold text-slate-300">הכנסות החודש</span>
+              <span class="w-3.5 h-3.5 rounded-full flex items-center justify-center" style="background:var(--mint-bg)"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2.6" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
+              <span class="text-xs font-bold text-slate-300">הכנסות החודש</span>
             </div>
-            <p class="tabular text-lg sm:text-xl font-black mt-1" style="color:var(--mint)" id="totalIncome">0</p>
+            <p class="tabular text-xl sm:text-2xl font-black mt-1" style="color:var(--mint)" id="totalIncome">0</p>
           </div>
-          <div class="summary-card p-2.5 h-full flex flex-col justify-center">
+          <div class="summary-card p-3 h-full flex flex-col justify-center">
             <div class="flex items-center gap-1.5">
-              <span class="w-3 h-3 rounded-full flex items-center justify-center" style="background:var(--coral-bg)"><svg width="6" height="6" viewBox="0 0 24 24" fill="none" stroke="var(--coral)" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg></span>
-              <span class="text-[11px] font-bold text-slate-300">הוצאות החודש</span>
+              <span class="w-3.5 h-3.5 rounded-full flex items-center justify-center" style="background:var(--coral-bg)"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="var(--coral)" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg></span>
+              <span class="text-xs font-bold text-slate-300">הוצאות החודש</span>
             </div>
-            <p class="tabular text-lg sm:text-xl font-black mt-1" style="color:var(--coral)" id="totalExpense">0</p>
+            <p class="tabular text-xl sm:text-2xl font-black mt-1" style="color:var(--coral)" id="totalExpense">0</p>
           </div>
         </section>
 
@@ -820,7 +687,7 @@
           <div class="ai-voice-box mb-1 shadow-md">
             <button id="micBtn" class="mic-btn" onclick="toggleVoiceRecognition()" title="הכתבה קולית">
               <span class="mic-ring"></span><span class="mic-ring d2"></span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
             </button>
             <div class="flex-1 min-w-0">
               <div class="flex items-center justify-between">
@@ -830,13 +697,13 @@
                 </h4>
                 <button onclick="openVoiceHelpModal()" class="w-3.5 h-3.5 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[8px] font-bold flex items-center justify-center text-emerald-400 cursor-pointer">?</button>
               </div>
-              <p id="micStatus" class="text-[9px] mt-0.5 leading-tight truncate" style="color:var(--text-dim)">למשל: "50 שקל במסעדה ב-18.8"</p>
+              <p id="micStatus" class="text-[9px] mt-0.5 leading-tight truncate" style="color:var(--text-dim)">למשל: "קניות בסופר 150 שקל"</p>
             </div>
           </div>
 
           <div class="summary-card p-2 space-y-1">
             <div class="field-shell flex items-center px-2.5 py-1.5">
-              <input id="smartTextInput" type="text" placeholder="הכתבה... (למשל: 50 שקל במסעדה ב-18.8)" class="w-full bg-transparent outline-none text-[10px] font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
+              <input id="smartTextInput" type="text" placeholder="הכתבה... (למשל: קניות בסופר 150 שקל)" class="w-full bg-transparent outline-none text-[10px] font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
             </div>
             <button onclick="processSmartText()" class="save-btn w-full py-1.5 rounded-xl text-[10px] font-bold cursor-pointer shadow-sm">פענח והוסף תנועה</button>
           </div>
@@ -867,26 +734,6 @@
           </div>
         </section>
 
-        <section id="travelWidgetSection" class="summary-card p-3 bg-gradient-to-l from-blue-500/10 to-indigo-500/10 border border-blue-400/30 hidden">
-          <div class="flex items-center justify-between mb-1.5">
-            <div class="flex items-center gap-1.5">
-              <span class="text-sm">✈️</span>
-              <span class="text-[12px] font-bold text-blue-400">מצב נסיעות פעיל</span>
-            </div>
-            <div class="flex items-center gap-1.5">
-                <button onclick="triggerEndTravelMode()" class="text-[9px] font-bold bg-blue-500 text-white px-2 py-0.5 rounded-md shadow cursor-pointer">סיים נסיעה</button>
-                <button onclick="openTravelModal()" class="text-[10px] font-bold text-blue-300 bg-[var(--card-2)] px-2.5 py-0.5 rounded-lg border border-[var(--border)] cursor-pointer">הגדרות</button>
-            </div>
-          </div>
-          <div class="w-full bg-[var(--card-2)] h-2 rounded-full overflow-hidden border border-[var(--border)] mb-1">
-            <div id="travelProgressBar" class="bg-blue-400 h-full transition-all duration-500" style="width: 0%"></div>
-          </div>
-          <div class="flex justify-between text-[10px]" style="color:var(--text-dim)">
-            <span id="travelSpentStatus">הוצאות בטיול: 0</span>
-            <span id="travelBudgetTarget">תקציב טיול: 0</span>
-          </div>
-        </section>
-
         <section class="summary-card p-3">
           <h3 class="text-[12px] font-semibold mb-1 text-slate-300">השוואה לתקופה קודמת</h3>
           <div id="monthlyComparisonBox" class="text-[11px] space-y-1" style="color:var(--text-dim)"></div>
@@ -896,7 +743,7 @@
           <div class="flex items-center justify-between mb-2">
             <div class="flex items-center gap-2">
               <span class="text-sm">🍩</span>
-              <span class="text-[12px] font-semibold">פילוח הוצאות ותקציבים</span>
+              <span class="text-[12px] font-semibold">פילוח לפי קטגוריות ראשיות</span>
             </div>
             <div class="flex items-center gap-2">
               <span class="tabular text-[12px] font-bold" style="color:var(--coral)" id="previewDonutTotal">0</span>
@@ -942,7 +789,7 @@
       <div class="flex items-center justify-between px-4 pt-3 pb-2 flex-shrink-0 border-b border-[var(--border)]">
         <div>
           <h2 class="text-sm font-bold gradient-text">טבלה חודשית (אקסל פיננסי)</h2>
-          <p class="text-[10px] text-slate-400">פירוט קטגוריות ראשיות ותתי-קטגוריות לפי תקופות</p>
+          <p id="tableDateRangeSubtitle" class="text-[10px] text-emerald-400 font-bold">טווח חישוב תקציבי: טוען...</p>
         </div>
         <div class="field-shell px-2 py-1">
           <select id="tableMonthSelect" onchange="renderTableScreen()" class="bg-transparent text-[10px] font-bold outline-none cursor-pointer" style="color:var(--text)"></select>
@@ -969,6 +816,12 @@
 </div>
 
 <script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
+
 const SUPABASE_URL = 'https://eptvlnqekogdakvyloeg.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Z5vHRP5UVmChVqGZ_1psRg_5DSYye5J';
 let supabaseClient = null;
@@ -996,201 +849,61 @@ async function saveDataToSupabase(appState) {
   } catch (err) {}
 }
 
-async function quickLogin() {
-  const handleInput = prompt("הכנס את שם המשתמש שלך (באנגלית):");
+async function loginWithExistingUser() {
+  const handleInput = prompt("נא להכניס את שם המשתמש שלך (באנגלית):");
   if (!handleInput) return;
-  const cleanHandle = handleInput.trim();
-  
-  if (!supabaseClient) {
-    alert("אין חיבור לענן כרגע.");
-    return;
-  }
+  const cleanHandle = handleInput.trim().toLowerCase();
+  if (!cleanHandle || !supabaseClient) return;
 
+  showToast("מחפש את הנתונים שלך בענן...");
   try {
-    showToast("מחפש חשבון בענן...");
-    const { data } = await supabaseClient.from('app_data').select('payload').eq('id', cleanHandle).single();
-    if (data && data.payload) {
-      state = data.payload;
-      localStorage.setItem('pulse_state_v64', JSON.stringify(state));
-      showToast("התחברת בהצלחה!");
-      setTimeout(() => location.reload(), 800);
-    } else {
-      alert("לא נמצא חשבון בשם משתמש זה.");
+    const { data, error } = await supabaseClient.from('app_data').select('payload').eq('id', cleanHandle).single();
+    if (error || !data || !data.payload) {
+      alert("לא נמצאו נתונים בענן עבור שם המשתמש שהוזן.");
+      return;
     }
-  } catch(err) {
-    alert("שגיאה בהתחברות או ששם המשתמש אינו קיים.");
+    state = data.payload;
+    state.handle = cleanHandle;
+    state.onboardingCompleted = true;
+    persist();
+    showToast(`ברוך השב, ${state.userName || cleanHandle}!`);
+    setTimeout(() => location.reload(), 1000);
+  } catch (err) {
+    alert("אירעה שגיאה בחיבור לענן.");
   }
 }
 
-// Master Categories Map - Optimized
-const masterCategoriesMap = {
-  'אוכל': [
-    'סופר', 'מסעדה', 'משלוח', 'קפה', 'שקם', 'קצבייה', 'חטיפים', 'מאפייה', 'גלידה', 'פירות', 'ירקות', 'משקאות', 
-    'שווארמה', 'פיצה', 'סושי', 'בשר', 'חלב', 'בישול', 'מכולת', 'מעדניה', 'בורגר', 'פלאפל', 
-    'חומוס', 'סטקיות', 'קונדיטוריה', 'גלידריות', 'איטלקי', 'מקסיקני', 'בייגלס', 'גבינות', 'לחמים', 
-    'ביצים', 'עוף', 'דגים', 'קפואים', 'שימורים', 'שוקולד', 'פיצוחים', 'תבלינים', 'שמן', 'רסק', 
-    'קמח', 'סוכר', 'מלח', 'תה', 'מיצים', 'אנרגיה', 'מים', 'בירות', 'יין', 'אלכוהול', 
-    'ניקיון', 'ספוגיות', 'מגבונים', 'נייר', 'מגבות', 'קופסאות', 'קיסמים', 'שמפו', 'סבון', 'משחה', 
-    'דאודורנט', 'סכינים', 'קצף', 'לחות', 'הגנה', 'טישו', 'סוללות', 'נורות', 'מטען', 'כבל', 
-    'תיק', 'עגלות', 'וולט', 'טיבי', 'ויקטורי', 'שופרסל', 'רמי', 'יוחננוף', 'מגה', 'אושר', 
-    'מקדונלדס', 'דומינוס', 'פפא', 'ג׳פניקה', 'ארומה', 'לנדוור', 'גרג', 'ביגה', 'רולדין', 'קופיקס', 
-    'סטארבקס', 'מציצים', 'נמל', 'מרינה', 'חוף', 'טיילת', 'פיקניק', 'מנגל', 'פחמים', 'שיפודים', 
-    'סטייקים', 'אנטריקוט', 'סינטה', 'פילה', 'כבש', 'עגל', 'הודו', 'פרגיות', 'כנפיים', 'נקניקיות', 
-    'קבב', 'המבורגר', 'טורטייה', 'טאקו', 'בוריטו', 'גואקמולה', 'סלסה', 'פול', 'מסבחה', 'משעוות', 
-    'סביח', 'פיתות', 'לאפה', 'באגט', 'לחמניות', 'עוגות', 'עוגיות', 'בורקס', 'רוגלך', 'קוראסון', 
-    'ופלים', 'במבה', 'ביסלי', 'סוכריות', 'מסטיקים', 'קריאטין', 'אקסל', 'מונסטר', 'שופס'
-  ],
-  'מתנה': [
-    'שרשרת', 'צמיד', 'טבעת', 'עגילים', 'בושם', 'פרחים', 'טיפוח', 'נר', 'תכשיט', 'שעון', 
-    'תיק', 'ארנק', 'משקפיים', 'איפור', 'צלליות', 'שפתון', 'קרם', 'עיסוי', 'חלוק', 'פיג׳מה', 
-    'נעליים', 'ספא', 'מלון', 'ארוחה', 'מסעדה', 'זר', 'בלונים', 'שוקולד', 'יין', 'כוס', 
-    'מחברת', 'עט', 'תה', 'מנורה', 'כרית', 'ריח'
-  ],
-  'בילויים': [
-    'בר', 'פאב', 'מועדון', 'מסיבה', 'סטנדאפ', 'קולנוע', 'קריוקי', 'תיאטרון', 'בריחה', 'באולינג', 
-    'קארטינג', 'ארקייד', 'פיינטבול', 'לייזר', 'מופע', 'רוק', 'פסטיבל', 'בריכה', 'טרקטורונים', 'סוסים', 
-    'קיאקים', 'פוקר', 'לונפארק', 'סופרלנד', 'אירי', 'יין', 'ג׳אז', 'טריוויה', 'חידון', 'סיור', 
-    'מוזיאון', 'תערוכה', 'פנטזיה', 'מציאות'
-  ],
-  'שופינג': [
-    'חולצת', 'ג׳ינס', 'ספורט', 'תיק', 'תכשיט', 'שעון', 'משקפיים', 'מעיל', 'פולו', 'מכנסיים', 
-    'גרביים', 'תחתונים', 'חגורה', 'ארנק', 'כובע', 'צעיף', 'כפפות', 'סנדלים', 'כפכפי', 'מזוודת', 
-    'רחצה', 'מטריה', 'שמלת', 'חצאית', 'ג׳קט', 'סווטשירט', 'קפוצ׳ון', 'גופיית', 'טייץ', 'חזייה', 
-    'בגדי', 'קריאה', 'נשיאה', 'כרטיסים', 'נרתיק', 'מחזיק', 'סיכת'
-  ],
-  'תחבורה': [
-    'רבקו', 'תדלוק', 'חניה', 'מונית', 'רכבת', 'קורקינט', 'ליסינג', 'אופניים', 'אוטובוס', 'קלה', 
-    'שירות', 'כביש', 'פנגו', 'סלופארק', 'שטיפה', 'טסטים', 'בדיקת', 'פנצ׳ר', 'מצבר', 'שמן', 
-    'נוזל', 'מגבי', 'מטען', 'מתקן', 'שלט', 'מנוי', 'ביטוח', 'מקיף', 'השכרת', 'הסעה', 'סולר'
-  ],
-  'תקשורת': [
-    'סלולר', 'ספוטיפיי', 'נטפליקס', 'אייקלוד', 'סיבים', 'יוטיוב', 'דרייב', 'דיסני', 'אפל', 'אמזון', 
-    'פלייסטיישן', 'אקסבוקס', 'אופיס', 'אנטיבירוס', 'אחסון', 'VPN', 'קו', 'גלישה', 'טינדר', 'כושר', 
-    'פודקאסטים', 'אפליקציה', 'שדרוג', 'הודעות', 'תמיכה', 'דומיין', 'שרת', 'רישיון', 'מערכת', 'עיתון'
-  ],
-  'טלוויזיה': [
-    'ממיר', 'הוט', 'פרטנר', 'סלקום', 'סטינג', 'נקסט', 'אפל', 'אמזון', 'יוטיוב', 'הזרמת', 
-    'ספורט', 'סרטים', 'VOD', 'השכרת', 'ילדים', 'דוקו', 'ביוטי', 'חדשות', 'היסטוריה', 'חכמה'
-  ],
-  'דיור': [
-    'שכירות', 'משכנתא', 'חשמל', 'מים', 'ארנונה', 'אינטרנט', 'גז', 'ועד', 'שיפוץ', 'רהיטים', 
-    'אינסטלציה', 'מנעול', 'הדברה', 'ניקיון', 'מזגן', 'הובלה', 'מנורה', 'וילונות', 'שטיח', 'צבע', 
-    'רולר', 'מסמרים', 'מקלחת', 'דוד', 'קולט', 'ממטרות', 'עציצים', 'אדמת', 'שולחן', 'כיסא', 
-    'מיטה', 'מזרן', 'ארון', 'שידת', 'מתלה'
-  ],
-  'טיפוח': [
-    'תספורת', 'עיצוב', 'ציפורניים', 'גבות', 'היגיינה', 'קיצוץ', 'שפם', 'צבע', 'החלקת', 'טיפול', 
-    'שעווה', 'לק', 'בניית', 'פדיקור', 'מניקור', 'איפור', 'מסאז׳', 'פילינג', 'בושם', 'דאודורנט', 
-    'שמפו', 'מסכה', 'סרום', 'קרם', 'ספוגית', 'מספריים', 'פינצטה', 'מכונת', 'מייבש', 'מחלק'
-  ],
-  'ציוד': [
-    'תרמי', 'טקטי', 'פקלקפה', 'כלים', 'תיקים', 'אולר', 'פנס', 'שקש', 'אוהל', 'וסט', 
-    'הרים', 'גרבי', 'מעיל', 'בקבוק', 'ראש', 'מבער', 'עזרה', 'משקפת', 'חבל', 'שק', 
-    'מזרן', 'גזייה', 'מימייה', 'סכין', 'מצפן', 'שקיות', 'מקלות', 'פאוץ׳', 'רשת', 'הסוואה'
-  ],
-  'בריאות': [
-    'תרופות', 'רופא', 'שיניים', 'מדרסים', 'ויטמינים', 'פיזיותרפיה', 'עיניים', 'משקפיים', 'עדשות', 'תמיסת', 
-    'דם', 'רנטגן', 'אולטרסאונד', 'ייעוץ', 'חבישת', 'פלסטרים', 'אלכוהול', 'משחה', 'טיפות', 'כדורי', 
-    'סירופ', 'מד', 'משאפת', 'קביים', 'חיטוי', 'מגנזיום', 'אומגה', 'חומצה', 'סידן', 'ברזל'
-  ],
-  'לימודים': [
-    'מכללה', 'קורס', 'ספר', 'הדפסה', 'מחברת', 'עט', 'פסיכומטרי', 'אנגלית', 'תואר', 'שכר', 
-    'רישום', 'הכנה', 'אקדמי', 'ספירלה', 'עטים', 'עפרונות', 'מחק', 'מרקר', 'קלסר', 'דפי', 
-    'מחשבון', 'גיאומטריה', 'ספריה', 'פרויקט', 'כריכת', 'שיעור', 'מורה', 'תכנות', 'פלטפורמת'
-  ],
-  'משפחה': [
-    'גן', 'צהרון', 'חוג', 'שמרטף', 'מתנות', 'טיטולים', 'מגבונים', 'תמ״ל', 'בקבוק', 'מוצץ', 
-    'בגדי', 'עגלת', 'כיסא', 'מיטת', 'מזרן', 'צעצוע', 'ספר', 'משחק', 'ספורט', 'פסנתר', 
-    'שחייה', 'קופסת', 'תלבושת', 'קלמר', 'פנדה', 'פלסטלינה', 'מספריים', 'דבק'
-  ],
-  'חיות': [
-    'וטרינר', 'פנסון', 'חול', 'קולר', 'רצועה', 'משחק', 'עצם', 'חתול', 'כלב', 'מזון', 
-    'דנטלי', 'קערת', 'מזרן', 'כלוב', 'מתקן', 'עכבר', 'תילוע', 'אמפולה', 'קרציות', 'שמפו'
-  ],
-  'חופש': [
-    'טיסה', 'מלון', 'אטרקציית', 'זר', 'צימר', 'מחנה', 'השכרת', 'ביטוח', 'פארק', 'סיור', 
-    'מוזיאונים', 'מפה', 'מזכרת', 'סים', 'ממיר', 'שק', 'כרית', 'אטמי', 'כיסוי', 'תיק', 'מנעול'
-  ],
-  'חיסכון': [
-    'פנסיה', 'השקעות', 'חירום', 'כללי', 'קריפטו', 'מניות', 'מדדים', 'קרן', 'קופת', 'תוכנית', 
-    'ביטקוין', 'אתריום', 'נאמנות', 'תיק', 'הפקדה', 'נדל״ן', 'הלוואה', 'אג״ח', 'זהב', 'מזומן'
-  ],
-  'ספורט': [
-    'מכון', 'מאמן', 'קרוספיט', 'כדורגל', 'כדורסל', 'ריצה', 'יוגה', 'פילאטיס', 'חלבון', 'שיעור', 
-    'נעלי', 'שעון', 'רצועת', 'שייקר', 'איזולייט', 'אמינו', 'חגורות', 'רצועות', 'גלגל', 'מזרן'
-  ],
-  'עסקים': [
-    'משרד', 'רואה', 'עורך', 'פרסום', 'מותג', 'אתר', 'לוגו', 'תוכנה', 'שכירות', 'שכר', 
-    'ייעוץ', 'קמפיין', 'קידום', 'עיצוב', 'פיתוח', 'חבילת', 'הדפסת', 'ציוד', 'דיו', 'כיסא'
-  ],
-  'רכב': [
-    'טעינה', 'מוסך', 'פנצריה', 'אגרה', 'חלפים', 'מצבר', 'מגבים', 'שמן', 'טיפול', 'רפידות', 
-    'צמיגים', 'תיקון', 'צביעת', 'החלת', 'חגורת', 'בדיקת', 'פילטר', 'ניקוי', 'נוזל', 'מערכת'
-  ],
-  'הימורים': [
-    'לוטו', 'טוטו', 'גירוד', 'פוקר', 'קזינו', 'הימור', 'הגרלה', 'ווינר', 'חישגד', 'טופס', 
-    'השתתפות', 'משחק', 'רולטה', 'ז׳יטונים', 'כרטיס', 'טורניר'
-  ],
-  'אירועים': [
-    'חופה', 'ברית', 'יוםולדת', 'חינה', 'גן', 'דיג׳יי', 'צילום', 'מגנטים', 'עיצוב', 'שמלת', 
-    'חליפת', 'טבעות', 'הזמנות', 'רב', 'הסעות', 'בר', 'זיקוקי', 'עוגת', 'מתנות'
-  ],
-  'אמנות': [
-    'ציור', 'פיסול', 'קנבס', 'צבעים', 'מכחול', 'חימר', 'רישום', 'סקיצה', 'אקריליק', 'שמן', 
-    'מים', 'סט', 'שפכטל', 'בלוק', 'עפרונות', 'פולימרי', 'אובניים', 'כן', 'פלטה', 'ספר'
-  ],
-  'מוסיקה': [
-    'גיטרה', 'פסנתר', 'תופים', 'מיקרופון', 'מגבר', 'מיתרים', 'קלידים', 'אקוסטית', 'חשמלית', 'מפרט', 
-    'כבל', 'מעמד', 'תווים', 'מטרונום', 'מפוחית', 'יוקליל', 'דרבוקה', 'תוף', 'אוזניות'
-  ],
-  'צילום': [
-    'מצלמה', 'עדשה', 'חצובה', 'תאורה', 'פלאש', 'כרטיס', 'רחפן', 'DSLR', 'פריים', 'זום', 
-    'מתכתית', 'מנורת', 'חיצוני', '128GB', 'תיק', 'סוללה', 'שלט', 'CPL', 'ניקוי', 'גימבל'
-  ],
-  'גינון': [
-    'אדמה', 'שתיל', 'עציץ', 'דשן', 'צינור', 'מזמרה', 'מכסחת', 'עונתיים', 'פלסטיק', 'חרס', 
-    'אורגני', 'גמיש', 'אקדח', 'גיזום', 'חשמלית', 'מפוח', 'מעדר', 'את', 'כפפות', 'מחבר'
-  ],
-  'תיקונים': [
-    'בורג', 'אום', 'דיבל', 'דבק', 'סיליקון', 'מטר', 'פלס', 'פלסטיים', 'אומים', 'סופר', 
-    'אפוקסי', 'שפופרת', 'אקדח', 'מדידה', 'מגנטי', 'מפתחות', 'מפתח', 'מברג', 'טסטר', 'איזולירבנד'
-  ]
-};
-
-const tipsList = [
-  "רוצה לקנות משהו יקר? חכה 48 שעות לפני שאתה מוציא את האשראי. לרוב, הדחף הרגעי עובר.",
-  "הוצאות קטנות מצטברות: קפה ומאפה כל יום זה כמעט 600 שקל בחודש!",
-  "ניקוי מנויים: אחת לחצי שנה עשה מעבר על כרטיס האשראי ובדוק אילו מנויים אתה לא באמת פותח.",
-  "קניות בסופר: לעולם אל תלך לסופר רעב או בלי רשימה מסודרת.",
-  "אוטומציה של חיסכון: הגדר העברה אוטומטית לחיסכון ביום שבו נכנסת המשכורת."
+const defaultMainCategories = [
+  { name: 'אוכל', color: '#FF8D82' },
+  { name: 'בילויים', color: '#FF9F43' },
+  { name: 'שופינג', color: '#FFC85C' },
+  { name: 'תחבורה', color: '#7FE8C6' },
+  { name: 'תקשורת', color: '#8FB8FF' },
+  { name: 'דיור', color: '#C7A6FF' },
+  { name: 'טיפוח', color: '#FF9FD1' },
+  { name: 'בריאות', color: '#34D399' },
+  { name: 'לימודים', color: '#38BDF8' },
+  { name: 'חיסכון', color: '#E11D48' },
+  { name: 'ספורט', color: '#A78BFA' },
+  { name: 'כללי', color: '#94A3B8' }
 ];
 
-const exchangeRates = {
-  '₪': 1, 'שקל': 1, 'שקלים': 1,
-  '$': 3.65, 'דולר': 3.65, 'דולרים': 3.65, 'USD': 3.65,
-  '€': 3.95, 'יורו': 3.95, 'EUR': 3.95,
-  '£': 4.65, 'פאונד': 4.65, 'GBP': 4.65,
-  'באט': 0.10, 'THB': 0.10, '฿': 0.10,
-  'יין': 0.024, 'JPY': 0.024, '¥': 0.024,
-  'דולר קנדי': 2.68, 'CAD': 2.68,
-  'דולר אוסטרלי': 2.42, 'AUD': 2.42,
-  'פרנק שוויצרי': 4.18, 'CHF': 4.18,
-  'דירהם': 0.99, 'AED': 0.99,
-  'דינר ירדני': 5.15, 'JOD': 5.15,
-  'רופי': 0.044, 'INR': 0.044,
-  'יואן': 0.51, 'CNY': 0.51
-};
+const tipsList = [
+  "רוצה לקנות משהו יקר? חכה 48 שעות לפני שאתה מוציא את האשראי.",
+  "הוצאות קטנות מצטברות: קפה ומאפה כל יום זה כמעט 600 שקל בחודש!",
+  "ניקוי מנויים: אחת לחצי שנה עשה מעבר על כרטיס האשראי ובדוק מנויים מיותרים.",
+  "קניות בסופר: לעולם אל תלך לסופר רעב או בלי רשימה מסודרת.",
+  "השקעה בעצמך: קורס מקצועי או שיפור מיומנויות הם ההשקעות המשתלמות ביותר."
+];
 
 let state = {
   handle: '', userName: '', baseline: null, financialDay: 1, savingsGoal: 1500, mainGoal: 'peace',
   currency: '₪', language: 'he', onboardingCompleted: false,
-  recurringItems: [], expenseCats: [], incomeCats: [{name:'משכורת', color:'#7FE8C6', budget:0}], transactions: [],
-  goalBuckets: [], 
-  isTravelMode: false,
-  travelBudget: 5000
+  recurringItems: [], expenseCats: [], incomeCats: [{name:'משכורת', color:'#7FE8C6', budget:0}], 
+  transactions: [], learnedMappings: {} // { "קפה בארומה": "אוכל", "תספורת": "טיפוח" }
 };
 
-const availableColors = ['#FF8D82', '#FF9F43', '#FFC85C', '#7FE8C6', '#8FB8FF', '#C7A6FF', '#FF9FD1', '#34D399', '#38BDF8', '#E11D48'];
+const availableColors = ['#FF8D82', '#FF9F43', '#FFC85C', '#7FE8C6', '#8FB8FF', '#C7A6FF', '#FF9FD1', '#34D399', '#38BDF8', '#E11D48', '#A78BFA', '#34D399'];
 
 function getLocalDateString(d) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -1198,7 +911,7 @@ function getLocalDateString(d) {
 
 function persist() {
   sortTransactions();
-  localStorage.setItem('pulse_state_v64', JSON.stringify(state));
+  localStorage.setItem('pulse_state_v63', JSON.stringify(state));
   saveDataToSupabase(state);
 }
 
@@ -1207,7 +920,32 @@ function showToast(message) {
   const textEl = document.getElementById('toastText');
   textEl.textContent = message;
   toast.classList.add('show');
-  setTimeout(() => { toast.classList.remove('show'); }, 3000);
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+function exportBackup() {
+  const dataStr = JSON.stringify(state, null, 2);
+  const blob = new Blob([dataStr], { type: 'application/octet-stream' });
+  const url = URL.createObjectURL(blob);
+  const downloadAnchor = document.createElement('a');
+  downloadAnchor.href = url;
+  downloadAnchor.download = `pulse_backup_${getLocalDateString(new Date())}.json`;
+  downloadAnchor.click();
+  URL.revokeObjectURL(url);
+}
+
+function importBackup(event) {
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if(imported && imported.userName) { state = imported; persist(); location.reload(); }
+      else alert("קובץ גיבוי לא תקין.");
+    } catch(err) { alert("שגיאה בפענוח קובץ."); }
+  };
+  reader.readAsText(file);
 }
 
 async function factoryReset() {
@@ -1215,12 +953,11 @@ async function factoryReset() {
     if (supabaseClient && state.handle) {
       try { await supabaseClient.from('app_data').delete().eq('id', state.handle); } catch(e) {}
     }
-    localStorage.removeItem('pulse_state_v64');
+    localStorage.removeItem('pulse_state_v63');
     location.reload();
   }
 }
 
-function changeLanguage(lang) { state.language = lang; persist(); alert("שפה עודכנה"); }
 function changeCurrency(curr) { state.currency = curr; persist(); renderHome(); renderAnalytics(); renderTableScreen(); }
 
 function toggleSystemSettingsContent() {
@@ -1233,7 +970,6 @@ function toggleSystemSettingsContent() {
 let systemSettingsOpen = false;
 
 function initDailyReminder() {
-  if ("Notification" in window && Notification.permission !== "granted") Notification.requestPermission();
   setInterval(() => {
     const now = new Date();
     if (now.getHours() === 20 && now.getMinutes() === 0) {
@@ -1249,199 +985,27 @@ function closeReminderModal() { document.getElementById('reminderModal').classLi
 function openTutorialModal() { document.getElementById('tutorialModal').classList.remove('hidden'); }
 function closeTutorialModal() { document.getElementById('tutorialModal').classList.add('hidden'); }
 
-function menuOpenGoalBuckets() {
-  closeMenuModal();
-  document.getElementById('goalBucketsModal').classList.remove('hidden');
-  renderGoalBucketsList();
-}
-function closeGoalBucketsModal() { document.getElementById('goalBucketsModal').classList.add('hidden'); }
-
-function renderGoalBucketsList() {
-  const container = document.getElementById('goalBucketsListContainer');
-  if(!container) return;
-  container.innerHTML = '';
-  if(!state.goalBuckets || state.goalBuckets.length === 0) {
-    container.innerHTML = '<p class="text-[10px] text-slate-400 text-center py-2">אין קופות חיסכון פעילות עדיין</p>';
-    return;
-  }
-  state.goalBuckets.forEach(b => {
-    const pct = b.target > 0 ? Math.min(100, Math.round((b.allocated / b.target) * 100)) : 0;
-    const row = document.createElement('div');
-    row.className = 'p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1.5';
-    row.innerHTML = `
-      <div class="flex items-center justify-between text-xs font-bold text-slate-100">
-        <span>${b.title}</span>
-        <span class="tabular text-emerald-400">${fmt(b.allocated)} / ${fmt(b.target)}</span>
-      </div>
-      <div class="w-full bg-[var(--bg)] h-2 rounded-full overflow-hidden border border-[var(--border)]">
-        <div class="bg-emerald-400 h-full transition-all duration-300" style="width:${pct}%"></div>
-      </div>
-      <div class="flex items-center justify-between pt-1">
-        <button onclick="openAllocateModal(${b.id})" class="text-[10px] font-bold text-blue-400 underline cursor-pointer">+ הוסף / משוך</button>
-        <button onclick="deleteGoalBucket(${b.id})" class="text-[10px] text-rose-400 font-bold bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded-lg cursor-pointer hover:bg-rose-500/20 transition"><i class="fa-solid fa-trash-can ml-1"></i> מחק קופה</button>
-      </div>
-    `;
-    container.appendChild(row);
-  });
-}
-
-function addNewBucket() {
-  const title = document.getElementById('bucketTitle').value.trim();
-  const target = parseFloat(document.getElementById('bucketTarget').value);
-  if(!title || isNaN(target) || target <= 0) { alert("נא למלא שם קופה ויעד תקין."); return; }
-  if(!state.goalBuckets) state.goalBuckets = [];
-  state.goalBuckets.push({ id: Date.now(), title, target, allocated: 0 });
-  persist();
-  renderGoalBucketsList();
-  renderHome();
-  showToast("קופת החיסכון נוצרה בהצלחה!");
-  document.getElementById('bucketTitle').value = '';
-  document.getElementById('bucketTarget').value = '';
-}
-
-let activeAllocateBucketId = null;
-function openAllocateModal(id) {
-  activeAllocateBucketId = id;
-  const bucket = state.goalBuckets.find(b => b.id === id);
-  if(!bucket) return;
-  document.getElementById('allocateModalTitle').textContent = `הקצאה לקופה: ${bucket.title}`;
-  document.getElementById('allocateAmountInput').value = '';
-  document.getElementById('allocateModal').classList.remove('hidden');
-}
-function closeAllocateModal() { document.getElementById('allocateModal').classList.add('hidden'); activeAllocateBucketId = null; }
-
-function confirmAllocate() {
-  if(!activeAllocateBucketId) return;
-  const amt = parseFloat(document.getElementById('allocateAmountInput').value);
-  if(isNaN(amt)) { alert("נא להזין סכום תקין"); return; }
-  
-  const bucket = state.goalBuckets.find(b => b.id === activeAllocateBucketId);
-  if(bucket) {
-    bucket.allocated = Math.max(0, bucket.allocated + amt);
-    persist();
-    renderGoalBucketsList();
-    renderHome();
-    showToast("הקופות עודכנו בהצלחה!");
-  }
-  closeAllocateModal();
-}
-
-function deleteGoalBucket(id) {
-  if(confirm("האם אתה בטוח שברצונך למחוק את קופת החיסכון הזו?")) {
-    state.goalBuckets = state.goalBuckets.filter(b => b.id !== id);
-    persist();
-    renderGoalBucketsList();
-    renderHome();
-    showToast("הקופה הוסרה בהצלחה");
-  }
-}
-
-function menuOpenTravelModal() {
-  closeMenuModal();
-  document.getElementById('travelToggleCheckbox').checked = state.isTravelMode;
-  document.getElementById('travelBudgetInput').value = state.travelBudget || 5000;
-  document.getElementById('travelModal').classList.remove('hidden');
-}
-function closeTravelModal() { document.getElementById('travelModal').classList.add('hidden'); }
-
-function toggleTravelModeState(val) {
-  state.isTravelMode = val;
-  persist();
-  renderHome();
-  renderAnalytics();
-}
-
-function toggleTravelModeFromMain(checked) {
-  if (checked) {
-    state.isTravelMode = true;
-    persist();
-    renderHome();
-    renderAnalytics();
-    showToast("מצב נסיעות הופעל בהצלחה! ✈️");
-  } else {
-    triggerEndTravelMode();
-  }
-}
-
-function saveTravelSettings() {
-  state.travelBudget = parseFloat(document.getElementById('travelBudgetInput').value) || 5000;
-  const wasOn = state.isTravelMode;
-  state.isTravelMode = document.getElementById('travelToggleCheckbox').checked;
-  persist();
-  closeTravelModal();
-  renderHome();
-  renderAnalytics();
-  
-  if (wasOn && !state.isTravelMode) {
-      triggerEndTravelMode();
-  } else {
-      showToast(state.isTravelMode ? "מצב נסיעות הופעל בהצלחה! ✈️" : "מצב נסיעות כובה.");
-  }
-}
-
-function triggerEndTravelMode() {
-  let travelSpent = 0;
-  let travelCount = 0;
-  state.transactions.forEach(t => {
-    if(t.type === 'expense' && t.isTravel) {
-      travelSpent += t.amount;
-      travelCount++;
-    }
-  });
-
-  const budget = state.travelBudget || 5000;
-  const remaining = budget - travelSpent;
-
-  const content = document.getElementById('travelSummaryContent');
-  content.innerHTML = `
-    <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1.5">
-      <div class="flex justify-between"><span>תקציב הטיול שהוגדר:</span><span class="font-bold tabular">${fmt(budget)}</span></div>
-      <div class="flex justify-between"><span>סך הוצאות בטיול:</span><span class="font-bold tabular text-rose-400">${fmt(travelSpent)}</span></div>
-      <div class="flex justify-between"><span>מספר תנועות בטיול:</span><span class="font-bold tabular">${travelCount} תנועות</span></div>
-      <div class="flex justify-between border-t border-[var(--border)] pt-1.5 font-bold">
-        <span>יתרה לסיום הטיול:</span>
-        <span class="tabular ${remaining >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${fmt(remaining)}</span>
-      </div>
-    </div>
-    <p class="text-[10px] text-slate-400 text-center">מצב הנסיעות כובה כעת בהצלחה, והנתונים נשמרו בהיסטוריית החשבון.</p>
-  `;
-
-  state.isTravelMode = false;
-  persist();
-  renderHome();
-  renderAnalytics();
-
-  document.getElementById('travelSummaryModal').classList.remove('hidden');
-}
-
-function closeTravelSummaryModal() {
-  document.getElementById('travelSummaryModal').classList.add('hidden');
-}
-
 function menuOpenRecurring() {
   closeMenuModal();
   document.getElementById('recurringModal').classList.remove('hidden');
   renderRecurringList();
-  updateRecCategories(document.getElementById('recType').value);
-}
-function closeRecurringModal() { document.getElementById('recurringModal').classList.add('hidden'); }
-
-function updateRecCategories(type) {
+  
   const sel = document.getElementById('recCategory');
-  if(!sel) return;
   sel.innerHTML = '';
-  const list = type === 'income' ? state.incomeCats : state.expenseCats;
-  list.forEach(c => {
-    const opt = document.createElement('option'); opt.value = c.name; opt.textContent = c.name; sel.appendChild(opt);
+  state.expenseCats.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c.name; opt.textContent = c.name;
+    sel.appendChild(opt);
   });
 }
+function closeRecurringModal() { document.getElementById('recurringModal').classList.add('hidden'); }
 
 function renderRecurringList() {
   const container = document.getElementById('recurringListContainer');
   if(!container) return;
   container.innerHTML = '';
   if(!state.recurringItems || state.recurringItems.length === 0) {
-    container.innerHTML = '<p class="text-[10px] text-slate-400 text-center py-2">אין הוראות קבע מוגדרות</p>';
+    container.innerHTML = '<p class="text-[10px] text-slate-400 text-center py-2">אין הוראות קבע מוגדרות כרגע</p>';
     return;
   }
   state.recurringItems.forEach(item => {
@@ -1471,13 +1035,14 @@ function addNewRecurringItem() {
   const day = parseInt(document.getElementById('recDay').value) || 1;
 
   if(!title || isNaN(amount) || amount <= 0) { alert("נא למלא כותרת וסכום תקינים."); return; }
+
   if(!state.recurringItems) state.recurringItems = [];
   state.recurringItems.push({ id: Date.now(), title, amount, type, cat, day });
   persist();
   renderRecurringList();
   renderHome();
   renderAnalytics();
-  showToast("הוראת קבע נוספה!");
+  showToast("הוראת קבע נוספה בהצלחה!");
   document.getElementById('recTitle').value = '';
   document.getElementById('recAmount').value = '';
 }
@@ -1497,35 +1062,24 @@ window.onload = async function() {
     if(splash) { splash.style.opacity = '0'; setTimeout(() => splash.remove(), 700); }
   }, 3500);
 
-  let saved = localStorage.getItem('pulse_state_v64');
+  let saved = localStorage.getItem('pulse_state_v63');
   if(saved) {
-    try { state = JSON.parse(saved); } catch(e) { localStorage.removeItem('pulse_state_v64'); }
+    try { state = JSON.parse(saved); } catch(e) {}
   }
 
   if (state.handle && supabaseClient) {
     try {
       const cloudData = await loadDataFromSupabase();
-      if (cloudData && cloudData.userName) { state = cloudData; localStorage.setItem('pulse_state_v64', JSON.stringify(state)); }
+      if (cloudData && cloudData.userName) { state = cloudData; localStorage.setItem('pulse_state_v63', JSON.stringify(state)); }
     } catch(e) {}
   }
 
   if(!state.expenseCats || state.expenseCats.length === 0) {
-    const keys = Object.keys(masterCategoriesMap);
-    state.expenseCats = keys.map((catName, idx) => ({
-      name: catName, color: availableColors[idx % availableColors.length], budget: 0, custom: false
-    }));
+    state.expenseCats = JSON.parse(JSON.stringify(defaultMainCategories));
   }
-  
-  Object.keys(masterCategoriesMap).forEach(key => {
-    if(!state.expenseCats.find(c => c.name === key)) {
-      state.expenseCats.push({ name: key, color: availableColors[state.expenseCats.length % availableColors.length], budget: 0, custom: false });
-    }
-  });
-
-  if(!state.incomeCats) {
-    state.incomeCats = [{ name: 'משכורת', color: '#7FE8C6', budget: 0, custom: false }];
+  if(!state.learnedMappings) {
+    state.learnedMappings = {};
   }
-
   sortTransactions();
   
   if(!state.onboardingCompleted || !state.handle || state.baseline === null || state.baseline === undefined) {
@@ -1541,7 +1095,6 @@ window.onload = async function() {
     await saveDataToSupabase(state);
   }
 
-  if(document.getElementById('langSelect')) document.getElementById('langSelect').value = state.language || 'he';
   if(document.getElementById('currencySelect')) document.getElementById('currencySelect').value = state.currency || '₪';
 
   setDynamicGreeting();
@@ -1558,9 +1111,7 @@ function sortTransactions() {
   }
 }
 
-let tempWizard = { handle: '', name: '', balance: 0, financialDay: 1, savingsGoal: 1500, mainGoal: 'peace' };
 function selectMainGoal(goal, btn) {
-  tempWizard.mainGoal = goal;
   btn.parentNode.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
 }
@@ -1576,8 +1127,12 @@ function wizardNextStep(stepNum) {
 function validateAndNextStep1() {
   const handleInput = document.getElementById('wizHandle').value.trim();
   const nameInput = document.getElementById('wizName').value.trim();
+  
   const handleRegex = /^[A-Za-z0-9_]{4,}$/;
-  if (!handleRegex.test(handleInput)) { alert("שם המשתמש חייב להיות באנגלית בלבד ולפחות 4 תווים."); return; }
+  if (!handleRegex.test(handleInput)) {
+    alert("שם המשתמש חייב להיות באנגלית בלבד ולפחות 4 תווים.");
+    return;
+  }
   if (!nameInput) { alert("נא להזין שם תצוגה."); return; }
   wizardNextStep(2);
 }
@@ -1589,13 +1144,15 @@ async function startCinematicBuild() {
   const finDay = parseInt(document.getElementById('wizFinancialDay').value) || 1;
   const savGoal = parseFloat(document.getElementById('wizSavingsGoal').value) || 1500;
 
-  const handleRegex = /^[A-Za-z0-9_]{4,}$/;
-  if(!handle || !handleRegex.test(handle)) { alert("שם משתמש שגוי"); wizardNextStep(1); return; }
-  if(!name) { alert("נא להזין שמך"); wizardNextStep(1); return; }
-  if(isNaN(balance)) { alert("יתרה שגויה"); wizardNextStep(2); return; }
+  if(!handle || !/^[A-Za-z0-9_]{4,}$/.test(handle)) { alert("שם משתמש לא תקין."); wizardNextStep(1); return; }
+  if(!name || isNaN(balance)) { alert("נא למלא שדות כראוי"); return; }
 
-  state.handle = handle; state.userName = name; state.baseline = balance;
-  state.financialDay = finDay; state.savingsGoal = savGoal; state.onboardingCompleted = true;
+  state.handle = handle; 
+  state.userName = name; 
+  state.baseline = balance;
+  state.financialDay = finDay;
+  state.savingsGoal = savGoal;
+  state.onboardingCompleted = true;
   
   for(let i=0; i<=5; i++) {
     const el = document.getElementById('onboarding-step-' + i);
@@ -1603,13 +1160,24 @@ async function startCinematicBuild() {
   }
   document.getElementById('onboarding-step-6').classList.remove('hidden');
   
-  const keys = Object.keys(masterCategoriesMap);
-  state.expenseCats = keys.map((catName, idx) => ({
-    name: catName, color: availableColors[idx % availableColors.length], budget: 0, custom: false
-  }));
-
+  state.expenseCats = JSON.parse(JSON.stringify(defaultMainCategories));
   persist();
-  await new Promise(r => setTimeout(r, 3000));
+
+  const steps = [
+    { progress: 20, title: "מאמת את שם המשתמש והפרופיל...", sub: `מגדיר את ${handle} בענן...` },
+    { progress: 60, title: "מפעיל את מנוע הלמידה האורגני...", sub: "מכין את קטגוריות הראשיות הנקיות..." },
+    { progress: 100, title: "העולם הפיננסי שלך מוכן!", sub: "פותח את הדשבורד האישי..." }
+  ];
+
+  for (let i = 0; i < steps.length; i++) {
+    await new Promise(r => setTimeout(r, 600));
+    document.getElementById('buildProgressBar').style.width = steps[i].progress + '%';
+    document.getElementById('buildPercentText').textContent = steps[i].progress + '%';
+    document.getElementById('buildTitle').textContent = steps[i].title;
+    document.getElementById('buildSubText').textContent = steps[i].sub;
+  }
+
+  await new Promise(r => setTimeout(r, 500));
   document.getElementById('onboarding-step-6').classList.add('hidden');
   document.getElementById('tutorialModal').classList.remove('hidden');
   setDynamicGreeting();
@@ -1620,9 +1188,7 @@ async function startCinematicBuild() {
 
 function loadDailyTip() {
   const now = new Date();
-  const start = new Date(now.getFullYear(), 0, 0);
-  const diff = (now - start) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
-  const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
   const tipEl = document.getElementById('dailyTipText');
   if(tipEl) tipEl.textContent = tipsList[dayOfYear % tipsList.length];
 }
@@ -1636,9 +1202,9 @@ function closeVoiceHelpModal() { document.getElementById('voiceHelpModal').class
 
 function openMenuModal() {
   document.getElementById('menuModal').classList.remove('hidden');
-  const { balance, freeCash } = totals();
+  const { balance } = totals();
   document.getElementById('sidebarUserName').textContent = state.userName || 'אורח';
-  document.getElementById('sidebarUserBalance').textContent = `פנוי: ${fmt(freeCash)}`;
+  document.getElementById('sidebarUserBalance').textContent = `יתרה: ${fmt(balance)}`;
   document.getElementById('sidebarUserInitial').textContent = state.userName ? state.userName.charAt(0) : '?';
 }
 function closeMenuModal() { document.getElementById('menuModal').classList.add('hidden'); }
@@ -1672,7 +1238,8 @@ function buildFinancialDayDropdowns() {
 function saveFinancialDay(val) {
   state.financialDay = parseInt(val) || 1;
   persist();
-  renderHome(); renderAnalytics();
+  renderHome();
+  renderAnalytics();
   showToast("תקופת תקציב עודכנה");
 }
 
@@ -1685,7 +1252,8 @@ function buildTableMonthDropdown() {
   for(let i=0; i<6; i++) {
     let d = new Date(now.getFullYear(), now.getMonth() - i, 1);
     const opt = document.createElement('option');
-    opt.value = -i; opt.textContent = `${monthsHeb[d.getMonth()]} ${d.getFullYear()}`;
+    opt.value = -i;
+    opt.textContent = `${monthsHeb[d.getMonth()]} ${d.getFullYear()}`;
     select.appendChild(opt);
   }
 }
@@ -1710,42 +1278,15 @@ function getFinancialPeriodDates(offsetMonths = 0) {
   return { startPeriod, endPeriod };
 }
 
+function formatDateHeb(d) {
+  return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+}
+
 function isWithinFinancialMonth(txDateStr, offsetMonths = 0) {
   if(!txDateStr) return true;
   const txDate = new Date(txDateStr + 'T00:00:00');
   const { startPeriod, endPeriod } = getFinancialPeriodDates(offsetMonths);
-  return txDate >= startPeriod && txDate < endPeriod;
-}
-
-function getRecurringItemsForCurrentMonth(offsetMonths = 0) {
-  const { startPeriod, endPeriod } = getFinancialPeriodDates(offsetMonths);
-  const fDay = parseInt(state.financialDay) || 1;
-  const recList = [];
-  if(state.recurringItems) {
-    state.recurringItems.forEach(r => {
-      let recYear, recMonth;
-      const day = r.day || 1;
-      if (day < fDay) {
-        recYear = endPeriod.getFullYear();
-        recMonth = endPeriod.getMonth();
-      } else {
-        recYear = startPeriod.getFullYear();
-        recMonth = startPeriod.getMonth();
-      }
-      let recDate = new Date(recYear, recMonth, day);
-      recList.push({
-        id: 'rec_' + r.id + '_' + recYear + '_' + recMonth,
-        type: r.type,
-        amount: r.amount,
-        cat: r.cat,
-        subCat: r.title,
-        color: '#C7A6FF',
-        date: getLocalDateString(recDate),
-        isRecurring: true
-      });
-    });
-  }
-  return recList;
+  return txDate >= startPeriod && txDate <= endPeriod;
 }
 
 function totals(){
@@ -1755,76 +1296,31 @@ function totals(){
       if(t.type==='income') income+=t.amount; else expense+=t.amount;
     }
   });
-  const recs = getRecurringItemsForCurrentMonth(0);
-  recs.forEach(r => {
-    if(r.type === 'income') income += r.amount; else expense += r.amount;
-  });
+  if(state.recurringItems) {
+    state.recurringItems.forEach(r => {
+      if(r.type === 'income') income += r.amount; else expense += r.amount;
+    });
+  }
 
   let allInc = 0, allExp = 0;
   state.transactions.forEach(t => t.type==='income' ? allInc+=t.amount : allExp+=t.amount);
-  
-  const todayStr = getLocalDateString(new Date());
-  for (let m = -12; m <= 0; m++) {
-    const monthRecs = getRecurringItemsForCurrentMonth(m);
-    monthRecs.forEach(r => {
-      if (r.date <= todayStr) {
-        const recIdNum = parseInt(r.id.split('_')[1]) || 0;
-        const recDateObj = new Date(r.date);
-        const createDateObj = new Date(recIdNum);
-        if (recDateObj >= new Date(createDateObj.getFullYear(), createDateObj.getMonth(), 1)) {
-          if (r.type === 'income') allInc += r.amount;
-          else allExp += r.amount;
-        }
-      }
+  if(state.recurringItems) {
+    state.recurringItems.forEach(r => {
+      if(r.type === 'income') allInc += r.amount; else allExp += r.amount;
     });
   }
 
   const balance = (state.baseline || 0) + allInc - allExp;
-  
-  let totalAllocatedBuckets = 0;
-  if(state.goalBuckets) {
-    state.goalBuckets.forEach(b => totalAllocatedBuckets += (b.allocated || 0));
-  }
-  const freeCash = balance - totalAllocatedBuckets;
-
-  return { income, expense, balance, freeCash, totalAllocatedBuckets };
+  return { income, expense, balance };
 }
-
 function fmt(n){ return Math.round(n).toLocaleString('he-IL') + ' ' + (state.currency || '₪'); }
 
 function renderHome(){
-  const { income, expense, balance, freeCash } = totals();
+  const {income, expense, balance} = totals();
   document.getElementById('balanceValue').textContent = fmt(balance);
-  document.getElementById('freeCashSubText').textContent = `פנוי: ${fmt(freeCash)}`;
   document.getElementById('totalIncome').textContent = fmt(income);
   document.getElementById('totalExpense').textContent = fmt(expense);
   document.documentElement.style.setProperty('--glow', balance >= 0 ? 'var(--glow-safe)' : 'var(--glow-danger)');
-
-  const travelControlCard = document.getElementById('homeTravelControlCard');
-  const travelCheckbox = document.getElementById('mainScreenTravelCheckbox');
-  const travelCardSubtitle = document.getElementById('travelCardSubtitle');
-  const micStatus = document.getElementById('micStatus');
-  const smartInput = document.getElementById('smartTextInput');
-  const voiceExampleBox = document.getElementById('voiceExampleBox');
-
-  if(travelCheckbox) travelCheckbox.checked = state.isTravelMode;
-
-  if(state.isTravelMode) {
-      if(travelControlCard) travelControlCard.classList.remove('hidden');
-      let travelSpent = 0;
-      state.transactions.forEach(t => { if(t.type === 'expense' && t.isTravel) travelSpent += t.amount; });
-      if(travelCardSubtitle) travelCardSubtitle.textContent = `הוצאות בטיול: ${fmt(travelSpent)} / תקציב: ${fmt(state.travelBudget || 5000)}`;
-      
-      if(micStatus) micStatus.textContent = 'למשל: "50 דולר במסעדה ב-18.8"';
-      if(smartInput) smartInput.placeholder = 'הכתבה... (למשל: 50 דולר במסעדה ב-18.8)';
-      if(voiceExampleBox) voiceExampleBox.textContent = '"שילמתי 50 דולר במסעדה ב-18.8"';
-  } else {
-      if(travelControlCard) travelControlCard.classList.add('hidden');
-      
-      if(micStatus) micStatus.textContent = 'למשל: "50 שקל במסעדה ב-18.8"';
-      if(smartInput) smartInput.placeholder = 'הכתבה... (למשל: 50 שקל במסעדה ב-18.8)';
-      if(voiceExampleBox) voiceExampleBox.textContent = '"שילמתי 50 שקל במסעדה ב-18.8"';
-  }
 }
 
 function renderAnalytics() {
@@ -1833,43 +1329,36 @@ function renderAnalytics() {
   
   state.transactions.forEach(t => {
     if(isWithinFinancialMonth(t.date, 0)) {
-      if(t.type === 'expense') { currentExpense += t.amount; spend[t.cat] = (spend[t.cat] || 0) + t.amount; }
+      if(t.type === 'expense') { 
+        currentExpense += t.amount; 
+        spend[t.cat] = (spend[t.cat] || 0) + t.amount; 
+      }
       else currentIncome += t.amount;
     }
   });
 
-  const recs = getRecurringItemsForCurrentMonth(0);
-  recs.forEach(r => {
-    if(r.type === 'expense') { currentExpense += r.amount; spend[r.cat] = (spend[r.cat] || 0) + r.amount; }
-    else currentIncome += r.amount;
-  });
-
-  const travelWidget = document.getElementById('travelWidgetSection');
-  if(state.isTravelMode) {
-    travelWidget.classList.remove('hidden');
-    let travelSpent = 0;
-    state.transactions.forEach(t => {
-      if(t.type === 'expense' && t.isTravel) travelSpent += t.amount;
+  if(state.recurringItems) {
+    state.recurringItems.forEach(r => {
+      if(r.type === 'expense') {
+        currentExpense += r.amount;
+        spend[r.cat] = (spend[r.cat] || 0) + r.amount;
+      } else {
+        currentIncome += r.amount;
+      }
     });
-    const travelBudget = state.travelBudget || 5000;
-    const tPct = Math.min(100, Math.round((travelSpent / travelBudget) * 100));
-    document.getElementById('travelProgressBar').style.width = tPct + '%';
-    document.getElementById('travelSpentStatus').textContent = `הוצאות בטיול: ${fmt(travelSpent)}`;
-    document.getElementById('travelBudgetTarget').textContent = `תקציב: ${fmt(travelBudget)}`;
-  } else {
-    travelWidget.classList.add('hidden');
   }
 
   let prevExpense = 0;
   state.transactions.forEach(t => {
     if(isWithinFinancialMonth(t.date, -1) && t.type === 'expense') prevExpense += t.amount;
   });
-  const prevRecs = getRecurringItemsForCurrentMonth(-1);
-  prevRecs.forEach(r => { if(r.type === 'expense') prevExpense += r.amount; });
+  if(state.recurringItems) {
+    state.recurringItems.forEach(r => { if(r.type === 'expense') prevExpense += r.amount; });
+  }
 
   const compBox = document.getElementById('monthlyComparisonBox');
   if(prevExpense === 0) {
-    compBox.innerHTML = `הוצאות התקופה הנוכחית: <span class="font-bold tabular">${fmt(currentExpense)}</span> (אין נתונים קודמים)`;
+    compBox.innerHTML = `הוצאות התקופה הנוכחית: <span class="font-bold tabular">${fmt(currentExpense)}</span> (אין נתונים מתקופה קודמת)`;
   } else {
     const diff = currentExpense - prevExpense;
     const diffPercent = Math.round((Math.abs(diff) / prevExpense) * 100);
@@ -1899,7 +1388,9 @@ function renderAnalytics() {
   state.expenseCats.forEach((cat) => {
     const amt = spend[cat.name] || 0;
     if(amt > 0) {
-      const start = (acc / total) * 100; acc += amt; const end = (acc / total) * 100;
+      const start = (acc / total) * 100;
+      acc += amt;
+      const end = (acc / total) * 100;
       stops.push(`${cat.color} ${start}% ${end}%`);
     }
   });
@@ -1932,24 +1423,24 @@ function renderAnalytics() {
     }
   });
 
-  if(usedCategoriesCount === 0) legend.innerHTML = '<p class="text-[10px] text-slate-400 text-center py-2">אין הוצאות פעילות בתקופה זו</p>';
+  if(usedCategoriesCount === 0) {
+    legend.innerHTML = '<p class="text-[10px] text-slate-400 text-center py-2">אין הוצאות פעילות בתקופה זו</p>';
+  }
 
   const currentTxs = state.transactions.filter(t => isWithinFinancialMonth(t.date, 0));
-  const allCurrentPeriodItems = [...currentTxs, ...recs];
-  allCurrentPeriodItems.sort((a, b) => b.date.localeCompare(a.date));
-
-  document.getElementById('txCountBadge').textContent = `${allCurrentPeriodItems.length} תנועות`;
+  const recurringCount = state.recurringItems ? state.recurringItems.length : 0;
+  document.getElementById('txCountBadge').textContent = `${currentTxs.length + recurringCount} תנועות`;
   
   const previewRow = document.getElementById('txPreviewRow');
-  if(allCurrentPeriodItems.length === 0) {
-    previewRow.innerHTML = '<span class="text-[10px] text-slate-500">אין תנועות בתקופה זו</span>';
+  if(currentTxs.length === 0 && recurringCount === 0) {
+    previewRow.innerHTML = '<span class="text-[10px] text-slate-500">אין תנועות בתקופה זו עדיין</span>';
   } else {
-    const latest = allCurrentPeriodItems[0];
+    const latest = currentTxs.length > 0 ? currentTxs[0] : { cat: state.recurringItems[0].cat, subCat: state.recurringItems[0].title, type: state.recurringItems[0].type, amount: state.recurringItems[0].amount };
     const sign = latest.type === 'income' ? '+' : '−';
     const col = latest.type === 'income' ? 'var(--mint)' : 'var(--coral)';
     previewRow.innerHTML = `
       <div class="flex items-center gap-2">
-        <span class="w-2.5 h-2.5 rounded-full" style="background:${latest.color || '#7FE8C6'}"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
         <div>
           <p class="text-[11px] font-bold">${latest.cat}</p>
           <p class="text-[9px] text-slate-400">${latest.subCat || 'כללי'} • ${latest.date || ''}</p>
@@ -1962,35 +1453,48 @@ function renderAnalytics() {
   const txList = document.getElementById('txList');
   txList.innerHTML = '';
   
-  if(allCurrentPeriodItems.length === 0) {
-    txList.innerHTML = '<p class="text-[11px] text-center text-slate-500 py-2">אין תנועות להצגה</p>';
-  } else {
-    allCurrentPeriodItems.forEach(t => {
+  if(state.recurringItems && state.recurringItems.length > 0) {
+    state.recurringItems.forEach(r => {
       const row = document.createElement('div');
       row.className = 'tx-row';
-      const sign = t.type === 'income' ? '+' : '−';
-      const col = t.type === 'income' ? 'var(--mint)' : 'var(--coral)';
-      const origText = t.originalCurrencyStr ? ` <span class="text-[9px] text-blue-400">(${t.originalCurrencyStr})</span>` : '';
-      const travelBadge = t.isTravel ? ` <span class="text-[8px] bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded">טיול</span>` : '';
-      const recBadge = t.isRecurring ? ` <span class="text-[8px] bg-violet-500/20 text-violet-300 px-1.5 py-0.5 rounded">קבע</span>` : '';
-      const deleteBtn = !t.isRecurring ? `<button onclick="deleteTransaction(${t.id})" class="text-[10px] text-rose-400 cursor-pointer p-1" title="מחק"><i class="fa-solid fa-trash-can"></i></button>` : '';
-
+      const col = r.type === 'income' ? 'var(--mint)' : 'var(--coral)';
+      const sign = r.type === 'income' ? '+' : '−';
       row.innerHTML = `
         <div class="flex items-center gap-2.5">
-          <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:${t.color}"></span>
+          <span class="w-2.5 h-2.5 rounded-full flex-shrink-0 bg-violet-400"></span>
           <div>
-            <p class="text-[11px] font-bold text-slate-100">${t.cat}${origText}${travelBadge}${recBadge}</p>
-            <p class="text-[9px] text-slate-400">${t.subCat || 'כללי'} • ${t.date || 'היום'}</p>
+            <p class="text-[11px] font-bold text-slate-100">${r.cat} <span class="text-[9px] text-violet-400">(הוראת קבע: ${r.title})</span></p>
+            <p class="text-[9px] text-slate-400">בכל ${r.day} לחודש</p>
           </div>
         </div>
         <div class="flex items-center gap-2">
-          <span class="tabular text-[11px] font-bold" style="color:${col}">${sign}${fmt(t.amount)}</span>
-          ${deleteBtn}
+          <span class="tabular text-[11px] font-bold" style="color:${col}">${sign}${fmt(r.amount)}</span>
         </div>
       `;
       txList.appendChild(row);
     });
   }
+
+  currentTxs.forEach(t => {
+    const row = document.createElement('div');
+    row.className = 'tx-row';
+    const col = t.type === 'income' ? 'var(--mint)' : 'var(--coral)';
+    const sign = t.type === 'income' ? '+' : '−';
+    row.innerHTML = `
+      <div class="flex items-center gap-2.5">
+        <span class="w-2.5 h-2.5 rounded-full flex-shrink-0 bg-emerald-400"></span>
+        <div>
+          <p class="text-[11px] font-bold text-slate-100">${t.cat} <span class="text-[9px] text-slate-400">(${t.subCat})</span></p>
+          <p class="text-[9px] text-slate-400">${t.date || 'היום'}</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="tabular text-[11px] font-bold" style="color:${col}">${sign}${fmt(t.amount)}</span>
+        <button onclick="deleteTransaction(${t.id})" class="text-[10px] text-rose-400 cursor-pointer p-1"><i class="fa-solid fa-trash-can"></i></button>
+      </div>
+    `;
+    txList.appendChild(row);
+  });
 }
 
 let donutExpanded = false;
@@ -2000,16 +1504,16 @@ function toggleDonutExpand() {
   donutExpanded = !donutExpanded;
   const content = document.getElementById('donutExpandedContent');
   const arrow = document.getElementById('donutArrowIcon');
-  if(donutExpanded) { content.classList.remove('hidden'); arrow.style.transform = 'rotate(180deg)'; }
-  else { content.classList.add('hidden'); arrow.style.transform = 'rotate(0deg)'; }
+  content.classList.toggle('hidden', !donutExpanded);
+  arrow.style.transform = donutExpanded ? 'rotate(180deg)' : 'rotate(0deg)';
 }
 
 function toggleTxExpand() {
   txExpanded = !txExpanded;
   const content = document.getElementById('txExpandedContent');
   const arrow = document.getElementById('txArrowIcon');
-  if(txExpanded) { content.classList.remove('hidden'); arrow.style.transform = 'rotate(180deg)'; }
-  else { content.classList.add('hidden'); arrow.style.transform = 'rotate(0deg)'; }
+  content.classList.toggle('hidden', !txExpanded);
+  arrow.style.transform = txExpanded ? 'rotate(180deg)' : 'rotate(0deg)';
 }
 
 function deleteTransaction(id) {
@@ -2017,19 +1521,7 @@ function deleteTransaction(id) {
   persist();
   renderAnalytics();
   renderHome();
-  showToast("התנועה נמחקה בהצלחה");
-}
-
-function editCategoryBudget(catName) {
-  const catObj = state.expenseCats.find(c => c.name === catName);
-  if(!catObj) return;
-  const val = prompt(`הכנס תקציב חודשי אופציונלי לקטגוריה "${catName}":`, catObj.budget || 0);
-  if(val !== null) {
-    catObj.budget = parseFloat(val) || 0;
-    persist();
-    renderTableScreen();
-    showToast("התקציב עודכן!");
-  }
+  showToast("התנועה נמחקה");
 }
 
 function renderTableScreen() {
@@ -2039,63 +1531,48 @@ function renderTableScreen() {
 
   const select = document.getElementById('tableMonthSelect');
   const offset = select ? parseInt(select.value) || 0 : 0;
+  const { startPeriod, endPeriod } = getFinancialPeriodDates(offset);
+  document.getElementById('tableDateRangeSubtitle').textContent = `טווח חישוב: ${formatDateHeb(startPeriod)} - ${formatDateHeb(endPeriod)}`;
 
   let totalMonthExpense = 0;
   let renderedCount = 0;
 
   state.expenseCats.forEach(cat => {
-    const subCats = masterCategoriesMap[cat.name] || ['כללי'];
-    const subCatTotals = {};
-    subCats.forEach(s => subCatTotals[s] = 0);
     let catTotal = 0;
+    const subCatsMap = {};
 
     state.transactions.forEach(t => {
       if(t.type === 'expense' && t.cat === cat.name && isWithinFinancialMonth(t.date, offset)) {
-        const sub = t.subCat && subCats.includes(t.subCat) ? t.subCat : subCats[0];
-        subCatTotals[sub] += t.amount;
+        subCatsMap[t.subCat] = (subCatsMap[t.subCat] || 0) + t.amount;
         catTotal += t.amount;
         totalMonthExpense += t.amount;
       }
     });
 
-    const recs = getRecurringItemsForCurrentMonth(offset);
-    recs.forEach(r => {
-      if(r.type === 'expense' && r.cat === cat.name) {
-        const sub = subCats[0];
-        subCatTotals[sub] += r.amount;
-        catTotal += r.amount;
-        totalMonthExpense += r.amount;
-      }
-    });
+    if(state.recurringItems && offset === 0) {
+      state.recurringItems.forEach(r => {
+        if(r.type === 'expense' && r.cat === cat.name) {
+          subCatsMap[r.title] = (subCatsMap[r.title] || 0) + r.amount;
+          catTotal += r.amount;
+          totalMonthExpense += r.amount;
+        }
+      });
+    }
 
-    if(catTotal > 0 || (cat.budget && cat.budget > 0)) {
+    if(catTotal > 0) {
       renderedCount++;
       const card = document.createElement('div');
       card.className = 'summary-card p-3 space-y-2';
 
       let subRowsHtml = '';
-      subCats.forEach(sub => {
-        const amt = subCatTotals[sub] || 0;
-        if(amt > 0) {
-          subRowsHtml += `
-            <div class="flex items-center justify-between text-[11px] py-1 px-2 rounded-lg bg-[var(--card-2)] border border-[var(--border)]">
-              <span class="text-slate-300 flex items-center gap-1.5"><i class="fa-solid fa-angle-left text-[9px] text-emerald-400"></i> ${sub}</span>
-              <span class="tabular font-semibold text-slate-200">${fmt(amt)}</span>
-            </div>
-          `;
-        }
-      });
-
-      const budget = cat.budget || 0;
-      let budgetStatusHtml = budget > 0 ? 
-        `<div class="flex items-center justify-between text-[10px] pt-1.5 border-t border-[var(--border)] mt-1">
-          <span class="text-slate-300">תקציב: ${fmt(budget)} | <span class="${catTotal > budget ? 'text-rose-400 font-bold' : 'text-emerald-400 font-bold'}">${catTotal > budget ? 'חורג 🔴' : 'עומד ביעד 🟢'}</span></span>
-          <button onclick="editCategoryBudget('${cat.name}')" class="text-violet-400 underline cursor-pointer font-bold">ערוך תקציב</button>
-         </div>` :
-        `<div class="flex items-center justify-between text-[10px] pt-1.5 border-t border-[var(--border)] mt-1">
-          <span class="text-slate-500">ללא תקציב</span>
-          <button onclick="editCategoryBudget('${cat.name}')" class="text-emerald-400 underline cursor-pointer font-bold">+ הגדר תקציב</button>
-         </div>`;
+      for(let [subName, subAmt] of Object.entries(subCatsMap)) {
+        subRowsHtml += `
+          <div class="flex items-center justify-between text-[11px] py-1 px-2 rounded-lg bg-[var(--card-2)] border border-[var(--border)]">
+            <span class="text-slate-300 flex items-center gap-1.5"><i class="fa-solid fa-angle-left text-[9px] text-emerald-400"></i> ${subName}</span>
+            <span class="tabular font-semibold text-slate-200">${fmt(subAmt)}</span>
+          </div>
+        `;
+      }
 
       card.innerHTML = `
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
@@ -2106,7 +1583,6 @@ function renderTableScreen() {
           <span class="tabular text-xs font-black text-rose-400">${fmt(catTotal)}</span>
         </div>
         <div class="space-y-1 pt-1">${subRowsHtml}</div>
-        ${budgetStatusHtml}
       `;
       container.appendChild(card);
     }
@@ -2120,7 +1596,7 @@ function renderTableScreen() {
   const summaryHeader = document.createElement('div');
   summaryHeader.className = 'summary-card p-3 bg-gradient-to-l from-emerald-500/15 to-blue-500/15 border border-emerald-400/30 flex items-center justify-between';
   summaryHeader.innerHTML = `
-    <span class="text-xs font-bold text-slate-200">סה״כ הוצאות בתקופה:</span>
+    <span class="text-xs font-bold text-slate-200">סה״כ הוצאות בתקופה הנבחרת:</span>
     <span class="tabular text-sm font-black text-emerald-400">${fmt(totalMonthExpense)}</span>
   `;
   container.prepend(summaryHeader);
@@ -2162,7 +1638,8 @@ function toggleVoiceRecognition() {
 function resetVoiceUI(){
   const btn = document.getElementById('micBtn');
   if(btn) btn.classList.remove('listening');
-  renderHome();
+  const status = document.getElementById('micStatus');
+  if(status) status.textContent = 'למשל: "קניות בסופר 150 שקל"';
   activeRecognition = null;
 }
 
@@ -2177,195 +1654,70 @@ function processSmartText() {
 function cleanSubCategoryText(rawText) {
   return rawText
     .replace(/(\d+[\.,]?\d*)/g, '')
-    .replace(/(שקל|שקלים|₪|\$|€|£|דולר|דולרים|יורו|פאונד|באט|יין|קנדי|אוסטרלי|פרנק|דירהם|דינר|רופי|יואן)/g, '')
+    .replace(/(שקל|שקלים|₪|\$)/g, '')
     .replace(/(אתמול|שלשום|היום)/g, '')
     .trim() || rawText.trim();
 }
 
-// ---- SMART DATE PARSING (First step) ----
 function parseDateFromText(text) {
   const now = new Date();
   let targetDate = new Date(now);
-
-  const numDateMatch = text.match(/(\d{1,2})[\./](\d{1,2})(?:[\./](\d{2,4}))?/);
-  if (numDateMatch) {
-    const day = parseInt(numDateMatch[1]);
-    const month = parseInt(numDateMatch[2]) - 1;
-    const year = numDateMatch[3] ? (numDateMatch[3].length === 2 ? 2000 + parseInt(numDateMatch[3]) : parseInt(numDateMatch[3])) : now.getFullYear();
-    if (day >= 1 && day <= 31 && month >= 0 && month <= 11) {
-      targetDate = new Date(year, month, day);
-      return getLocalDateString(targetDate);
-    }
-  }
-
   if (text.includes('אתמול')) { targetDate.setDate(now.getDate() - 1); return getLocalDateString(targetDate); }
   if (text.includes('שלשום')) { targetDate.setDate(now.getDate() - 2); return getLocalDateString(targetDate); }
-  if (text.includes('היום')) { return getLocalDateString(now); }
-  
-  const dayMatch = text.match(/ב?-?(\d{1,2}) לחודש/);
-  if (dayMatch) {
-    const dayNum = parseInt(dayMatch[1]);
-    if (dayNum >= 1 && dayNum <= 31) {
-      targetDate.setDate(dayNum);
-      return getLocalDateString(targetDate);
-    }
-  }
   return getLocalDateString(now);
 }
 
 function processVoiceCommandDirectly(text){
-  let cleanText = text.trim();
-
-  // 1. FIRST: Extract and clean date
-  const parsedDate = parseDateFromText(cleanText);
-  cleanText = cleanText
-    .replace(/(\d{1,2})[\./](\d{1,2})(?:[\./](\d{2,4}))?/g, '')
-    .replace(/ב?-?(\d{1,2}) לחודש/g, '')
-    .replace(/(אתמול|שלשום|היום)/g, '')
-    .trim();
-
-  // 2. SECOND: Extract amount and currency
-  let rawAmount = 0;
-  let currencyMultiplier = 1;
-  let currencyLabel = '₪';
-
-  for (let key of Object.keys(exchangeRates)) {
-    if (cleanText.includes(key)) {
-      currencyMultiplier = exchangeRates[key];
-      currencyLabel = key;
-      break;
-    }
+  let amount = 0;
+  const currencyMatch = text.match(/(\d+[\.,]?\d*)\s*(שקל|שקלים|₪|\$)/);
+  if (currencyMatch) amount = parseFloat(currencyMatch[1].replace(',', '.'));
+  else {
+    const allNumbers = text.match(/\d+[\.,]?\d*/g);
+    if (allNumbers && allNumbers.length > 0) amount = parseFloat(allNumbers[0].replace(',', '.'));
   }
 
-  const matchNum = cleanText.match(/(\d+[\.,]?\d*)/);
-  if (matchNum) {
-    rawAmount = parseFloat(matchNum[1].replace(',', '.'));
-    cleanText = cleanText.replace(matchNum[0], '').trim();
-  }
+  if(!amount || isNaN(amount)) { alert("לא זיהיתי סכום ברור."); return; }
 
-  if(!rawAmount || isNaN(rawAmount)) { alert("לא זיהיתי סכום ברור."); return; }
+  const parsedDate = parseDateFromText(text);
+  const subCategoryPhrase = cleanSubCategoryText(text);
 
-  const convertedAmount = Math.round(rawAmount * currencyMultiplier * 100) / 100;
-  const originalStr = currencyMultiplier !== 1 ? `${rawAmount} ${currencyLabel}` : null;
-
-  let isIncome = cleanText.includes('הכנסה') || cleanText.includes('משכורת') || cleanText.includes('קיבלתי') || cleanText.includes('הרווחתי');
-  cleanText = cleanText.replace(/(הכנסה|משכורת|קיבלתי|הרווחתי|שילמתי|קניתי|ב)/g, '').trim();
-
-  let matchedCat = null;
-  let matchedSub = null;
-
-  // Split into exact words for strict matching
-  const textWords = cleanText.split(/\s+/).map(w => w.trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"']/g,"")).filter(Boolean);
-
-  // 3. THIRD: Strict Word-Level Category Matching Only
-  if (isIncome) {
-    for (let c of state.incomeCats) {
-      if (textWords.includes(c.name)) { matchedCat = c.name; matchedSub = c.name; break; }
-    }
-    if (!matchedCat) matchedCat = state.incomeCats[0].name;
+  // Check if we already learned this phrase
+  if (state.learnedMappings && state.learnedMappings[subCategoryPhrase]) {
+    const mainCat = state.learnedMappings[subCategoryPhrase];
+    saveAndExecuteTransaction(amount, mainCat, subCategoryPhrase, parsedDate);
   } else {
-    // Check exact word match against predefined subcategories
-    for (let catName of Object.keys(masterCategoriesMap)) {
-      const subs = masterCategoriesMap[catName];
-      for (let sub of subs) {
-        const cleanSub = sub.trim();
-        const isMatch = cleanSub.includes(' ') ? cleanText.includes(cleanSub) : textWords.includes(cleanSub);
-        if (isMatch && cleanSub.length > 1) {
-          matchedCat = catName;
-          matchedSub = cleanSub;
-          break;
-        }
-      }
-      if (matchedCat) break;
-    }
-
-    // Check exact word match against main category names
-    if (!matchedCat) {
-      for (let cat of state.expenseCats) {
-        if (textWords.includes(cat.name)) {
-          matchedCat = cat.name;
-          matchedSub = 'כללי';
-          break;
-        }
-      }
-    }
-  }
-
-  // 4. FOURTH: Fallback if category was not recognized strictly -> Opens manual selection window
-  if (!matchedCat || (!isIncome && !state.expenseCats.find(c => c.name === matchedCat))) {
-    populateVoiceCategorySelect();
-    const cleanSub = cleanSubCategoryText(cleanText);
-    pendingSmartTx = { 
-      type: isIncome ? 'income' : 'expense', 
-      amount: convertedAmount, 
-      originalCurrencyStr: originalStr, 
-      cat: isIncome ? state.incomeCats[0].name : state.expenseCats[0].name, 
-      subCat: cleanSub || 'כללי', 
-      color: isIncome ? '#7FE8C6' : state.expenseCats[0].color, 
-      date: parsedDate, 
-      isTravel: state.isTravelMode && !isIncome 
-    };
-    document.getElementById('voiceSubCatInput').value = cleanSub || '';
-    document.getElementById('voiceParsedInfo').innerHTML = `סכום שזוהה: <span class="text-emerald-400 font-bold">${fmt(convertedAmount)}</span>${originalStr ? ` (${originalStr})` : ''} | תאריך: <span class="text-blue-400 font-bold">${parsedDate}</span>`;
+    // New phrase! Ask user once
+    pendingSmartTx = { amount, subCat: subCategoryPhrase, date: parsedDate };
+    populateMainCategorySelect();
+    document.getElementById('voiceSubCatInput').value = subCategoryPhrase;
+    document.getElementById('voiceParsedInfo').innerHTML = `סכום: <span class="text-emerald-400 font-bold">${fmt(amount)}</span>`;
     document.getElementById('voiceDescModal').classList.remove('hidden');
-  } else {
-    const type = isIncome ? 'income' : 'expense';
-    const catObj = isIncome ? (state.incomeCats.find(c => c.name === matchedCat) || state.incomeCats[0]) : (state.expenseCats.find(c => c.name === matchedCat) || state.expenseCats[0]);
-    
-    const newTx = {
-      id: Date.now(), type: type, amount: convertedAmount, originalCurrencyStr: originalStr,
-      cat: matchedCat, subCat: matchedSub || 'כללי', color: catObj.color, date: parsedDate, isTravel: state.isTravelMode && !isIncome
-    };
-    state.transactions.push(newTx);
-    persist();
-    renderHome(); renderAnalytics(); resetVoiceUI();
-    showToast(`✅ נשמר בהצלחה: ${fmt(convertedAmount)} (${matchedCat})`);
   }
 }
 
-function populateVoiceCategorySelect() {
-  const mainCatSelect = document.getElementById('selectMainCategory');
-  mainCatSelect.innerHTML = '';
+function populateMainCategorySelect() {
+  const sel = document.getElementById('selectMainCategory');
+  sel.innerHTML = '';
   state.expenseCats.forEach(c => {
-    const opt = document.createElement('option'); opt.value = c.name; opt.textContent = c.name; mainCatSelect.appendChild(opt);
+    const opt = document.createElement('option');
+    opt.value = c.name; opt.textContent = c.name;
+    sel.appendChild(opt);
   });
-}
-
-function addNewCatQuickly() {
-  const quickInput = document.getElementById('newCatQuickInput');
-  const catName = quickInput.value.trim();
-  if(!catName) { alert("נא להזין שם קטגוריה."); return; }
-  if(state.expenseCats.find(c => c.name === catName)) { alert("קטגוריה קיימת."); return; }
-
-  const color = availableColors[state.expenseCats.length % availableColors.length];
-  state.expenseCats.push({ name: catName, color, budget: 0, custom: true });
-  if(!masterCategoriesMap[catName]) masterCategoriesMap[catName] = ['כללי'];
-  persist();
-  populateVoiceCategorySelect();
-  document.getElementById('selectMainCategory').value = catName;
-  quickInput.value = '';
-  showToast(`קטגוריה "${catName}" נוספה!`);
 }
 
 function confirmVoiceTransaction() {
   if(!pendingSmartTx) return;
   const chosenMainCat = document.getElementById('selectMainCategory').value;
-  const subCatVal = cleanSubCategoryText(document.getElementById('voiceSubCatInput').value) || 'כללי';
-  const catObj = state.expenseCats.find(c => c.name === chosenMainCat) || state.expenseCats[0];
-  
-  pendingSmartTx.cat = chosenMainCat;
-  pendingSmartTx.subCat = subCatVal;
-  pendingSmartTx.color = catObj.color;
+  const subCatText = document.getElementById('voiceSubCatInput').value.trim() || pendingSmartTx.subCat;
 
-  if (!masterCategoriesMap[chosenMainCat]) masterCategoriesMap[chosenMainCat] = [];
-  if (!masterCategoriesMap[chosenMainCat].includes(subCatVal)) masterCategoriesMap[chosenMainCat].push(subCatVal);
+  // Learn mapping for future!
+  if(!state.learnedMappings) state.learnedMappings = {};
+  state.learnedMappings[subCatText] = chosenMainCat;
 
-  state.transactions.push({ id: Date.now(), ...pendingSmartTx });
-  persist();
-  renderHome(); renderAnalytics();
+  saveAndExecuteTransaction(pendingSmartTx.amount, chosenMainCat, subCatText, pendingSmartTx.date);
   document.getElementById('voiceDescModal').classList.add('hidden');
-  pendingSmartTx = null; resetVoiceUI();
-  showToast(`✅ נשמר בהצלחה: ${fmt(pendingSmartTx.amount)} (${chosenMainCat})`);
+  pendingSmartTx = null;
+  resetVoiceUI();
 }
 
 function cancelVoiceTransaction() {
@@ -2374,23 +1726,21 @@ function cancelVoiceTransaction() {
   resetVoiceUI();
 }
 
-let currentCategoryTab = 'expense';
-function switchCategoryTab(tab) {
-  currentCategoryTab = tab;
-  const expBtn = document.getElementById('catTabExpBtn');
-  const incBtn = document.getElementById('catTabIncBtn');
-  const label = document.getElementById('newCatTitleLabel');
-  
-  if(tab === 'expense') {
-    expBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold bg-emerald-500/20 text-emerald-400 transition';
-    incBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold text-slate-400 transition';
-    label.textContent = 'הוספת קטגוריית הוצאה חדשה:';
-  } else {
-    incBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold bg-emerald-500/20 text-emerald-400 transition';
-    expBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold text-slate-400 transition';
-    label.textContent = 'הוספת קטגוריית הכנסה חדשה:';
-  }
-  renderModalCategoryList();
+function saveAndExecuteTransaction(amount, mainCat, subCat, date) {
+  const newTx = {
+    id: Date.now(),
+    type: 'expense',
+    amount: amount,
+    cat: mainCat,
+    subCat: subCat,
+    date: date
+  };
+  state.transactions.push(newTx);
+  persist();
+  renderHome();
+  renderAnalytics();
+  resetVoiceUI();
+  showToast(`✅ נשמר: ${fmt(amount)} (${mainCat} • ${subCat})`);
 }
 
 function openCategoriesModal() { document.getElementById('categoriesModal').classList.remove('hidden'); renderModalCategoryList(); }
@@ -2400,122 +1750,30 @@ function renderModalCategoryList() {
   const container = document.getElementById('modalCatList');
   if(!container) return;
   container.innerHTML = '';
-  
-  const list = currentCategoryTab === 'expense' ? state.expenseCats : state.incomeCats;
-
-  list.forEach((c, idx) => {
-    const subs = currentCategoryTab === 'expense' ? (masterCategoriesMap[c.name] || []) : [c.name];
-    const itemWrap = document.createElement('div');
-    itemWrap.className = 'rounded-lg border bg-[var(--card-2)] border-[var(--border)] overflow-hidden';
-    
-    const deleteMainBtn = c.custom ? `<button onclick="deleteMainCategory('${c.name}', '${currentCategoryTab}')" class="text-rose-400 text-xs px-2 py-0.5 rounded bg-rose-500/10 hover:bg-rose-500/20 transition cursor-pointer" title="מחק קטגוריה"><i class="fa-solid fa-trash-can"></i></button>` : '';
-
-    const header = document.createElement('div');
-    header.className = 'flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-[var(--card)] transition';
-    header.innerHTML = `
+  state.expenseCats.forEach(c => {
+    const row = document.createElement('div');
+    row.className = 'flex items-center justify-between p-2 rounded-lg bg-[var(--card-2)] border border-[var(--border)] text-[11px]';
+    row.innerHTML = `
       <div class="flex items-center gap-2">
         <span class="w-2.5 h-2.5 rounded-full" style="background:${c.color}"></span>
-        <span class="text-[11px] font-bold text-slate-100">${c.name}</span>
-      </div>
-      <div class="flex items-center gap-2" onclick="event.stopPropagation()">
-        ${deleteMainBtn}
-        <span class="text-[9px] text-slate-400">(${subs.length} תתי-קטגוריות)</span>
-        <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform cursor-pointer" onclick="toggleSubcatView(this)"></i>
+        <span class="font-bold text-slate-100">${c.name}</span>
       </div>
     `;
-    
-    const subContainer = document.createElement('div');
-    subContainer.className = 'hidden px-3 py-2 border-t border-[var(--border)] space-y-1 bg-[var(--bg)] max-h-[120px] overflow-y-auto subcat-dropdown';
-    
-    subs.forEach(sub => {
-      const subItem = document.createElement('div');
-      subItem.className = 'text-[10px] text-slate-300 flex items-center justify-between py-0.5';
-      const isCustomSub = currentCategoryTab === 'expense' && !masterCategoriesMap[c.name]?.includes(sub);
-      const deleteSub = isCustomSub ? `<button onclick="deleteSubCategory('${c.name}', '${sub}')" class="text-rose-400 text-[9px] cursor-pointer" title="מחק תת קטגוריה"><i class="fa-solid fa-xmark"></i></button>` : '';
-      subItem.innerHTML = `<span class="flex items-center gap-1.5"><i class="fa-solid fa-angle-left text-[8px] text-emerald-400"></i> ${sub}</span> ${deleteSub}`;
-      subContainer.appendChild(subItem);
-    });
-
-    if(currentCategoryTab === 'expense') {
-      const addSubRow = document.createElement('div');
-      addSubRow.className = 'pt-1.5 flex gap-1';
-      addSubRow.innerHTML = `
-        <input type="text" id="subInput_${idx}" placeholder="הוסף תת קטגוריה..." class="field-shell px-2 py-1 text-[10px] w-full outline-none font-bold" style="color:var(--text)" />
-        <button onclick="addSubCategoryToCat('${c.name}', 'subInput_${idx}')" class="px-2 py-1 bg-emerald-500/20 text-emerald-300 rounded text-[10px] font-bold cursor-pointer">הוסף</button>
-      `;
-      subContainer.appendChild(addSubRow);
-    }
-
-    header.onclick = () => {
-      const isHidden = subContainer.classList.contains('hidden');
-      document.querySelectorAll('.subcat-dropdown').forEach(el => el.classList.add('hidden'));
-      if(isHidden) subContainer.classList.remove('hidden');
-    };
-
-    itemWrap.appendChild(header); itemWrap.appendChild(subContainer);
-    container.appendChild(itemWrap);
+    container.appendChild(row);
   });
-}
-
-function toggleSubcatView(iconEl) {
-  const header = iconEl.closest('div').parentElement;
-  const subContainer = header.nextElementSibling;
-  if(subContainer) subContainer.classList.toggle('hidden');
-}
-
-function deleteMainCategory(name, type) {
-  if(confirm(`האם אתה בטוח שברצונך למחוק את הקטגוריה "${name}"?`)) {
-    if(type === 'expense') {
-      state.expenseCats = state.expenseCats.filter(c => c.name !== name);
-      delete masterCategoriesMap[name];
-    } else {
-      state.incomeCats = state.incomeCats.filter(c => c.name !== name);
-    }
-    persist();
-    renderModalCategoryList();
-    showToast("הקטגוריה נמחקה");
-  }
-}
-
-function deleteSubCategory(catName, subName) {
-  if(masterCategoriesMap[catName]) {
-    masterCategoriesMap[catName] = masterCategoriesMap[catName].filter(s => s !== subName);
-    persist();
-    renderModalCategoryList();
-    showToast("תת-הקטגוריה נמחקה");
-  }
-}
-
-function addSubCategoryToCat(catName, inputId) {
-  const val = document.getElementById(inputId).value.trim();
-  if(!val) return;
-  if(!masterCategoriesMap[catName]) masterCategoriesMap[catName] = [];
-  if(masterCategoriesMap[catName].includes(val)) { alert("תת קטגוריה קיימת"); return; }
-  masterCategoriesMap[catName].push(val);
-  persist();
-  renderModalCategoryList();
-  showToast("תת-הקטגוריה נוספה!");
 }
 
 function addNewCustomCategory() {
   const catName = document.getElementById('newCatInput').value.trim();
   if(!catName) { alert("נא להזין שם קטגוריה."); return; }
-  
-  if(currentCategoryTab === 'expense') {
-    if(state.expenseCats.find(c => c.name === catName)) { alert("קטגוריה קיימת."); return; }
-    const color = availableColors[state.expenseCats.length % availableColors.length];
-    state.expenseCats.push({ name: catName, color, budget: 0, custom: true });
-    if(!masterCategoriesMap[catName]) masterCategoriesMap[catName] = ['כללי'];
-  } else {
-    if(state.incomeCats.find(c => c.name === catName)) { alert("קטגוריה קיימת."); return; }
-    const color = availableColors[state.incomeCats.length % availableColors.length];
-    state.incomeCats.push({ name: catName, color, budget: 0, custom: true });
-  }
+  if(state.expenseCats.find(c => c.name === catName)) { alert("קטגוריה זו קיימת כבר."); return; }
 
+  const color = availableColors[state.expenseCats.length % availableColors.length];
+  state.expenseCats.push({ name: catName, color });
   persist();
   renderModalCategoryList();
   document.getElementById('newCatInput').value = '';
-  showToast("קטגוריה נוספה בהצלחה!");
+  showToast("קטגוריה ראשית נוספה בהצלחה!");
 }
 
 function promptSavingsGoal() {

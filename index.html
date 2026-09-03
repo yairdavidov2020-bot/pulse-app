@@ -1300,14 +1300,14 @@ function initSystemNotifications() {
         }
       }
 
-      // 20:00 - Expense Reminder Notification
-      if (hours === 20 && minutes === 0) {
-        const key = `pulse_notif_20_${todayStr}`;
+      // 22:40 - Expense Reminder Notification (ניסוי)
+      if (hours === 22 && minutes === 40) {
+        const key = `pulse_notif_2240_${todayStr}`;
         if (localStorage.getItem(key) !== 'true') {
           localStorage.setItem(key, 'true');
           showBrowserNotification(
-            "Pulse - תזכורת הוצאות 💰",
-            `${userName} אל תשכח להוסיף את ההוצאות שלך להיום`,
+            "Pulse - תזכורת הוצאות (ניסוי) 💰",
+            `${userName}, זוהי בדיקת תזכורת הוצאות שנקבעה ל-22:40!`,
             () => {
               window.focus();
               const remModal = document.getElementById('reminderModal');

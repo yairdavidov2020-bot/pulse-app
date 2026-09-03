@@ -291,8 +291,9 @@
                 </div>
             </div>
             <div class="grid grid-cols-2 gap-2">
-                <div class="field-shell px-3 py-1.5">
+                <div class="field-shell px-3 py-1.5 flex items-center justify-between">
                     <select id="recCategory" class="w-full bg-transparent outline-none text-[11px] font-bold" style="color:var(--text)"></select>
+                    <button type="button" onclick="quickAddRecCategory()" class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0 cursor-pointer" title="הוסף קטגוריה ראשית חדשה">+</button>
                 </div>
                 <div class="field-shell px-3 py-1.5">
                     <input id="recDay" type="number" min="1" max="31" placeholder="יום בחודש" class="w-full bg-transparent outline-none text-[11px] font-bold" style="color:var(--text)" value="1" />
@@ -356,11 +357,11 @@
             <div class="space-y-2.5 text-[11px] text-slate-300">
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-microphone"></i> 1. הכתבה חכמה ולמידה אוטומטית</p>
-                    <p class="leading-relaxed">מדבר או מקליד בשפה חופשית סכום, תאריך ומקום (למשל: "שילמתי 120 במסעדה X ב-18.8"). המערכת שומרת את תת-הקטגוריה, ומעכשיו כשתאכל באותה מסעדה היא תזהה זאת לבד באופן אוטומטי!</p>
+                    <p class="leading-relaxed">שמור סכום, תאריך ומקום (למשל: "שילמתי 120 במסעדה X ב-18.8"). המערכת שומרת את תת-הקטגוריה, ומעכשיו כשתאכל באותה מסעדה היא תזהה זאת לבד באופן אוטומטי!</p>
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-blue-400 flex items-center gap-1.5"><i class="fa-solid fa-calendar-days"></i> 2. תקופת תקציב אישית</p>
-                    <p class="leading-relaxed">הגדר את היום בחודש שבו נסגרת תקופת האשראי שלך (למשל 10 או 1). כל החישובים, ההוצאות וההכנסות בטבלה ובתמונת המצב מתעדכנים לפי טווח התאריכים המדויק הזה.</p>
+                    <p class="leading-relaxed">הגדר את היום בחודש שבו נסגרת תקופת האשראי שלך. כל החישובים, ההוצאות וההכנסות בטבלה ובתמונת המצב מתעדכנים לפי טווח התאריכים המדויק הזה.</p>
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-violet-400 flex items-center gap-1.5"><i class="fa-solid fa-chart-pie"></i> 3. תמונת מצב ותרשים עוגה</p>
@@ -368,7 +369,7 @@
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-amber-400 flex items-center gap-1.5"><i class="fa-solid fa-piggy-bank"></i> 4. קופות חיסכון ומצב נסיעות</p>
-                    <p class="leading-relaxed">שמור כסף בצד לקופות וירטואליות (כמו טיסה או רכישה) מבלי לפגוע בעו״ש, והפעל מצב נסיעות (עם שערי מטבע חיים!) לניהול הוצאות במטבע זר וסיכום טיול אוטומטי.</p>
+                    <p class="leading-relaxed">שמור כסף בצד לקופות וירטואליות והפעל מצב נסיעות (עם שערי מטבע חיים!) לניהול הוצאות במטבע זר וסיכום טיול אוטומטי.</p>
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-teal-400 flex items-center gap-1.5"><i class="fa-solid fa-table"></i> 5. טבלה חודשית (אקסל פיננסי)</p>
@@ -651,7 +652,7 @@
             <button id="catTabIncBtn" onclick="switchCategoryTab('income')" class="flex-1 py-1.5 rounded-lg text-xs font-bold text-slate-400 transition">הכנסות</button>
         </div>
 
-        <p class="text-[10px] text-slate-400 leading-relaxed">להלן הקטגוריות הראשיות והמילים שהמערכת למדה אוטומטית. ניתן להסיר מילים שנלמדו בלחיצה על כפתור המחיקה:</p>
+        <p class="text-[10px] text-slate-400 leading-relaxed">להלן הקטגוריות הראשיות והמילים שהמערכת למדה אוטומטית. ניתן להסיר מילים או קטגוריות ראשיות:</p>
 
         <div id="modalCatList" class="space-y-1.5 max-h-[220px] overflow-y-auto"></div>
 
@@ -1048,7 +1049,6 @@ const tipsList = [
   "אוטומציה של חיסכון: הגדר העברה אוטומטית לחיסכון ביום שבו נכנסת המשכורת."
 ];
 
-// שערי מטבעות עם עדכון חי מהאינטרנט וגיבוי מובנה
 let exchangeRates = {
   '₪': 1, 'שקל': 1, 'שקלים': 1,
   '$': 3.65, 'דולר': 3.65, 'דולרים': 3.65, 'USD': 3.65,
@@ -1369,6 +1369,25 @@ function updateRecCategories(type) {
   list.forEach(c => {
     const opt = document.createElement('option'); opt.value = c.name; opt.textContent = c.name; sel.appendChild(opt);
   });
+}
+
+function quickAddRecCategory() {
+  const type = document.getElementById('recType').value;
+  const name = prompt("הכנס שם לקטגוריה הראשית החדשה:");
+  if (!name || !name.trim()) return;
+  const cleanName = name.trim();
+  
+  const list = type === 'income' ? state.incomeCats : state.expenseCats;
+  if (list.find(c => c.name === cleanName)) {
+    alert("הקטגוריה כבר קיימת.");
+    return;
+  }
+  const color = availableColors[list.length % availableColors.length];
+  list.push({ name: cleanName, color, budget: 0, custom: true });
+  persist();
+  updateRecCategories(type);
+  document.getElementById('recCategory').value = cleanName;
+  showToast("קטגוריה ראשית נוספה בהצלחה!");
 }
 
 function renderRecurringList() {
@@ -2284,7 +2303,6 @@ function processVoiceCommandDirectly(text){
 
   let isIncome = cleanText.includes('הכנסה') || cleanText.includes('משכורת') || cleanText.includes('קיבלתי') || cleanText.includes('הרווחתי');
   
-  // הוסר ב' בטעות שהיה מוחק אותיות ב' ממילים כמו במסעדה/בפאב
   cleanText = cleanText.replace(/(הכנסה|משכורת|קיבלתי|הרווחתי|שילמתי|קניתי)/g, '').trim();
 
   let matchedCat = null;
@@ -2450,7 +2468,8 @@ function renderModalCategoryList() {
     const itemWrap = document.createElement('div');
     itemWrap.className = 'rounded-lg border bg-[var(--card-2)] border-[var(--border)] overflow-hidden';
     
-    const deleteMainBtn = c.custom ? `<button onclick="deleteMainCategory('${c.name}', '${currentCategoryTab}')" class="text-rose-400 text-xs px-2 py-0.5 rounded bg-rose-500/10 hover:bg-rose-500/20 transition cursor-pointer" title="מחק קטגוריה"><i class="fa-solid fa-trash-can"></i></button>` : '';
+    // אפשרות מחיקה לכל קטגוריה (כולל ברירת מחדל אם יש לפחות 2)
+    const deleteMainBtn = `<button onclick="deleteMainCategory('${c.name}', '${currentCategoryTab}')" class="text-rose-400 text-xs px-2 py-0.5 rounded bg-rose-500/10 hover:bg-rose-500/20 transition cursor-pointer" title="מחק קטגוריה"><i class="fa-solid fa-trash-can"></i></button>`;
 
     const header = document.createElement('div');
     header.className = 'flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-[var(--card)] transition';
@@ -2498,6 +2517,11 @@ function toggleSubcatView(iconEl) {
 }
 
 function deleteMainCategory(name, type) {
+  const list = type === 'expense' ? state.expenseCats : state.incomeCats;
+  if (list.length <= 1) {
+    alert("לא ניתן למחוק את הקטגוריה האחרונה שנשארה ברשימה.");
+    return;
+  }
   if(confirm(`האם אתה בטוח שברצונך למחוק את הקטגוריה "${name}"?`)) {
     if(type === 'expense') {
       state.expenseCats = state.expenseCats.filter(c => c.name !== name);

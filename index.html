@@ -343,6 +343,7 @@
     </div>
 </div>
 
+<!-- COMPREHENSIVE APP GUIDE & TUTORIAL MODAL -->
 <div id="tutorialModal" class="modal-overlay hidden">
     <div class="summary-card p-5 max-w-md w-full space-y-4 shadow-2xl text-right relative overflow-hidden border border-emerald-400/50 max-h-[90vh] overflow-y-auto">
         <div class="absolute -top-16 -right-16 w-36 h-36 bg-emerald-500/20 rounded-full blur-3xl"></div>
@@ -352,18 +353,30 @@
                 <button onclick="closeTutorialModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
             </div>
             
-            <div class="space-y-3 text-[11px] text-slate-300">
+            <div class="space-y-2.5 text-[11px] text-slate-300">
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
-                    <p class="font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-microphone"></i> 1. למידה חכמה — מדברים והמערכת לומדת</p>
-                    <p class="leading-relaxed">החידוש המרכזי: פשוט מקלידים או אומרים בשפה חופשית (למשל: "50 שקל פלאפל"). אם המילה חדשה, המערכת תשאל פעם אחת לאיזו קטגוריה ראשית לשייך אותה — ומעכשיו תזהה אותה אוטומטית לבד!</p>
+                    <p class="font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-microphone"></i> 1. הכתבה חכמה ולמידה אוטומטית</p>
+                    <p class="leading-relaxed">מדבר או מקליד בשפה חופשית סכום, תאריך ומקום (למשל: "שילמתי 120 במסעדה X ב-18.8"). המערכת שומרת את תת-הקטגוריה, ומעכשיו כשתאכל באותה מסעדה היא תזהה זאת לבד באופן אוטומטי!</p>
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
-                    <p class="font-bold text-blue-400 flex items-center gap-1.5"><i class="fa-solid fa-piggy-bank"></i> 2. קופות חיסכון ומצב נסיעות</p>
-                    <p class="leading-relaxed">נהל קופות חיסכון וירטואליות עם מחיקה ויזואלית קלה, והפעל מצב נסיעות עם מתג מהיר וסיכום טיול אוטומטי בסיומו!</p>
+                    <p class="font-bold text-blue-400 flex items-center gap-1.5"><i class="fa-solid fa-calendar-days"></i> 2. תקופת תקציב אישית</p>
+                    <p class="leading-relaxed">הגדר את היום בחודש שבו נסגרת תקופת האשראי שלך (למשל 10 או 1). כל החישובים, ההוצאות וההכנסות בטבלה ובתמונת המצב מתעדכנים לפי טווח התאריכים המדויק הזה.</p>
+                </div>
+                <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
+                    <p class="font-bold text-violet-400 flex items-center gap-1.5"><i class="fa-solid fa-chart-pie"></i> 3. תמונת מצב ותרשים עוגה</p>
+                    <p class="leading-relaxed">מעקב אחר יעד החיסכון החודשי שלך, השוואה לתקופה הקודמת, ופילוח ויזואלי ברור של כל ההוצאות לפי קטגוריות ראשיות בלחיצה אחת.</p>
+                </div>
+                <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
+                    <p class="font-bold text-amber-400 flex items-center gap-1.5"><i class="fa-solid fa-piggy-bank"></i> 4. קופות חיסכון ומצב נסיעות</p>
+                    <p class="leading-relaxed">שמור כסף בצד לקופות וירטואליות (כמו טיסה או רכישה) מבלי לפגוע בעו״ש, והפעל מצב נסיעות לניהול הוצאות במטבע זר וסיכום טיול אוטומטי.</p>
+                </div>
+                <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
+                    <p class="font-bold text-teal-400 flex items-center gap-1.5"><i class="fa-solid fa-table"></i> 5. טבלה חודשית (אקסל פיננסי)</p>
+                    <p class="leading-relaxed">פירוט מלא של כל הקטגוריות, תתי-הקטגוריות והתקציבים החודשיים עם מעקב מדויק האם עמדת ביעד או חרגת.</p>
                 </div>
             </div>
         </div>
-        <button onclick="closeTutorialModal()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs shadow-xl cursor-pointer relative z-10">הבנתי לגמרי!</button>
+        <button onclick="closeTutorialModal()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs shadow-xl cursor-pointer relative z-10">הבנתי לגמרי, יאללה מתחילים!</button>
     </div>
 </div>
 
@@ -947,7 +960,7 @@
       <div class="flex items-center justify-between px-4 pt-3 pb-2 flex-shrink-0 border-b border-[var(--border)]">
         <div>
           <h2 class="text-sm font-bold gradient-text">טבלה חודשית (אקסל פיננסי)</h2>
-          <p class="text-[10px] text-slate-400">פירוט קטגוריות ראשיות ותתי-קטגוריות לפי תקופות</p>
+          <p id="tableDateRangeSub" class="text-[10px] text-emerald-400 font-bold mt-0.5">תקופה: טוען...</p>
         </div>
         <div class="field-shell px-2 py-1">
           <select id="tableMonthSelect" onchange="renderTableScreen()" class="bg-transparent text-[10px] font-bold outline-none cursor-pointer" style="color:var(--text)"></select>
@@ -2004,6 +2017,16 @@ function renderTableScreen() {
 
   const select = document.getElementById('tableMonthSelect');
   const offset = select ? parseInt(select.value) || 0 : 0;
+
+  // Calculate and display exact date range for the financial period
+  const { startPeriod, endPeriod } = getFinancialPeriodDates(offset);
+  const startStr = `${String(startPeriod.getDate()).padStart(2,'0')}.${String(startPeriod.getMonth()+1).padStart(2,'0')}.${startPeriod.getFullYear()}`;
+  const endMinusOne = new Date(endPeriod);
+  endMinusOne.setDate(endMinusOne.getDate() - 1);
+  const endStr = `${String(endMinusOne.getDate()).padStart(2,'0')}.${String(endMinusOne.getMonth()+1).padStart(2,'0')}.${endMinusOne.getFullYear()}`;
+  
+  const rangeSub = document.getElementById('tableDateRangeSub');
+  if(rangeSub) rangeSub.textContent = `תקופה: מ-${startStr} עד ${endStr}`;
 
   let totalMonthExpense = 0;
   let renderedCount = 0;

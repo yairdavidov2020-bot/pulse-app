@@ -232,13 +232,13 @@
         </div>
         
         <div class="p-3 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-2.5">
-            <p class="text-[11px] font-bold text-slate-100 flex items-center gap-1.5"><i class="fa-solid fa-sliders text-blue-400"></i> חלון 1: בחירת יעד ומטבע עולמי</p>
+            <p class="text-[11px] font-bold text-slate-100 flex items-center gap-1.5"><i class="fa-solid fa-sliders text-blue-400"></i> חלון 1: בחירת יעד והמרת מטבע אוטומטית</p>
             <div class="flex items-center justify-between py-1">
                 <span class="text-xs font-bold">הפעל מצב נסיעות</span>
                 <input id="travelToggleCheckbox" type="checkbox" onchange="toggleTravelModeState(this.checked)" class="w-4 h-4 accent-emerald-400 cursor-pointer" />
             </div>
             <div>
-                <label class="text-[10px] font-semibold text-slate-400 mb-1 block">לאן אתה טס? (בחר מכל יעדי העולם לישראלים)</label>
+                <label class="text-[10px] font-semibold text-slate-400 mb-1 block">לאן אתה טס? (בחר יעד בעולם)</label>
                 <div class="field-shell px-3 py-2">
                     <select id="travelCountrySelect" onchange="onTravelCountryChange(this.value)" class="w-full bg-transparent outline-none text-xs font-bold" style="color:var(--text)">
                         <optgroup label="🌏 תאילנד ואסיה">
@@ -287,7 +287,7 @@
                             <option value="ארגנטינה">🇦🇷 ארגנטינה (פזו ארגנטינאי - ARS)</option>
                             <option value="קולומביה">🇨🇴 קולומביה (פזו קולומביאני - COP)</option>
                             <option value="פרו">🇵🇪 פרו (סול פרואני - PEN)</option>
-                            <option value="צ׳ילה">🇨🇱 צ'ילה (פזו צ'יליאני - CLP)</option>
+                            <option value="צ׳ילה">🇨🇱 צ'ילה (פזו צ׳יליאני - CLP)</option>
                         </optgroup>
                         <optgroup label="🌍 אפריקה והמזרח התיכון">
                             <option value="דרום אפריקה">🇿🇦 דרום אפריקה (ראנד - ZAR)</option>
@@ -309,9 +309,9 @@
         </div>
 
         <div class="p-3 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1.5">
-            <p class="text-[11px] font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-circle-info"></i> חלון 2: המרה חכמה</p>
+            <p class="text-[11px] font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-circle-info"></i> המרה אוטומטית מלאה</p>
             <p class="text-[10px] text-slate-300 leading-relaxed">
-                המערכת מזהה אוטומטית את מטבע היעד הנבחר ומתאימה את שערי המטבע החיים. תוכל לרשום או לומר הוצאה במטבע המקומי והיא תחושב ותומר מיידית לשקלים.
+                מעכשיו בטיול אין צורך להקליד את שם המטבע! פשוט הקלד סכום ותיאור (למשל: "50 פלאפל ב-18.8") והמערכת תמיר זאת אוטומטית למטבע המדינה שבחרת.
             </p>
         </div>
 
@@ -437,7 +437,7 @@
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-amber-400 flex items-center gap-1.5"><i class="fa-solid fa-piggy-bank"></i> 4. קופות חיסכון ומצב נסיעות</p>
-                    <p class="leading-relaxed">שמור כסף בצד לקופות וירטואליות והפעל מצב נסיעות (עם שערי מטבע חיים לכל יעדי העולם!) לניהול הוצאות במטבע זר וסיכום טיול אוטומטי.</p>
+                    <p class="leading-relaxed">שמור כסף בצד לקופות וירטואליות והפעל מצב נסיעות (עם המרה אוטומטית לפי מדינת היעד!) לניהול הוצאות בחו"ל וסיכום טיול.</p>
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-teal-400 flex items-center gap-1.5"><i class="fa-solid fa-table"></i> 5. טבלה חודשית (אקסל פיננסי)</p>
@@ -668,8 +668,8 @@
             <h3 class="text-xs font-bold text-emerald-400">הכתבה חכמה</h3>
             <button onclick="closeVoiceHelpModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
-        <p class="text-[11px] text-slate-300 leading-relaxed">אמור או הקלד משפט חופשי כולל מטבע זר ותאריך (לדוגמה: 18.8). דוגמאות מוצלחות:</p>
-        <p class="text-[11px] font-bold text-emerald-300 bg-[var(--card-2)] p-2 rounded-lg border border-[var(--border)]" id="voiceExampleBox">"שילמתי 50 שקל פלאפל ב-18.8"</p>
+        <p class="text-[11px] text-slate-300 leading-relaxed">אמור או הקלד משפט חופשי. במצב נסיעות, המערכת ממירה לבד למטבע היעד הנבחר:</p>
+        <p class="text-[11px] font-bold text-emerald-300 bg-[var(--card-2)] p-2 rounded-lg border border-[var(--border)]" id="voiceExampleBox">"שילמתי 50 פלאפל ב-18.8"</p>
         <button onclick="closeVoiceHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי</button>
     </div>
 </div>
@@ -917,13 +917,13 @@
                 </h4>
                 <button onclick="openVoiceHelpModal()" class="w-3.5 h-3.5 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[8px] font-bold flex items-center justify-center text-emerald-400 cursor-pointer">?</button>
               </div>
-              <p id="micStatus" class="text-[9px] mt-0.5 leading-tight truncate" style="color:var(--text-dim)">למשל: "50 שקל פלאפל ב-18.8"</p>
+              <p id="micStatus" class="text-[9px] mt-0.5 leading-tight truncate" style="color:var(--text-dim)">למשל: "50 פלאפל ב-18.8"</p>
             </div>
           </div>
 
           <div class="summary-card p-2 space-y-1">
             <div class="field-shell flex items-center px-2.5 py-1.5">
-              <input id="smartTextInput" type="text" placeholder="הכתבה... (למשל: 50 שקל פלאפל ב-18.8)" class="w-full bg-transparent outline-none text-[10px] font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
+              <input id="smartTextInput" type="text" placeholder="הכתבה... (למשל: 50 פלאפל ב-18.8)" class="w-full bg-transparent outline-none text-[10px] font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
             </div>
             <button onclick="processSmartText()" class="save-btn w-full py-1.5 rounded-xl text-[10px] font-bold cursor-pointer shadow-sm">פענח והוסף תנועה</button>
           </div>
@@ -1971,9 +1971,9 @@ function renderHome(){
         if(travelCardFlagIcon) travelCardFlagIcon.textContent = flag;
         if(travelCardSubtitle) travelCardSubtitle.textContent = `הוצאות בטיול: ${fmt(travelSpent)} / תקציב: ${fmt(state.travelBudget || 5000)}`;
         
-        if(micStatus) micStatus.textContent = `למשל: "50 ${state.travelCurrency || 'באט'} מסעדה ב-18.8"`;
-        if(smartInput) smartInput.placeholder = `הכתבה... (למשל: 50 ${state.travelCurrency || 'באט'} מסעדה ב-18.8)`;
-        if(voiceExampleBox) voiceExampleBox.textContent = `"שילמתי 50 ${state.travelCurrency || 'באט'} מסעדה ב-18.8"`;
+        if(micStatus) micStatus.textContent = `מצב טיול (${country}): כתוב סכום ותיאור בלבד`;
+        if(smartInput) smartInput.placeholder = `הכתבה... (למשל: 50 פלאפל ב-18.8 במטבע ${state.travelCurrency})`;
+        if(voiceExampleBox) voiceExampleBox.textContent = `"שילמתי 50 פלאפל ב-18.8" (יומר אוטומטית לפי ${state.travelCurrency})`;
     } else {
         if(travelControlCard) travelControlCard.classList.add('hidden');
         if(micStatus) micStatus.textContent = 'למשל: "50 שקל פלאפל ב-18.8"';
@@ -2025,7 +2025,7 @@ function renderAnalytics() {
         const aFlag = document.getElementById('analyticsTravelFlag');
         const aTitle = document.getElementById('analyticsTravelTitle');
         if(aFlag) aFlag.textContent = getCountryFlag(state.travelCountry);
-        if(aTitle) aTitle.textContent = `מצב נסיעות פעיל (${state.travelCountry || 'תאילנד'}) - שערים חיים`;
+        if(aTitle) aTitle.textContent = `מצב נסיעות פעיל (${state.travelCountry || 'תאילנד'}) - המרה אוטומטית`;
       } else {
         travelWidget.classList.add('hidden');
       }
@@ -2456,12 +2456,22 @@ function processVoiceCommandDirectly(text){
   let rawAmount = 0;
   let currencyMultiplier = 1;
   let currencyLabel = '₪';
+  let explicitCurrencyFound = false;
 
   for (let key of Object.keys(exchangeRates)) {
     if (cleanText.includes(key)) {
       currencyMultiplier = exchangeRates[key];
       currencyLabel = key;
+      explicitCurrencyFound = true;
       break;
+    }
+  }
+
+  // אם לא צוין מטבע במפורש, אבל מצב נסיעות מופעל - השתמש אוטומטית במטבע של המדינה הנבחרת!
+  if (!explicitCurrencyFound && state.isTravelMode && state.travelCurrency) {
+    if (exchangeRates[state.travelCurrency]) {
+      currencyMultiplier = exchangeRates[state.travelCurrency];
+      currencyLabel = state.travelCurrency;
     }
   }
 
@@ -2474,7 +2484,7 @@ function processVoiceCommandDirectly(text){
   if(!rawAmount || isNaN(rawAmount)) { alert("לא זיהיתי סכום ברור."); return; }
 
   const convertedAmount = Math.round(rawAmount * currencyMultiplier * 100) / 100;
-  const originalStr = currencyMultiplier !== 1 ? `${rawAmount} ${currencyLabel}` : null;
+  const originalStr = `${rawAmount} ${currencyLabel}`;
 
   let isIncome = cleanText.includes('הכנסה') || cleanText.includes('משכורת') || cleanText.includes('קיבלתי') || cleanText.includes('הרווחתי');
   
@@ -2525,7 +2535,7 @@ function processVoiceCommandDirectly(text){
     const subInput = document.getElementById('voiceSubCatInput');
     if(subInput) subInput.value = cleanSub || '';
     const parseInfo = document.getElementById('voiceParsedInfo');
-    if(parseInfo) parseInfo.innerHTML = `סכום: <span class="text-emerald-400 font-bold">${fmt(convertedAmount)}</span>${originalStr ? ` (${originalStr})` : ''} | תאריך: <span class="text-blue-400 font-bold">${parsedDate}</span>`;
+    if(parseInfo) parseInfo.innerHTML = `סכום: <span class="text-emerald-400 font-bold">${fmt(convertedAmount)}</span> (${originalStr}) | תאריך: <span class="text-blue-400 font-bold">${parsedDate}</span>`;
     const vModal = document.getElementById('voiceDescModal');
     if(vModal) vModal.classList.remove('hidden');
   } else {
@@ -2545,7 +2555,7 @@ function processVoiceCommandDirectly(text){
     state.transactions.push(newTx);
     persist();
     renderHome(); renderAnalytics(); resetVoiceUI();
-    showToast(`✅ נשמר בהצלחה: ${fmt(convertedAmount)} (${matchedCat})`);
+    showToast(`✅ נשמר בהצלחה: ${fmt(convertedAmount)} (${originalStr})`);
   }
 }
 

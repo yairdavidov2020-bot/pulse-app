@@ -772,6 +772,11 @@
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-rotate text-emerald-400 w-4"></i> הוראות קבע ומנויים</span>
             </button>
 
+            <!-- כפתור הפעלת התראות פוש -->
+            <button onclick="requestNotificationPermission()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-l from-emerald-500/20 to-teal-500/20 border border-emerald-400/40 hover:border-emerald-400 transition text-[12px] font-bold cursor-pointer text-emerald-300">
+                <span class="flex items-center gap-2.5"><i class="fa-solid fa-bell text-emerald-400 w-4"></i> הפעל התראות פוש 🔔</span>
+            </button>
+
             <div class="summary-card p-3 space-y-2 mt-2 bg-[var(--card-2)] border border-[var(--border)] rounded-xl">
                 <p class="text-[11px] font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-calendar-days"></i> תקופת תקציב מותאמת אישית</p>
                 <div class="field-shell px-2 py-1">
@@ -1265,15 +1270,23 @@ function toggleSystemSettingsContent() {
 }
 let systemSettingsOpen = false;
 
-// ---- SYSTEM NOTIFICATIONS & DAILY TIP SCHEDULER ----
+// ---- PUSH NOTIFICATIONS & PERMISSION REQUEST ----
+async function requestNotificationPermission() {
+  if (!("Notification" in window)) {
+    alert("הדפדפן שלך אינו תומך בהתראות פוש.");
+    return;
+  }
+  const permission = await Notification.requestPermission();
+  if (permission === "granted") {
+    showToast("התראות פוש הופעלו בהצלחה! 🔔");
+    showBrowserNotification("Pulse 💰", "מעכשיו תקבל תזכורות והודעות ישירות למכשיר שלך.");
+  } else {
+    alert("ההרשאה להתראות נדחתה. תוכל לאפשר אותה בהגדרות הדפדפן.");
+  }
+}
+
 function initSystemNotifications() {
   try {
-    if ("Notification" in window) {
-      if (Notification.permission === "default") {
-        Notification.requestPermission();
-      }
-    }
-
     setInterval(() => {
       const now = new Date();
       const hours = now.getHours();
@@ -1291,7 +1304,7 @@ function initSystemNotifications() {
           localStorage.setItem(key, 'true');
           showBrowserNotification(
             "Pulse - טיפ יומי 💡",
-            `${userName} הטיפ היומי שלך כבר כאן לצפייה הקש`,
+            `${userName}, הטיפ היומי שלך כבר כאן! הקש לצפייה.`,
             () => {
               window.focus();
               openTutorialModal();
@@ -1300,14 +1313,14 @@ function initSystemNotifications() {
         }
       }
 
-      // 22:40 - Expense Reminder Notification (ניסוי)
-      if (hours === 22 && minutes === 40) {
-        const key = `pulse_notif_2240_${todayStr}`;
+      // 22:55 - Expense Reminder Notification (ניסוי)
+      if (hours === 22 && minutes === 55) {
+        const key = `pulse_notif_2255_${todayStr}`;
         if (localStorage.getItem(key) !== 'true') {
           localStorage.setItem(key, 'true');
           showBrowserNotification(
             "Pulse - תזכורת הוצאות (ניסוי) 💰",
-            `${userName}, זוהי בדיקת תזכורת הוצאות שנקבעה ל-22:40!`,
+            `${userName}, זוהי בדיקת תזכורת הוצאות שנקבעה ל-22:55!`,
             () => {
               window.focus();
               const remModal = document.getElementById('reminderModal');
@@ -1777,7 +1790,6 @@ async function startCinematicBuild() {
 function loadDailyTip() {
   try {
     const now = new Date();
-    // Shift tip day cycle so it changes precisely at 12:00 PM
     let tipDate = new Date(now);
     if (now.getHours() < 12) {
       tipDate.setDate(tipDate.getDate() - 1);

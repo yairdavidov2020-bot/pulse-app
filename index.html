@@ -1061,7 +1061,7 @@
 </div>
 
 <script>
-// --- REGISTER INLINE SERVICE WORKER FOR PWA & NOTIFICATIONS ---
+// --- REGISTER SERVICE WORKER & PUSH SUBSCRIPTION INTEGRATION ---
 if ('serviceWorker' in navigator) {
   const swCode = `
     self.addEventListener('install', (e) => { self.skipWaiting(); });
@@ -1069,6 +1069,10 @@ if ('serviceWorker' in navigator) {
     self.addEventListener('push', (e) => {
       const data = e.data ? e.data.json() : { title: 'Pulse', body: 'הודעה חדשה' };
       e.waitUntil(self.registration.showNotification(data.title, { body: data.body, icon: 'icon.png' }));
+    });
+    self.addEventListener('notificationclick', (e) => {
+      e.notification.close();
+      e.waitUntil(clients.openWindow('/'));
     });
   `;
   const blob = new Blob([swCode], { type: 'text/javascript' });
@@ -1285,16 +1289,39 @@ function toggleSystemSettingsContent() {
 }
 let systemSettingsOpen = false;
 
-// ---- PUSH NOTIFICATIONS & PERMISSION REQUEST ----
+// ---- PUSH NOTIFICATIONS & SUPABASE SUBSCRIPTION REGISTRATION ----
 async function requestNotificationPermission() {
-  if (!("Notification" in window)) {
+  if (!("Notification" in window) || !('serviceWorker' in navigator)) {
     alert("הדפדפן שלך אינו תומך בהתראות פוש.");
     return;
   }
+  
   const permission = await Notification.requestPermission();
   if (permission === "granted") {
-    showToast("התראות פוש הופעלו בהצלחה! 🔔");
-    showBrowserNotification("Pulse 💰", "מעכשיו תקבל תזכורות והודעות ישירות למכשיר שלך.");
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      const vapidPublicKey = 'BMer4VQeC_fPwrVHgwH6-L3zLO_RgYZ-Yt9otbq5HaVJVZrI2shY6gRYuhReFVW71rNIXFSXa2ZmYrYqIbnb7gw';
+      
+      const subscription = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: vapidPublicKey
+      });
+
+      if (supabaseClient && state.handle) {
+        const { error } = await supabaseClient.from('push_subscriptions').upsert({
+          user_key: state.handle,
+          subscription: subscription
+        }, { onConflict: 'user_key' });
+
+        if (error) throw error;
+      }
+
+      showToast("התראות פוש הופעלו ונשמרו בענן בהצלחה! 🔔");
+      showBrowserNotification("Pulse 💰", "מעכשיו תקבל התזכורות והודעות ישירות מהענן למכשיר שלך.");
+    } catch (err) {
+      console.error("שגיאה ברישום להתראות פוש:", err);
+      alert("שגיאה ברישום להתראות פוש מול Supabase.");
+    }
   } else {
     alert("ההרשאה להתראות נדחתה. תוכל לאפשר אותה בהגדרות הדפדפן.");
   }
@@ -1327,14 +1354,14 @@ function initSystemNotifications() {
         }
       }
 
-      // 22:55 - Expense Reminder Notification (ניסוי)
+      // 22:55 - Expense Reminder Notification
       if (hours === 22 && minutes === 55) {
         const key = `pulse_notif_2255_${todayStr}`;
         if (localStorage.getItem(key) !== 'true') {
           localStorage.setItem(key, 'true');
           showBrowserNotification(
-            "Pulse - תזכורת הוצאות (ניסוי) 💰",
-            `${userName}, זוהי בדיקת תזכורת הוצאות שנקבעה ל-22:55!`,
+            "Pulse - תזכורת הוצאות 💰",
+            `${userName}, אל תשכח לעדכן את ההוצאות שלך להיום!`,
             () => {
               window.focus();
               const remModal = document.getElementById('reminderModal');

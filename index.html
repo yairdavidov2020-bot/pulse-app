@@ -175,7 +175,6 @@
   .tx-row{ display:flex; align-items:center; justify-content:space-between; padding:5px 0; border-bottom:1px solid var(--border); }
   .tx-row:last-child{ border-bottom:none; }
   
-  /* Travel Floating Animation */
   @keyframes travelFloat {
     0%, 100% { transform: translateY(0px) rotate(0deg); }
     50% { transform: translateY(-4px) rotate(3deg); }
@@ -233,21 +232,69 @@
         </div>
         
         <div class="p-3 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-2.5">
-            <p class="text-[11px] font-bold text-slate-100 flex items-center gap-1.5"><i class="fa-solid fa-sliders text-blue-400"></i> חלון 1: בחירת יעד ומטבע</p>
+            <p class="text-[11px] font-bold text-slate-100 flex items-center gap-1.5"><i class="fa-solid fa-sliders text-blue-400"></i> חלון 1: בחירת יעד ומטבע עולמי</p>
             <div class="flex items-center justify-between py-1">
                 <span class="text-xs font-bold">הפעל מצב נסיעות</span>
                 <input id="travelToggleCheckbox" type="checkbox" onchange="toggleTravelModeState(this.checked)" class="w-4 h-4 accent-emerald-400 cursor-pointer" />
             </div>
             <div>
-                <label class="text-[10px] font-semibold text-slate-400 mb-1 block">לאן אתה טס? (מדינה / יעד)</label>
+                <label class="text-[10px] font-semibold text-slate-400 mb-1 block">לאן אתה טס? (בחר מכל יעדי העולם לישראלים)</label>
                 <div class="field-shell px-3 py-2">
                     <select id="travelCountrySelect" onchange="onTravelCountryChange(this.value)" class="w-full bg-transparent outline-none text-xs font-bold" style="color:var(--text)">
-                        <option value="תאילנד">🇹🇭 תאילנד (באט - THB)</option>
-                        <option value="ארהב">🇺🇸 ארה״ב (דולר - USD)</option>
-                        <option value="אירופה">🇪🇺 אירופה (אירו - EUR)</option>
-                        <option value="בריטניה">🇬🇧 בריטניה (פאונד - GBP)</option>
-                        <option value="יפן">🇯🇵 יפן (יין - JPY)</option>
-                        <option value="איחוד האמירויות">🇦🇪 איחוד האמירויות (דירהם - AED)</option>
+                        <optgroup label="🌏 תאילנד ואסיה">
+                            <option value="תאילנד">🇹🇭 תאילנד (באט - THB)</option>
+                            <option value="יפן">🇯🇵 יפן (יין - JPY)</option>
+                            <option value="איחוד האמירויות">🇦🇪 איחוד האמירויות (דירהם - AED)</option>
+                            <option value="סינגפור">🇸🇬 סינגפור (דולר סינגפורי - SGD)</option>
+                            <option value="דרום קוריאה">🇰🇷 דרום קוריאה (וון - KRW)</option>
+                            <option value="וייטנאם">🇻🇳 וייטנאם (דונג - VND)</option>
+                            <option value="הודו">🇮🇳 הודו (רופי - INR)</option>
+                            <option value="הפיליפינים">🇵🇭 הפיליפינים (פזו - PHP)</option>
+                            <option value="אוסטרליה">🇦🇺 אוסטרליה (דולר אוסטרלי - AUD)</option>
+                            <option value="ניו זילנד">🇳🇿 ניו זילנד (דולר ניו זילנדי - NZD)</option>
+                        </optgroup>
+                        <optgroup label="🇪🇺 אירופה">
+                            <option value="איטליה">🇮🇹 איטליה / שנגן (אירו - EUR)</option>
+                            <option value="צרפת">🇫🇷 צרפת (אירו - EUR)</option>
+                            <option value="ספרד">🇪🇸 ספרד (אירו - EUR)</option>
+                            <option value="גרמניה">🇩🇪 גרמניה (אירו - EUR)</option>
+                            <option value="יוון">🇬🇷 יוון (אירו - EUR)</option>
+                            <option value="פורטוגל">🇵🇹 פורטוגל (אירו - EUR)</option>
+                            <option value="אוסטריה">🇦🇹 אוסטריה (אירו - EUR)</option>
+                            <option value="הולנד">🇳🇱 הולנד (אירו - EUR)</option>
+                            <option value="בלגיה">🇧🇪 בלגיה (אירו - EUR)</option>
+                            <option value="פינלנד">🇫🇮 פינלנד (אירו - EUR)</option>
+                            <option value="שוויץ">🇨🇭 שוויץ (פרנק שוויצרי - CHF)</option>
+                            <option value="בריטניה">🇬🇧 בריטניה (פאונד - GBP)</option>
+                            <option value="גאורגיה">🇬🇪 גאורגיה (לארי - GEL)</option>
+                            <option value="סרביה">🇷🇸 סרביה (דינר - RSD)</option>
+                            <option value="פולין">🇵🇱 פולין (זלוטי - PLN)</option>
+                            <option value="צ׳כיה">🇨🇿 צ'כיה (קרונה צ׳כית - CZK)</option>
+                            <option value="הונגריה">🇭🇺 הונגריה (פורינט - HUF)</option>
+                            <option value="שבדיה">🇸🇪 שבדיה (קרונה שוודית - SEK)</option>
+                            <option value="נורווגיה">🇳🇴 נורווגיה (קרונה נורווגית - NOK)</option>
+                            <option value="דנמרק">🇩🇰 דנמרק (קרונה דנית - DKK)</option>
+                        </optgroup>
+                        <optgroup label="🌎 אמריקה הצפונית והמרכזית">
+                            <option value="ארצות הברית">🇺🇸 ארצות הברית (דולר - USD)</option>
+                            <option value="קנדה">🇨🇦 קנדה (דולר קנדי - CAD)</option>
+                            <option value="מקסיקו">🇲🇽 מקסיקו (פזו מקסיקני - MXN)</option>
+                            <option value="קוסטה ריקה">🇨🇷 קוסטה ריקה (קולון - CRC)</option>
+                            <option value="פנמה">🇵🇦 פנמה (דולר - USD)</option>
+                        </optgroup>
+                        <optgroup label="🌎 אמריקה הדרומית">
+                            <option value="ברזיל">🇧🇷 ברזיל (ריאל ברזילאי - BRL)</option>
+                            <option value="ארגנטינה">🇦🇷 ארגנטינה (פזו ארגנטינאי - ARS)</option>
+                            <option value="קולומביה">🇨🇴 קולומביה (פזו קולומביאני - COP)</option>
+                            <option value="פרו">🇵🇪 פרו (סול פרואני - PEN)</option>
+                            <option value="צ׳ילה">🇨🇱 צ'ילה (פזו צ'יליאני - CLP)</option>
+                        </optgroup>
+                        <optgroup label="🌍 אפריקה והמזרח התיכון">
+                            <option value="דרום אפריקה">🇿🇦 דרום אפריקה (ראנד - ZAR)</option>
+                            <option value="מרוקו">🇲🇦 מרוקו (דירהם מרוקאי - MAD)</option>
+                            <option value="סיישל">🇸🇨 סיישל (רופי סיישל - SCR)</option>
+                            <option value="מאוריציוס">🇲🇺 מאוריציוס (רופי מאוריציאני - MUR)</option>
+                        </optgroup>
                         <option value="אחר">🌐 יעד אחר (דולר ברירת מחדל)</option>
                     </select>
                 </div>
@@ -264,7 +311,7 @@
         <div class="p-3 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1.5">
             <p class="text-[11px] font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-circle-info"></i> חלון 2: המרה חכמה</p>
             <p class="text-[10px] text-slate-300 leading-relaxed">
-                המערכת מזהה אוטומטית את מטבע היעד הנבחר ומתאימה את שערי המטבע החיים. תוכל לרשום או לומר הוצאה במטבע המקומי (לדוגמה: "500 באט") והיא תחושב ותומר מיידית לשקלים.
+                המערכת מזהה אוטומטית את מטבע היעד הנבחר ומתאימה את שערי המטבע החיים. תוכל לרשום או לומר הוצאה במטבע המקומי והיא תחושב ותומר מיידית לשקלים.
             </p>
         </div>
 
@@ -390,7 +437,7 @@
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-amber-400 flex items-center gap-1.5"><i class="fa-solid fa-piggy-bank"></i> 4. קופות חיסכון ומצב נסיעות</p>
-                    <p class="leading-relaxed">שמור כסף בצד לקופות וירטואליות והפעל מצב נסיעות (עם שערי מטבע חיים!) לניהול הוצאות במטבע זר וסיכום טיול אוטומטי.</p>
+                    <p class="leading-relaxed">שמור כסף בצד לקופות וירטואליות והפעל מצב נסיעות (עם שערי מטבע חיים לכל יעדי העולם!) לניהול הוצאות במטבע זר וסיכום טיול אוטומטי.</p>
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-teal-400 flex items-center gap-1.5"><i class="fa-solid fa-table"></i> 5. טבלה חודשית (אקסל פיננסי)</p>
@@ -1083,7 +1130,31 @@ let exchangeRates = {
   'דירהם': 0.99, 'AED': 0.99,
   'דינר ירדני': 5.15, 'JOD': 5.15,
   'רופי': 0.044, 'INR': 0.044,
-  'יואן': 0.51, 'CNY': 0.51
+  'יואן': 0.51, 'CNY': 0.51,
+  'קרונה שוודית': 0.35, 'SEK': 0.35,
+  'קרונה נורווגית': 0.34, 'NOK': 0.34,
+  'קרונה דנית': 0.53, 'DKK': 0.53,
+  'קרונה צ׳כית': 0.16, 'CZK': 0.16,
+  'זלוטי': 0.92, 'PLN': 0.92,
+  'פורינט': 0.01, 'HUF': 0.01,
+  'לארי': 1.35, 'GEL': 1.35,
+  'דינר סרבי': 0.034, 'RSD': 0.034,
+  'דולר סינגפורי': 2.75, 'SGD': 2.75,
+  'וון': 0.0027, 'KRW': 0.0027,
+  'דונג': 0.00015, 'VND': 0.00015,
+  'פזו פיליפיני': 0.065, 'PHP': 0.065,
+  'דולר ניו זילנדי': 2.20, 'NZD': 2.20,
+  'פזו מקסיקני': 0.21, 'MXN': 0.21,
+  'קולון': 0.007, 'CRC': 0.007,
+  'ריאל ברזילאי': 0.73, 'BRL': 0.73,
+  'פזו ארגנטינאי': 0.0038, 'ARS': 0.0038,
+  'פזו קולומביאני': 0.0009, 'COP': 0.0009,
+  'סול': 0.98, 'PEN': 0.98,
+  'פזו צ׳יליאני': 0.004, 'CLP': 0.004,
+  'ראנד': 0.20, 'ZAR': 0.20,
+  'דירהם מרוקאי': 0.37, 'MAD': 0.37,
+  'רופי סיישל': 0.27, 'SCR': 0.27,
+  'רופי מאוריציאני': 0.08, 'MUR': 0.08
 };
 
 async function updateLiveExchangeRates() {
@@ -1309,15 +1380,25 @@ function menuOpenTravelModal() {
 }
 function closeTravelModal() { document.getElementById('travelModal').classList.add('hidden'); }
 
+const countryCurrencyMap = {
+  'איטליה': 'יורו', 'צרפת': 'יורו', 'ספרד': 'יורו', 'גרמניה': 'יורו', 'יוון': 'יורו', 
+  'פורטוגל': 'יורו', 'אוסטריה': 'יורו', 'הולנד': 'יורו', 'בלגיה': 'יורו', 'פינלנד': 'יורו',
+  'שוויץ': 'פרנק שוויצרי', 'בריטניה': 'פאונד', 'גאורגיה': 'לארי', 'סרביה': 'דינר סרבי',
+  'פולין': 'זלוטי', 'צ׳כיה': 'קרונה צ׳כית', 'הונגריה': 'פורינט', 'שבדיה': 'קרונה שוודית',
+  'נורווגיה': 'קרונה נורווגית', 'דנמרק': 'קרונה דנית',
+  'תאילנד': 'באט', 'יפן': 'יין', 'איחוד האמירויות': 'דירהם', 'סינגפור': 'דולר סינגפורי',
+  'דרום קוריאה': 'וון', 'וייטנאם': 'דונג', 'הודו': 'רופי', 'הפיליפינים': 'פזו פיליפיני',
+  'אוסטרליה': 'דולר אוסטרלי', 'ניו זילנד': 'דולר ניו זילנדי',
+  'ארצות הברית': 'דולר', 'קנדה': 'דולר קנדי', 'מקסיקו': 'פזו מקסיקני',
+  'קוסטה ריקה': 'קולון', 'פנמה': 'דולר',
+  'ברזיל': 'ריאל ברזילאי', 'ארגנטינה': 'פזו ארגנטינאי', 'קולומביה': 'פזו קולומביאני',
+  'פרו': 'סול', 'צ׳ילה': 'פזו צ׳יליאני',
+  'דרום אפריקה': 'ראנד', 'מרוקו': 'דירהם מרוקאי', 'סיישל': 'רופי סיישל', 'מאוריציוס': 'רופי מאוריציאני'
+};
+
 function onTravelCountryChange(country) {
   state.travelCountry = country;
-  if(country === 'תאילנד') state.travelCurrency = 'באט';
-  else if(country === 'ארהב') state.travelCurrency = 'דולר';
-  else if(country === 'אירופה') state.travelCurrency = 'יורו';
-  else if(country === 'בריטניה') state.travelCurrency = 'פאונד';
-  else if(country === 'יפן') state.travelCurrency = 'יין';
-  else if(country === 'איחוד האמירויות') state.travelCurrency = 'דירהם';
-  else state.travelCurrency = 'דולר';
+  state.travelCurrency = countryCurrencyMap[country] || 'דולר';
 }
 
 function toggleTravelModeState(val) {
@@ -1813,11 +1894,40 @@ function fmt(n){ return Math.round(n || 0).toLocaleString('he-IL') + ' ' + (stat
 
 function getCountryFlag(country) {
   if(country === 'תאילנד') return '🇹🇭';
-  if(country === 'ארהב') return '🇺🇸';
-  if(country === 'אירופה') return '🇪🇺';
-  if(country === 'בריטניה') return '🇬🇧';
   if(country === 'יפן') return '🇯🇵';
   if(country === 'איחוד האמירויות') return '🇦🇪';
+  if(country === 'סינגפור') return '🇸🇬';
+  if(country === 'דרום קוריאה') return '🇰🇷';
+  if(country === 'וייטנאם') return '🇻🇳';
+  if(country === 'הודו') return '🇮🇳';
+  if(country === 'הפיליפינים') return '🇵🇭';
+  if(country === 'אוסטרליה') return '🇦🇺';
+  if(country === 'ניו זילנד') return '🇳🇿';
+  if(['איטליה','צרפת','ספרד','גרמניה','יוון','פורטוגל','אוסטריה','הולנד','בלגיה','פינלנד'].includes(country)) return '🇪🇺';
+  if(country === 'שוויץ') return '🇨🇭';
+  if(country === 'בריטניה') return '🇬🇧';
+  if(country === 'גאורגיה') return '🇬🇪';
+  if(country === 'סרביה') return '🇷🇸';
+  if(country === 'פולין') return '🇵🇱';
+  if(country === 'צ׳כיה') return '🇨🇿';
+  if(country === 'הונגריה') return '🇭🇺';
+  if(country === 'שבדיה') return '🇸🇪';
+  if(country === 'נורווגיה') return '🇳🇴';
+  if(country === 'דנמרק') return '🇩🇰';
+  if(country === 'ארצות הברית') return '🇺🇸';
+  if(country === 'קנדה') return '🇨🇦';
+  if(country === 'מקסיקו') return '🇲🇽';
+  if(country === 'קוסטה ריקה') return '🇨🇷';
+  if(country === 'פנמה') return '🇵🇦';
+  if(country === 'ברזיל') return '🇧🇷';
+  if(country === 'ארגנטינה') return '🇦🇷';
+  if(country === 'קולומביה') return '🇨🇴';
+  if(country === 'פרו') return '🇵🇪';
+  if(country === 'צ׳ילה') return '🇨🇱';
+  if(country === 'דרום אפריקה') return '🇿🇦';
+  if(country === 'מרוקו') return '🇲🇦';
+  if(country === 'סיישל') return '🇸🇨';
+  if(country === 'מאוריציוס') return '🇲🇺';
   return '✈️';
 }
 

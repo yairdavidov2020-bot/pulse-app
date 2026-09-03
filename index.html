@@ -174,6 +174,13 @@
 
   .tx-row{ display:flex; align-items:center; justify-content:space-between; padding:5px 0; border-bottom:1px solid var(--border); }
   .tx-row:last-child{ border-bottom:none; }
+  
+  /* Travel Floating Animation */
+  @keyframes travelFloat {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-4px) rotate(3deg); }
+  }
+  .travel-float-icon { animation: travelFloat 3s ease-in-out infinite; }
 </style>
 </head>
 <body>
@@ -226,10 +233,24 @@
         </div>
         
         <div class="p-3 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-2.5">
-            <p class="text-[11px] font-bold text-slate-100 flex items-center gap-1.5"><i class="fa-solid fa-sliders text-blue-400"></i> חלון 1: הפעלת מצב ותקציב</p>
+            <p class="text-[11px] font-bold text-slate-100 flex items-center gap-1.5"><i class="fa-solid fa-sliders text-blue-400"></i> חלון 1: בחירת יעד ומטבע</p>
             <div class="flex items-center justify-between py-1">
                 <span class="text-xs font-bold">הפעל מצב נסיעות</span>
                 <input id="travelToggleCheckbox" type="checkbox" onchange="toggleTravelModeState(this.checked)" class="w-4 h-4 accent-emerald-400 cursor-pointer" />
+            </div>
+            <div>
+                <label class="text-[10px] font-semibold text-slate-400 mb-1 block">לאן אתה טס? (מדינה / יעד)</label>
+                <div class="field-shell px-3 py-2">
+                    <select id="travelCountrySelect" onchange="onTravelCountryChange(this.value)" class="w-full bg-transparent outline-none text-xs font-bold" style="color:var(--text)">
+                        <option value="תאילנד">🇹🇭 תאילנד (באט - THB)</option>
+                        <option value="ארהב">🇺🇸 ארה״ב (דולר - USD)</option>
+                        <option value="אירופה">🇪🇺 אירופה (אירו - EUR)</option>
+                        <option value="בריטניה">🇬🇧 בריטניה (פאונד - GBP)</option>
+                        <option value="יפן">🇯🇵 יפן (יין - JPY)</option>
+                        <option value="איחוד האמירויות">🇦🇪 איחוד האמירויות (דירהם - AED)</option>
+                        <option value="אחר">🌐 יעד אחר (דולר ברירת מחדל)</option>
+                    </select>
+                </div>
             </div>
             <div>
                 <label class="text-[10px] font-semibold text-slate-400 mb-1 block">תקציב לטיול (בשקלים)</label>
@@ -241,9 +262,9 @@
         </div>
 
         <div class="p-3 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1.5">
-            <p class="text-[11px] font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-circle-info"></i> חלון 2: הסבר מפורט</p>
+            <p class="text-[11px] font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-circle-info"></i> חלון 2: המרה חכמה</p>
             <p class="text-[10px] text-slate-300 leading-relaxed">
-                כאשר מצב הנסיעות דלוק, כפתור הניהול יופיע במסך הבית שלך. תוכל להקליד או להגיד הוצאות בכל מטבע זר בעולם והמערכת תמיר אותן במדויק (עם שערים חיים מעודכנים). בלחיצה על כיבוי המצב – יוצג מיד סיכום הטיול שלך!
+                המערכת מזהה אוטומטית את מטבע היעד הנבחר ומתאימה את שערי המטבע החיים. תוכל לרשום או לומר הוצאה במטבע המקומי (לדוגמה: "500 באט") והיא תחושב ותומר מיידית לשקלים.
             </p>
         </div>
 
@@ -553,7 +574,7 @@
         </div>
         <div class="space-y-3">
             <h2 id="buildTitle" class="text-xl font-black gradient-text">בונה את עולמך הפיננסי...</h2>
-            <p id="buildSubText" class="text-xs text-slate-300 leading-relaxed min-h-[36px]">מאתחל את מאגר-העל והמנועים החכמים...</p>
+            <p id="buildSubText" class="text-xs text-slate-300 leading-relaxed min-h-[36px]">מאתחל את מאגר-על והמנועים החכמים...</p>
         </div>
         <div class="space-y-1.5">
             <div class="w-full bg-[var(--card-2)] h-3 rounded-full overflow-hidden border border-[var(--border)] p-0.5">
@@ -774,14 +795,14 @@
           </div>
         </section>
 
-        <section id="homeTravelControlCard" class="summary-card p-2.5 flex items-center justify-between transition-all duration-300 hidden">
+        <section id="homeTravelControlCard" class="summary-card p-2.5 flex items-center justify-between transition-all duration-300 hidden border-blue-400/40 bg-gradient-to-l from-blue-500/10 to-indigo-500/10">
             <div class="flex items-center gap-2.5">
-                <div class="w-7 h-7 rounded-xl bg-blue-500/20 border border-blue-400/40 flex items-center justify-center text-blue-400 text-xs">
-                    <i class="fa-solid fa-plane"></i>
+                <div class="w-8 h-8 rounded-xl bg-blue-500/25 border border-blue-400/50 flex items-center justify-center text-blue-300 text-sm travel-float-icon" id="travelCardFlagIcon">
+                    ✈️
                 </div>
                 <div>
                     <p class="text-[11px] font-bold text-blue-300" id="travelCardTitle">✈️ מצב נסיעות פעיל</p>
-                    <p class="text-[9px] text-slate-400" id="travelCardSubtitle">הוצאות בטיול: ₪0</p>
+                    <p class="text-[9px] text-slate-300" id="travelCardSubtitle">הוצאות בטיול: ₪0</p>
                 </div>
             </div>
             <label class="toggle-switch">
@@ -889,8 +910,8 @@
         <section id="travelWidgetSection" class="summary-card p-3 bg-gradient-to-l from-blue-500/10 to-indigo-500/10 border border-blue-400/30 hidden">
           <div class="flex items-center justify-between mb-1.5">
             <div class="flex items-center gap-1.5">
-              <span class="text-sm">✈️</span>
-              <span class="text-[12px] font-bold text-blue-400">מצב נסיעות פעיל (שערים חיים)</span>
+              <span class="text-sm" id="analyticsTravelFlag">✈️</span>
+              <span class="text-[12px] font-bold text-blue-400" id="analyticsTravelTitle">מצב נסיעות פעיל (שערים חיים)</span>
             </div>
             <div class="flex items-center gap-1.5">
                 <button onclick="triggerEndTravelMode()" class="text-[9px] font-bold bg-blue-500 text-white px-2 py-0.5 rounded-md shadow cursor-pointer">סיים נסיעה</button>
@@ -1086,6 +1107,12 @@ async function updateLiveExchangeRates() {
         exchangeRates['פאונד'] = gbp;
         exchangeRates['GBP'] = gbp;
       }
+      if (data.rates.THB) {
+        const thb = usd / data.rates.THB;
+        exchangeRates['באט'] = thb;
+        exchangeRates['THB'] = thb;
+        exchangeRates['฿'] = thb;
+      }
     }
   } catch(e) {}
 }
@@ -1111,6 +1138,8 @@ let state = {
   transactions: [],
   goalBuckets: [], 
   isTravelMode: false,
+  travelCountry: 'תאילנד',
+  travelCurrency: 'באט',
   travelBudget: 5000,
   learnedKeywords: {}
 };
@@ -1274,10 +1303,22 @@ function deleteGoalBucket(id) {
 function menuOpenTravelModal() {
   closeMenuModal();
   document.getElementById('travelToggleCheckbox').checked = state.isTravelMode;
+  document.getElementById('travelCountrySelect').value = state.travelCountry || 'תאילנד';
   document.getElementById('travelBudgetInput').value = state.travelBudget || 5000;
   document.getElementById('travelModal').classList.remove('hidden');
 }
 function closeTravelModal() { document.getElementById('travelModal').classList.add('hidden'); }
+
+function onTravelCountryChange(country) {
+  state.travelCountry = country;
+  if(country === 'תאילנד') state.travelCurrency = 'באט';
+  else if(country === 'ארהב') state.travelCurrency = 'דולר';
+  else if(country === 'אירופה') state.travelCurrency = 'יורו';
+  else if(country === 'בריטניה') state.travelCurrency = 'פאונד';
+  else if(country === 'יפן') state.travelCurrency = 'יין';
+  else if(country === 'איחוד האמירויות') state.travelCurrency = 'דירהם';
+  else state.travelCurrency = 'דולר';
+}
 
 function toggleTravelModeState(val) {
   state.isTravelMode = val;
@@ -1300,6 +1341,8 @@ function toggleTravelModeFromMain(checked) {
 
 function saveTravelSettings() {
   state.travelBudget = parseFloat(document.getElementById('travelBudgetInput').value) || 5000;
+  state.travelCountry = document.getElementById('travelCountrySelect').value;
+  onTravelCountryChange(state.travelCountry);
   const wasOn = state.isTravelMode;
   state.isTravelMode = document.getElementById('travelToggleCheckbox').checked;
   persist();
@@ -1330,6 +1373,7 @@ function triggerEndTravelMode() {
   const content = document.getElementById('travelSummaryContent');
   content.innerHTML = `
     <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1.5">
+      <div class="flex justify-between"><span>יעד הטיול:</span><span class="font-bold text-blue-400">${state.travelCountry || 'תאילנד'}</span></div>
       <div class="flex justify-between"><span>תקציב הטיול שהוגדר:</span><span class="font-bold tabular">${fmt(budget)}</span></div>
       <div class="flex justify-between"><span>סך הוצאות בטיול:</span><span class="font-bold tabular text-rose-400">${fmt(travelSpent)}</span></div>
       <div class="flex justify-between"><span>מספר תנועות בטיול:</span><span class="font-bold tabular">${travelCount} תנועות</span></div>
@@ -1767,6 +1811,16 @@ function totals(){
 
 function fmt(n){ return Math.round(n || 0).toLocaleString('he-IL') + ' ' + (state.currency || '₪'); }
 
+function getCountryFlag(country) {
+  if(country === 'תאילנד') return '🇹🇭';
+  if(country === 'ארהב') return '🇺🇸';
+  if(country === 'אירופה') return '🇪🇺';
+  if(country === 'בריטניה') return '🇬🇧';
+  if(country === 'יפן') return '🇯🇵';
+  if(country === 'איחוד האמירויות') return '🇦🇪';
+  return '✈️';
+}
+
 function renderHome(){
   try {
     const { income, expense, balance, freeCash } = totals();
@@ -1787,6 +1841,8 @@ function renderHome(){
     const travelControlCard = document.getElementById('homeTravelControlCard');
     const travelCheckbox = document.getElementById('mainScreenTravelCheckbox');
     const travelCardSubtitle = document.getElementById('travelCardSubtitle');
+    const travelCardTitle = document.getElementById('travelCardTitle');
+    const travelCardFlagIcon = document.getElementById('travelCardFlagIcon');
     const micStatus = document.getElementById('micStatus');
     const smartInput = document.getElementById('smartTextInput');
     const voiceExampleBox = document.getElementById('voiceExampleBox');
@@ -1799,11 +1855,15 @@ function renderHome(){
         if(state.transactions) {
           state.transactions.forEach(t => { if(t.type === 'expense' && t.isTravel) travelSpent += t.amount; });
         }
+        const country = state.travelCountry || 'תאילנד';
+        const flag = getCountryFlag(country);
+        if(travelCardTitle) travelCardTitle.textContent = `✈️ מצב נסיעות פעיל (${country})`;
+        if(travelCardFlagIcon) travelCardFlagIcon.textContent = flag;
         if(travelCardSubtitle) travelCardSubtitle.textContent = `הוצאות בטיול: ${fmt(travelSpent)} / תקציב: ${fmt(state.travelBudget || 5000)}`;
         
-        if(micStatus) micStatus.textContent = 'למשל: "50 דולר מסעדה ב-18.8"';
-        if(smartInput) smartInput.placeholder = 'הכתבה... (למשל: 50 דולר מסעדה ב-18.8)';
-        if(voiceExampleBox) voiceExampleBox.textContent = '"שילמתי 50 דולר מסעדה ב-18.8"';
+        if(micStatus) micStatus.textContent = `למשל: "50 ${state.travelCurrency || 'באט'} מסעדה ב-18.8"`;
+        if(smartInput) smartInput.placeholder = `הכתבה... (למשל: 50 ${state.travelCurrency || 'באט'} מסעדה ב-18.8)`;
+        if(voiceExampleBox) voiceExampleBox.textContent = `"שילמתי 50 ${state.travelCurrency || 'באט'} מסעדה ב-18.8"`;
     } else {
         if(travelControlCard) travelControlCard.classList.add('hidden');
         if(micStatus) micStatus.textContent = 'למשל: "50 שקל פלאפל ב-18.8"';
@@ -1851,6 +1911,11 @@ function renderAnalytics() {
         if(tSpent) tSpent.textContent = `הוצאות בטיול: ${fmt(travelSpent)}`;
         const tBudg = document.getElementById('travelBudgetTarget');
         if(tBudg) tBudg.textContent = `תקציב: ${fmt(travelBudget)}`;
+        
+        const aFlag = document.getElementById('analyticsTravelFlag');
+        const aTitle = document.getElementById('analyticsTravelTitle');
+        if(aFlag) aFlag.textContent = getCountryFlag(state.travelCountry);
+        if(aTitle) aTitle.textContent = `מצב נסיעות פעיל (${state.travelCountry || 'תאילנד'}) - שערים חיים`;
       } else {
         travelWidget.classList.add('hidden');
       }
@@ -2468,7 +2533,6 @@ function renderModalCategoryList() {
     const itemWrap = document.createElement('div');
     itemWrap.className = 'rounded-lg border bg-[var(--card-2)] border-[var(--border)] overflow-hidden';
     
-    // אפשרות מחיקה לכל קטגוריה (כולל ברירת מחדל אם יש לפחות 2)
     const deleteMainBtn = `<button onclick="deleteMainCategory('${c.name}', '${currentCategoryTab}')" class="text-rose-400 text-xs px-2 py-0.5 rounded bg-rose-500/10 hover:bg-rose-500/20 transition cursor-pointer" title="מחק קטגוריה"><i class="fa-solid fa-trash-can"></i></button>`;
 
     const header = document.createElement('div');

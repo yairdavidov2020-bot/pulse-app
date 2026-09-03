@@ -354,8 +354,8 @@
             
             <div class="space-y-3 text-[11px] text-slate-300">
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
-                    <p class="font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-microphone"></i> 1. ללא בחירת קטגוריות — פשוט מדברים</p>
-                    <p class="leading-relaxed">החידוש המרכזי ב-Pulse: **אין צורך לבחור קטגוריות ידנית**. פשוט מקלידים או אומרים בשפה חופשית (למשל: "50 שקל במסעדה ב-18.8").</p>
+                    <p class="font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-microphone"></i> 1. למידה חכמה — מדברים והמערכת לומדת</p>
+                    <p class="leading-relaxed">החידוש המרכזי: פשוט מקלידים או אומרים בשפה חופשית (למשל: "50 שקל פלאפל"). אם המילה חדשה, המערכת תשאל פעם אחת לאיזו קטגוריה ראשית לשייך אותה — ומעכשיו תזהה אותה אוטומטית לבד!</p>
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-blue-400 flex items-center gap-1.5"><i class="fa-solid fa-piggy-bank"></i> 2. קופות חיסכון ומצב נסיעות</p>
@@ -388,7 +388,7 @@
             </div>
             <h1 class="text-3xl font-black tracking-tight gradient-text">ברוכים הבאים ל-Pulse</h1>
             <p class="text-sm font-bold text-slate-200 leading-relaxed px-4">
-                בלי הרבה כאבי ראש פשוט מדברים או מקלידים בשפה שלכם ו-Pulse תעשה את השאר.
+                בלי הרבה כאבי ראש פשוט מדברים או מקלידים בשפה שלכם ו-Pulse לומדת את ההוצאות שלכם לבד.
             </p>
         </div>
 
@@ -560,7 +560,7 @@
             <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-microphone ml-1"></i> העוזר הקולי והצ׳אט החכם</h3>
             <button onclick="closeChatHelpModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
-        <p class="text-[11px] text-slate-300 leading-relaxed">העוזר הקולי והצ׳אט החכם מזהים אוטומטית מאות קטגוריות, מטבעות זרים ותאריכים ומסדרת הכל לבד בשניות.</p>
+        <p class="text-[11px] text-slate-300 leading-relaxed">העוזר הקולי מזהה סכומים, מטבעות ומילים. אם זו מילה חדשה, המערכת תלמד אותה ממך פעם אחת בלבד.</p>
         <button onclick="closeChatHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי</button>
     </div>
 </div>
@@ -587,36 +587,39 @@
             <button onclick="closeVoiceHelpModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
         <p class="text-[11px] text-slate-300 leading-relaxed">אמור או הקלד משפט חופשי כולל מטבע זר ותאריך (לדוגמה: 18.8). דוגמאות מוצלחות:</p>
-        <p class="text-[11px] font-bold text-emerald-300 bg-[var(--card-2)] p-2 rounded-lg border border-[var(--border)]" id="voiceExampleBox">"שילמתי 50 שקל במסעדה ב-18.8"</p>
+        <p class="text-[11px] font-bold text-emerald-300 bg-[var(--card-2)] p-2 rounded-lg border border-[var(--border)]" id="voiceExampleBox">"שילמתי 50 שקל פלאפל ב-18.8"</p>
         <button onclick="closeVoiceHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי</button>
     </div>
 </div>
 
 <div id="voiceDescModal" class="modal-overlay hidden">
-    <div class="summary-card p-4 max-w-xs w-full space-y-3 shadow-2xl text-right">
+    <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-            <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-pen-nib ml-1"></i> השלמת קטגוריה חסרה</h3>
+            <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-wand-magic-sparkles ml-1"></i> לימוד מילה חדשה</h3>
         </div>
-        <div class="space-y-2 text-[11px]">
+        <div class="space-y-2.5 text-[11px]">
             <p id="voiceParsedInfo" class="font-bold text-slate-300"></p>
-            <div class="p-2 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[10px]">
-                לא הצלחנו למצוא קטגוריה תואמת מדויקת ברשימה. בחר קטגוריה קיימת או הוסף קטגוריה חדשה בקלות:
+            
+            <div class="p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-[10px] leading-relaxed font-medium">
+                המערכת עדיין לא מכירה את המילה הזו. בחר קטגוריה ראשית מתאימה ותת-קטגוריה — ומעכשיו המערכת תזהה אותה אוטומטית לבד!
             </div>
-            <div class="field-shell px-3 py-1.5">
-                <select id="selectMainCategory" class="w-full bg-transparent outline-none font-bold text-[11px]" style="color:var(--text)"></select>
-            </div>
-            <div class="flex gap-2">
-                <div class="field-shell px-3 py-1.5 flex-1">
-                    <input id="newCatQuickInput" type="text" placeholder="או הוסף קטגוריה חדשה כאן..." class="w-full bg-transparent outline-none font-bold text-[11px]" style="color:var(--text)" />
+
+            <div class="space-y-1">
+                <label class="text-[10px] font-semibold text-slate-400 block">בחר קטגוריה ראשית:</label>
+                <div class="field-shell px-3 py-1.5">
+                    <select id="selectMainCategory" class="w-full bg-transparent outline-none font-bold text-[11px]" style="color:var(--text)"></select>
                 </div>
-                <button onclick="addNewCatQuickly()" class="px-3 py-1.5 rounded-xl bg-violet-500/20 border border-violet-500/40 text-violet-300 font-bold text-[11px] cursor-pointer">הוסף</button>
             </div>
-            <div class="field-shell px-3 py-2">
-                <input id="voiceSubCatInput" type="text" placeholder="תת קטגוריה נקייה (ללא סכום)..." class="w-full bg-transparent outline-none font-bold" style="color:var(--text)" />
+
+            <div class="space-y-1">
+                <label class="text-[10px] font-semibold text-slate-400 block">תת-קטגוריה נלמדת:</label>
+                <div class="field-shell px-3 py-2">
+                    <input id="voiceSubCatInput" type="text" placeholder="שם המילה/תת-קטגוריה..." class="w-full bg-transparent outline-none font-bold" style="color:var(--text)" />
+                </div>
             </div>
         </div>
         <div class="flex gap-2 pt-1">
-            <button onclick="confirmVoiceTransaction()" class="save-btn flex-1 py-2 rounded-xl font-bold text-xs">שמור תנועה</button>
+            <button onclick="confirmVoiceTransaction()" class="save-btn flex-1 py-2 rounded-xl font-bold text-xs">שמור ולמד מילה זו</button>
             <button onclick="cancelVoiceTransaction()" class="px-3 py-2 rounded-xl bg-[var(--card-2)] border border-[var(--border)] text-rose-400 text-xs font-bold">ביטול</button>
         </div>
     </div>
@@ -626,7 +629,7 @@
 <div id="categoriesModal" class="modal-overlay hidden">
     <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl max-h-[85vh] overflow-y-auto text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-            <h3 class="text-xs font-bold text-violet-400"><i class="fa-solid fa-tags ml-1"></i> ניהול קטגוריות מערכת</h3>
+            <h3 class="text-xs font-bold text-violet-400"><i class="fa-solid fa-tags ml-1"></i> ניהול קטגוריות ומילים נלמדות</h3>
             <button onclick="closeCategoriesModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
         
@@ -635,14 +638,16 @@
             <button id="catTabIncBtn" onclick="switchCategoryTab('income')" class="flex-1 py-1.5 rounded-lg text-xs font-bold text-slate-400 transition">הכנסות</button>
         </div>
 
-        <div id="modalCatList" class="space-y-1.5 max-h-[190px] overflow-y-auto"></div>
+        <p class="text-[10px] text-slate-400 leading-relaxed">להלן הקטגוריות הראשיות והמילים שהמערכת למדה אוטומטית. ניתן להסיר מילים שנלמדו בלחיצה על כפתור המחיקה:</p>
+
+        <div id="modalCatList" class="space-y-1.5 max-h-[220px] overflow-y-auto"></div>
 
         <div class="border-t border-[var(--border)] pt-2 space-y-2">
-            <p class="text-[11px] font-bold text-slate-200" id="newCatTitleLabel">הוספת קטגוריית הוצאה חדשה:</p>
+            <p class="text-[11px] font-bold text-slate-200" id="newCatTitleLabel">הוספת קטגוריית הוצאה ראשית חדשה:</p>
             <div class="field-shell px-3 py-1.5">
                 <input id="newCatInput" type="text" placeholder="שם הקטגוריה החדשה..." class="w-full bg-transparent outline-none text-[11px] font-bold" style="color:var(--text)" />
             </div>
-            <button onclick="addNewCustomCategory()" class="save-btn w-full py-2 rounded-xl font-bold text-xs cursor-pointer">הוסף קטגוריה</button>
+            <button onclick="addNewCustomCategory()" class="save-btn w-full py-2 rounded-xl font-bold text-xs cursor-pointer">הוסף קטגוריה ראשית</button>
         </div>
     </div>
 </div>
@@ -679,7 +684,7 @@
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-plane-departure text-blue-400 w-4"></i> הגדרות מצב נסיעות</span>
             </button>
             <button onclick="menuOpenCategories()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-violet-400 transition text-[12px] font-bold cursor-pointer">
-                <span class="flex items-center gap-2.5"><i class="fa-solid fa-tags text-violet-400 w-4"></i> ניהול קטגוריות מערכת</span>
+                <span class="flex items-center gap-2.5"><i class="fa-solid fa-tags text-violet-400 w-4"></i> ניהול קטגוריות ומילים נלמדות</span>
             </button>
             <button onclick="menuOpenRecurring()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-emerald-400 transition text-[12px] font-bold cursor-pointer">
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-rotate text-emerald-400 w-4"></i> הוראות קבע ומנויים</span>
@@ -830,13 +835,13 @@
                 </h4>
                 <button onclick="openVoiceHelpModal()" class="w-3.5 h-3.5 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[8px] font-bold flex items-center justify-center text-emerald-400 cursor-pointer">?</button>
               </div>
-              <p id="micStatus" class="text-[9px] mt-0.5 leading-tight truncate" style="color:var(--text-dim)">למשל: "50 שקל במסעדה ב-18.8"</p>
+              <p id="micStatus" class="text-[9px] mt-0.5 leading-tight truncate" style="color:var(--text-dim)">למשל: "50 שקל פלאפל ב-18.8"</p>
             </div>
           </div>
 
           <div class="summary-card p-2 space-y-1">
             <div class="field-shell flex items-center px-2.5 py-1.5">
-              <input id="smartTextInput" type="text" placeholder="הכתבה... (למשל: 50 שקל במסעדה ב-18.8)" class="w-full bg-transparent outline-none text-[10px] font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
+              <input id="smartTextInput" type="text" placeholder="הכתבה... (למשל: 50 שקל פלאפל ב-18.8)" class="w-full bg-transparent outline-none text-[10px] font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
             </div>
             <button onclick="processSmartText()" class="save-btn w-full py-1.5 rounded-xl text-[10px] font-bold cursor-pointer shadow-sm">פענח והוסף תנועה</button>
           </div>
@@ -1011,7 +1016,7 @@ async function quickLogin() {
     const { data } = await supabaseClient.from('app_data').select('payload').eq('id', cleanHandle).single();
     if (data && data.payload) {
       state = data.payload;
-      localStorage.setItem('pulse_state_v64', JSON.stringify(state));
+      localStorage.setItem('pulse_state_v65', JSON.stringify(state));
       showToast("התחברת בהצלחה!");
       setTimeout(() => location.reload(), 800);
     } else {
@@ -1021,141 +1026,6 @@ async function quickLogin() {
     alert("שגיאה בהתחברות או ששם המשתמש אינו קיים.");
   }
 }
-
-// Master Categories Map - Optimized
-const masterCategoriesMap = {
-  'אוכל': [
-    'סופר', 'מסעדה', 'משלוח', 'קפה', 'שקם', 'קצבייה', 'חטיפים', 'מאפייה', 'גלידה', 'פירות', 'ירקות', 'משקאות', 
-    'שווארמה', 'פיצה', 'סושי', 'בשר', 'חלב', 'בישול', 'מכולת', 'מעדניה', 'בורגר', 'פלאפל', 
-    'חומוס', 'סטקיות', 'קונדיטוריה', 'גלידריות', 'איטלקי', 'מקסיקני', 'בייגלס', 'גבינות', 'לחמים', 
-    'ביצים', 'עוף', 'דגים', 'קפואים', 'שימורים', 'שוקולד', 'פיצוחים', 'תבלינים', 'שמן', 'רסק', 
-    'קמח', 'סוכר', 'מלח', 'תה', 'מיצים', 'אנרגיה', 'מים', 'בירות', 'יין', 'אלכוהול', 
-    'ניקיון', 'ספוגיות', 'מגבונים', 'נייר', 'מגבות', 'קופסאות', 'קיסמים', 'שמפו', 'סבון', 'משחה', 
-    'דאודורנט', 'סכינים', 'קצף', 'לחות', 'הגנה', 'טישו', 'סוללות', 'נורות', 'מטען', 'כבל', 
-    'תיק', 'עגלות', 'וולט', 'טיבי', 'ויקטורי', 'שופרסל', 'רמי', 'יוחננוף', 'מגה', 'אושר', 
-    'מקדונלדס', 'דומינוס', 'פפא', 'ג׳פניקה', 'ארומה', 'לנדוור', 'גרג', 'ביגה', 'רולדין', 'קופיקס', 
-    'סטארבקס', 'מציצים', 'נמל', 'מרינה', 'חוף', 'טיילת', 'פיקניק', 'מנגל', 'פחמים', 'שיפודים', 
-    'סטייקים', 'אנטריקוט', 'סינטה', 'פילה', 'כבש', 'עגל', 'הודו', 'פרגיות', 'כנפיים', 'נקניקיות', 
-    'קבב', 'המבורגר', 'טורטייה', 'טאקו', 'בוריטו', 'גואקמולה', 'סלסה', 'פול', 'מסבחה', 'משעוות', 
-    'סביח', 'פיתות', 'לאפה', 'באגט', 'לחמניות', 'עוגות', 'עוגיות', 'בורקס', 'רוגלך', 'קוראסון', 
-    'ופלים', 'במבה', 'ביסלי', 'סוכריות', 'מסטיקים', 'קריאטין', 'אקסל', 'מונסטר', 'שופס'
-  ],
-  'מתנה': [
-    'שרשרת', 'צמיד', 'טבעת', 'עגילים', 'בושם', 'פרחים', 'טיפוח', 'נר', 'תכשיט', 'שעון', 
-    'תיק', 'ארנק', 'משקפיים', 'איפור', 'צלליות', 'שפתון', 'קרם', 'עיסוי', 'חלוק', 'פיג׳מה', 
-    'נעליים', 'ספא', 'מלון', 'ארוחה', 'מסעדה', 'זר', 'בלונים', 'שוקולד', 'יין', 'כוס', 
-    'מחברת', 'עט', 'תה', 'מנורה', 'כרית', 'ריח'
-  ],
-  'בילויים': [
-    'בר', 'פאב', 'מועדון', 'מסיבה', 'סטנדאפ', 'קולנוע', 'קריוקי', 'תיאטרון', 'בריחה', 'באולינג', 
-    'קארטינג', 'ארקייד', 'פיינטבול', 'לייזר', 'מופע', 'רוק', 'פסטיבל', 'בריכה', 'טרקטורונים', 'סוסים', 
-    'קיאקים', 'פוקר', 'לונפארק', 'סופרלנד', 'אירי', 'יין', 'ג׳אז', 'טריוויה', 'חידון', 'סיור', 
-    'מוזיאון', 'תערוכה', 'פנטזיה', 'מציאות'
-  ],
-  'שופינג': [
-    'חולצת', 'ג׳ינס', 'ספורט', 'תיק', 'תכשיט', 'שעון', 'משקפיים', 'מעיל', 'פולו', 'מכנסיים', 
-    'גרביים', 'תחתונים', 'חגורה', 'ארנק', 'כובע', 'צעיף', 'כפפות', 'סנדלים', 'כפכפי', 'מזוודת', 
-    'רחצה', 'מטריה', 'שמלת', 'חצאית', 'ג׳קט', 'סווטשירט', 'קפוצ׳ון', 'גופיית', 'טייץ', 'חזייה', 
-    'בגדי', 'קריאה', 'נשיאה', 'כרטיסים', 'נרתיק', 'מחזיק', 'סיכת'
-  ],
-  'תחבורה': [
-    'רבקו', 'תדלוק', 'חניה', 'מונית', 'רכבת', 'קורקינט', 'ליסינג', 'אופניים', 'אוטובוס', 'קלה', 
-    'שירות', 'כביש', 'פנגו', 'סלופארק', 'שטיפה', 'טסטים', 'בדיקת', 'פנצ׳ר', 'מצבר', 'שמן', 
-    'נוזל', 'מגבי', 'מטען', 'מתקן', 'שלט', 'מנוי', 'ביטוח', 'מקיף', 'השכרת', 'הסעה', 'סולר'
-  ],
-  'תקשורת': [
-    'סלולר', 'ספוטיפיי', 'נטפליקס', 'אייקלוד', 'סיבים', 'יוטיוב', 'דרייב', 'דיסני', 'אפל', 'אמזון', 
-    'פלייסטיישן', 'אקסבוקס', 'אופיס', 'אנטיבירוס', 'אחסון', 'VPN', 'קו', 'גלישה', 'טינדר', 'כושר', 
-    'פודקאסטים', 'אפליקציה', 'שדרוג', 'הודעות', 'תמיכה', 'דומיין', 'שרת', 'רישיון', 'מערכת', 'עיתון'
-  ],
-  'טלוויזיה': [
-    'ממיר', 'הוט', 'פרטנר', 'סלקום', 'סטינג', 'נקסט', 'אפל', 'אמזון', 'יוטיוב', 'הזרמת', 
-    'ספורט', 'סרטים', 'VOD', 'השכרת', 'ילדים', 'דוקו', 'ביוטי', 'חדשות', 'היסטוריה', 'חכמה'
-  ],
-  'דיור': [
-    'שכירות', 'משכנתא', 'חשמל', 'מים', 'ארנונה', 'אינטרנט', 'גז', 'ועד', 'שיפוץ', 'רהיטים', 
-    'אינסטלציה', 'מנעול', 'הדברה', 'ניקיון', 'מזגן', 'הובלה', 'מנורה', 'וילונות', 'שטיח', 'צבע', 
-    'רולר', 'מסמרים', 'מקלחת', 'דוד', 'קולט', 'ממטרות', 'עציצים', 'אדמת', 'שולחן', 'כיסא', 
-    'מיטה', 'מזרן', 'ארון', 'שידת', 'מתלה'
-  ],
-  'טיפוח': [
-    'תספורת', 'עיצוב', 'ציפורניים', 'גבות', 'היגיינה', 'קיצוץ', 'שפם', 'צבע', 'החלקת', 'טיפול', 
-    'שעווה', 'לק', 'בניית', 'פדיקור', 'מניקור', 'איפור', 'מסאז׳', 'פילינג', 'בושם', 'דאודורנט', 
-    'שמפו', 'מסכה', 'סרום', 'קרם', 'ספוגית', 'מספריים', 'פינצטה', 'מכונת', 'מייבש', 'מחלק'
-  ],
-  'ציוד': [
-    'תרמי', 'טקטי', 'פקלקפה', 'כלים', 'תיקים', 'אולר', 'פנס', 'שקש', 'אוהל', 'וסט', 
-    'הרים', 'גרבי', 'מעיל', 'בקבוק', 'ראש', 'מבער', 'עזרה', 'משקפת', 'חבל', 'שק', 
-    'מזרן', 'גזייה', 'מימייה', 'סכין', 'מצפן', 'שקיות', 'מקלות', 'פאוץ׳', 'רשת', 'הסוואה'
-  ],
-  'בריאות': [
-    'תרופות', 'רופא', 'שיניים', 'מדרסים', 'ויטמינים', 'פיזיותרפיה', 'עיניים', 'משקפיים', 'עדשות', 'תמיסת', 
-    'דם', 'רנטגן', 'אולטרסאונד', 'ייעוץ', 'חבישת', 'פלסטרים', 'אלכוהול', 'משחה', 'טיפות', 'כדורי', 
-    'סירופ', 'מד', 'משאפת', 'קביים', 'חיטוי', 'מגנזיום', 'אומגה', 'חומצה', 'סידן', 'ברזל'
-  ],
-  'לימודים': [
-    'מכללה', 'קורס', 'ספר', 'הדפסה', 'מחברת', 'עט', 'פסיכומטרי', 'אנגלית', 'תואר', 'שכר', 
-    'רישום', 'הכנה', 'אקדמי', 'ספירלה', 'עטים', 'עפרונות', 'מחק', 'מרקר', 'קלסר', 'דפי', 
-    'מחשבון', 'גיאומטריה', 'ספריה', 'פרויקט', 'כריכת', 'שיעור', 'מורה', 'תכנות', 'פלטפורמת'
-  ],
-  'משפחה': [
-    'גן', 'צהרון', 'חוג', 'שמרטף', 'מתנות', 'טיטולים', 'מגבונים', 'תמ״ל', 'בקבוק', 'מוצץ', 
-    'בגדי', 'עגלת', 'כיסא', 'מיטת', 'מזרן', 'צעצוע', 'ספר', 'משחק', 'ספורט', 'פסנתר', 
-    'שחייה', 'קופסת', 'תלבושת', 'קלמר', 'פנדה', 'פלסטלינה', 'מספריים', 'דבק'
-  ],
-  'חיות': [
-    'וטרינר', 'פנסון', 'חול', 'קולר', 'רצועה', 'משחק', 'עצם', 'חתול', 'כלב', 'מזון', 
-    'דנטלי', 'קערת', 'מזרן', 'כלוב', 'מתקן', 'עכבר', 'תילוע', 'אמפולה', 'קרציות', 'שמפו'
-  ],
-  'חופש': [
-    'טיסה', 'מלון', 'אטרקציית', 'זר', 'צימר', 'מחנה', 'השכרת', 'ביטוח', 'פארק', 'סיור', 
-    'מוזיאונים', 'מפה', 'מזכרת', 'סים', 'ממיר', 'שק', 'כרית', 'אטמי', 'כיסוי', 'תיק', 'מנעול'
-  ],
-  'חיסכון': [
-    'פנסיה', 'השקעות', 'חירום', 'כללי', 'קריפטו', 'מניות', 'מדדים', 'קרן', 'קופת', 'תוכנית', 
-    'ביטקוין', 'אתריום', 'נאמנות', 'תיק', 'הפקדה', 'נדל״ן', 'הלוואה', 'אג״ח', 'זהב', 'מזומן'
-  ],
-  'ספורט': [
-    'מכון', 'מאמן', 'קרוספיט', 'כדורגל', 'כדורסל', 'ריצה', 'יוגה', 'פילאטיס', 'חלבון', 'שיעור', 
-    'נעלי', 'שעון', 'רצועת', 'שייקר', 'איזולייט', 'אמינו', 'חגורות', 'רצועות', 'גלגל', 'מזרן'
-  ],
-  'עסקים': [
-    'משרד', 'רואה', 'עורך', 'פרסום', 'מותג', 'אתר', 'לוגו', 'תוכנה', 'שכירות', 'שכר', 
-    'ייעוץ', 'קמפיין', 'קידום', 'עיצוב', 'פיתוח', 'חבילת', 'הדפסת', 'ציוד', 'דיו', 'כיסא'
-  ],
-  'רכב': [
-    'טעינה', 'מוסך', 'פנצריה', 'אגרה', 'חלפים', 'מצבר', 'מגבים', 'שמן', 'טיפול', 'רפידות', 
-    'צמיגים', 'תיקון', 'צביעת', 'החלת', 'חגורת', 'בדיקת', 'פילטר', 'ניקוי', 'נוזל', 'מערכת'
-  ],
-  'הימורים': [
-    'לוטו', 'טוטו', 'גירוד', 'פוקר', 'קזינו', 'הימור', 'הגרלה', 'ווינר', 'חישגד', 'טופס', 
-    'השתתפות', 'משחק', 'רולטה', 'ז׳יטונים', 'כרטיס', 'טורניר'
-  ],
-  'אירועים': [
-    'חופה', 'ברית', 'יוםולדת', 'חינה', 'גן', 'דיג׳יי', 'צילום', 'מגנטים', 'עיצוב', 'שמלת', 
-    'חליפת', 'טבעות', 'הזמנות', 'רב', 'הסעות', 'בר', 'זיקוקי', 'עוגת', 'מתנות'
-  ],
-  'אמנות': [
-    'ציור', 'פיסול', 'קנבס', 'צבעים', 'מכחול', 'חימר', 'רישום', 'סקיצה', 'אקריליק', 'שמן', 
-    'מים', 'סט', 'שפכטל', 'בלוק', 'עפרונות', 'פולימרי', 'אובניים', 'כן', 'פלטה', 'ספר'
-  ],
-  'מוסיקה': [
-    'גיטרה', 'פסנתר', 'תופים', 'מיקרופון', 'מגבר', 'מיתרים', 'קלידים', 'אקוסטית', 'חשמלית', 'מפרט', 
-    'כבל', 'מעמד', 'תווים', 'מטרונום', 'מפוחית', 'יוקליל', 'דרבוקה', 'תוף', 'אוזניות'
-  ],
-  'צילום': [
-    'מצלמה', 'עדשה', 'חצובה', 'תאורה', 'פלאש', 'כרטיס', 'רחפן', 'DSLR', 'פריים', 'זום', 
-    'מתכתית', 'מנורת', 'חיצוני', '128GB', 'תיק', 'סוללה', 'שלט', 'CPL', 'ניקוי', 'גימבל'
-  ],
-  'גינון': [
-    'אדמה', 'שתיל', 'עציץ', 'דשן', 'צינור', 'מזמרה', 'מכסחת', 'עונתיים', 'פלסטיק', 'חרס', 
-    'אורגני', 'גמיש', 'אקדח', 'גיזום', 'חשמלית', 'מפוח', 'מעדר', 'את', 'כפפות', 'מחבר'
-  ],
-  'תיקונים': [
-    'בורג', 'אום', 'דיבל', 'דבק', 'סיליקון', 'מטר', 'פלס', 'פלסטיים', 'אומים', 'סופר', 
-    'אפוקסי', 'שפופרת', 'אקדח', 'מדידה', 'מגנטי', 'מפתחות', 'מפתח', 'מברג', 'טסטר', 'איזולירבנד'
-  ]
-};
 
 const tipsList = [
   "רוצה לקנות משהו יקר? חכה 48 שעות לפני שאתה מוציא את האשראי. לרוב, הדחף הרגעי עובר.",
@@ -1184,10 +1054,26 @@ const exchangeRates = {
 let state = {
   handle: '', userName: '', baseline: null, financialDay: 1, savingsGoal: 1500, mainGoal: 'peace',
   currency: '₪', language: 'he', onboardingCompleted: false,
-  recurringItems: [], expenseCats: [], incomeCats: [{name:'משכורת', color:'#7FE8C6', budget:0}], transactions: [],
+  recurringItems: [], 
+  expenseCats: [
+    { name: 'אוכל', color: '#7FE8C6', budget: 0, custom: false },
+    { name: 'בילויים', color: '#FF8D82', budget: 0, custom: false },
+    { name: 'שופינג', color: '#8FB8FF', budget: 0, custom: false },
+    { name: 'תחבורה', color: '#C7A6FF', budget: 0, custom: false },
+    { name: 'דיור', color: '#FFC85C', budget: 0, custom: false },
+    { name: 'טיפוח', color: '#FF9FD1', budget: 0, custom: false },
+    { name: 'בריאות', color: '#34D399', budget: 0, custom: false },
+    { name: 'ספורט', color: '#38BDF8', budget: 0, custom: false },
+    { name: 'לימודים', color: '#F472B6', budget: 0, custom: false },
+    { name: 'חיסכון', color: '#A78BFA', budget: 0, custom: false },
+    { name: 'שונות', color: '#94A3B8', budget: 0, custom: false }
+  ], 
+  incomeCats: [{name:'משכורת', color:'#7FE8C6', budget:0}], 
+  transactions: [],
   goalBuckets: [], 
   isTravelMode: false,
-  travelBudget: 5000
+  travelBudget: 5000,
+  learnedKeywords: {} // { "פלאפל": "אוכל", "סופר": "אוכל", "פנגו": "תחבורה" }
 };
 
 const availableColors = ['#FF8D82', '#FF9F43', '#FFC85C', '#7FE8C6', '#8FB8FF', '#C7A6FF', '#FF9FD1', '#34D399', '#38BDF8', '#E11D48'];
@@ -1198,7 +1084,7 @@ function getLocalDateString(d) {
 
 function persist() {
   sortTransactions();
-  localStorage.setItem('pulse_state_v64', JSON.stringify(state));
+  localStorage.setItem('pulse_state_v65', JSON.stringify(state));
   saveDataToSupabase(state);
 }
 
@@ -1215,7 +1101,7 @@ async function factoryReset() {
     if (supabaseClient && state.handle) {
       try { await supabaseClient.from('app_data').delete().eq('id', state.handle); } catch(e) {}
     }
-    localStorage.removeItem('pulse_state_v64');
+    localStorage.removeItem('pulse_state_v65');
     location.reload();
   }
 }
@@ -1497,33 +1383,39 @@ window.onload = async function() {
     if(splash) { splash.style.opacity = '0'; setTimeout(() => splash.remove(), 700); }
   }, 3500);
 
-  let saved = localStorage.getItem('pulse_state_v64');
+  let saved = localStorage.getItem('pulse_state_v65');
   if(saved) {
-    try { state = JSON.parse(saved); } catch(e) { localStorage.removeItem('pulse_state_v64'); }
+    try { state = JSON.parse(saved); } catch(e) { localStorage.removeItem('pulse_state_v65'); }
   }
 
   if (state.handle && supabaseClient) {
     try {
       const cloudData = await loadDataFromSupabase();
-      if (cloudData && cloudData.userName) { state = cloudData; localStorage.setItem('pulse_state_v64', JSON.stringify(state)); }
+      if (cloudData && cloudData.userName) { state = cloudData; localStorage.setItem('pulse_state_v65', JSON.stringify(state)); }
     } catch(e) {}
   }
 
   if(!state.expenseCats || state.expenseCats.length === 0) {
-    const keys = Object.keys(masterCategoriesMap);
-    state.expenseCats = keys.map((catName, idx) => ({
-      name: catName, color: availableColors[idx % availableColors.length], budget: 0, custom: false
-    }));
+    state.expenseCats = [
+      { name: 'אוכל', color: '#7FE8C6', budget: 0, custom: false },
+      { name: 'בילויים', color: '#FF8D82', budget: 0, custom: false },
+      { name: 'שופינג', color: '#8FB8FF', budget: 0, custom: false },
+      { name: 'תחבורה', color: '#C7A6FF', budget: 0, custom: false },
+      { name: 'דיור', color: '#FFC85C', budget: 0, custom: false },
+      { name: 'טיפוח', color: '#FF9FD1', budget: 0, custom: false },
+      { name: 'בריאות', color: '#34D399', budget: 0, custom: false },
+      { name: 'ספורט', color: '#38BDF8', budget: 0, custom: false },
+      { name: 'לימודים', color: '#F472B6', budget: 0, custom: false },
+      { name: 'חיסכון', color: '#A78BFA', budget: 0, custom: false },
+      { name: 'שונות', color: '#94A3B8', budget: 0, custom: false }
+    ];
   }
-  
-  Object.keys(masterCategoriesMap).forEach(key => {
-    if(!state.expenseCats.find(c => c.name === key)) {
-      state.expenseCats.push({ name: key, color: availableColors[state.expenseCats.length % availableColors.length], budget: 0, custom: false });
-    }
-  });
 
   if(!state.incomeCats) {
     state.incomeCats = [{ name: 'משכורת', color: '#7FE8C6', budget: 0, custom: false }];
+  }
+  if(!state.learnedKeywords) {
+    state.learnedKeywords = {};
   }
 
   sortTransactions();
@@ -1603,11 +1495,6 @@ async function startCinematicBuild() {
   }
   document.getElementById('onboarding-step-6').classList.remove('hidden');
   
-  const keys = Object.keys(masterCategoriesMap);
-  state.expenseCats = keys.map((catName, idx) => ({
-    name: catName, color: availableColors[idx % availableColors.length], budget: 0, custom: false
-  }));
-
   persist();
   await new Promise(r => setTimeout(r, 3000));
   document.getElementById('onboarding-step-6').classList.add('hidden');
@@ -1815,15 +1702,15 @@ function renderHome(){
       state.transactions.forEach(t => { if(t.type === 'expense' && t.isTravel) travelSpent += t.amount; });
       if(travelCardSubtitle) travelCardSubtitle.textContent = `הוצאות בטיול: ${fmt(travelSpent)} / תקציב: ${fmt(state.travelBudget || 5000)}`;
       
-      if(micStatus) micStatus.textContent = 'למשל: "50 דולר במסעדה ב-18.8"';
-      if(smartInput) smartInput.placeholder = 'הכתבה... (למשל: 50 דולר במסעדה ב-18.8)';
-      if(voiceExampleBox) voiceExampleBox.textContent = '"שילמתי 50 דולר במסעדה ב-18.8"';
+      if(micStatus) micStatus.textContent = 'למשל: "50 דולר מסעדה ב-18.8"';
+      if(smartInput) smartInput.placeholder = 'הכתבה... (למשל: 50 דולר מסעדה ב-18.8)';
+      if(voiceExampleBox) voiceExampleBox.textContent = '"שילמתי 50 דולר מסעדה ב-18.8"';
   } else {
       if(travelControlCard) travelControlCard.classList.add('hidden');
       
-      if(micStatus) micStatus.textContent = 'למשל: "50 שקל במסעדה ב-18.8"';
-      if(smartInput) smartInput.placeholder = 'הכתבה... (למשל: 50 שקל במסעדה ב-18.8)';
-      if(voiceExampleBox) voiceExampleBox.textContent = '"שילמתי 50 שקל במסעדה ב-18.8"';
+      if(micStatus) micStatus.textContent = 'למשל: "50 שקל פלאפל ב-18.8"';
+      if(smartInput) smartInput.placeholder = 'הכתבה... (למשל: 50 שקל פלאפל ב-18.8)';
+      if(voiceExampleBox) voiceExampleBox.textContent = '"שילמתי 50 שקל פלאפל ב-18.8"';
   }
 }
 
@@ -2044,15 +1931,28 @@ function renderTableScreen() {
   let renderedCount = 0;
 
   state.expenseCats.forEach(cat => {
-    const subCats = masterCategoriesMap[cat.name] || ['כללי'];
+    // Gather subcategories for this main category from learned keywords and transactions
+    const subsSet = new Set(['כללי']);
+    if (state.learnedKeywords) {
+      Object.entries(state.learnedKeywords).forEach(([kw, cName]) => {
+        if (cName === cat.name) subsSet.add(kw);
+      });
+    }
+    state.transactions.forEach(t => {
+      if (t.type === 'expense' && t.cat === cat.name && isWithinFinancialMonth(t.date, offset)) {
+        if (t.subCat) subsSet.add(t.subCat);
+      }
+    });
+
+    const subCats = Array.from(subsSet);
     const subCatTotals = {};
     subCats.forEach(s => subCatTotals[s] = 0);
     let catTotal = 0;
 
     state.transactions.forEach(t => {
       if(t.type === 'expense' && t.cat === cat.name && isWithinFinancialMonth(t.date, offset)) {
-        const sub = t.subCat && subCats.includes(t.subCat) ? t.subCat : subCats[0];
-        subCatTotals[sub] += t.amount;
+        const sub = t.subCat && subCats.includes(t.subCat) ? t.subCat : 'כללי';
+        subCatTotals[sub] = (subCatTotals[sub] || 0) + t.amount;
         catTotal += t.amount;
         totalMonthExpense += t.amount;
       }
@@ -2061,8 +1961,8 @@ function renderTableScreen() {
     const recs = getRecurringItemsForCurrentMonth(offset);
     recs.forEach(r => {
       if(r.type === 'expense' && r.cat === cat.name) {
-        const sub = subCats[0];
-        subCatTotals[sub] += r.amount;
+        const sub = 'כללי';
+        subCatTotals[sub] = (subCatTotals[sub] || 0) + r.amount;
         catTotal += r.amount;
         totalMonthExpense += r.amount;
       }
@@ -2182,7 +2082,6 @@ function cleanSubCategoryText(rawText) {
     .trim() || rawText.trim();
 }
 
-// ---- SMART DATE PARSING (First step) ----
 function parseDateFromText(text) {
   const now = new Date();
   let targetDate = new Date(now);
@@ -2216,7 +2115,6 @@ function parseDateFromText(text) {
 function processVoiceCommandDirectly(text){
   let cleanText = text.trim();
 
-  // 1. FIRST: Extract and clean date
   const parsedDate = parseDateFromText(cleanText);
   cleanText = cleanText
     .replace(/(\d{1,2})[\./](\d{1,2})(?:[\./](\d{2,4}))?/g, '')
@@ -2224,7 +2122,6 @@ function processVoiceCommandDirectly(text){
     .replace(/(אתמול|שלשום|היום)/g, '')
     .trim();
 
-  // 2. SECOND: Extract amount and currency
   let rawAmount = 0;
   let currencyMultiplier = 1;
   let currencyLabel = '₪';
@@ -2254,47 +2151,38 @@ function processVoiceCommandDirectly(text){
   let matchedCat = null;
   let matchedSub = null;
 
-  // Split into exact words for strict matching
-  const textWords = cleanText.split(/\s+/).map(w => w.trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"']/g,"")).filter(Boolean);
-
-  // 3. THIRD: Strict Word-Level Category Matching Only
-  if (isIncome) {
-    for (let c of state.incomeCats) {
-      if (textWords.includes(c.name)) { matchedCat = c.name; matchedSub = c.name; break; }
-    }
-    if (!matchedCat) matchedCat = state.incomeCats[0].name;
-  } else {
-    // Check exact word match against predefined subcategories
-    for (let catName of Object.keys(masterCategoriesMap)) {
-      const subs = masterCategoriesMap[catName];
-      for (let sub of subs) {
-        const cleanSub = sub.trim();
-        const isMatch = cleanSub.includes(' ') ? cleanText.includes(cleanSub) : textWords.includes(cleanSub);
-        if (isMatch && cleanSub.length > 1) {
-          matchedCat = catName;
-          matchedSub = cleanSub;
-          break;
-        }
-      }
-      if (matchedCat) break;
-    }
-
-    // Check exact word match against main category names
-    if (!matchedCat) {
-      for (let cat of state.expenseCats) {
-        if (textWords.includes(cat.name)) {
-          matchedCat = cat.name;
-          matchedSub = 'כללי';
-          break;
-        }
+  // Check learned keywords first!
+  const cleanedKeywordQuery = cleanSubCategoryText(cleanText);
+  if (!isIncome && state.learnedKeywords) {
+    for (let [kw, mainCat] of Object.entries(state.learnedKeywords)) {
+      if (cleanedKeywordQuery.includes(kw) || cleanText.includes(kw)) {
+        matchedCat = mainCat;
+        matchedSub = kw;
+        break;
       }
     }
   }
 
-  // 4. FOURTH: Fallback if category was not recognized strictly -> Opens manual selection window
+  // Check main category direct match if not found via learned keywords
+  if (!matchedCat && !isIncome) {
+    for (let cat of state.expenseCats) {
+      if (cleanText.includes(cat.name)) {
+        matchedCat = cat.name;
+        matchedSub = cleanedKeywordQuery || 'כללי';
+        break;
+      }
+    }
+  }
+
+  if (isIncome) {
+    matchedCat = state.incomeCats[0].name;
+    matchedSub = cleanedKeywordQuery || 'משכורת';
+  }
+
+  // If still not matched, trigger the smart learning modal
   if (!matchedCat || (!isIncome && !state.expenseCats.find(c => c.name === matchedCat))) {
     populateVoiceCategorySelect();
-    const cleanSub = cleanSubCategoryText(cleanText);
+    const cleanSub = cleanedKeywordQuery;
     pendingSmartTx = { 
       type: isIncome ? 'income' : 'expense', 
       amount: convertedAmount, 
@@ -2306,7 +2194,7 @@ function processVoiceCommandDirectly(text){
       isTravel: state.isTravelMode && !isIncome 
     };
     document.getElementById('voiceSubCatInput').value = cleanSub || '';
-    document.getElementById('voiceParsedInfo').innerHTML = `סכום שזוהה: <span class="text-emerald-400 font-bold">${fmt(convertedAmount)}</span>${originalStr ? ` (${originalStr})` : ''} | תאריך: <span class="text-blue-400 font-bold">${parsedDate}</span>`;
+    document.getElementById('voiceParsedInfo').innerHTML = `סכום: <span class="text-emerald-400 font-bold">${fmt(convertedAmount)}</span>${originalStr ? ` (${originalStr})` : ''} | תאריך: <span class="text-blue-400 font-bold">${parsedDate}</span>`;
     document.getElementById('voiceDescModal').classList.remove('hidden');
   } else {
     const type = isIncome ? 'income' : 'expense';
@@ -2331,22 +2219,6 @@ function populateVoiceCategorySelect() {
   });
 }
 
-function addNewCatQuickly() {
-  const quickInput = document.getElementById('newCatQuickInput');
-  const catName = quickInput.value.trim();
-  if(!catName) { alert("נא להזין שם קטגוריה."); return; }
-  if(state.expenseCats.find(c => c.name === catName)) { alert("קטגוריה קיימת."); return; }
-
-  const color = availableColors[state.expenseCats.length % availableColors.length];
-  state.expenseCats.push({ name: catName, color, budget: 0, custom: true });
-  if(!masterCategoriesMap[catName]) masterCategoriesMap[catName] = ['כללי'];
-  persist();
-  populateVoiceCategorySelect();
-  document.getElementById('selectMainCategory').value = catName;
-  quickInput.value = '';
-  showToast(`קטגוריה "${catName}" נוספה!`);
-}
-
 function confirmVoiceTransaction() {
   if(!pendingSmartTx) return;
   const chosenMainCat = document.getElementById('selectMainCategory').value;
@@ -2357,15 +2229,17 @@ function confirmVoiceTransaction() {
   pendingSmartTx.subCat = subCatVal;
   pendingSmartTx.color = catObj.color;
 
-  if (!masterCategoriesMap[chosenMainCat]) masterCategoriesMap[chosenMainCat] = [];
-  if (!masterCategoriesMap[chosenMainCat].includes(subCatVal)) masterCategoriesMap[chosenMainCat].push(subCatVal);
+  // Save to learned keywords for future auto-detection!
+  if (!state.learnedKeywords) state.learnedKeywords = {};
+  state.learnedKeywords[subCatVal] = chosenMainCat;
 
   state.transactions.push({ id: Date.now(), ...pendingSmartTx });
   persist();
   renderHome(); renderAnalytics();
   document.getElementById('voiceDescModal').classList.add('hidden');
+  const savedAmt = pendingSmartTx.amount;
   pendingSmartTx = null; resetVoiceUI();
-  showToast(`✅ נשמר בהצלחה: ${fmt(pendingSmartTx.amount)} (${chosenMainCat})`);
+  showToast(`✅ נלמד ונשמר בהצלחה: ${fmt(savedAmt)} (${chosenMainCat})`);
 }
 
 function cancelVoiceTransaction() {
@@ -2384,11 +2258,11 @@ function switchCategoryTab(tab) {
   if(tab === 'expense') {
     expBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold bg-emerald-500/20 text-emerald-400 transition';
     incBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold text-slate-400 transition';
-    label.textContent = 'הוספת קטגוריית הוצאה חדשה:';
+    label.textContent = 'הוספת קטגוריית הוצאה ראשית חדשה:';
   } else {
     incBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold bg-emerald-500/20 text-emerald-400 transition';
     expBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold text-slate-400 transition';
-    label.textContent = 'הוספת קטגוריית הכנסה חדשה:';
+    label.textContent = 'הוספת קטגוריית הכנסה ראשית חדשה:';
   }
   renderModalCategoryList();
 }
@@ -2403,8 +2277,15 @@ function renderModalCategoryList() {
   
   const list = currentCategoryTab === 'expense' ? state.expenseCats : state.incomeCats;
 
-  list.forEach((c, idx) => {
-    const subs = currentCategoryTab === 'expense' ? (masterCategoriesMap[c.name] || []) : [c.name];
+  list.forEach((c) => {
+    // Find learned keywords associated with this category
+    const learnedWordsForCat = [];
+    if (currentCategoryTab === 'expense' && state.learnedKeywords) {
+      Object.entries(state.learnedKeywords).forEach(([kw, mainCat]) => {
+        if (mainCat === c.name) learnedWordsForCat.push(kw);
+      });
+    }
+
     const itemWrap = document.createElement('div');
     itemWrap.className = 'rounded-lg border bg-[var(--card-2)] border-[var(--border)] overflow-hidden';
     
@@ -2419,7 +2300,7 @@ function renderModalCategoryList() {
       </div>
       <div class="flex items-center gap-2" onclick="event.stopPropagation()">
         ${deleteMainBtn}
-        <span class="text-[9px] text-slate-400">(${subs.length} תתי-קטגוריות)</span>
+        <span class="text-[9px] text-slate-400">(${learnedWordsForCat.length} מילים נלמדו)</span>
         <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform cursor-pointer" onclick="toggleSubcatView(this)"></i>
       </div>
     `;
@@ -2427,23 +2308,15 @@ function renderModalCategoryList() {
     const subContainer = document.createElement('div');
     subContainer.className = 'hidden px-3 py-2 border-t border-[var(--border)] space-y-1 bg-[var(--bg)] max-h-[120px] overflow-y-auto subcat-dropdown';
     
-    subs.forEach(sub => {
-      const subItem = document.createElement('div');
-      subItem.className = 'text-[10px] text-slate-300 flex items-center justify-between py-0.5';
-      const isCustomSub = currentCategoryTab === 'expense' && !masterCategoriesMap[c.name]?.includes(sub);
-      const deleteSub = isCustomSub ? `<button onclick="deleteSubCategory('${c.name}', '${sub}')" class="text-rose-400 text-[9px] cursor-pointer" title="מחק תת קטגוריה"><i class="fa-solid fa-xmark"></i></button>` : '';
-      subItem.innerHTML = `<span class="flex items-center gap-1.5"><i class="fa-solid fa-angle-left text-[8px] text-emerald-400"></i> ${sub}</span> ${deleteSub}`;
-      subContainer.appendChild(subItem);
-    });
-
-    if(currentCategoryTab === 'expense') {
-      const addSubRow = document.createElement('div');
-      addSubRow.className = 'pt-1.5 flex gap-1';
-      addSubRow.innerHTML = `
-        <input type="text" id="subInput_${idx}" placeholder="הוסף תת קטגוריה..." class="field-shell px-2 py-1 text-[10px] w-full outline-none font-bold" style="color:var(--text)" />
-        <button onclick="addSubCategoryToCat('${c.name}', 'subInput_${idx}')" class="px-2 py-1 bg-emerald-500/20 text-emerald-300 rounded text-[10px] font-bold cursor-pointer">הוסף</button>
-      `;
-      subContainer.appendChild(addSubRow);
+    if (learnedWordsForCat.length === 0) {
+      subContainer.innerHTML = '<p class="text-[10px] text-slate-500 text-center py-1">עדיין לא נלמדו מילים לקטגוריה זו</p>';
+    } else {
+      learnedWordsForCat.forEach(kw => {
+        const subItem = document.createElement('div');
+        subItem.className = 'text-[10px] text-slate-300 flex items-center justify-between py-0.5';
+        subItem.innerHTML = `<span class="flex items-center gap-1.5"><i class="fa-solid fa-angle-left text-[8px] text-emerald-400"></i> ${kw}</span> <button onclick="deleteLearnedKeyword('${kw}')" class="text-rose-400 text-[9px] cursor-pointer hover:text-rose-300" title="מחק מילה"><i class="fa-solid fa-xmark"></i></button>`;
+        subContainer.appendChild(subItem);
+      });
     }
 
     header.onclick = () => {
@@ -2467,7 +2340,11 @@ function deleteMainCategory(name, type) {
   if(confirm(`האם אתה בטוח שברצונך למחוק את הקטגוריה "${name}"?`)) {
     if(type === 'expense') {
       state.expenseCats = state.expenseCats.filter(c => c.name !== name);
-      delete masterCategoriesMap[name];
+      if(state.learnedKeywords) {
+        Object.keys(state.learnedKeywords).forEach(kw => {
+          if(state.learnedKeywords[kw] === name) delete state.learnedKeywords[kw];
+        });
+      }
     } else {
       state.incomeCats = state.incomeCats.filter(c => c.name !== name);
     }
@@ -2477,24 +2354,13 @@ function deleteMainCategory(name, type) {
   }
 }
 
-function deleteSubCategory(catName, subName) {
-  if(masterCategoriesMap[catName]) {
-    masterCategoriesMap[catName] = masterCategoriesMap[catName].filter(s => s !== subName);
+function deleteLearnedKeyword(kw) {
+  if(state.learnedKeywords && state.learnedKeywords[kw]) {
+    delete state.learnedKeywords[kw];
     persist();
     renderModalCategoryList();
-    showToast("תת-הקטגוריה נמחקה");
+    showToast(`התג "${kw}`} נמחק מהזיכרון`);
   }
-}
-
-function addSubCategoryToCat(catName, inputId) {
-  const val = document.getElementById(inputId).value.trim();
-  if(!val) return;
-  if(!masterCategoriesMap[catName]) masterCategoriesMap[catName] = [];
-  if(masterCategoriesMap[catName].includes(val)) { alert("תת קטגוריה קיימת"); return; }
-  masterCategoriesMap[catName].push(val);
-  persist();
-  renderModalCategoryList();
-  showToast("תת-הקטגוריה נוספה!");
 }
 
 function addNewCustomCategory() {
@@ -2505,7 +2371,6 @@ function addNewCustomCategory() {
     if(state.expenseCats.find(c => c.name === catName)) { alert("קטגוריה קיימת."); return; }
     const color = availableColors[state.expenseCats.length % availableColors.length];
     state.expenseCats.push({ name: catName, color, budget: 0, custom: true });
-    if(!masterCategoriesMap[catName]) masterCategoriesMap[catName] = ['כללי'];
   } else {
     if(state.incomeCats.find(c => c.name === catName)) { alert("קטגוריה קיימת."); return; }
     const color = availableColors[state.incomeCats.length % availableColors.length];
@@ -2515,7 +2380,7 @@ function addNewCustomCategory() {
   persist();
   renderModalCategoryList();
   document.getElementById('newCatInput').value = '';
-  showToast("קטגוריה נוספה בהצלחה!");
+  showToast("קטגוריה ראשית נוספה בהצלחה!");
 }
 
 function promptSavingsGoal() {

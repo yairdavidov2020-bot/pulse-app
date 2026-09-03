@@ -1265,7 +1265,7 @@ function toggleSystemSettingsContent() {
 }
 let systemSettingsOpen = false;
 
-// ---- SYSTEM NOTIFICATIONS SCHEDULER (12:00 & 20:00) ----
+// ---- SYSTEM NOTIFICATIONS & DAILY TIP SCHEDULER ----
 function initSystemNotifications() {
   try {
     if ("Notification" in window) {
@@ -1280,6 +1280,9 @@ function initSystemNotifications() {
       const minutes = now.getMinutes();
       const todayStr = getLocalDateString(now);
       const userName = state.userName || 'דוידי';
+
+      // Updates tip dynamically if 12:00 PM hits while app is open
+      loadDailyTip();
 
       // 12:00 - Daily Tip Notification
       if (hours === 12 && minutes === 0) {
@@ -1774,11 +1777,17 @@ async function startCinematicBuild() {
 function loadDailyTip() {
   try {
     const now = new Date();
-    const start = new Date(now.getFullYear(), 0, 0);
-    const diff = (now - start) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
-    const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+    // Shift tip day cycle so it changes precisely at 12:00 PM
+    let tipDate = new Date(now);
+    if (now.getHours() < 12) {
+      tipDate.setDate(tipDate.getDate() - 1);
+    }
+    const start = new Date(tipDate.getFullYear(), 0, 0);
+    const diff = (tipDate - start) + ((start.getTimezoneOffset() - tipDate.getTimezoneOffset()) * 60 * 1000);
+    const dayIndex = Math.floor(diff / (1000 * 60 * 60 * 24));
+    
     const tipEl = document.getElementById('dailyTipText');
-    if(tipEl) tipEl.textContent = tipsList[dayOfYear % tipsList.length];
+    if(tipEl) tipEl.textContent = tipsList[dayIndex % tipsList.length];
   } catch(e) {}
 }
 

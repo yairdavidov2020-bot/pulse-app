@@ -216,7 +216,7 @@
             <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500/20 to-blue-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-400 text-2xl shadow-xl">
                 <i class="fa-solid fa-wallet"></i>
             </div>
-            <h3 class="text-base font-black gradient-text">תזכורת הוצאות יומית</h3>
+            <h3 class="text-base font-black gradient-text">תזכורת הוצאות יומיות</h3>
             <p id="reminderModalText" class="text-xs text-slate-300 leading-relaxed">אל תשכח להוסיף את ההוצאות שלך להיום 💡</p>
         </div>
         <button onclick="closeReminderModal()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs shadow-lg cursor-pointer relative z-10">הבנתי, יאללה מעדכן!</button>
@@ -1061,6 +1061,21 @@
 </div>
 
 <script>
+// --- REGISTER INLINE SERVICE WORKER FOR PWA & NOTIFICATIONS ---
+if ('serviceWorker' in navigator) {
+  const swCode = `
+    self.addEventListener('install', (e) => { self.skipWaiting(); });
+    self.addEventListener('activate', (e) => { e.waitUntil(clients.claim()); });
+    self.addEventListener('push', (e) => {
+      const data = e.data ? e.data.json() : { title: 'Pulse', body: 'הודעה חדשה' };
+      e.waitUntil(self.registration.showNotification(data.title, { body: data.body, icon: 'icon.png' }));
+    });
+  `;
+  const blob = new Blob([swCode], { type: 'text/javascript' });
+  const swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).catch(() => {});
+}
+
 const SUPABASE_URL = 'https://eptvlnqekogdakvyloeg.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Z5vHRP5UVmChVqGZ_1psRg_5DSYye5J';
 let supabaseClient = null;
@@ -1294,7 +1309,6 @@ function initSystemNotifications() {
       const todayStr = getLocalDateString(now);
       const userName = state.userName || 'דוידי';
 
-      // Updates tip dynamically if 12:00 PM hits while app is open
       loadDailyTip();
 
       // 12:00 - Daily Tip Notification

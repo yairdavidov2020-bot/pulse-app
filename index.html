@@ -1432,13 +1432,18 @@ function deleteGoalBucket(id) {
   }
 }
 
-function menuOpenTravelModal() {
+function openTravelModal() {
   closeMenuModal();
   document.getElementById('travelToggleCheckbox').checked = state.isTravelMode;
   document.getElementById('travelCountrySelect').value = state.travelCountry || 'תאילנד';
   document.getElementById('travelBudgetInput').value = state.travelBudget || 5000;
   document.getElementById('travelModal').classList.remove('hidden');
 }
+
+function menuOpenTravelModal() {
+  openTravelModal();
+}
+
 function closeTravelModal() { document.getElementById('travelModal').classList.add('hidden'); }
 
 const countryCurrencyMap = {
@@ -2137,7 +2142,6 @@ function renderAnalytics() {
     const total = totalExpenseVal || 1;
     let acc = 0; const stops = [];
     
-    // Sort expense categories from highest expense to lowest expense
     let sortedExpCats = [...(state.expenseCats || [])].sort((a, b) => (spend[b.name] || 0) - (spend[a.name] || 0));
 
     sortedExpCats.forEach((cat) => {
@@ -2532,7 +2536,6 @@ function parseDateFromText(text) {
 }
 
 async function processVoiceCommandDirectly(text){
-  // Fetch absolute live rates instantly right before processing the transaction
   await updateLiveExchangeRates();
 
   let cleanText = text.trim();

@@ -216,8 +216,8 @@
             <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500/20 to-blue-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-400 text-2xl shadow-xl">
                 <i class="fa-solid fa-wallet"></i>
             </div>
-            <h3 class="text-base font-black gradient-text">תזכורת הוצאות יומיות</h3>
-            <p id="reminderModalText" class="text-xs text-slate-300 leading-relaxed">אל תשכח להוסיף את ההוצאות שלך להיום 💡</p>
+            <h3 class="text-base font-black gradient-text">תזכורת הוצאות יומית</h3>
+            <p class="text-xs text-slate-300 leading-relaxed">היי! זה הזמן לעצור רגע, לעדכן את ההוצאות וההכנסות של היום ולהישאר בשליטה מלאה 💡</p>
         </div>
         <button onclick="closeReminderModal()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs shadow-lg cursor-pointer relative z-10">הבנתי, יאללה מעדכן!</button>
     </div>
@@ -772,11 +772,6 @@
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-rotate text-emerald-400 w-4"></i> הוראות קבע ומנויים</span>
             </button>
 
-            <!-- כפתור הפעלת התראות פוש מעודכן -->
-            <button onclick="requestNotificationPermission()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-l from-emerald-500/20 to-teal-500/20 border border-emerald-400/40 hover:border-emerald-400 transition text-[12px] font-bold cursor-pointer text-emerald-300">
-                <span class="flex items-center gap-2.5"><i class="fa-solid fa-bell text-emerald-400 w-4"></i> הפעל התראות פוש 🔔</span>
-            </button>
-
             <div class="summary-card p-3 space-y-2 mt-2 bg-[var(--card-2)] border border-[var(--border)] rounded-xl">
                 <p class="text-[11px] font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-calendar-days"></i> תקופת תקציב מותאמת אישית</p>
                 <div class="field-shell px-2 py-1">
@@ -1061,25 +1056,6 @@
 </div>
 
 <script>
-// --- REGISTER SERVICE WORKER & PUSH SUBSCRIPTION INTEGRATION ---
-if ('serviceWorker' in navigator) {
-  const swCode = `
-    self.addEventListener('install', (e) => { self.skipWaiting(); });
-    self.addEventListener('activate', (e) => { e.waitUntil(clients.claim()); });
-    self.addEventListener('push', (e) => {
-      const data = e.data ? e.data.json() : { title: 'Pulse', body: 'הודעה חדשה' };
-      e.waitUntil(self.registration.showNotification(data.title, { body: data.body, icon: 'icon.png' }));
-    });
-    self.addEventListener('notificationclick', (e) => {
-      e.notification.close();
-      e.waitUntil(clients.openWindow('/'));
-    });
-  `;
-  const blob = new Blob([swCode], { type: 'text/javascript' });
-  const swUrl = URL.createObjectURL(blob);
-  navigator.serviceWorker.register(swUrl).catch(() => {});
-}
-
 const SUPABASE_URL = 'https://eptvlnqekogdakvyloeg.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Z5vHRP5UVmChVqGZ_1psRg_5DSYye5J';
 let supabaseClient = null;
@@ -1289,133 +1265,21 @@ function toggleSystemSettingsContent() {
 }
 let systemSettingsOpen = false;
 
-// --- VAPID CONVERSION & PUSH NOTIFICATIONS FUNCTIONS ---
-function urlBase64ToUint8Array(base64String) {
-  const sanitized = base64String.trim().replace(/[^A-Za-z0-9\-_]/g, '');
-  const padding = '='.repeat((4 - (sanitized.length % 4)) % 4);
-  const base64 = (sanitized + padding)
-    .replace(/-/g, '+')
-    .replace(/_/g, '/');
-  
-  const rawData = window.atob(base64);
-  const outputArray = new Uint8Array(rawData.length);
-  for (let i = 0; i < rawData.length; ++i) {
-    outputArray[i] = rawData.charCodeAt(i);
-  }
-  return outputArray;
-}
-
-async function requestNotificationPermission() {
-  if (!("Notification" in window) || !('serviceWorker' in navigator)) {
-    alert("הדפדפן שלך אינו תומך בהתראות פוש.");
-    return;
-  }
-  
-  const permission = await Notification.requestPermission();
-  if (permission === "granted") {
-    try {
-      const registration = await navigator.serviceWorker.ready;
-      const vapidPublicKey = 'BCCMKASHUMUH6tC849Xx3VFYzq6qwbO3MylclUSOqJtog7IWQhJSvFkVa-q01gcXFYmBnqQbrzWhVENGv7y2k';
-      
-      const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
-      
-      const subscription = await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: convertedVapidKey
-      });
-
-      const cleanSubscription = subscription.toJSON();
-
-      if (supabaseClient && state.handle) {
-        const { error } = await supabaseClient.from('push_subscriptions').upsert({
-          user_key: state.handle,
-          subscription: cleanSubscription
-        }, { onConflict: 'user_key' });
-
-        if (error) throw error;
-      }
-
-      showToast("התראות פוש הופעלו ונשמרו בענן בהצלחה! 🔔");
-      showBrowserNotification("Pulse 💰", "מעכשיו תקבל התזכורות והודעות ישירות מהענן למכשיר שלך.");
-    } catch (err) {
-      console.error("שגיאה ברישום להתראות פוש:", err);
-      alert("שגיאה מול סופאבייס: " + (err.message || JSON.stringify(err)));
-    }
-  } else {
-    alert("ההרשאה להתראות נדחתה. תוכל לאפשר אותה בהגדרות הדפדפן.");
-  }
-}
-  
-function initSystemNotifications() {
+function initDailyReminder() {
   try {
+    if ("Notification" in window && Notification.permission !== "granted") Notification.requestPermission();
     setInterval(() => {
       const now = new Date();
-      const hours = now.getHours();
-      const minutes = now.getMinutes();
-      const todayStr = getLocalDateString(now);
-      const userName = state.userName || 'דוידי';
-
-      loadDailyTip();
-
-      // 12:00 - Daily Tip Notification
-      if (hours === 12 && minutes === 0) {
-        const key = `pulse_notif_12_${todayStr}`;
-        if (localStorage.getItem(key) !== 'true') {
-          localStorage.setItem(key, 'true');
-          showBrowserNotification(
-            "Pulse - טיפ יומי 💡",
-            `${userName}, הטיפ היומי שלך כבר כאן! הקש לצפייה.`,
-            () => {
-              window.focus();
-              openTutorialModal();
-            }
-          );
-        }
-      }
-
-      // 22:55 - Expense Reminder Notification
-      if (hours === 22 && minutes === 55) {
-        const key = `pulse_notif_2255_${todayStr}`;
-        if (localStorage.getItem(key) !== 'true') {
-          localStorage.setItem(key, 'true');
-          showBrowserNotification(
-            "Pulse - תזכורת הוצאות 💰",
-            `${userName}, אל תשכח לעדכן את ההוצאות שלך להיום!`,
-            () => {
-              window.focus();
-              const remModal = document.getElementById('reminderModal');
-              const remText = document.getElementById('reminderModalText');
-              if(remText) remText.textContent = `${userName}, אל תשכח להוסיף את ההוצאות שלך להיום 💡`;
-              if(remModal) remModal.classList.remove('hidden');
-            }
-          );
+      if (now.getHours() === 20 && now.getMinutes() === 0) {
+        const todayStr = getLocalDateString(now);
+        if (localStorage.getItem(`pulse_reminder_${todayStr}`) !== 'true') {
+          localStorage.setItem(`pulse_reminder_${todayStr}`, 'true');
+          document.getElementById('reminderModal').classList.remove('hidden');
         }
       }
     }, 30000);
   } catch(e) {}
 }
-
-function showBrowserNotification(title, body, onClickCallback) {
-  if ("Notification" in window && Notification.permission === "granted") {
-    try {
-      const notification = new Notification(title, {
-        body: body,
-        icon: "icon.png"
-      });
-      notification.onclick = function(event) {
-        event.preventDefault();
-        window.focus();
-        if (onClickCallback) onClickCallback();
-        notification.close();
-      };
-    } catch(e) {
-      showToast(body);
-    }
-  } else {
-    showToast(body);
-  }
-}
-
 function closeReminderModal() { document.getElementById('reminderModal').classList.add('hidden'); }
 function openTutorialModal() { document.getElementById('tutorialModal').classList.remove('hidden'); }
 function closeTutorialModal() { document.getElementById('tutorialModal').classList.add('hidden'); }
@@ -1706,88 +1570,79 @@ function deleteRecurringItem(id) {
   showToast("הוראת קבע הוסרה");
 }
 
-// ---- NON-BLOCKING APP INITIALIZATION ----
-window.onload = function() {
-  setTimeout(() => {
-    const splash = document.getElementById('appSplashScreen');
-    if(splash) { 
-      splash.style.opacity = '0'; 
-      setTimeout(() => splash.remove(), 700); 
+window.onload = async function() {
+  try {
+    await updateLiveExchangeRates();
+
+    setTimeout(() => {
+      const splash = document.getElementById('appSplashScreen');
+      if(splash) { splash.style.opacity = '0'; setTimeout(() => splash.remove(), 700); }
+    }, 3500);
+
+    let saved = localStorage.getItem('pulse_state_v66');
+    if(saved) {
+      try { state = JSON.parse(saved); } catch(e) { localStorage.removeItem('pulse_state_v66'); }
     }
-  }, 1500);
 
-  (async function() {
-    try {
-      updateLiveExchangeRates().catch(() => {});
-
-      let saved = localStorage.getItem('pulse_state_v66');
-      if(saved) {
-        try { state = JSON.parse(saved); } catch(e) { localStorage.removeItem('pulse_state_v66'); }
-      }
-
-      if (state.handle && supabaseClient) {
-        try {
-          const cloudData = await loadDataFromSupabase();
-          if (cloudData && cloudData.userName) { 
-            state = cloudData; 
-            localStorage.setItem('pulse_state_v66', JSON.stringify(state)); 
-          }
-        } catch(e) {}
-      }
-
-      if(!state.expenseCats || state.expenseCats.length === 0) {
-        state.expenseCats = [
-          { name: 'אוכל', color: '#7FE8C6', budget: 0, custom: false },
-          { name: 'בילויים', color: '#FF8D82', budget: 0, custom: false },
-          { name: 'שופינג', color: '#8FB8FF', budget: 0, custom: false },
-          { name: 'תחבורה', color: '#C7A6FF', budget: 0, custom: false },
-          { name: 'דיור', color: '#FFC85C', budget: 0, custom: false },
-          { name: 'טיפוח', color: '#FF9FD1', budget: 0, custom: false },
-          { name: 'בריאות', color: '#34D399', budget: 0, custom: false },
-          { name: 'ספורט', color: '#38BDF8', budget: 0, custom: false },
-          { name: 'לימודים', color: '#F472B6', budget: 0, custom: false },
-          { name: 'חיסכון', color: '#A78BFA', budget: 0, custom: false },
-          { name: 'שונות', color: '#94A3B8', budget: 0, custom: false }
-        ];
-      }
-
-      if(!state.incomeCats) {
-        state.incomeCats = [{ name: 'משכורת', color: '#7FE8C6', budget: 0, custom: false }];
-      }
-      if(!state.learnedKeywords) {
-        state.learnedKeywords = {};
-      }
-
-      sortTransactions();
-      
-      if(!state.onboardingCompleted || !state.handle || state.baseline === null || state.baseline === undefined) {
-        if(document.getElementById('wizName') && state.userName) document.getElementById('wizName').value = state.userName;
-        if(document.getElementById('wizHandle') && state.handle) document.getElementById('wizHandle').value = state.handle;
-        if(document.getElementById('wizBalance') && state.baseline !== null) document.getElementById('wizBalance').value = state.baseline;
-        if(document.getElementById('wizSavingsGoal') && state.savingsGoal) document.getElementById('wizSavingsGoal').value = state.savingsGoal;
-        if(document.getElementById('wizFinancialDay') && state.financialDay) document.getElementById('wizFinancialDay').value = state.financialDay;
-
-        const step0 = document.getElementById('onboarding-step-0');
-        if(step0) step0.classList.remove('hidden');
-      } else {
-        const step0 = document.getElementById('onboarding-step-0');
-        if(step0) step0.classList.add('hidden');
-        await saveDataToSupabase(state);
-      }
-
-      if(document.getElementById('langSelect')) document.getElementById('langSelect').value = state.language || 'he';
-      if(document.getElementById('currencySelect')) document.getElementById('currencySelect').value = state.currency || '₪';
-
-      setDynamicGreeting();
-      buildFinancialDayDropdowns();
-      buildTableMonthDropdown();
-      initSystemNotifications();
-      loadDailyTip();
-      renderHome();
-    } catch (err) {
-      console.error("Initialization error caught:", err);
+    if (state.handle && supabaseClient) {
+      try {
+        const cloudData = await loadDataFromSupabase();
+        if (cloudData && cloudData.userName) { state = cloudData; localStorage.setItem('pulse_state_v66', JSON.stringify(state)); }
+      } catch(e) {}
     }
-  })();
+
+    if(!state.expenseCats || state.expenseCats.length === 0) {
+      state.expenseCats = [
+        { name: 'אוכל', color: '#7FE8C6', budget: 0, custom: false },
+        { name: 'בילויים', color: '#FF8D82', budget: 0, custom: false },
+        { name: 'שופינג', color: '#8FB8FF', budget: 0, custom: false },
+        { name: 'תחבורה', color: '#C7A6FF', budget: 0, custom: false },
+        { name: 'דיור', color: '#FFC85C', budget: 0, custom: false },
+        { name: 'טיפוח', color: '#FF9FD1', budget: 0, custom: false },
+        { name: 'בריאות', color: '#34D399', budget: 0, custom: false },
+        { name: 'ספורט', color: '#38BDF8', budget: 0, custom: false },
+        { name: 'לימודים', color: '#F472B6', budget: 0, custom: false },
+        { name: 'חיסכון', color: '#A78BFA', budget: 0, custom: false },
+        { name: 'שונות', color: '#94A3B8', budget: 0, custom: false }
+      ];
+    }
+
+    if(!state.incomeCats) {
+      state.incomeCats = [{ name: 'משכורת', color: '#7FE8C6', budget: 0, custom: false }];
+    }
+    if(!state.learnedKeywords) {
+      state.learnedKeywords = {};
+    }
+
+    sortTransactions();
+    
+    if(!state.onboardingCompleted || !state.handle || state.baseline === null || state.baseline === undefined) {
+      if(document.getElementById('wizName') && state.userName) document.getElementById('wizName').value = state.userName;
+      if(document.getElementById('wizHandle') && state.handle) document.getElementById('wizHandle').value = state.handle;
+      if(document.getElementById('wizBalance') && state.baseline !== null) document.getElementById('wizBalance').value = state.baseline;
+      if(document.getElementById('wizSavingsGoal') && state.savingsGoal) document.getElementById('wizSavingsGoal').value = state.savingsGoal;
+      if(document.getElementById('wizFinancialDay') && state.financialDay) document.getElementById('wizFinancialDay').value = state.financialDay;
+
+      const step0 = document.getElementById('onboarding-step-0');
+      if(step0) step0.classList.remove('hidden');
+    } else {
+      const step0 = document.getElementById('onboarding-step-0');
+      if(step0) step0.classList.add('hidden');
+      await saveDataToSupabase(state);
+    }
+
+    if(document.getElementById('langSelect')) document.getElementById('langSelect').value = state.language || 'he';
+    if(document.getElementById('currencySelect')) document.getElementById('currencySelect').value = state.currency || '₪';
+
+    setDynamicGreeting();
+    buildFinancialDayDropdowns();
+    buildTableMonthDropdown();
+    initDailyReminder();
+    loadDailyTip();
+    renderHome();
+  } catch (err) {
+    console.error("Initialization error caught:", err);
+  }
 };
 
 function sortTransactions() {
@@ -1859,16 +1714,11 @@ async function startCinematicBuild() {
 function loadDailyTip() {
   try {
     const now = new Date();
-    let tipDate = new Date(now);
-    if (now.getHours() < 12) {
-      tipDate.setDate(tipDate.getDate() - 1);
-    }
-    const start = new Date(tipDate.getFullYear(), 0, 0);
-    const diff = (tipDate - start) + ((start.getTimezoneOffset() - tipDate.getTimezoneOffset()) * 60 * 1000);
-    const dayIndex = Math.floor(diff / (1000 * 60 * 60 * 24));
-    
+    const start = new Date(now.getFullYear(), 0, 0);
+    const diff = (now - start) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
+    const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
     const tipEl = document.getElementById('dailyTipText');
-    if(tipEl) tipEl.textContent = tipsList[dayIndex % tipsList.length];
+    if(tipEl) tipEl.textContent = tipsList[dayOfYear % tipsList.length];
   } catch(e) {}
 }
 
@@ -2617,6 +2467,7 @@ function processVoiceCommandDirectly(text){
     }
   }
 
+  // אם לא צוין מטבע במפורש, אבל מצב נסיעות מופעל - השתמש אוטומטית במטבע של המדינה הנבחרת!
   if (!explicitCurrencyFound && state.isTravelMode && state.travelCurrency) {
     if (exchangeRates[state.travelCurrency]) {
       currencyMultiplier = exchangeRates[state.travelCurrency];
@@ -2624,258 +2475,288 @@ function processVoiceCommandDirectly(text){
     }
   }
 
-  const numMatch = cleanText.match(/(\d+[\.,]?\d*)/);
-  if(numMatch) {
-    rawAmount = parseFloat(numMatch[1].replace(',', ''));
+  const matchNum = cleanText.match(/(\d+[\.,]?\d*)/);
+  if (matchNum) {
+    rawAmount = parseFloat(matchNum[1].replace(',', '.'));
+    cleanText = cleanText.replace(matchNum[0], '').trim();
   }
 
-  if(!rawAmount || isNaN(rawAmount)) {
-    alert("לא הצלחתי לזהות סכום במסר. נסה שוב.");
-    return;
-  }
+  if(!rawAmount || isNaN(rawAmount)) { alert("לא זיהיתי סכום ברור."); return; }
 
-  const finalAmountInILS = rawAmount * currencyMultiplier;
-  const originalCurrencyStr = explicitCurrencyFound ? `${rawAmount} ${currencyLabel}` : (state.isTravelMode ? `${rawAmount} ${state.travelCurrency}` : null);
+  const convertedAmount = Math.round(rawAmount * currencyMultiplier * 100) / 100;
+  const originalStr = `${rawAmount} ${currencyLabel}`;
 
-  let textWithoutNumber = cleanText.replace(/(\d+[\.,]?\d*)/, '').trim();
-  for (let key of Object.keys(exchangeRates)) {
-    textWithoutNumber = textWithoutNumber.replace(key, '').trim();
-  }
-  textWithoutNumber = textWithoutNumber.replace(/(שילמתי|עלד|על|בסך|לשרוף|הוצאתי|עלה|שקל|שקלים)/g, '').trim();
-  const subCatText = cleanSubCategoryText(textWithoutNumber);
+  let isIncome = cleanText.includes('הכנסה') || cleanText.includes('משכורת') || cleanText.includes('קיבלתי') || cleanText.includes('הרווחתי');
+  
+  cleanText = cleanText.replace(/(הכנסה|משכורת|קיבלתי|הרווחתי|שילמתי|קניתי)/g, '').trim();
 
-  let determinedCategory = 'שונות';
-  let isIncome = cleanText.includes('משכורת') || cleanText.includes('הכנסה') || cleanText.includes('קיבלתי');
+  let matchedCat = null;
+  let matchedSub = null;
 
-  if (isIncome) {
-    determinedCategory = 'משכורת';
-  } else {
-    for (let [kw, catName] of Object.entries(state.learnedKeywords || {})) {
-      if (subCatText.includes(kw) || kw.includes(subCatText)) {
-        determinedCategory = catName;
+  const cleanedKeywordQuery = cleanSubCategoryText(cleanText);
+  if (!isIncome && state.learnedKeywords) {
+    for (let [kw, mainCat] of Object.entries(state.learnedKeywords)) {
+      if (cleanedKeywordQuery.includes(kw) || cleanText.includes(kw)) {
+        matchedCat = mainCat;
+        matchedSub = kw;
         break;
       }
     }
-    if (determinedCategory === 'שונות') {
-      if (subCatText.includes('אוכל') || subCatText.includes('מסעדה') || subCatText.includes('קפה') || subCatText.includes('סופר') || subCatText.includes('פלאפל') || subCatText.includes('פיצה') || subCatText.includes('שווארמה')) {
-        determinedCategory = 'אוכל';
-      } else if (subCatText.includes('דלק') || subCatText.includes('מונית') || subCatText.includes('רכבת') || subCatText.includes('אוטובוס')) {
-        determinedCategory = 'תחבורה';
-      } else if (subCatText.includes('בגדים') || subCatText.includes('נעליים') || subCatText.includes('שופינג') || subCatText.includes('קניות')) {
-        determinedCategory = 'שופינג';
-      } else if (subCatText.includes('סרט') || subCatText.includes('ברים') || subCatText.includes('פאב') || subCatText.includes('בילוי')) {
-        determinedCategory = 'בילויים';
+  }
+
+  if (!matchedCat && !isIncome && state.expenseCats) {
+    for (let cat of state.expenseCats) {
+      if (cleanText.includes(cat.name)) {
+        matchedCat = cat.name;
+        matchedSub = cleanedKeywordQuery || 'כללי';
+        break;
       }
     }
   }
 
-  const isUnknownKeyword = !isIncome && determinedCategory === 'שונות' && subCatText !== 'כללי' && subCatText.length > 1;
-
-  if (isUnknownKeyword) {
-    pendingSmartTx = {
-      amount: finalAmountInILS,
-      type: 'expense',
-      subCat: subCatText,
-      date: parsedDate,
-      originalCurrencyStr: originalCurrencyStr,
-      isTravel: state.isTravelMode
-    };
-    
-    const select = document.getElementById('selectMainCategory');
-    if(select) {
-      select.innerHTML = '';
-      state.expenseCats.forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c.name; opt.textContent = c.name;
-        select.appendChild(opt);
-      });
-    }
-    document.getElementById('voiceParsedInfo').textContent = `זיהיתי: "${subCatText}" (${Math.round(finalAmountInILS)} ₪)`;
-    document.getElementById('voiceSubCatInput').value = subCatText;
-    document.getElementById('voiceDescModal').classList.remove('hidden');
-    return;
+  if (isIncome) {
+    matchedCat = state.incomeCats && state.incomeCats[0] ? state.incomeCats[0].name : 'הכנסה';
+    matchedSub = cleanedKeywordQuery || 'משכורת';
   }
 
-  const catObj = isIncome ? state.incomeCats.find(c => c.name === determinedCategory) : state.expenseCats.find(c => c.name === determinedCategory);
-  const color = catObj ? catObj.color : '#7FE8C6';
+  if (!matchedCat || (!isIncome && state.expenseCats && !state.expenseCats.find(c => c.name === matchedCat))) {
+    populateVoiceCategorySelect();
+    const cleanSub = cleanedKeywordQuery;
+    pendingSmartTx = { 
+      type: isIncome ? 'income' : 'expense', 
+      amount: convertedAmount, 
+      originalCurrencyStr: originalStr, 
+      cat: isIncome ? (state.incomeCats[0] ? state.incomeCats[0].name : 'הכנסה') : (state.expenseCats[0] ? state.expenseCats[0].name : 'שונות'), 
+      subCat: cleanSub || 'כללי', 
+      color: isIncome ? '#7FE8C6' : (state.expenseCats[0] ? state.expenseCats[0].color : '#7FE8C6'), 
+      date: parsedDate, 
+      isTravel: state.isTravelMode && !isIncome 
+    };
+    const subInput = document.getElementById('voiceSubCatInput');
+    if(subInput) subInput.value = cleanSub || '';
+    const parseInfo = document.getElementById('voiceParsedInfo');
+    if(parseInfo) parseInfo.innerHTML = `סכום: <span class="text-emerald-400 font-bold">${fmt(convertedAmount)}</span> (${originalStr}) | תאריך: <span class="text-blue-400 font-bold">${parsedDate}</span>`;
+    const vModal = document.getElementById('voiceDescModal');
+    if(vModal) vModal.classList.remove('hidden');
+  } else {
+    const type = isIncome ? 'income' : 'expense';
+    let catObj = null;
+    if(isIncome) {
+      catObj = state.incomeCats.find(c => c.name === matchedCat) || state.incomeCats[0];
+    } else {
+      catObj = state.expenseCats.find(c => c.name === matchedCat) || state.expenseCats[0];
+    }
+    
+    const newTx = {
+      id: Date.now(), type: type, amount: convertedAmount, originalCurrencyStr: originalStr,
+      cat: matchedCat, subCat: matchedSub || 'כללי', color: catObj ? catObj.color : '#7FE8C6', date: parsedDate, isTravel: state.isTravelMode && !isIncome
+    };
+    if(!state.transactions) state.transactions = [];
+    state.transactions.push(newTx);
+    persist();
+    renderHome(); renderAnalytics(); resetVoiceUI();
+    showToast(`✅ נשמר בהצלחה: ${fmt(convertedAmount)} (${originalStr})`);
+  }
+}
 
-  if(!state.transactions) state.transactions = [];
-  state.transactions.unshift({
-    id: Date.now(),
-    type: isIncome ? 'income' : 'expense',
-    amount: finalAmountInILS,
-    cat: determinedCategory,
-    subCat: subCatText,
-    color: color,
-    date: parsedDate,
-    originalCurrencyStr: originalCurrencyStr,
-    isTravel: state.isTravelMode
-  });
-
-  persist();
-  renderHome();
-  renderAnalytics();
-  showToast(`נוסף בהצלחה: ${Math.round(finalAmountInILS)} ₪ (${determinedCategory})`);
+function populateVoiceCategorySelect() {
+  const mainCatSelect = document.getElementById('selectMainCategory');
+  if(!mainCatSelect) return;
+  mainCatSelect.innerHTML = '';
+  if(state.expenseCats) {
+    state.expenseCats.forEach(c => {
+      const opt = document.createElement('option'); opt.value = c.name; opt.textContent = c.name; mainCatSelect.appendChild(opt);
+    });
+  }
 }
 
 function confirmVoiceTransaction() {
   if(!pendingSmartTx) return;
-  const mainCat = document.getElementById('selectMainCategory').value;
-  const customSub = document.getElementById('voiceSubCatInput').value.trim() || pendingSmartTx.subCat;
+  const catSelect = document.getElementById('selectMainCategory');
+  const chosenMainCat = catSelect ? catSelect.value : 'שונות';
+  const subInput = document.getElementById('voiceSubCatInput');
+  const subCatVal = cleanSubCategoryText(subInput ? subInput.value : '') || 'כללי';
+  
+  let catObj = state.expenseCats ? state.expenseCats.find(c => c.name === chosenMainCat) : null;
+  if(!catObj && state.expenseCats && state.expenseCats[0]) catObj = state.expenseCats[0];
+  
+  pendingSmartTx.cat = chosenMainCat;
+  pendingSmartTx.subCat = subCatVal;
+  pendingSmartTx.color = catObj ? catObj.color : '#7FE8C6';
 
-  const catObj = state.expenseCats.find(c => c.name === mainCat);
-  const color = catObj ? catObj.color : '#7FE8C6';
-
-  if(!state.learnedKeywords) state.learnedKeywords = {};
-  state.learnedKeywords[customSub] = mainCat;
-
-  pendingSmartTx.cat = mainCat;
-  pendingSmartTx.subCat = customSub;
-  pendingSmartTx.color = color;
+  if (!state.learnedKeywords) state.learnedKeywords = {};
+  state.learnedKeywords[subCatVal] = chosenMainCat;
 
   if(!state.transactions) state.transactions = [];
-  state.transactions.unshift({
-    id: Date.now(),
-    type: pendingSmartTx.type,
-    amount: pendingSmartTx.amount,
-    cat: pendingSmartTx.cat,
-    subCat: pendingSmartTx.subCat,
-    color: pendingSmartTx.color,
-    date: pendingSmartTx.date,
-    originalCurrencyStr: pendingSmartTx.originalCurrencyStr,
-    isTravel: pendingSmartTx.isTravel
-  });
-
+  state.transactions.push({ id: Date.now(), ...pendingSmartTx });
   persist();
-  renderHome();
-  renderAnalytics();
-  document.getElementById('voiceDescModal').classList.add('hidden');
-  showToast(`נלמד בהצלחה! התנועה נוספה תחת ${mainCat}`);
-  pendingSmartTx = null;
+  renderHome(); renderAnalytics();
+  const vModal = document.getElementById('voiceDescModal');
+  if(vModal) vModal.classList.add('hidden');
+  const savedAmt = pendingSmartTx.amount;
+  pendingSmartTx = null; resetVoiceUI();
+  showToast(`✅ נלמד ונשמר בהצלחה: ${fmt(savedAmt)} (${chosenMainCat})`);
 }
 
 function cancelVoiceTransaction() {
-  document.getElementById('voiceDescModal').classList.add('hidden');
   pendingSmartTx = null;
+  const vModal = document.getElementById('voiceDescModal');
+  if(vModal) vModal.classList.add('hidden');
+  resetVoiceUI();
 }
 
-function openCategoriesModal() {
-  document.getElementById('categoriesModal').classList.remove('hidden');
-  renderCategoriesModalList('expense');
-}
-function closeCategoriesModal() { document.getElementById('categoriesModal').classList.add('hidden'); }
-
-let currentCatTab = 'expense';
+let currentCategoryTab = 'expense';
 function switchCategoryTab(tab) {
-  currentCatTab = tab;
+  currentCategoryTab = tab;
   const expBtn = document.getElementById('catTabExpBtn');
   const incBtn = document.getElementById('catTabIncBtn');
   const label = document.getElementById('newCatTitleLabel');
+  
   if(tab === 'expense') {
-    expBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold bg-emerald-500/20 text-emerald-400 transition';
-    incBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold text-slate-400 transition';
+    if(expBtn) expBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold bg-emerald-500/20 text-emerald-400 transition';
+    if(incBtn) incBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold text-slate-400 transition';
     if(label) label.textContent = 'הוספת קטגוריית הוצאה ראשית חדשה:';
   } else {
-    incBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold bg-emerald-500/20 text-emerald-400 transition';
-    expBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold text-slate-400 transition';
+    if(incBtn) incBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold bg-emerald-500/20 text-emerald-400 transition';
+    if(expBtn) expBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold text-slate-400 transition';
     if(label) label.textContent = 'הוספת קטגוריית הכנסה ראשית חדשה:';
   }
-  renderCategoriesModalList(tab);
+  renderModalCategoryList();
 }
 
-function renderCategoriesModalList(type) {
+function openCategoriesModal() { 
+  const cModal = document.getElementById('categoriesModal');
+  if(cModal) cModal.classList.remove('hidden'); 
+  renderModalCategoryList(); 
+}
+function closeCategoriesModal() { 
+  const cModal = document.getElementById('categoriesModal');
+  if(cModal) cModal.classList.add('hidden'); 
+}
+
+function renderModalCategoryList() {
   const container = document.getElementById('modalCatList');
   if(!container) return;
   container.innerHTML = '';
-  const list = type === 'expense' ? state.expenseCats : state.incomeCats;
   
-  list.forEach((cat) => {
-    const row = document.createElement('div');
-    row.className = 'p-2 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1.5 text-[11px]';
+  const list = currentCategoryTab === 'expense' ? state.expenseCats : state.incomeCats;
+  if(!list) return;
+
+  list.forEach((c) => {
+    const learnedWordsForCat = [];
+    if (currentCategoryTab === 'expense' && state.learnedKeywords) {
+      Object.entries(state.learnedKeywords).forEach(([kw, mainCat]) => {
+        if (mainCat === c.name) learnedWordsForCat.push(kw);
+      });
+    }
+
+    const itemWrap = document.createElement('div');
+    itemWrap.className = 'rounded-lg border bg-[var(--card-2)] border-[var(--border)] overflow-hidden';
     
-    let keywordsHtml = '';
-    const matchedKw = [];
-    if(state.learnedKeywords) {
-      Object.entries(state.learnedKeywords).forEach(([kw, cName]) => {
-        if(cName === cat.name) matchedKw.push(kw);
-      });
-    }
+    const deleteMainBtn = `<button onclick="deleteMainCategory('${c.name}', '${currentCategoryTab}')" class="text-rose-400 text-xs px-2 py-0.5 rounded bg-rose-500/10 hover:bg-rose-500/20 transition cursor-pointer" title="מחק קטגוריה"><i class="fa-solid fa-trash-can"></i></button>`;
 
-    if(matchedKw.length > 0) {
-      keywordsHtml = `<div class="flex flex-wrap gap-1 pt-1 border-t border-[var(--border)]">`;
-      matchedKw.forEach(kw => {
-        keywordsHtml += `<span class="text-[9px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-md flex items-center gap-1">
-          ${kw} <button onclick="deleteKeyword('${kw}')" class="text-rose-400 hover:text-rose-200 cursor-pointer">×</button>
-        </span>`;
-      });
-      keywordsHtml += `</div>`;
-    } else {
-      keywordsHtml = `<p class="text-[9px] text-slate-500">אין מילים נלמדות לקטגוריה זו</p>`;
-    }
-
-    const deleteCatBtn = cat.custom ? `<button onclick="deleteMainCategory('${cat.name}', '${type}')" class="text-rose-400 text-xs cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>` : '';
-
-    row.innerHTML = `
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <span class="w-3 h-3 rounded-full" style="background:${cat.color}"></span>
-          <span class="font-bold text-slate-100">${cat.name}</span>
-        </div>
-        ${deleteCatBtn}
+    const header = document.createElement('div');
+    header.className = 'flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-[var(--card)] transition';
+    header.innerHTML = `
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full" style="background:${c.color}"></span>
+        <span class="text-[11px] font-bold text-slate-100">${c.name}</span>
       </div>
-      ${keywordsHtml}
+      <div class="flex items-center gap-2" onclick="event.stopPropagation()">
+        ${deleteMainBtn}
+        <span class="text-[9px] text-slate-400">(${learnedWordsForCat.length} מילים נלמדו)</span>
+        <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform cursor-pointer" onclick="toggleSubcatView(this)"></i>
+      </div>
     `;
-    container.appendChild(row);
+    
+    const subContainer = document.createElement('div');
+    subContainer.className = 'hidden px-3 py-2 border-t border-[var(--border)] space-y-1 bg-[var(--bg)] max-h-[120px] overflow-y-auto subcat-dropdown';
+    
+    if (learnedWordsForCat.length === 0) {
+      subContainer.innerHTML = '<p class="text-[10px] text-slate-500 text-center py-1">עדיין לא נלמדו מילים לקטגוריה זו</p>';
+    } else {
+      learnedWordsForCat.forEach(kw => {
+        const subItem = document.createElement('div');
+        subItem.className = 'text-[10px] text-slate-300 flex items-center justify-between py-0.5';
+        subItem.innerHTML = `<span class="flex items-center gap-1.5"><i class="fa-solid fa-angle-left text-[8px] text-emerald-400"></i> ${kw}</span> <button onclick="deleteLearnedKeyword('${kw}')" class="text-rose-400 text-[9px] cursor-pointer hover:text-rose-300" title="מחק מילה"><i class="fa-solid fa-xmark"></i></button>`;
+        subContainer.appendChild(subItem);
+      });
+    }
+
+    header.onclick = () => {
+      const isHidden = subContainer.classList.contains('hidden');
+      document.querySelectorAll('.subcat-dropdown').forEach(el => el.classList.add('hidden'));
+      if(isHidden) subContainer.classList.remove('hidden');
+    };
+
+    itemWrap.appendChild(header); itemWrap.appendChild(subContainer);
+    container.appendChild(itemWrap);
   });
 }
 
-function deleteKeyword(kw) {
-  if(state.learnedKeywords && state.learnedKeywords[kw]) {
-    delete state.learnedKeywords[kw];
-    persist();
-    renderCategoriesModalList(currentCatTab);
-    showToast("המילה הוסרה מהזיכרון האוטומטי");
-  }
-}
-
-function addNewCustomCategory() {
-  const input = document.getElementById('newCatInput');
-  const name = input.value.trim();
-  if(!name) return;
-  const list = currentCatTab === 'expense' ? state.expenseCats : state.incomeCats;
-  if(list.find(c => c.name === name)) { alert("קטגוריה בשם זה כבר קיימת."); return; }
-  const color = availableColors[list.length % availableColors.length];
-  list.push({ name, color, budget: 0, custom: true });
-  persist();
-  input.value = '';
-  renderCategoriesModalList(currentCatTab);
-  showToast("הקטגוריה הראשית נוספה בהצלחה!");
+function toggleSubcatView(iconEl) {
+  const header = iconEl.closest('div').parentElement;
+  const subContainer = header.nextElementSibling;
+  if(subContainer) subContainer.classList.toggle('hidden');
 }
 
 function deleteMainCategory(name, type) {
+  const list = type === 'expense' ? state.expenseCats : state.incomeCats;
+  if (list.length <= 1) {
+    alert("לא ניתן למחוק את הקטגוריה האחרונה שנשארה ברשימה.");
+    return;
+  }
   if(confirm(`האם אתה בטוח שברצונך למחוק את הקטגוריה "${name}"?`)) {
     if(type === 'expense') {
       state.expenseCats = state.expenseCats.filter(c => c.name !== name);
+      if(state.learnedKeywords) {
+        Object.keys(state.learnedKeywords).forEach(kw => {
+          if(state.learnedKeywords[kw] === name) delete state.learnedKeywords[kw];
+        });
+      }
     } else {
       state.incomeCats = state.incomeCats.filter(c => c.name !== name);
     }
     persist();
-    renderCategoriesModalList(type);
-    showToast("הקטגוריה הוסרה");
+    renderModalCategoryList();
+    showToast("הקטגוריה נמחקה");
   }
+}
+
+function deleteLearnedKeyword(kw) {
+  if(state.learnedKeywords && state.learnedKeywords[kw]) {
+    delete state.learnedKeywords[kw];
+    persist();
+    renderModalCategoryList();
+    showToast(`התג "${kw}" נמחק מהזיכרון`);
+  }
+}
+
+function addNewCustomCategory() {
+  const newCatInput = document.getElementById('newCatInput');
+  if(!newCatInput) return;
+  const catName = newCatInput.value.trim();
+  if(!catName) { alert("נא להזין שם קטגוריה."); return; }
+  
+  if(currentCategoryTab === 'expense') {
+    if(state.expenseCats.find(c => c.name === catName)) { alert("קטגוריה קיימת."); return; }
+    const color = availableColors[state.expenseCats.length % availableColors.length];
+    state.expenseCats.push({ name: catName, color, budget: 0, custom: true });
+  } else {
+    if(state.incomeCats.find(c => c.name === catName)) { alert("קטגוריה קיימת."); return; }
+    const color = availableColors[state.incomeCats.length % availableColors.length];
+    state.incomeCats.push({ name: catName, color, budget: 0, custom: true });
+  }
+
+  persist();
+  renderModalCategoryList();
+  newCatInput.value = '';
+  showToast("קטגוריה ראשית נוספה בהצלחה!");
 }
 
 function promptSavingsGoal() {
   const val = prompt("הכנס יעד חיסכון חודשי חדש:", state.savingsGoal || 1500);
-  if(val !== null) {
-    const num = parseFloat(val);
-    if(!isNaN(num) && num >= 0) {
-      state.savingsGoal = num;
-      persist();
-      renderAnalytics();
-      showToast("יעד החיסכון עודכן בהצלחה!");
-    }
-  }
+  if(val !== null && !isNaN(parseFloat(val))) { state.savingsGoal = parseFloat(val); persist(); renderHome(); renderAnalytics(); }
 }
 </script>
 </body>

@@ -79,7 +79,7 @@
   .summary-card{ border:1px solid var(--border); background:var(--card); border-radius:12px; backdrop-filter:blur(12px); }
 
   .amount-input{ background:transparent; border:none; outline:none; color:var(--text); font-family:'Rubik',sans-serif; font-weight:700; width:100%; font-size: 16px !important; }
-  input[type="text"], select, input[type="tel"], input[type="number"] { font-size: 16px !important; }
+  input[type="text"], select, input[type="tel"], input[type="number"], input[type="time"] { font-size: 16px !important; }
 
   .field-shell{ background:rgba(15, 20, 30, 0.85); border:1px solid rgba(255,255,255,0.15); border-radius:10px; transition: border-color 0.2s; backdrop-filter:blur(10px); }
   html.light .field-shell { background: rgba(240, 242, 245, 0.9); border-color: rgba(0,0,0,0.1); }
@@ -223,6 +223,39 @@
     </div>
 </div>
 
+<!-- NOTIFICATIONS SETTINGS MODAL -->
+<div id="notificationsModal" class="modal-overlay hidden">
+    <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl text-right border border-emerald-400/40">
+        <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
+            <h3 class="text-xs font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-bell"></i> הגדרות התראות ברקע (גם כשהאפליקציה סגורה)</h3>
+            <button onclick="closeNotificationsModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
+        </div>
+        
+        <div class="p-3 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-2.5">
+            <div class="flex items-center justify-between py-1">
+                <span class="text-xs font-bold">הפעל התראות דפדפן (Web Push)</span>
+                <input id="notifToggleCheckbox" type="checkbox" onchange="toggleNotificationsPermission(this.checked)" class="w-4 h-4 accent-emerald-400 cursor-pointer" />
+            </div>
+            <div>
+                <label class="text-[10px] font-semibold text-slate-400 mb-1 block">שעת תזכורת יומית (ברירת מחדל: 20:00)</label>
+                <div class="field-shell px-3 py-2">
+                    <input id="notifTimeInput" type="time" value="20:00" onchange="saveNotificationTime(this.value)" class="w-full bg-transparent outline-none text-xs font-bold" style="color:var(--text)" />
+                </div>
+            </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1.5">
+            <p class="text-[11px] font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-circle-info"></i> התראות חריגה ורקע</p>
+            <p class="text-[10px] text-slate-300 leading-relaxed">
+                כאשר האפליקציה מותקנת במסך הבית (PWA) ומורשית לשלוח התראות, מנגנון הרקע (Service Worker בשילוב Push API) יקבל התראות ישירות מענן Supabase — גם אם סגרת לגמרי את הלשונית או האפליקציה.
+            </p>
+        </div>
+
+        <button onclick="sendTestNotification()" class="w-full py-2.5 rounded-xl font-bold text-xs bg-[var(--card-2)] border border-[var(--border)] text-emerald-400 hover:text-white transition cursor-pointer">שלח התראת בדיקה מקומית</button>
+        <button onclick="closeNotificationsModal()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs cursor-pointer shadow-lg">שמור וסגור</button>
+    </div>
+</div>
+
 <!-- TRAVEL MODE SETTINGS MODAL -->
 <div id="travelModal" class="modal-overlay hidden">
     <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl text-right max-h-[85vh] overflow-y-auto border border-blue-400/40">
@@ -232,7 +265,7 @@
         </div>
         
         <div class="p-3 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-2.5">
-            <p class="text-[11px] font-bold text-slate-100 flex items-center gap-1.5"><i class="fa-solid fa-sliders text-blue-400"></i> חלון 1: בחירת יעד והמרת מטבע אוטומטית</p>
+            <p class="text-[11px] font-bold text-slate-100 flex items-center gap-1.5"><i class="fa-solid fa-sliders text-blue-400"></i> בחירת יעד והמרת מטבע אוטומטית</p>
             <div class="flex items-center justify-between py-1">
                 <span class="text-xs font-bold">הפעל מצב נסיעות</span>
                 <input id="travelToggleCheckbox" type="checkbox" onchange="toggleTravelModeState(this.checked)" class="w-4 h-4 accent-emerald-400 cursor-pointer" />
@@ -306,13 +339,6 @@
                     <input id="travelBudgetInput" type="tel" inputmode="decimal" placeholder="5000..." class="w-full bg-transparent outline-none text-xs font-bold" style="color:var(--text)" />
                 </div>
             </div>
-        </div>
-
-        <div class="p-3 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1.5">
-            <p class="text-[11px] font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-circle-info"></i> המרה אוטומטית מלאה</p>
-            <p class="text-[10px] text-slate-300 leading-relaxed">
-                מעכשיו בטיול אין צורך להקליד את שם המטבע! פשוט הקלד סכום ותיאור (למשל: "50 פלאפל ב-18.8") והמערכת תמיר זאת אוטומטית למטבע המדינה שבחרת לפי השערים העדכניים ברגע האמת.
-            </p>
         </div>
 
         <button onclick="saveTravelSettings()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs cursor-pointer shadow-lg">שמור הגדרות נסיעה</button>
@@ -765,6 +791,9 @@
             <button onclick="menuOpenTravelModal()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-blue-400 transition text-[12px] font-bold cursor-pointer">
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-plane-departure text-blue-400 w-4"></i> הגדרות מצב נסיעות</span>
             </button>
+            <button onclick="menuOpenNotificationsModal()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-amber-400 transition text-[12px] font-bold cursor-pointer">
+                <span class="flex items-center gap-2.5"><i class="fa-solid fa-bell text-amber-400 w-4"></i> הגדרות התראות ברקע</span>
+            </button>
             <button onclick="menuOpenCategories()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-violet-400 transition text-[12px] font-bold cursor-pointer">
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-tags text-violet-400 w-4"></i> ניהול קטגוריות ומילים נלמדות</span>
             </button>
@@ -1101,6 +1130,47 @@ try {
   }
 } catch (e) {}
 
+// VAPID PUBLIC KEY FOR WEB PUSH (Background Notifications)
+const VAPID_PUBLIC_KEY = 'BMb9En_5CeJWop39VpSP6KZ5vijUFd42tDNElvDFLt6ixVkr07YOzIw29SUYXEfSGJ7xicrsaDZAjqYFCRITiRw';
+
+function urlB64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+
+// SERVICE WORKER & WEB PUSH SETUP
+let swRegistration = null;
+if ('serviceWorker' in navigator) {
+  const swCode = `
+    self.addEventListener('install', (e) => { self.skipWaiting(); });
+    self.addEventListener('activate', (e) => { e.waitUntil(self.clients.claim()); });
+    
+    // האזנה להודעות Push אמיתיות מהענן (עובד גם שהאפליקציה סגורה לגמרי!)
+    self.addEventListener('push', (e) => {
+      const data = e.data ? e.data.json() : { title: 'Pulse', body: 'הודעה חדשה' };
+      e.waitUntil(
+        self.registration.showNotification(data.title, {
+          body: data.body,
+          icon: 'icon.png',
+          badge: 'icon.png',
+          dir: 'rtl',
+          vibrate: [200, 100, 200]
+        })
+      );
+    });
+  `;
+  const blob = new Blob([swCode], { type: 'text/javascript' });
+  navigator.serviceWorker.register(URL.createObjectURL(blob)).then(reg => {
+    swRegistration = reg;
+  }).catch(err => {});
+}
+
 async function loadDataFromSupabase() {
   if (!supabaseClient) return null;
   try {
@@ -1273,7 +1343,9 @@ let state = {
   travelCountry: 'תאילנד',
   travelCurrency: 'באט',
   travelBudget: 5000,
-  learnedKeywords: {}
+  learnedKeywords: {},
+  notificationsEnabled: false,
+  notificationTime: '20:00'
 };
 
 const availableColors = ['#FF8D82', '#FF9F43', '#FFC85C', '#7FE8C6', '#8FB8FF', '#C7A6FF', '#FF9FD1', '#34D399', '#38BDF8', '#E11D48'];
@@ -1326,21 +1398,83 @@ function toggleSystemSettingsContent() {
 }
 let systemSettingsOpen = false;
 
-function initDailyReminder() {
-  try {
-    if ("Notification" in window && Notification.permission !== "granted") Notification.requestPermission();
-    setInterval(() => {
-      const now = new Date();
-      if (now.getHours() === 20 && now.getMinutes() === 0) {
-        const todayStr = getLocalDateString(now);
-        if (localStorage.getItem(`pulse_reminder_${todayStr}`) !== 'true') {
-          localStorage.setItem(`pulse_reminder_${todayStr}`, 'true');
-          document.getElementById('reminderModal').classList.remove('hidden');
+// NOTIFICATIONS & REMINDERS LOGIC (Web Push subscription integration)
+async function toggleNotificationsPermission(checked) {
+  if (checked) {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+      alert("הדפדפן שלך אינו תומך בהתראות ענן ברקע.");
+      document.getElementById('notifToggleCheckbox').checked = false;
+      return;
+    }
+    
+    const permission = await Notification.requestPermission();
+    if (permission === "granted") {
+      try {
+        const registration = await navigator.serviceWorker.ready;
+        const subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlB64ToUint8Array(VAPID_PUBLIC_KEY)
+        });
+
+        // שמירת המנוי בטבלה ב-Supabase לפי שם המשתמש
+        if (supabaseClient && state.handle) {
+          await supabaseClient.from('push_subscriptions').upsert({
+            user_key: state.handle,
+            subscription: subscription
+          }, { onConflict: 'user_key' });
         }
+
+        state.notificationsEnabled = true;
+        persist();
+        showToast("התראות ענן ברקע הופעלו בהצלחה! 🚀");
+      } catch (err) {
+        console.error("Error subscribing to push:", err);
+        alert("שגיאה ברישום להתרעות. נסה שוב.");
+        document.getElementById('notifToggleCheckbox').checked = false;
       }
-    }, 30000);
-  } catch(e) {}
+    } else {
+      alert("יש לאפשר התראות בהגדרות הדפדפן.");
+      document.getElementById('notifToggleCheckbox').checked = false;
+      state.notificationsEnabled = false;
+      persist();
+    }
+  } else {
+    state.notificationsEnabled = false;
+    persist();
+    showToast("התראות כובו.");
+  }
 }
+
+function saveNotificationTime(val) {
+  state.notificationTime = val || '20:00';
+  persist();
+  showToast(`שעת תזכורת עודכנה ל-${state.notificationTime}`);
+}
+
+function sendTestNotification() {
+  if (!state.notificationsEnabled) {
+    alert("יש להפעיל את מתג ההתראות תחילה.");
+    return;
+  }
+  const reminderModal = document.getElementById('reminderModal');
+  if (reminderModal) reminderModal.classList.remove('hidden');
+}
+
+function openNotificationsModal() {
+  closeMenuModal();
+  document.getElementById('notifToggleCheckbox').checked = state.notificationsEnabled || false;
+  document.getElementById('notifTimeInput').value = state.notificationTime || '20:00';
+  document.getElementById('notificationsModal').classList.remove('hidden');
+}
+
+function closeNotificationsModal() {
+  document.getElementById('notificationsModal').classList.add('hidden');
+}
+
+function menuOpenNotificationsModal() {
+  openNotificationsModal();
+}
+
 function closeReminderModal() { document.getElementById('reminderModal').classList.add('hidden'); }
 function openTutorialModal() { document.getElementById('tutorialModal').classList.remove('hidden'); }
 function closeTutorialModal() { document.getElementById('tutorialModal').classList.add('hidden'); }
@@ -1703,7 +1837,6 @@ window.onload = async function() {
     setDynamicGreeting();
     buildFinancialDayDropdowns();
     buildTableMonthDropdown();
-    initDailyReminder();
     loadDailyTip();
     renderHome();
   } catch (err) {

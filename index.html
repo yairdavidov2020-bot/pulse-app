@@ -433,7 +433,7 @@
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-violet-400 flex items-center gap-1.5"><i class="fa-solid fa-chart-pie"></i> 3. תמונת מצב ותרשים עוגה</p>
-                    <p class="leading-relaxed">מעקב אחר יעד החיסכון החודשי שלך, השוואה לתקופה הקודמת, ופילוח ויזואלי ברור של כל ההוצאות לפי קטגוריות ראשיות בלחיצה אחת.</p>
+                    <p class="leading-relaxed">מעקב אחר יעד החיסכון החודשי שלך, השוואה לתקופה הקודמת, ופילוח ויזואלי ברור של כל ההוצאות לפי קטגוריות ראשיות בלחיצה אחת (מסודר מההוצאה הגבוהה לנמוכה).</p>
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-amber-400 flex items-center gap-1.5"><i class="fa-solid fa-piggy-bank"></i> 4. קופות חיסכון ומצב נסיעות</p>
@@ -441,7 +441,7 @@
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-teal-400 flex items-center gap-1.5"><i class="fa-solid fa-table"></i> 5. טבלה חודשית (אקסל פיננסי)</p>
-                    <p class="leading-relaxed">פירוט מלא של כל הקטגוריות, תתי-הקטגוריות והתקציבים החודשיים עם מעקב מדויק האם עמדת ביעד או חרגת.</p>
+                    <p class="leading-relaxed">פירוט מלא של כל הקטגוריות, תתי-הקטגוריות והתקציבים החודשיים עם מעקב מדויק והתרעות אוטומטיות לחריגות מהתקציב.</p>
                 </div>
             </div>
         </div>
@@ -795,10 +795,45 @@
                     <div>
                         <label class="text-[10px] font-semibold text-slate-400 flex items-center gap-1.5 mb-1"><i class="fa-solid fa-coins text-amber-400"></i> בחירת מטבע</label>
                         <select id="currencySelect" onchange="changeCurrency(this.value)" class="w-full bg-[var(--card-2)] border border-[var(--border)] p-2 rounded-lg text-[11px] font-bold outline-none cursor-pointer" style="color:var(--text)">
-                            <option value="₪">שקל (₪ ILS)</option>
-                            <option value="$">דולר ($ USD)</option>
-                            <option value="€">אירו (€ EUR)</option>
-                            <option value="£">פאונד (£ GBP)</option>
+                            <optgroup label="מטבעות ראשיים">
+                                <option value="₪">שקל (₪ ILS)</option>
+                                <option value="$">דולר ($ USD)</option>
+                                <option value="€">אירו (€ EUR)</option>
+                                <option value="£">פאונד (£ GBP)</option>
+                            </optgroup>
+                            <optgroup label="מטבעות נסיעות ויעדים בעולם">
+                                <option value="באט">באט תאילנדי (THB)</option>
+                                <option value="יין">יין יפני (JPY)</option>
+                                <option value="דירהם">דירהם איחוד האמירויות (AED)</option>
+                                <option value="דולר סינגפורי">דולר סינגפורי (SGD)</option>
+                                <option value="וון">וון דרום קוריאני (KRW)</option>
+                                <option value="דונג">דונג וייטנאמי (VND)</option>
+                                <option value="רופי">רופי הודי (INR)</option>
+                                <option value="פזו פיליפיני">פזו פיליפיני (PHP)</option>
+                                <option value="דולר אוסטרלי">דולר אוסטרלי (AUD)</option>
+                                <option value="דולר ניו זילנדי">דולר ניו זילנדי (NZD)</option>
+                                <option value="פרנק שוויצרי">פרנק שוויצרי (CHF)</option>
+                                <option value="לארי">לארי גאורגי (GEL)</option>
+                                <option value="דינר סרבי">דינר סרבי (RSD)</option>
+                                <option value="זלוטי">זלוטי פולני (PLN)</option>
+                                <option value="קרונה צ׳כית">קרונה צ׳כית (CZK)</option>
+                                <option value="פורינט">פורינט הונגרי (HUF)</option>
+                                <option value="קרונה שוודית">קרונה שוודית (SEK)</option>
+                                <option value="קרונה נורווגית">קרונה נורווגית (NOK)</option>
+                                <option value="קרונה דנית">קרונה דנית (DKK)</option>
+                                <option value="דולר קנדי">דולר קנדי (CAD)</option>
+                                <option value="פזו מקסיקני">פזו מקסיקני (MXN)</option>
+                                <option value="קולון">קולון קוסטה ריקני (CRC)</option>
+                                <option value="ריאל ברזילאי">ריאל ברזילאי (BRL)</option>
+                                <option value="פזו ארגנטינאי">פזו ארגנטינאי (ARS)</option>
+                                <option value="פזו קולומביאני">פזו קולומביאני (COP)</option>
+                                <option value="סול">סול פרואני (PEN)</option>
+                                <option value="פזו צ׳יליאני">פזו צ׳יליאני (CLP)</option>
+                                <option value="ראנד">ראנד דרום אפריקאי (ZAR)</option>
+                                <option value="דירהם מרוקאי">דירהם מרוקאי (MAD)</option>
+                                <option value="רופי סיישל">רופי סיישל (SCR)</option>
+                                <option value="רופי מאוריציאני">רופי מאוריציאני (MUR)</option>
+                            </optgroup>
                         </select>
                     </div>
                     <button onclick="factoryReset()" class="w-full py-2.5 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-400 text-[11px] font-bold flex items-center justify-center gap-1.5 hover:bg-rose-500/20 transition cursor-pointer mt-1">
@@ -2076,15 +2111,16 @@ function renderAnalytics() {
     const total = totalExpenseVal || 1;
     let acc = 0; const stops = [];
     
-    if(state.expenseCats) {
-      state.expenseCats.forEach((cat) => {
-        const amt = spend[cat.name] || 0;
-        if(amt > 0) {
-          const start = (acc / total) * 100; acc += amt; const end = (acc / total) * 100;
-          stops.push(`${cat.color} ${start}% ${end}%`);
-        }
-      });
-    }
+    // Sort expense categories from highest expense to lowest expense
+    let sortedExpCats = [...(state.expenseCats || [])].sort((a, b) => (spend[b.name] || 0) - (spend[a.name] || 0));
+
+    sortedExpCats.forEach((cat) => {
+      const amt = spend[cat.name] || 0;
+      if(amt > 0) {
+        const start = (acc / total) * 100; acc += amt; const end = (acc / total) * 100;
+        stops.push(`${cat.color} ${start}% ${end}%`);
+      }
+    });
 
     const donutEl = document.getElementById('donutChart');
     if(donutEl) {
@@ -2096,28 +2132,26 @@ function renderAnalytics() {
       legend.innerHTML = '';
       let usedCategoriesCount = 0;
       
-      if(state.expenseCats) {
-        state.expenseCats.forEach(cat => {
-          const amt = spend[cat.name] || 0;
-          if(amt > 0) {
-            usedCategoriesCount++;
-            const pct = Math.round((amt / total) * 100);
-            const row = document.createElement('div');
-            row.className = 'flex items-center justify-between text-[11px] py-1 px-2 rounded-lg bg-[var(--card-2)] border border-[var(--border)]';
-            row.innerHTML = `
-              <div class="flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full" style="background:${cat.color}"></span>
-                <span class="font-bold">${cat.name}</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <span class="text-[10px] text-slate-400">${pct}%</span>
-                <span class="tabular font-semibold">${fmt(amt)}</span>
-              </div>
-            `;
-            legend.appendChild(row);
-          }
-        });
-      }
+      sortedExpCats.forEach(cat => {
+        const amt = spend[cat.name] || 0;
+        if(amt > 0) {
+          usedCategoriesCount++;
+          const pct = Math.round((amt / total) * 100);
+          const row = document.createElement('div');
+          row.className = 'flex items-center justify-between text-[11px] py-1 px-2 rounded-lg bg-[var(--card-2)] border border-[var(--border)]';
+          row.innerHTML = `
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full" style="background:${cat.color}"></span>
+              <span class="font-bold">${cat.name}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] text-slate-400">${pct}%</span>
+              <span class="tabular font-semibold">${fmt(amt)}</span>
+            </div>
+          `;
+          legend.appendChild(row);
+        }
+      });
 
       if(usedCategoriesCount === 0) legend.innerHTML = '<p class="text-[10px] text-slate-400 text-center py-2">אין הוצאות פעילות בתקופה זו</p>';
     }
@@ -2161,7 +2195,14 @@ function renderAnalytics() {
           row.className = 'tx-row';
           const sign = t.type === 'income' ? '+' : '−';
           const col = t.type === 'income' ? 'var(--mint)' : 'var(--coral)';
-          const origText = t.originalCurrencyStr ? ` <span class="text-[9px] text-blue-400">(${t.originalCurrencyStr})</span>` : '';
+          
+          // Clean original currency string so it doesn't duplicate the amount number
+          let origLabel = '';
+          if (t.originalCurrencyStr) {
+            const cleanCurr = t.originalCurrencyStr.replace(/[\d\.,]/g, '').trim();
+            if (cleanCurr) origLabel = ` <span class="text-[9px] text-blue-400">(${cleanCurr})</span>`;
+          }
+
           const travelBadge = t.isTravel ? ` <span class="text-[8px] bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded">טיול</span>` : '';
           const recBadge = t.isRecurring ? ` <span class="text-[8px] bg-violet-500/20 text-violet-300 px-1.5 py-0.5 rounded">קבע</span>` : '';
           const deleteBtn = !t.isRecurring ? `<button onclick="deleteTransaction(${t.id})" class="text-[10px] text-rose-400 cursor-pointer p-1" title="מחק"><i class="fa-solid fa-trash-can"></i></button>` : '';
@@ -2170,7 +2211,7 @@ function renderAnalytics() {
             <div class="flex items-center gap-2.5">
               <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:${t.color}"></span>
               <div>
-                <p class="text-[11px] font-bold text-slate-100">${t.cat}${origText}${travelBadge}${recBadge}</p>
+                <p class="text-[11px] font-bold text-slate-100">${t.cat}${origLabel}${travelBadge}${recBadge}</p>
                 <p class="text-[9px] text-slate-400">${t.subCat || 'כללי'} • ${t.date || 'היום'}</p>
               </div>
             </div>
@@ -2250,7 +2291,7 @@ function renderTableScreen() {
   if(rangeSub) rangeSub.textContent = `תקופה: מ-${startStr} עד ${endStr}`;
 
   let totalMonthExpense = 0;
-  let renderedCount = 0;
+  let categoryDataList = [];
 
   if(state.expenseCats) {
     state.expenseCats.forEach(cat => {
@@ -2279,7 +2320,6 @@ function renderTableScreen() {
             const sub = t.subCat && subCats.includes(t.subCat) ? t.subCat : 'כללי';
             subCatTotals[sub] = (subCatTotals[sub] || 0) + t.amount;
             catTotal += t.amount;
-            totalMonthExpense += t.amount;
           }
         });
       }
@@ -2290,56 +2330,21 @@ function renderTableScreen() {
           const sub = 'כללי';
           subCatTotals[sub] = (subCatTotals[sub] || 0) + r.amount;
           catTotal += r.amount;
-          totalMonthExpense += r.amount;
         }
       });
 
+      totalMonthExpense += catTotal;
+
       if(catTotal > 0 || (cat.budget && cat.budget > 0)) {
-        renderedCount++;
-        const card = document.createElement('div');
-        card.className = 'summary-card p-3 space-y-2';
-
-        let subRowsHtml = '';
-        subCats.forEach(sub => {
-          const amt = subCatTotals[sub] || 0;
-          if(amt > 0) {
-            subRowsHtml += `
-              <div class="flex items-center justify-between text-[11px] py-1 px-2 rounded-lg bg-[var(--card-2)] border border-[var(--border)]">
-                <span class="text-slate-300 flex items-center gap-1.5"><i class="fa-solid fa-angle-left text-[9px] text-emerald-400"></i> ${sub}</span>
-                <span class="tabular font-semibold text-slate-200">${fmt(amt)}</span>
-              </div>
-            `;
-          }
-        });
-
-        const budget = cat.budget || 0;
-        let budgetStatusHtml = budget > 0 ? 
-          `<div class="flex items-center justify-between text-[10px] pt-1.5 border-t border-[var(--border)] mt-1">
-            <span class="text-slate-300">תקציב: ${fmt(budget)} | <span class="${catTotal > budget ? 'text-rose-400 font-bold' : 'text-emerald-400 font-bold'}">${catTotal > budget ? 'חורג 🔴' : 'עומד ביעד 🟢'}</span></span>
-            <button onclick="editCategoryBudget('${cat.name}')" class="text-violet-400 underline cursor-pointer font-bold">ערוך תקציב</button>
-           </div>` :
-          `<div class="flex items-center justify-between text-[10px] pt-1.5 border-t border-[var(--border)] mt-1">
-            <span class="text-slate-500">ללא תקציב</span>
-            <button onclick="editCategoryBudget('${cat.name}')" class="text-emerald-400 underline cursor-pointer font-bold">+ הגדר תקציב</button>
-           </div>`;
-
-        card.innerHTML = `
-          <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-            <div class="flex items-center gap-2">
-              <span class="w-3 h-3 rounded-full" style="background:${cat.color}"></span>
-              <span class="text-xs font-bold text-slate-100">${cat.name}</span>
-            </div>
-            <span class="tabular text-xs font-black text-rose-400">${fmt(catTotal)}</span>
-          </div>
-          <div class="space-y-1 pt-1">${subRowsHtml}</div>
-          ${budgetStatusHtml}
-        `;
-        container.appendChild(card);
+        categoryDataList.push({ cat, catTotal, subCats, subCatTotals });
       }
     });
   }
 
-  if(renderedCount === 0) {
+  // Sort categories by highest expense to lowest expense
+  categoryDataList.sort((a, b) => b.catTotal - a.catTotal);
+
+  if(categoryDataList.length === 0) {
     container.innerHTML = '<p class="text-xs text-slate-400 text-center py-6">אין הוצאות פעילות בתקופה הנבחרת.</p>';
     return;
   }
@@ -2350,7 +2355,66 @@ function renderTableScreen() {
     <span class="text-xs font-bold text-slate-200">סה״כ הוצאות בתקופה:</span>
     <span class="tabular text-sm font-black text-emerald-400">${fmt(totalMonthExpense)}</span>
   `;
-  container.prepend(summaryHeader);
+  container.appendChild(summaryHeader);
+
+  categoryDataList.forEach(({ cat, catTotal, subCats, subCatTotals }) => {
+    const card = document.createElement('div');
+    card.className = 'summary-card p-3 space-y-2';
+
+    let subRowsHtml = '';
+    subCats.forEach(sub => {
+      const amt = subCatTotals[sub] || 0;
+      if(amt > 0) {
+        subRowsHtml += `
+          <div class="flex items-center justify-between text-[11px] py-1 px-2 rounded-lg bg-[var(--card-2)] border border-[var(--border)]">
+            <span class="text-slate-300 flex items-center gap-1.5"><i class="fa-solid fa-angle-left text-[9px] text-emerald-400"></i> ${sub}</span>
+            <span class="tabular font-semibold text-slate-200">${fmt(amt)}</span>
+          </div>
+        `;
+      }
+    });
+
+    const budget = cat.budget || 0;
+    let budgetStatusHtml = '';
+    if (budget > 0) {
+      const pct = Math.round((catTotal / budget) * 100);
+      let alertBadge = '';
+      if (pct >= 100) {
+        alertBadge = `<span class="px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-400 font-bold">🚨 חריגה מהתקציב! (${pct}%)</span>`;
+      } else if (pct >= 80) {
+        alertBadge = `<span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">⚠️ מתקרב לחריגה (${pct}%)</span>`;
+      } else {
+        alertBadge = `<span class="text-emerald-400 font-bold">עומד ביעד 🟢 (${pct}%)</span>`;
+      }
+
+      budgetStatusHtml = `
+        <div class="flex items-center justify-between text-[10px] pt-1.5 border-t border-[var(--border)] mt-1">
+          <span class="text-slate-300">תקציב: ${fmt(budget)} | ${alertBadge}</span>
+          <button onclick="editCategoryBudget('${cat.name}')" class="text-violet-400 underline cursor-pointer font-bold">ערוך תקציב</button>
+        </div>
+      `;
+    } else {
+      budgetStatusHtml = `
+        <div class="flex items-center justify-between text-[10px] pt-1.5 border-t border-[var(--border)] mt-1">
+          <span class="text-slate-500">ללא תקציב</span>
+          <button onclick="editCategoryBudget('${cat.name}')" class="text-emerald-400 underline cursor-pointer font-bold">+ הגדר תקציב</button>
+        </div>
+      `;
+    }
+
+    card.innerHTML = `
+      <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full" style="background:${cat.color}"></span>
+          <span class="text-xs font-bold text-slate-100">${cat.name}</span>
+        </div>
+        <span class="tabular text-xs font-black text-rose-400">${fmt(catTotal)}</span>
+      </div>
+      <div class="space-y-1 pt-1">${subRowsHtml}</div>
+      ${budgetStatusHtml}
+    `;
+    container.appendChild(card);
+  });
 }
 
 let activeRecognition = null;
@@ -2458,7 +2522,10 @@ function processVoiceCommandDirectly(text){
   let currencyLabel = '₪';
   let explicitCurrencyFound = false;
 
-  for (let key of Object.keys(exchangeRates)) {
+  // Sort keys by length descending to match longer currency names first (e.g. 'דולר קנדי' before 'דולר')
+  const sortedExchangeKeys = Object.keys(exchangeRates).sort((a, b) => b.length - a.length);
+
+  for (let key of sortedExchangeKeys) {
     if (cleanText.includes(key)) {
       currencyMultiplier = exchangeRates[key];
       currencyLabel = key;
@@ -2467,7 +2534,6 @@ function processVoiceCommandDirectly(text){
     }
   }
 
-  // אם לא צוין מטבע במפורש, אבל מצב נסיעות מופעל - השתמש אוטומטית במטבע של המדינה הנבחרת!
   if (!explicitCurrencyFound && state.isTravelMode && state.travelCurrency) {
     if (exchangeRates[state.travelCurrency]) {
       currencyMultiplier = exchangeRates[state.travelCurrency];

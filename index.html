@@ -1320,9 +1320,9 @@ async function requestNotificationPermission() {
 
       showToast("התראות פוש הופעלו ונשמרו בענן בהצלחה! 🔔");
       showBrowserNotification("Pulse 💰", "מעכשיו תקבל התזכורות והודעות ישירות מהענן למכשיר שלך.");
-    } catch (err) {
+ } catch (err) {
       console.error("שגיאה ברישום להתראות פוש:", err);
-      alert("שגיאה ברישום להתראות פוש מול Supabase.");
+      alert("שגיאה מול סופאבייס: " + (err.message || JSON.stringify(err)));
     }
   } else {
     alert("ההרשאה להתראות נדחתה. תוכל לאפשר אותה בהגדרות הדפדפן.");

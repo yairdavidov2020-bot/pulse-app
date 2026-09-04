@@ -1300,7 +1300,6 @@ async function requestNotificationPermission() {
   if (permission === "granted") {
     try {
       const registration = await navigator.serviceWorker.ready;
-      // מפתח ה-VAPID הציבורי המעודכן והאמיתי
       const vapidPublicKey = 'BCCMKASHUMUH6tC849Xx3VFYzq6qwbO3MylclUSOqJtog7IWQhJSvFkVa-q01gcXFYmBnqQbrzWhVENGv7y2k';
       
       const subscription = await registration.pushManager.subscribe({
@@ -1308,10 +1307,13 @@ async function requestNotificationPermission() {
         applicationServerKey: vapidPublicKey
       });
 
+      // המרה ל-JSON נקי שמונע את שגיאת הפורמט מול סופאבייס
+      const cleanSubscription = subscription.toJSON();
+
       if (supabaseClient && state.handle) {
         const { error } = await supabaseClient.from('push_subscriptions').upsert({
           user_key: state.handle,
-          subscription: subscription
+          subscription: cleanSubscription
         }, { onConflict: 'user_key' });
 
         if (error) throw error;

@@ -1144,31 +1144,14 @@ function urlB64ToUint8Array(base64String) {
   return outputArray;
 }
 
-// SERVICE WORKER & WEB PUSH SETUP
+// SERVICE WORKER & WEB PUSH SETUP (מתוקן עבור אייפון - טעינת קובץ sw.js חיצוני)
 let swRegistration = null;
 if ('serviceWorker' in navigator) {
-  const swCode = `
-    self.addEventListener('install', (e) => { self.skipWaiting(); });
-    self.addEventListener('activate', (e) => { e.waitUntil(self.clients.claim()); });
-    
-    // האזנה להודעות Push אמיתיות מהענן (עובד גם שהאפליקציה סגורה לגמרי!)
-    self.addEventListener('push', (e) => {
-      const data = e.data ? e.data.json() : { title: 'Pulse', body: 'הודעה חדשה' };
-      e.waitUntil(
-        self.registration.showNotification(data.title, {
-          body: data.body,
-          icon: 'icon.png',
-          badge: 'icon.png',
-          dir: 'rtl',
-          vibrate: [200, 100, 200]
-        })
-      );
-    });
-  `;
-  const blob = new Blob([swCode], { type: 'text/javascript' });
-  navigator.serviceWorker.register(URL.createObjectURL(blob)).then(reg => {
+  navigator.serviceWorker.register('sw.js').then(reg => {
     swRegistration = reg;
-  }).catch(err => {});
+  }).catch(err => {
+    console.error("SW registration failed:", err);
+  });
 }
 
 async function loadDataFromSupabase() {
@@ -1398,7 +1381,7 @@ function toggleSystemSettingsContent() {
 }
 let systemSettingsOpen = false;
 
-// NOTIFICATIONS & REMINDERS LOGIC (Web Push subscription integration)
+// NOTIFICATIONS & REMINDERS LOGIC
 async function toggleNotificationsPermission(checked) {
   if (checked) {
     if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
@@ -1416,7 +1399,6 @@ async function toggleNotificationsPermission(checked) {
           applicationServerKey: urlB64ToUint8Array(VAPID_PUBLIC_KEY)
         });
 
-        // שמירת המנוי בטבלה ב-Supabase לפי שם המשתמש
         if (supabaseClient && state.handle) {
           await supabaseClient.from('push_subscriptions').upsert({
             user_key: state.handle,

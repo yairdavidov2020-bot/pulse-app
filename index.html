@@ -1307,7 +1307,6 @@ async function requestNotificationPermission() {
         applicationServerKey: vapidPublicKey
       });
 
-   // המרה ל-JSON נקי לפני שליחה לסופאבייס
       const cleanSubscription = subscription.toJSON();
 
       if (supabaseClient && state.handle) {
@@ -1316,8 +1315,6 @@ async function requestNotificationPermission() {
           subscription: cleanSubscription
         }, { onConflict: 'user_key' });
 
-        if (error) throw error;
-      }
         if (error) throw error;
       }
 
@@ -1331,7 +1328,7 @@ async function requestNotificationPermission() {
     alert("ההרשאה להתראות נדחתה. תוכל לאפשר אותה בהגדרות הדפדפן.");
   }
 }
-
+  
 function initSystemNotifications() {
   try {
     setInterval(() => {

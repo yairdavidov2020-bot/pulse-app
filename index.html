@@ -1688,79 +1688,90 @@ function deleteRecurringItem(id) {
   showToast("הוראת קבע הוסרה");
 }
 
-window.onload = async function() {
-  try {
-    await updateLiveExchangeRates();
-
-    setTimeout(() => {
-      const splash = document.getElementById('appSplashScreen');
-      if(splash) { splash.style.opacity = '0'; setTimeout(() => splash.remove(), 700); }
-    }, 3500);
-
-    let saved = localStorage.getItem('pulse_state_v66');
-    if(saved) {
-      try { state = JSON.parse(saved); } catch(e) { localStorage.removeItem('pulse_state_v66'); }
+// ---- NON-BLOCKING APP INITIALIZATION ----
+window.onload = function() {
+  // הסרת מסך טעינה מיידית, בלי תלות בשום קריאת רשת
+  setTimeout(() => {
+    const splash = document.getElementById('appSplashScreen');
+    if(splash) { 
+      splash.style.opacity = '0'; 
+      setTimeout(() => splash.remove(), 700); 
     }
+  }, 1500);
 
-    if (state.handle && supabaseClient) {
-      try {
-        const cloudData = await loadDataFromSupabase();
-        if (cloudData && cloudData.userName) { state = cloudData; localStorage.setItem('pulse_state_v66', JSON.stringify(state)); }
-      } catch(e) {}
+  // טעינת הנתונים והרשת ברקע
+  (async function() {
+    try {
+      updateLiveExchangeRates().catch(() => {});
+
+      let saved = localStorage.getItem('pulse_state_v66');
+      if(saved) {
+        try { state = JSON.parse(saved); } catch(e) { localStorage.removeItem('pulse_state_v66'); }
+      }
+
+      if (state.handle && supabaseClient) {
+        try {
+          const cloudData = await loadDataFromSupabase();
+          if (cloudData && cloudData.userName) { 
+            state = cloudData; 
+            localStorage.setItem('pulse_state_v66', JSON.stringify(state)); 
+          }
+        } catch(e) {}
+      }
+
+      if(!state.expenseCats || state.expenseCats.length === 0) {
+        state.expenseCats = [
+          { name: 'אוכל', color: '#7FE8C6', budget: 0, custom: false },
+          { name: 'בילויים', color: '#FF8D82', budget: 0, custom: false },
+          { name: 'שופינג', color: '#8FB8FF', budget: 0, custom: false },
+          { name: 'תחבורה', color: '#C7A6FF', budget: 0, custom: false },
+          { name: 'דיור', color: '#FFC85C', budget: 0, custom: false },
+          { name: 'טיפוח', color: '#FF9FD1', budget: 0, custom: false },
+          { name: 'בריאות', color: '#34D399', budget: 0, custom: false },
+          { name: 'ספורט', color: '#38BDF8', budget: 0, custom: false },
+          { name: 'לימודים', color: '#F472B6', budget: 0, custom: false },
+          { name: 'חיסכון', color: '#A78BFA', budget: 0, custom: false },
+          { name: 'שונות', color: '#94A3B8', budget: 0, custom: false }
+        ];
+      }
+
+      if(!state.incomeCats) {
+        state.incomeCats = [{ name: 'משכורת', color: '#7FE8C6', budget: 0, custom: false }];
+      }
+      if(!state.learnedKeywords) {
+        state.learnedKeywords = {};
+      }
+
+      sortTransactions();
+      
+      if(!state.onboardingCompleted || !state.handle || state.baseline === null || state.baseline === undefined) {
+        if(document.getElementById('wizName') && state.userName) document.getElementById('wizName').value = state.userName;
+        if(document.getElementById('wizHandle') && state.handle) document.getElementById('wizHandle').value = state.handle;
+        if(document.getElementById('wizBalance') && state.baseline !== null) document.getElementById('wizBalance').value = state.baseline;
+        if(document.getElementById('wizSavingsGoal') && state.savingsGoal) document.getElementById('wizSavingsGoal').value = state.savingsGoal;
+        if(document.getElementById('wizFinancialDay') && state.financialDay) document.getElementById('wizFinancialDay').value = state.financialDay;
+
+        const step0 = document.getElementById('onboarding-step-0');
+        if(step0) step0.classList.remove('hidden');
+      } else {
+        const step0 = document.getElementById('onboarding-step-0');
+        if(step0) step0.classList.add('hidden');
+        await saveDataToSupabase(state);
+      }
+
+      if(document.getElementById('langSelect')) document.getElementById('langSelect').value = state.language || 'he';
+      if(document.getElementById('currencySelect')) document.getElementById('currencySelect').value = state.currency || '₪';
+
+      setDynamicGreeting();
+      buildFinancialDayDropdowns();
+      buildTableMonthDropdown();
+      initSystemNotifications();
+      loadDailyTip();
+      renderHome();
+    } catch (err) {
+      console.error("Initialization error caught:", err);
     }
-
-    if(!state.expenseCats || state.expenseCats.length === 0) {
-      state.expenseCats = [
-        { name: 'אוכל', color: '#7FE8C6', budget: 0, custom: false },
-        { name: 'בילויים', color: '#FF8D82', budget: 0, custom: false },
-        { name: 'שופינג', color: '#8FB8FF', budget: 0, custom: false },
-        { name: 'תחבורה', color: '#C7A6FF', budget: 0, custom: false },
-        { name: 'דיור', color: '#FFC85C', budget: 0, custom: false },
-        { name: 'טיפוח', color: '#FF9FD1', budget: 0, custom: false },
-        { name: 'בריאות', color: '#34D399', budget: 0, custom: false },
-        { name: 'ספורט', color: '#38BDF8', budget: 0, custom: false },
-        { name: 'לימודים', color: '#F472B6', budget: 0, custom: false },
-        { name: 'חיסכון', color: '#A78BFA', budget: 0, custom: false },
-        { name: 'שונות', color: '#94A3B8', budget: 0, custom: false }
-      ];
-    }
-
-    if(!state.incomeCats) {
-      state.incomeCats = [{ name: 'משכורת', color: '#7FE8C6', budget: 0, custom: false }];
-    }
-    if(!state.learnedKeywords) {
-      state.learnedKeywords = {};
-    }
-
-    sortTransactions();
-    
-    if(!state.onboardingCompleted || !state.handle || state.baseline === null || state.baseline === undefined) {
-      if(document.getElementById('wizName') && state.userName) document.getElementById('wizName').value = state.userName;
-      if(document.getElementById('wizHandle') && state.handle) document.getElementById('wizHandle').value = state.handle;
-      if(document.getElementById('wizBalance') && state.baseline !== null) document.getElementById('wizBalance').value = state.baseline;
-      if(document.getElementById('wizSavingsGoal') && state.savingsGoal) document.getElementById('wizSavingsGoal').value = state.savingsGoal;
-      if(document.getElementById('wizFinancialDay') && state.financialDay) document.getElementById('wizFinancialDay').value = state.financialDay;
-
-      const step0 = document.getElementById('onboarding-step-0');
-      if(step0) step0.classList.remove('hidden');
-    } else {
-      const step0 = document.getElementById('onboarding-step-0');
-      if(step0) step0.classList.add('hidden');
-      await saveDataToSupabase(state);
-    }
-
-    if(document.getElementById('langSelect')) document.getElementById('langSelect').value = state.language || 'he';
-    if(document.getElementById('currencySelect')) document.getElementById('currencySelect').value = state.currency || '₪';
-
-    setDynamicGreeting();
-    buildFinancialDayDropdowns();
-    buildTableMonthDropdown();
-    initSystemNotifications();
-    loadDailyTip();
-    renderHome();
-  } catch (err) {
-    console.error("Initialization error caught:", err);
-  }
+  })();
 };
 
 function sortTransactions() {
@@ -2440,11 +2451,11 @@ function renderTableScreen() {
           `<div class="flex items-center justify-between text-[10px] pt-1.5 border-t border-[var(--border)] mt-1">
             <span class="text-slate-300">תקציב: ${fmt(budget)} | <span class="${catTotal > budget ? 'text-rose-400 font-bold' : 'text-emerald-400 font-bold'}">${catTotal > budget ? 'חורג 🔴' : 'עומד ביעד 🟢'}</span></span>
             <button onclick="editCategoryBudget('${cat.name}')" class="text-violet-400 underline cursor-pointer font-bold">ערוך תקציב</button>
-          </div>` :
+           </div>` :
           `<div class="flex items-center justify-between text-[10px] pt-1.5 border-t border-[var(--border)] mt-1">
             <span class="text-slate-500">ללא תקציב</span>
             <button onclick="editCategoryBudget('${cat.name}')" class="text-emerald-400 underline cursor-pointer font-bold">+ הגדר תקציב</button>
-          </div>`;
+           </div>`;
 
         card.innerHTML = `
           <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
@@ -2594,4 +2605,262 @@ function processVoiceCommandDirectly(text){
     if (exchangeRates[state.travelCurrency]) {
       currencyMultiplier = exchangeRates[state.travelCurrency];
       currencyLabel = state.travelCurrency;
-    }אני AI מבוסס-טקסט, וזה מעבר ליכולות שלי.
+    }
+  }
+
+  const numMatch = cleanText.match(/(\d+[\.,]?\d*)/);
+  if(numMatch) {
+    rawAmount = parseFloat(numMatch[1].replace(',', ''));
+  }
+
+  if(!rawAmount || isNaN(rawAmount)) {
+    alert("לא הצלחתי לזהות סכום במסר. נסה שוב.");
+    return;
+  }
+
+  const finalAmountInILS = rawAmount * currencyMultiplier;
+  const originalCurrencyStr = explicitCurrencyFound ? `${rawAmount} ${currencyLabel}` : (state.isTravelMode ? `${rawAmount} ${state.travelCurrency}` : null);
+
+  let textWithoutNumber = cleanText.replace(/(\d+[\.,]?\d*)/, '').trim();
+  for (let key of Object.keys(exchangeRates)) {
+    textWithoutNumber = textWithoutNumber.replace(key, '').trim();
+  }
+  textWithoutNumber = textWithoutNumber.replace(/(שילמתי|עלד|על|בסך|לשרוף|הוצאתי|עלה|שקל|שקלים)/g, '').trim();
+  const subCatText = cleanSubCategoryText(textWithoutNumber);
+
+  let determinedCategory = 'שונות';
+  let isIncome = cleanText.includes('משכורת') || cleanText.includes('הכנסה') || cleanText.includes('קיבלתי');
+
+  if (isIncome) {
+    determinedCategory = 'משכורת';
+  } else {
+    for (let [kw, catName] of Object.entries(state.learnedKeywords || {})) {
+      if (subCatText.includes(kw) || kw.includes(subCatText)) {
+        determinedCategory = catName;
+        break;
+      }
+    }
+    if (determinedCategory === 'שונות') {
+      if (subCatText.includes('אוכל') || subCatText.includes('מסעדה') || subCatText.includes('קפה') || subCatText.includes('סופר') || subCatText.includes('פלאפל') || subCatText.includes('פיצה') || subCatText.includes('שווארמה')) {
+        determinedCategory = 'אוכל';
+      } else if (subCatText.includes('דלק') || subCatText.includes('מונית') || subCatText.includes('רכבת') || subCatText.includes('אוטובוס')) {
+        determinedCategory = 'תחבורה';
+      } else if (subCatText.includes('בגדים') || subCatText.includes('נעליים') || subCatText.includes('שופינג') || subCatText.includes('קניות')) {
+        determinedCategory = 'שופינג';
+      } else if (subCatText.includes('סרט') || subCatText.includes('ברים') || subCatText.includes('פאב') || subCatText.includes('בילוי')) {
+        determinedCategory = 'בילויים';
+      }
+    }
+  }
+
+  const isUnknownKeyword = !isIncome && determinedCategory === 'שונות' && subCatText !== 'כללי' && subCatText.length > 1;
+
+  if (isUnknownKeyword) {
+    pendingSmartTx = {
+      amount: finalAmountInILS,
+      type: 'expense',
+      subCat: subCatText,
+      date: parsedDate,
+      originalCurrencyStr: originalCurrencyStr,
+      isTravel: state.isTravelMode
+    };
+    
+    const select = document.getElementById('selectMainCategory');
+    if(select) {
+      select.innerHTML = '';
+      state.expenseCats.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.name; opt.textContent = c.name;
+        select.appendChild(opt);
+      });
+    }
+    document.getElementById('voiceParsedInfo').textContent = `זיהיתי: "${subCatText}" (${Math.round(finalAmountInILS)} ₪)`;
+    document.getElementById('voiceSubCatInput').value = subCatText;
+    document.getElementById('voiceDescModal').classList.remove('hidden');
+    return;
+  }
+
+  const catObj = isIncome ? state.incomeCats.find(c => c.name === determinedCategory) : state.expenseCats.find(c => c.name === determinedCategory);
+  const color = catObj ? catObj.color : '#7FE8C6';
+
+  if(!state.transactions) state.transactions = [];
+  state.transactions.unshift({
+    id: Date.now(),
+    type: isIncome ? 'income' : 'expense',
+    amount: finalAmountInILS,
+    cat: determinedCategory,
+    subCat: subCatText,
+    color: color,
+    date: parsedDate,
+    originalCurrencyStr: originalCurrencyStr,
+    isTravel: state.isTravelMode
+  });
+
+  persist();
+  renderHome();
+  renderAnalytics();
+  showToast(`נוסף בהצלחה: ${Math.round(finalAmountInILS)} ₪ (${determinedCategory})`);
+}
+
+function confirmVoiceTransaction() {
+  if(!pendingSmartTx) return;
+  const mainCat = document.getElementById('selectMainCategory').value;
+  const customSub = document.getElementById('voiceSubCatInput').value.trim() || pendingSmartTx.subCat;
+
+  const catObj = state.expenseCats.find(c => c.name === mainCat);
+  const color = catObj ? catObj.color : '#7FE8C6';
+
+  if(!state.learnedKeywords) state.learnedKeywords = {};
+  state.learnedKeywords[customSub] = mainCat;
+
+  pendingSmartTx.cat = mainCat;
+  pendingSmartTx.subCat = customSub;
+  pendingSmartTx.color = color;
+
+  if(!state.transactions) state.transactions = [];
+  state.transactions.unshift({
+    id: Date.now(),
+    type: pendingSmartTx.type,
+    amount: pendingSmartTx.amount,
+    cat: pendingSmartTx.cat,
+    subCat: pendingSmartTx.subCat,
+    color: pendingSmartTx.color,
+    date: pendingSmartTx.date,
+    originalCurrencyStr: pendingSmartTx.originalCurrencyStr,
+    isTravel: pendingSmartTx.isTravel
+  });
+
+  persist();
+  renderHome();
+  renderAnalytics();
+  document.getElementById('voiceDescModal').classList.add('hidden');
+  showToast(`נלמד בהצלחה! התנועה נוספה תחת ${mainCat}`);
+  pendingSmartTx = null;
+}
+
+function cancelVoiceTransaction() {
+  document.getElementById('voiceDescModal').classList.add('hidden');
+  pendingSmartTx = null;
+}
+
+function openCategoriesModal() {
+  document.getElementById('categoriesModal').classList.remove('hidden');
+  renderCategoriesModalList('expense');
+}
+function closeCategoriesModal() { document.getElementById('categoriesModal').classList.add('hidden'); }
+
+let currentCatTab = 'expense';
+function switchCategoryTab(tab) {
+  currentCatTab = tab;
+  const expBtn = document.getElementById('catTabExpBtn');
+  const incBtn = document.getElementById('catTabIncBtn');
+  const label = document.getElementById('newCatTitleLabel');
+  if(tab === 'expense') {
+    expBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold bg-emerald-500/20 text-emerald-400 transition';
+    incBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold text-slate-400 transition';
+    if(label) label.textContent = 'הוספת קטגוריית הוצאה ראשית חדשה:';
+  } else {
+    incBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold bg-emerald-500/20 text-emerald-400 transition';
+    expBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold text-slate-400 transition';
+    if(label) label.textContent = 'הוספת קטגוריית הכנסה ראשית חדשה:';
+  }
+  renderCategoriesModalList(tab);
+}
+
+function renderCategoriesModalList(type) {
+  const container = document.getElementById('modalCatList');
+  if(!container) return;
+  container.innerHTML = '';
+  const list = type === 'expense' ? state.expenseCats : state.incomeCats;
+  
+  list.forEach((cat) => {
+    const row = document.createElement('div');
+    row.className = 'p-2 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1.5 text-[11px]';
+    
+    let keywordsHtml = '';
+    const matchedKw = [];
+    if(state.learnedKeywords) {
+      Object.entries(state.learnedKeywords).forEach(([kw, cName]) => {
+        if(cName === cat.name) matchedKw.push(kw);
+      });
+    }
+
+    if(matchedKw.length > 0) {
+      keywordsHtml = `<div class="flex flex-wrap gap-1 pt-1 border-t border-[var(--border)]">`;
+      matchedKw.forEach(kw => {
+        keywordsHtml += `<span class="text-[9px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-md flex items-center gap-1">
+          ${kw} <button onclick="deleteKeyword('${kw}')" class="text-rose-400 hover:text-rose-200 cursor-pointer">×</button>
+        </span>`;
+      });
+      keywordsHtml += `</div>`;
+    } else {
+      keywordsHtml = `<p class="text-[9px] text-slate-500">אין מילים נלמדות לקטגוריה זו</p>`;
+    }
+
+    const deleteCatBtn = cat.custom ? `<button onclick="deleteMainCategory('${cat.name}', '${type}')" class="text-rose-400 text-xs cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>` : '';
+
+    row.innerHTML = `
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full" style="background:${cat.color}"></span>
+          <span class="font-bold text-slate-100">${cat.name}</span>
+        </div>
+        ${deleteCatBtn}
+      </div>
+      ${keywordsHtml}
+    `;
+    container.appendChild(row);
+  });
+}
+
+function deleteKeyword(kw) {
+  if(state.learnedKeywords && state.learnedKeywords[kw]) {
+    delete state.learnedKeywords[kw];
+    persist();
+    renderCategoriesModalList(currentCatTab);
+    showToast("המילה הוסרה מהזיכרון האוטומטי");
+  }
+}
+
+function addNewCustomCategory() {
+  const input = document.getElementById('newCatInput');
+  const name = input.value.trim();
+  if(!name) return;
+  const list = currentCatTab === 'expense' ? state.expenseCats : state.incomeCats;
+  if(list.find(c => c.name === name)) { alert("קטגוריה בשם זה כבר קיימת."); return; }
+  const color = availableColors[list.length % availableColors.length];
+  list.push({ name, color, budget: 0, custom: true });
+  persist();
+  input.value = '';
+  renderCategoriesModalList(currentCatTab);
+  showToast("הקטגוריה הראשית נוספה בהצלחה!");
+}
+
+function deleteMainCategory(name, type) {
+  if(confirm(`האם אתה בטוח שברצונך למחוק את הקטגוריה "${name}"?`)) {
+    if(type === 'expense') {
+      state.expenseCats = state.expenseCats.filter(c => c.name !== name);
+    } else {
+      state.incomeCats = state.incomeCats.filter(c => c.name !== name);
+    }
+    persist();
+    renderCategoriesModalList(type);
+    showToast("הקטגוריה הוסרה");
+  }
+}
+
+function promptSavingsGoal() {
+  const val = prompt("הכנס יעד חיסכון חודשי חדש:", state.savingsGoal || 1500);
+  if(val !== null) {
+    const num = parseFloat(val);
+    if(!isNaN(num) && num >= 0) {
+      state.savingsGoal = num;
+      persist();
+      renderAnalytics();
+      showToast("יעד החיסכון עודכן בהצלחה!");
+    }
+  }
+}
+</script>
+</body>
+</html>

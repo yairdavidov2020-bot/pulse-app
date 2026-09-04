@@ -1411,7 +1411,8 @@ async function toggleNotificationsPermission(checked) {
         showToast("התראות ענן ברקע הופעלו בהצלחה! 🚀");
       } catch (err) {
         console.error("Error subscribing to push:", err);
-        alert("שגיאה ברישום להתרעות. נסה שוב.");
+        // הצגת השגיאה המדויקת על המסך באייפון
+        alert("שגיאה ברישום להתרעות: " + (err.message || err));
         document.getElementById('notifToggleCheckbox').checked = false;
       }
     } else {

@@ -79,7 +79,7 @@
   .summary-card{ border:1px solid var(--border); background:var(--card); border-radius:12px; backdrop-filter:blur(12px); }
 
   .amount-input{ background:transparent; border:none; outline:none; color:var(--text); font-family:'Rubik',sans-serif; font-weight:700; width:100%; font-size: 16px !important; }
-  input[type="text"], select, input[type="tel"], input[type="number"], input[type="time"] { font-size: 16px !important; }
+  input[type="text"], select, input[type="tel"], input[type="number"], input[type="time"], input[type="date"] { font-size: 16px !important; }
 
   .field-shell{ background:rgba(15, 20, 30, 0.85); border:1px solid rgba(255,255,255,0.15); border-radius:10px; transition: border-color 0.2s; backdrop-filter:blur(10px); }
   html.light .field-shell { background: rgba(240, 242, 245, 0.9); border-color: rgba(0,0,0,0.1); }
@@ -232,7 +232,6 @@
         </div>
         
         <div class="p-3 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-2.5">
-            <p class="text-[11px] font-bold text-slate-100 flex items-center gap-1.5"><i class="fa-solid fa-sliders text-blue-400"></i> בחירת יעד והמרת מטבע אוטומטית</p>
             <div class="flex items-center justify-between py-1">
                 <span class="text-xs font-bold">הפעל מצב נסיעות</span>
                 <input id="travelToggleCheckbox" type="checkbox" onchange="toggleTravelModeState(this.checked)" class="w-4 h-4 accent-emerald-400 cursor-pointer" />
@@ -299,11 +298,32 @@
                     </select>
                 </div>
             </div>
-            <div>
-                <label class="text-[10px] font-semibold text-slate-400 mb-1 block">תקציב לטיול (בשקלים)</label>
-                <div class="field-shell px-3 py-2 flex items-center">
-                    <span class="text-xs font-bold ml-1 text-emerald-400">₪</span>
-                    <input id="travelBudgetInput" type="tel" inputmode="decimal" placeholder="5000..." class="w-full bg-transparent outline-none text-xs font-bold" style="color:var(--text)" />
+            
+            <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <label class="text-[10px] font-semibold text-slate-400 mb-1 block">תאריך התחלת טיול</label>
+                    <input id="travelStartDateInput" type="date" class="field-shell px-2 py-1.5 text-xs font-bold w-full bg-transparent outline-none" style="color:var(--text)" />
+                </div>
+                <div>
+                    <label class="text-[10px] font-semibold text-slate-400 mb-1 block">תאריך סיום טיול</label>
+                    <input id="travelEndDateInput" type="date" class="field-shell px-2 py-1.5 text-xs font-bold w-full bg-transparent outline-none" style="color:var(--text)" />
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <label class="text-[10px] font-semibold text-slate-400 mb-1 block">תקציב כולל (בשקלים)</label>
+                    <div class="field-shell px-2 py-1.5 flex items-center">
+                        <span class="text-xs font-bold ml-1 text-emerald-400">₪</span>
+                        <input id="travelBudgetInput" type="tel" inputmode="decimal" placeholder="5000..." class="w-full bg-transparent outline-none text-xs font-bold" style="color:var(--text)" />
+                    </div>
+                </div>
+                <div>
+                    <label class="text-[10px] font-semibold text-slate-400 mb-1 block">מזומן פיזי בארנק (₪)</label>
+                    <div class="field-shell px-2 py-1.5 flex items-center">
+                        <span class="text-xs font-bold ml-1 text-emerald-400">₪</span>
+                        <input id="travelCashInput" type="tel" inputmode="decimal" placeholder="2000..." class="w-full bg-transparent outline-none text-xs font-bold" style="color:var(--text)" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -430,7 +450,7 @@
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-amber-400 flex items-center gap-1.5"><i class="fa-solid fa-piggy-bank"></i> 4. קופות חיסכון ומצב נסיעות</p>
-                    <p class="leading-relaxed">שמור כסף בצד לקופות וירטואליות והפעל מצב נסיעות (עם המרה אוטומטית לפי מדינת היעד!) לניהול הוצאות בחו"ל וסיכום טיול.</p>
+                    <p class="leading-relaxed">שמור כסף בצד לקופות וירטואליות והפעל מצב נסיעות (עם המרה אוטומטית, ניהול מזומן בארנק וחישוב תקציב יומי Burn Rate) לניהול הוצאות בחו"ל.</p>
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-teal-400 flex items-center gap-1.5"><i class="fa-solid fa-table"></i> 5. טבלה חודשית (אקסל פיננסי)</p>
@@ -646,7 +666,7 @@
             <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-microphone ml-1"></i> העוזר הקולי והצ׳אט החכם</h3>
             <button onclick="closeChatHelpModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
-        <p class="text-[11px] text-slate-300 leading-relaxed">העוזר הקולי מזהה סכומים, מטבעות ומילים. אם זו מילה חדשה, המערכת תלמד אותה ממך פעם אחת בלבד.</p>
+        <p class="text-[11px] text-slate-300 leading-relaxed">העוזר הקולי מזהה סכומים, מטבעות ומילים. במצב נסיעות ניתן להגיד גם "במזומן" כדי לעדכן את ארנק המזומן הפיזי.</p>
         <button onclick="closeChatHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי</button>
     </div>
 </div>
@@ -970,13 +990,13 @@
                 </h4>
                 <button onclick="openVoiceHelpModal()" class="w-3.5 h-3.5 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[8px] font-bold flex items-center justify-center text-emerald-400 cursor-pointer">?</button>
               </div>
-              <p id="micStatus" class="text-[9px] mt-0.5 leading-tight truncate" style="color:var(--text-dim)">למשל: "50 פלאפל ב-18.8"</p>
+              <p id="micStatus" class="text-[9px] mt-0.5 leading-tight truncate" style="color:var(--text-dim)">למשל: "50 פלאפל במזומן ב-18.8"</p>
             </div>
           </div>
 
           <div class="summary-card p-2 space-y-1">
             <div class="field-shell flex items-center px-2.5 py-1.5">
-              <input id="smartTextInput" type="text" placeholder="הכתבה... (למשל: 50 פלאפל ב-18.8)" class="w-full bg-transparent outline-none text-[10px] font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
+              <input id="smartTextInput" type="text" placeholder="הכתבה... (למשל: 50 פלאפל מזומן ב-18.8)" class="w-full bg-transparent outline-none text-[10px] font-medium" style="color:var(--text)" onkeydown="if(event.key==='Enter') processSmartText()" />
             </div>
             <button onclick="processSmartText()" class="save-btn w-full py-1.5 rounded-xl text-[10px] font-bold cursor-pointer shadow-sm">פענח והוסף תנועה</button>
           </div>
@@ -1011,7 +1031,7 @@
           <div class="flex items-center justify-between mb-1.5">
             <div class="flex items-center gap-1.5">
               <span class="text-sm" id="analyticsTravelFlag">✈️</span>
-              <span class="text-[12px] font-bold text-blue-400" id="analyticsTravelTitle">מצב נסיעות פעיל (שערים חיים)</span>
+              <span class="text-[12px] font-bold text-blue-400" id="analyticsTravelTitle">מצב נסיעות פעיל (Burn Rate ומזומן)</span>
             </div>
             <div class="flex items-center gap-1.5">
                 <button onclick="triggerEndTravelMode()" class="text-[9px] font-bold bg-blue-500 text-white px-2 py-0.5 rounded-md shadow cursor-pointer">סיים נסיעה</button>
@@ -1022,8 +1042,8 @@
             <div id="travelProgressBar" class="bg-blue-400 h-full transition-all duration-500" style="width: 0%"></div>
           </div>
           <div class="flex justify-between text-[10px]" style="color:var(--text-dim)">
-            <span id="travelSpentStatus">הוצאות בטיול: 0</span>
-            <span id="travelBudgetTarget">תקציב טיול: 0</span>
+            <span id="travelSpentStatus">הוצאות: 0</span>
+            <span id="travelBudgetTarget">ארנק מזומן: 0</span>
           </div>
         </section>
 
@@ -1313,6 +1333,9 @@ let state = {
   travelCountry: 'תאילנד',
   travelCurrency: 'באט',
   travelBudget: 5000,
+  travelStartDate: '',
+  travelEndDate: '',
+  travelCashAvailable: 0,
   learnedKeywords: {},
   notificationsEnabled: false,
   micPermissionGranted: false,
@@ -1368,7 +1391,6 @@ function toggleSystemSettingsContent() {
     content.classList.remove('hidden'); 
     chevron.style.transform = 'rotate(180deg)';
     
-    // Sync toggles state
     const notifToggle = document.getElementById('settingsNotifToggle');
     const micToggle = document.getElementById('settingsMicToggle');
     if(notifToggle) notifToggle.checked = state.notificationsEnabled || false;
@@ -1378,11 +1400,9 @@ function toggleSystemSettingsContent() {
 }
 let systemSettingsOpen = false;
 
-// PERMISSIONS HANDLING FOR WIZARD AND SETTINGS
 async function requestMicrophonePermissionInWizard(btn) {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    // Stop the stream immediately, we just needed the permission grant
     stream.getTracks().forEach(track => track.stop());
     state.micPermissionGranted = true;
     persist();
@@ -1547,6 +1567,9 @@ function openTravelModal() {
   document.getElementById('travelToggleCheckbox').checked = state.isTravelMode;
   document.getElementById('travelCountrySelect').value = state.travelCountry || 'תאילנד';
   document.getElementById('travelBudgetInput').value = state.travelBudget || 5000;
+  document.getElementById('travelStartDateInput').value = state.travelStartDate || '';
+  document.getElementById('travelEndDateInput').value = state.travelEndDate || '';
+  document.getElementById('travelCashInput').value = state.travelCashAvailable || 0;
   document.getElementById('travelModal').classList.remove('hidden');
 }
 
@@ -1598,8 +1621,12 @@ function toggleTravelModeFromMain(checked) {
 
 function saveTravelSettings() {
   state.travelBudget = parseFloat(document.getElementById('travelBudgetInput').value) || 5000;
+  state.travelCashAvailable = parseFloat(document.getElementById('travelCashInput').value) || 0;
   state.travelCountry = document.getElementById('travelCountrySelect').value;
+  state.travelStartDate = document.getElementById('travelStartDateInput').value;
+  state.travelEndDate = document.getElementById('travelEndDateInput').value;
   onTravelCountryChange(state.travelCountry);
+
   const wasOn = state.isTravelMode;
   state.isTravelMode = document.getElementById('travelToggleCheckbox').checked;
   persist();
@@ -1610,7 +1637,7 @@ function saveTravelSettings() {
   if (wasOn && !state.isTravelMode) {
       triggerEndTravelMode();
   } else {
-      showToast(state.isTravelMode ? "מצב נסיעות הופעל בהצלחה! ✈️" : "מצב נסיעות כובה.");
+      showToast(state.isTravelMode ? "מצב נסיעות ונתוני ארנק עודכנו בהצלחה! ✈️" : "מצב נסיעות כובה.");
   }
 }
 
@@ -2146,9 +2173,9 @@ function renderHome(){
         if(travelCardFlagIcon) travelCardFlagIcon.textContent = flag;
         if(travelCardSubtitle) travelCardSubtitle.textContent = `הוצאות בטיול: ${fmt(travelSpent)} / תקציב: ${fmt(state.travelBudget || 5000)}`;
         
-        if(micStatus) micStatus.textContent = `מצב טיול (${country}): כתוב סכום ותיאור בלבד`;
-        if(smartInput) smartInput.placeholder = `הכתבה... (למשל: 50 פלאפל ב-18.8 במטבע ${state.travelCurrency})`;
-        if(voiceExampleBox) voiceExampleBox.textContent = `"שילמתי 50 פלאפל ב-18.8" (יומר אוטומטית לפי ${state.travelCurrency})`;
+        if(micStatus) micStatus.textContent = `מצב טיול (${country}): אמור "מזומן" לתשלום פיזי`;
+        if(smartInput) smartInput.placeholder = `הכתבה... (למשל: 50 פלאפל מזומן ב-18.8 במטבע ${state.travelCurrency})`;
+        if(voiceExampleBox) voiceExampleBox.textContent = `"שילמתי 50 פלאפל מזומן ב-18.8" (יומר אוטומטית לפי ${state.travelCurrency})`;
     } else {
         if(travelControlCard) travelControlCard.classList.add('hidden');
         if(micStatus) micStatus.textContent = 'למשל: "50 שקל פלאפל ב-18.8"';
@@ -2182,25 +2209,50 @@ function renderAnalytics() {
     if(travelWidget) {
       if(state.isTravelMode) {
         travelWidget.classList.remove('hidden');
-        let travelSpent = 0;
+        let travelSpentTotal = 0;
+        let travelCashSpent = 0;
+
         if(state.transactions) {
           state.transactions.forEach(t => {
-            if(t.type === 'expense' && t.isTravel) travelSpent += t.amount;
+            if(t.type === 'expense' && t.isTravel) {
+              travelSpentTotal += t.amount;
+              if(t.paymentMethod === 'cash') travelCashSpent += t.amount;
+            }
           });
         }
+
         const travelBudget = state.travelBudget || 5000;
-        const tPct = Math.min(100, Math.round((travelSpent / travelBudget) * 100));
+        const remainingBudget = travelBudget - travelSpentTotal;
+
+        // חישוב ימים נותרים ו-Burn Rate יומי
+        const today = new Date();
+        today.setHours(0,0,0,0);
+        const endDate = state.travelEndDate ? new Date(state.travelEndDate) : new Date(today.getTime() + 7*86400000);
+        const diffTime = endDate - today;
+        const remainingDays = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+        const recommendedDaily = Math.round(Math.max(0, remainingBudget) / remainingDays);
+
+        // חישוב מזומן נותר בארנק
+        const cashAvailable = state.travelCashAvailable || 0;
+        const cashRemaining = cashAvailable - travelCashSpent;
+
+        const tPct = Math.min(100, Math.round((travelSpentTotal / travelBudget) * 100));
         const tProg = document.getElementById('travelProgressBar');
         if(tProg) tProg.style.width = tPct + '%';
+
         const tSpent = document.getElementById('travelSpentStatus');
-        if(tSpent) tSpent.textContent = `הוצאות בטיול: ${fmt(travelSpent)}`;
+        if(tSpent) {
+          tSpent.innerHTML = `הוצאות: ${fmt(travelSpentTotal)} | <span class="text-emerald-400 font-bold">יומי מומלץ: ${fmt(recommendedDaily)}</span>`;
+        }
         const tBudg = document.getElementById('travelBudgetTarget');
-        if(tBudg) tBudg.textContent = `תקציב: ${fmt(travelBudget)}`;
-        
+        if(tBudg) {
+          tBudg.innerHTML = `מזומן בארנק נותר: <span class="${cashRemaining >= 0 ? 'text-amber-300' : 'text-rose-400'} font-bold">${fmt(cashRemaining)}</span>`;
+        }
+
         const aFlag = document.getElementById('analyticsTravelFlag');
         const aTitle = document.getElementById('analyticsTravelTitle');
         if(aFlag) aFlag.textContent = getCountryFlag(state.travelCountry);
-        if(aTitle) aTitle.textContent = `מצב נסיעות פעיל (${state.travelCountry || 'תאילנד'}) - המרה אוטומטית`;
+        if(aTitle) aTitle.textContent = `מצב נסיעות (${state.travelCountry || 'תאילנד'}) • נותרו ${remainingDays} ימים`;
       } else {
         travelWidget.classList.add('hidden');
       }
@@ -2342,6 +2394,7 @@ function renderAnalytics() {
           }
 
           const travelBadge = t.isTravel ? ` <span class="text-[8px] bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded">טיול</span>` : '';
+          const paymentBadge = t.paymentMethod === 'cash' ? ` <span class="text-[8px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded">מזומן</span>` : '';
           const recBadge = t.isRecurring ? ` <span class="text-[8px] bg-violet-500/20 text-violet-300 px-1.5 py-0.5 rounded">קבע</span>` : '';
           const deleteBtn = !t.isRecurring ? `<button onclick="deleteTransaction(${t.id})" class="text-[10px] text-rose-400 cursor-pointer p-1" title="מחק"><i class="fa-solid fa-trash-can"></i></button>` : '';
 
@@ -2349,7 +2402,7 @@ function renderAnalytics() {
             <div class="flex items-center gap-2.5">
               <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:${t.color}"></span>
               <div>
-                <p class="text-[11px] font-bold text-slate-100">${t.cat}${origLabel}${travelBadge}${recBadge}</p>
+                <p class="text-[11px] font-bold text-slate-100">${t.cat}${origLabel}${travelBadge}${paymentBadge}${recBadge}</p>
                 <p class="text-[9px] text-slate-400">${t.subCat || 'כללי'} • ${t.date || 'היום'}</p>
               </div>
             </div>
@@ -2610,7 +2663,7 @@ function cleanSubCategoryText(rawText) {
   return rawText
     .replace(/(\d{1,2}[\.,]?\d*)/g, '')
     .replace(/(שקל|שקלים|₪|\$|€|£|דולר|דולרים|יורו|פאונד|באט|יין|קנדי|אוסטרלי|פרנק|דירהם|דינר|רופי|יואן)/g, '')
-    .replace(/(אתמול|שלשום|היום)/g, '')
+    .replace(/(אתמול|שלשום|היום|מזומן|במזומן)/g, '')
     .trim() || rawText.trim();
 }
 
@@ -2648,6 +2701,9 @@ async function processVoiceCommandDirectly(text){
   await updateLiveExchangeRates();
 
   let cleanText = text.trim();
+
+  let isCashPayment = cleanText.includes('מזומן') || cleanText.includes('במזומן');
+  cleanText = cleanText.replace(/(מזומן|במזומן)/g, '').trim();
 
   const parsedDate = parseDateFromText(cleanText);
   cleanText = cleanText
@@ -2734,7 +2790,8 @@ async function processVoiceCommandDirectly(text){
       subCat: cleanSub || 'כללי', 
       color: isIncome ? '#7FE8C6' : (state.expenseCats[0] ? state.expenseCats[0].color : '#7FE8C6'), 
       date: parsedDate, 
-      isTravel: state.isTravelMode && !isIncome 
+      isTravel: state.isTravelMode && !isIncome,
+      paymentMethod: isCashPayment ? 'cash' : 'credit'
     };
     const subInput = document.getElementById('voiceSubCatInput');
     if(subInput) subInput.value = cleanSub || '';
@@ -2753,7 +2810,8 @@ async function processVoiceCommandDirectly(text){
     
     const newTx = {
       id: Date.now(), type: type, amount: convertedAmount, originalCurrencyStr: originalStr,
-      cat: matchedCat, subCat: matchedSub || 'כללי', color: catObj ? catObj.color : '#7FE8C6', date: parsedDate, isTravel: state.isTravelMode && !isIncome
+      cat: matchedCat, subCat: matchedSub || 'כללי', color: catObj ? catObj.color : '#7FE8C6', date: parsedDate, isTravel: state.isTravelMode && !isIncome,
+      paymentMethod: isCashPayment ? 'cash' : 'credit'
     };
     if(!state.transactions) state.transactions = [];
     state.transactions.push(newTx);

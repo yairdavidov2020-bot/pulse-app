@@ -3038,7 +3038,7 @@ function deleteMainCategory(name, type) {
   }
 }
 
-// פונקציית בדיקה בעליית האפליקציה למשתמשים קיימים
+// בדיקה אוטומטית בעליית האפליקציה למשתמשים קיימים
 function checkOrphanedKeywordsOnStartup() {
   if (!state.learnedKeywords || !state.expenseCats) return;
   
@@ -3204,7 +3204,7 @@ function addNewCustomCategory() {
 
   persist();
   renderModalCategoryList();
-  newCatInput.value, '';
+  newCatInput.value = '';
   showToast("קטגוריה ראשית נוספה בהצלחה!");
 }
 

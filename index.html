@@ -92,13 +92,6 @@
   .toggle-switch input:checked + .toggle-slider { background: #3b82f6; }
   .toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
 
-  .wizard-option-btn {
-    display: flex; align-items: center; justify-content: space-between; padding: 12px 14px;
-    border-radius: 12px; background: var(--card-2); border: 1px solid var(--border);
-    color: var(--text); font-weight: 600; font-size: 12px; cursor: pointer; transition: all 0.2s;
-  }
-  .wizard-option-btn:hover, .wizard-option-btn.selected { border-color: var(--mint); background: var(--mint-bg); color: var(--mint); }
-
   .ai-voice-box { 
     background: linear-gradient(135deg, rgba(19, 24, 36, 0.95) 0%, rgba(14, 18, 27, 0.9) 100%); 
     border: 1px solid rgba(127, 232, 198, 0.3); border-radius: 14px; padding: 10px 14px; 
@@ -600,7 +593,7 @@
         <div class="text-center space-y-1">
             <span class="text-[10px] text-emerald-400 font-bold">שלב 5 מתוך 5</span>
             <h2 class="text-base font-black gradient-text">הרשאות ומטרה מרכזית</h2>
-            <p class="text-xs text-slate-300">אישור מהיר להרשאות המערכת ובחירת מטרת על:</p>
+            <p class="text-xs text-slate-300">אישור מהיר להרשאות המערכת:</p>
         </div>
         
         <!-- Quick Permissions Box -->
@@ -615,18 +608,6 @@
             </div>
         </div>
 
-        <div class="space-y-2">
-            <p class="text-[10px] text-slate-400 font-semibold">מה המטרה הכי חשובה לך כרגע?</p>
-            <button onclick="selectMainGoal('peace', this)" class="wizard-option-btn selected w-full">
-                <span>🧘‍♂️ ראש שקט (לסיים חודש בלי הפתעות)</span>
-            </button>
-            <button onclick="selectMainGoal('saving', this)" class="wizard-option-btn w-full">
-                <span>🎯 חיסכון ליעד (לטייל, לרכוש פרויקט גדול)</span>
-            </button>
-            <button onclick="selectMainGoal('awareness', this)" class="wizard-option-btn w-full">
-                <span>📊 מודעות (לראות לאן הכסף זורם ביום-יום)</span>
-            </button>
-        </div>
         <button onclick="startCinematicBuild()" class="w-full py-3.5 rounded-2xl font-bold text-sm shadow-xl cursor-pointer bg-gradient-to-l from-emerald-500 to-teal-600 text-white hover:opacity-95 transition flex items-center justify-between px-5 mt-2">
             <span>בנה לי את האפליקציה</span>
             <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
@@ -1350,7 +1331,7 @@ async function updateLiveExchangeRates() {
 }
 
 let state = {
-  handle: '', userName: '', baseline: null, financialDay: 1, savingsGoal: 1500, mainGoal: 'peace',
+  handle: '', userName: '', baseline: null, financialDay: 1, savingsGoal: 1500,
   currency: '₪', language: 'he', onboardingCompleted: false,
   recurringItems: [], 
   expenseCats: [
@@ -1378,8 +1359,7 @@ let state = {
   travelCashAvailable: 0,
   learnedKeywords: {},
   notificationsEnabled: false,
-  micPermissionGranted: false,
-  notificationTime: '20:00'
+  micPermissionGranted: false
 };
 
 const availableColors = ['#FF8D82', '#FF9F43', '#FFC85C', '#7FE8C6', '#8FB8FF', '#C7A6FF', '#FF9FD1', '#34D399', '#38BDF8', '#E11D48'];
@@ -1873,7 +1853,6 @@ window.onload = async function() {
       if(step0) step0.classList.add('hidden');
       await saveDataToSupabase(state);
       
-      // בדיקה אוטומטית בעליית האפליקציה למשתמשים קיימים שיש להם תתי-קטגוריות יתומות
       checkOrphanedKeywordsOnStartup();
     }
 
@@ -1896,13 +1875,6 @@ function sortTransactions() {
       state.transactions.sort((a, b) => b.date.localeCompare(a.date) || b.id - a.id);
     }
   } catch(e) {}
-}
-
-let tempWizard = { handle: '', name: '', balance: 0, financialDay: 1, savingsGoal: 1500, mainGoal: 'peace' };
-function selectMainGoal(goal, btn) {
-  tempWizard.mainGoal = goal;
-  btn.parentNode.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
 }
 
 function wizardNextStep(stepNum) {
@@ -3038,7 +3010,6 @@ function deleteMainCategory(name, type) {
   }
 }
 
-// בדיקה אוטומטית בעליית האפליקציה למשתמשים קיימים
 function checkOrphanedKeywordsOnStartup() {
   if (!state.learnedKeywords || !state.expenseCats) return;
   

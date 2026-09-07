@@ -758,7 +758,7 @@
     </div>
 </div>
 
-<!-- REASSIGN SUBCATEGORY MODAL -->
+<!-- REASSIGN SUBCATEGORY MODAL (FOR SINGLE DELETION) -->
 <div id="reassignSubcatModal" class="modal-overlay hidden">
     <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
@@ -774,6 +774,26 @@
         <div class="flex gap-2 pt-1">
             <button onclick="confirmReassignKeyword()" class="save-btn flex-1 py-2 rounded-xl font-bold text-xs">שייך לקטגוריה החדשה</button>
             <button onclick="skipReassignKeyword()" class="px-3 py-2 rounded-xl bg-[var(--card-2)] border border-[var(--border)] text-rose-400 text-xs font-bold">מחק סופית</button>
+        </div>
+    </div>
+</div>
+
+<!-- ORPHANED SUBCATEGORIES MODAL (FOR MAIN CATEGORY DELETION & STARTUP CHECK) -->
+<div id="orphanedSubcatsModal" class="modal-overlay hidden">
+    <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl text-right">
+        <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
+            <h3 class="text-xs font-bold text-amber-400"><i class="fa-solid fa-triangle-exclamation ml-1"></i> תתי-קטגוריות ללא שיוך</h3>
+        </div>
+        <p id="orphanedModalDesc" class="text-[11px] text-slate-300 leading-relaxed"></p>
+        <div class="space-y-1">
+            <label class="text-[10px] font-semibold text-slate-400 block">בחר קטגוריה ראשית חדשה לכל תתי-הקטגוריות האלו:</label>
+            <div class="field-shell px-3 py-1.5">
+                <select id="orphanedCategorySelect" class="w-full bg-transparent outline-none font-bold text-[11px]" style="color:var(--text)"></select>
+            </div>
+        </div>
+        <div class="flex gap-2 pt-1">
+            <button onclick="confirmOrphanedReassign()" class="save-btn flex-1 py-2 rounded-xl font-bold text-xs">שייך לקטגוריה החדשה</button>
+            <button onclick="skipOrphanedReassign()" class="px-3 py-2 rounded-xl bg-[var(--card-2)] border border-[var(--border)] text-rose-400 text-xs font-bold">מחק את כולן</button>
         </div>
     </div>
 </div>
@@ -1852,6 +1872,9 @@ window.onload = async function() {
       const step0 = document.getElementById('onboarding-step-0');
       if(step0) step0.classList.add('hidden');
       await saveDataToSupabase(state);
+      
+      // בדיקה אוטומטית בעליית האפליקציה למשתמשים קיימים שיש להם תתי-קטגוריות יתומות
+      checkOrphanedKeywordsOnStartup();
     }
 
     if(document.getElementById('langSelect')) document.getElementById('langSelect').value = state.language || 'he';
@@ -2980,30 +3003,133 @@ function toggleSubcatView(iconEl) {
   if(subContainer) subContainer.classList.toggle('hidden');
 }
 
+let pendingOrphanedKeywords = [];
+
 function deleteMainCategory(name, type) {
   const list = type === 'expense' ? state.expenseCats : state.incomeCats;
   if (list.length <= 1) {
     alert("לא ניתן למחוק את הקטגוריה האחרונה שנשארה ברשימה.");
     return;
   }
+  
   if(confirm(`האם אתה בטוח שברצונך למחוק את הקטגוריה "${name}"?`)) {
     if(type === 'expense') {
-      state.expenseCats = state.expenseCats.filter(c => c.name !== name);
+      const orphaned = [];
       if(state.learnedKeywords) {
-        Object.keys(state.learnedKeywords).forEach(kw => {
-          if(state.learnedKeywords[kw] === name) delete state.learnedKeywords[kw];
+        Object.entries(state.learnedKeywords).forEach(([kw, mainCat]) => {
+          if(mainCat === name) orphaned.push(kw);
         });
+      }
+
+      state.expenseCats = state.expenseCats.filter(c => c.name !== name);
+
+      if (orphaned.length > 0) {
+        pendingOrphanedKeywords = orphaned;
+        openOrphanedModal(name, orphaned.length);
+      } else {
+        showToast("הקטגוריה נמחקה");
       }
     } else {
       state.incomeCats = state.incomeCats.filter(c => c.name !== name);
+      showToast("הקטגוריה נמחקה");
     }
     persist();
     renderModalCategoryList();
-    showToast("הקטגוריה נמחקה");
   }
 }
 
-// --- NEW REASSIGN SUBCATEGORY LOGIC ---
+// פונקציית בדיקה בעליית האפליקציה למשתמשים קיימים
+function checkOrphanedKeywordsOnStartup() {
+  if (!state.learnedKeywords || !state.expenseCats) return;
+  
+  const validExpenseCatNames = new Set(state.expenseCats.map(c => c.name));
+  const orphaned = [];
+  
+  Object.entries(state.learnedKeywords).forEach(([kw, mainCat]) => {
+    if (!validExpenseCatNames.has(mainCat)) {
+      orphaned.push(kw);
+    }
+  });
+  
+  if (orphaned.length > 0) {
+    pendingOrphanedKeywords = orphaned;
+    openOrphanedModalStartup(orphaned.length);
+  }
+}
+
+function openOrphanedModalStartup(count) {
+  const desc = document.getElementById('orphanedModalDesc');
+  if (desc) {
+    desc.textContent = `זוהו במערכת ${count} תתי-קטגוריות / מילים נלמדות שהיו משויכות לקטגוריות שנמחקו בעבר וכעת אינן משויכות לאף קטגוריה ראשית פעילה. האם תרצה לשייך אותן לקטגוריה ראשית חדשה?`;
+  }
+  
+  const sel = document.getElementById('orphanedCategorySelect');
+  if (sel) {
+    sel.innerHTML = '';
+    if (state.expenseCats) {
+      state.expenseCats.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.name;
+        opt.textContent = c.name;
+        sel.appendChild(opt);
+      });
+    }
+  }
+  document.getElementById('orphanedSubcatsModal').classList.remove('hidden');
+}
+
+function openOrphanedModal(catName, count) {
+  const desc = document.getElementById('orphanedModalDesc');
+  if (desc) {
+    desc.textContent = `מחקת את הקטגוריה הראשית "${catName}". נמצאו ${count} תתי-קטגוריות / מילים שהיו משויכות אליה וכעת אינן רשומות תחת אף קטגוריה פעילה. האם תרצה לשייך אותן לקטגוריה ראשית חדשה?`;
+  }
+  
+  const sel = document.getElementById('orphanedCategorySelect');
+  if (sel) {
+    sel.innerHTML = '';
+    if (state.expenseCats) {
+      state.expenseCats.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.name;
+        opt.textContent = c.name;
+        sel.appendChild(opt);
+      });
+    }
+  }
+  document.getElementById('orphanedSubcatsModal').classList.remove('hidden');
+}
+
+function confirmOrphanedReassign() {
+  const sel = document.getElementById('orphanedCategorySelect');
+  const newCat = sel ? sel.value : null;
+  if (newCat && pendingOrphanedKeywords.length > 0) {
+    pendingOrphanedKeywords.forEach(kw => {
+      state.learnedKeywords[kw] = newCat;
+    });
+    persist();
+    renderModalCategoryList();
+    showToast(`${pendingOrphanedKeywords.length} תתי-קטגוריות שויכו בהצלחה לקטגוריה "${newCat}"`);
+  }
+  closeOrphanedModal();
+}
+
+function skipOrphanedReassign() {
+  if (pendingOrphanedKeywords.length > 0) {
+    pendingOrphanedKeywords.forEach(kw => {
+      delete state.learnedKeywords[kw];
+    });
+    persist();
+    renderModalCategoryList();
+    showToast("תתי-הקטגוריות שלא שויכו נמחקו מהמערכת");
+  }
+  closeOrphanedModal();
+}
+
+function closeOrphanedModal() {
+  pendingOrphanedKeywords = [];
+  document.getElementById('orphanedSubcatsModal').classList.add('hidden');
+}
+
 let pendingReassignKeyword = null;
 
 function deleteLearnedKeyword(kw) {
@@ -3059,7 +3185,6 @@ function closeReassignModal() {
   pendingReassignKeyword = null;
   document.getElementById('reassignSubcatModal').classList.add('hidden');
 }
-// --------------------------------------
 
 function addNewCustomCategory() {
   const newCatInput = document.getElementById('newCatInput');
@@ -3079,7 +3204,7 @@ function addNewCustomCategory() {
 
   persist();
   renderModalCategoryList();
-  newCatInput.value = '';
+  newCatInput.value, '';
   showToast("קטגוריה ראשית נוספה בהצלחה!");
 }
 

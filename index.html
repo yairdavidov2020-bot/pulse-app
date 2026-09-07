@@ -2136,7 +2136,7 @@ function getCountryFlag(country) {
 
 function renderHome(){
   try {
-    const { income, expense, balance, freeCash } = totals();
+    const { income, expense, balance, freeCash, totalAllocatedBuckets } = totals();
     const balanceEl = document.getElementById('balanceValue');
     if(balanceEl) balanceEl.textContent = fmt(balance);
     
@@ -2148,7 +2148,10 @@ function renderHome(){
     const dailyBudget = Math.round(Math.max(0, freeCash) / daysLeft);
 
     const freeSub = document.getElementById('freeCashSubText');
-    if(freeSub) freeSub.textContent = `פנוי: ${fmt(freeCash)} | 🎯 ${fmt(dailyBudget)} ליום (${daysLeft} ימים)`;
+    if(freeSub) {
+      const bucketsLabel = totalAllocatedBuckets > 0 ? ' (אחרי ניכוי קופות)' : '';
+      freeSub.textContent = `פנוי${bucketsLabel}: ${fmt(freeCash)} | 🎯 ${fmt(dailyBudget)} ליום (${daysLeft} ימים)`;
+    }
     
     const incEl = document.getElementById('totalIncome');
     if(incEl) incEl.textContent = fmt(income);

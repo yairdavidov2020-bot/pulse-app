@@ -1247,7 +1247,7 @@ const tipsList = [
   "כשיש לך הכנסה נוספת בונוס מתנה הפנה לפחות מחצית ממנה ישר לחיסכון",
   "תכנן את ארוחות השבוע מראש כדי להימנע מהזמנת אוכל מוכן ויקר באמצע השבוע",
   "השתמש בתחבורה ציבורית או בנסיעות משותפות כשניתן כדי לחסוך עלויות דלק וחניה",
-  "אל תתפתה למבצעי קנה 3 קבל 4 אם אתה לא באמת צריך את המוצר הנוסף",
+  "אל תתפתה למבצעי קנה 3 קבל 4 אם אתה לא צריך את המוצר הנוסף",
   "בדוק את ביטוחי הבריאות והחיים שלך פעם בשנים מספר כדי למנוע כפל ביטוחי מיותר",
   "נהל תקציב חודשי המותאם בדיוק ליום סגירת האשראי שלך בבנק",
   "השקעה בעצמך קורסים ספרים לימודים היא ההשקעה בעלת תשואה גבוהה ביותר",
@@ -1296,7 +1296,7 @@ const tipsList = [
   "קנה מתנות לאירועים מראש ובסיטונות במקום בלחץ של הרגע האחרון",
   "שקול קניית רכב יד שנייה במצב מעולה שספג כבר ירידת ערך",
   "בדוק זכויות לקבלת הנחות בארנונה תחבורה ציבורית או חשמל",
-  "למד לומר לא להוצאות חברתיות שאינן מתאימות ליכולתך הכלכלית",
+  "למד לומר לא הוצאות חברתיות שאינן מתאימות ליכולתך הכלכלית",
   "הגדר לעצמך דמי כיס חודשיים אישיים לבזבוזים ללא ייסורי מצפון",
   "בדוק את תנאי כרטיס האשראי שלך ובטל דמי כרטיס מיותרים",
   "שמור על דירוג אשראי גבוה על ידי תשלום בזמן של כל החשבונות",
@@ -1897,7 +1897,6 @@ function deleteRecurringItem(id) {
 
 // Guaranteed Splash Screen Removal & Safe App Boot
 window.onload = function() {
-  // Guaranteed splash removal after max 1.5 seconds regardless of network issues
   setTimeout(() => {
     const splash = document.getElementById('appSplashScreen');
     if(splash) { 
@@ -1906,7 +1905,6 @@ window.onload = function() {
     }
   }, 1500);
 
-  // Run initialization safely in background
   initApp();
 };
 
@@ -2043,7 +2041,6 @@ async function startCinematicBuild() {
 function loadDailyTip() {
   try {
     const now = new Date();
-    // Shift by -8 hours so that 00:00-07:59 belongs to the previous day, shifting the daily tip at 08:00 AM sharp
     const adjustedDate = new Date(now.getTime() - (8 * 60 * 60 * 1000));
     const start = new Date(adjustedDate.getFullYear(), 0, 0);
     const diff = (adjustedDate - start) + ((start.getTimezoneOffset() - adjustedDate.getTimezoneOffset()) * 60 * 1000);
@@ -2962,19 +2959,35 @@ async function processVoiceCommandDirectly(text){
   const convertedAmount = Math.round(rawAmount * currencyMultiplier * 100) / 100;
   const originalStr = `${rawAmount} ${currencyLabel}`;
 
-  let isIncome = cleanText.includes('הכנסה') || cleanText.includes('משכורת') || cleanText.includes('קיבלתי') || cleanText.includes('הרווחתי');
+  let isIncome = cleanText.includes('הכנסה') || cleanText.includes('משכורת') || cleanText.includes('קיבלתי') || cleanText.includes('הרווחתי') || cleanText.includes('בונוס') || cleanText.includes('מתנה');
   
-  cleanText = cleanText.replace(/(הכנסה|משכורת|קיבלתי|הרווחתי|שילמתי|קניתי)/g, '').trim();
+  cleanText = cleanText.replace(/(הכנסה|משכורת|קיבלתי|הרווחתי|שילמתי|קניתי|בונוס|מתנה)/g, '').trim();
 
   let matchedCat = null;
   let matchedSub = null;
 
   const cleanedKeywordQuery = cleanSubCategoryText(cleanText);
-  if (!isIncome && state.learnedKeywords) {
+  if (state.learnedKeywords) {
     for (let [kw, mainCat] of Object.entries(state.learnedKeywords)) {
       if (cleanedKeywordQuery.includes(kw) || cleanText.includes(kw)) {
-        matchedCat = mainCat;
-        matchedSub = kw;
+        if (isIncome && state.incomeCats && state.incomeCats.find(c => c.name === mainCat)) {
+          matchedCat = mainCat;
+          matchedSub = kw;
+          break;
+        } else if (!isIncome && state.expenseCats && state.expenseCats.find(c => c.name === mainCat)) {
+          matchedCat = mainCat;
+          matchedSub = kw;
+          break;
+        }
+      }
+    }
+  }
+
+  if (!matchedCat && isIncome && state.incomeCats) {
+    for (let cat of state.incomeCats) {
+      if (cleanText.includes(cat.name)) {
+        matchedCat = cat.name;
+        matchedSub = cleanedKeywordQuery || 'משכורת';
         break;
       }
     }
@@ -2990,25 +3003,27 @@ async function processVoiceCommandDirectly(text){
     }
   }
 
-  if (isIncome) {
-    matchedCat = state.incomeCats && state.incomeCats[0] ? state.incomeCats[0].name : 'הכנסה';
-    matchedSub = cleanedKeywordQuery || 'משכורת';
-  }
+  const validTargetCatList = isIncome ? state.incomeCats : state.expenseCats;
+  const isCatValid = matchedCat && validTargetCatList && validTargetCatList.find(c => c.name === matchedCat);
 
-  if (!matchedCat || (!isIncome && state.expenseCats && !state.expenseCats.find(c => c.name === matchedCat))) {
-    populateVoiceCategorySelect();
+  if (!isCatValid) {
+    populateVoiceCategorySelect(isIncome);
     const cleanSub = cleanedKeywordQuery;
+    const defaultCat = isIncome ? (state.incomeCats[0] ? state.incomeCats[0].name : 'משכורת') : (state.expenseCats[0] ? state.expenseCats[0].name : 'שונות');
+    const defaultColor = isIncome ? (state.incomeCats[0] ? state.incomeCats[0].color : '#7FE8C6') : (state.expenseCats[0] ? state.expenseCats[0].color : '#7FE8C6');
+
     pendingSmartTx = { 
       type: isIncome ? 'income' : 'expense', 
       amount: convertedAmount, 
       originalCurrencyStr: originalStr, 
-      cat: isIncome ? (state.incomeCats[0] ? state.incomeCats[0].name : 'הכנסה') : (state.expenseCats[0] ? state.expenseCats[0].name : 'שונות'), 
-      subCat: cleanSub || 'כללי', 
-      color: isIncome ? '#7FE8C6' : (state.expenseCats[0] ? state.expenseCats[0].color : '#7FE8C6'), 
+      cat: defaultCat, 
+      subCat: cleanSub || (isIncome ? 'משכורת' : 'כללי'), 
+      color: defaultColor, 
       date: parsedDate, 
       isTravel: state.isTravelMode && !isIncome,
       paymentMethod: isCashPayment ? 'cash' : 'credit'
     };
+    
     const subInput = document.getElementById('voiceSubCatInput');
     if(subInput) subInput.value = cleanSub || '';
     const parseInfo = document.getElementById('voiceParsedInfo');
@@ -3017,16 +3032,11 @@ async function processVoiceCommandDirectly(text){
     if(vModal) vModal.classList.remove('hidden');
   } else {
     const type = isIncome ? 'income' : 'expense';
-    let catObj = null;
-    if(isIncome) {
-      catObj = state.incomeCats.find(c => c.name === matchedCat) || state.incomeCats[0];
-    } else {
-      catObj = state.expenseCats.find(c => c.name === matchedCat) || state.expenseCats[0];
-    }
+    const catObj = validTargetCatList.find(c => c.name === matchedCat);
     
     const newTx = {
       id: Date.now(), type: type, amount: convertedAmount, originalCurrencyStr: originalStr,
-      cat: matchedCat, subCat: matchedSub || 'כללי', color: catObj ? catObj.color : '#7FE8C6', date: parsedDate, isTravel: state.isTravelMode && !isIncome,
+      cat: matchedCat, subCat: matchedSub || (isIncome ? 'משכורת' : 'כללי'), color: catObj ? catObj.color : '#7FE8C6', date: parsedDate, isTravel: state.isTravelMode && !isIncome,
       paymentMethod: isCashPayment ? 'cash' : 'credit'
     };
     if(!state.transactions) state.transactions = [];
@@ -3037,12 +3047,13 @@ async function processVoiceCommandDirectly(text){
   }
 }
 
-function populateVoiceCategorySelect() {
+function populateVoiceCategorySelect(isIncome = false) {
   const mainCatSelect = document.getElementById('selectMainCategory');
   if(!mainCatSelect) return;
   mainCatSelect.innerHTML = '';
-  if(state.expenseCats) {
-    state.expenseCats.forEach(c => {
+  const list = isIncome ? state.incomeCats : state.expenseCats;
+  if(list) {
+    list.forEach(c => {
       const opt = document.createElement('option'); opt.value = c.name; opt.textContent = c.name; mainCatSelect.appendChild(opt);
     });
   }
@@ -3051,12 +3062,13 @@ function populateVoiceCategorySelect() {
 function confirmVoiceTransaction() {
   if(!pendingSmartTx) return;
   const catSelect = document.getElementById('selectMainCategory');
-  const chosenMainCat = catSelect ? catSelect.value : 'שונות';
+  const chosenMainCat = catSelect ? catSelect.value : (pendingSmartTx.type === 'income' ? 'משכורת' : 'שונות');
   const subInput = document.getElementById('voiceSubCatInput');
-  const subCatVal = cleanSubCategoryText(subInput ? subInput.value : '') || 'כללי';
+  const subCatVal = cleanSubCategoryText(subInput ? subInput.value : '') || (pendingSmartTx.type === 'income' ? 'משכורת' : 'כללי');
   
-  let catObj = state.expenseCats ? state.expenseCats.find(c => c.name === chosenMainCat) : null;
-  if(!catObj && state.expenseCats && state.expenseCats[0]) catObj = state.expenseCats[0];
+  const list = pendingSmartTx.type === 'income' ? state.incomeCats : state.expenseCats;
+  let catObj = list ? list.find(c => c.name === chosenMainCat) : null;
+  if(!catObj && list && list[0]) catObj = list[0];
   
   pendingSmartTx.cat = chosenMainCat;
   pendingSmartTx.subCat = subCatVal;
@@ -3122,7 +3134,7 @@ function renderModalCategoryList() {
 
   list.forEach((c) => {
     const learnedWordsForCat = [];
-    if (currentCategoryTab === 'expense' && state.learnedKeywords) {
+    if (state.learnedKeywords) {
       Object.entries(state.learnedKeywords).forEach(([kw, mainCat]) => {
         if (mainCat === c.name) learnedWordsForCat.push(kw);
       });
@@ -3214,13 +3226,13 @@ function deleteMainCategory(name, type) {
 }
 
 function checkOrphanedKeywordsOnStartup() {
-  if (!state.learnedKeywords || !state.expenseCats) return;
+  if (!state.learnedKeywords) return;
   
-  const validExpenseCatNames = new Set(state.expenseCats.map(c => c.name));
+  const validCatNames = new Set([...(state.expenseCats || []).map(c => c.name), ...(state.incomeCats || []).map(c => c.name)]);
   const orphaned = [];
   
   Object.entries(state.learnedKeywords).forEach(([kw, mainCat]) => {
-    if (!validExpenseCatNames.has(mainCat)) {
+    if (!validCatNames.has(mainCat)) {
       orphaned.push(kw);
     }
   });
@@ -3368,11 +3380,11 @@ function addNewCustomCategory() {
   
   if(currentCategoryTab === 'expense') {
     if(state.expenseCats.find(c => c.name === catName)) { alert("קטגוריה קיימת."); return; }
-    const color = availableColors[state.expenseCats.length % availableColors.length];
+    const color = '#7FE8C6';
     state.expenseCats.push({ name: catName, color, budget: 0, custom: true });
   } else {
     if(state.incomeCats.find(c => c.name === catName)) { alert("קטגוריה קיימת."); return; }
-    const color = availableColors[state.incomeCats.length % availableColors.length];
+    const color = '#7FE8C6';
     state.incomeCats.push({ name: catName, color, budget: 0, custom: true });
   }
 

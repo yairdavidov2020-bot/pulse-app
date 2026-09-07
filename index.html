@@ -71,7 +71,7 @@
   .balance-card{ position:relative; width:100%; border:1px solid var(--border); background:linear-gradient(180deg, var(--card) 0%, var(--card-2) 100%); border-radius:18px; padding:14px 12px; text-align:center; z-index:1; display:flex; flex-direction:column; justify-content:center; height:100%; }
   .balance-card::before{ content:""; position:absolute; inset:0; border-radius:18px; padding:1px; background:linear-gradient(135deg, var(--glow) 0%, transparent 45%, transparent 55%, var(--glow) 100%); opacity:.5; -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; }
   
-  .ecg-line{ width:100%; height:14px; margin-top:2px; overflow:hidden; }
+  .ecg-line{ width:100%; height:14px; margin-top:4px; overflow:hidden; }
   .ecg-line path{ stroke: #2EB88A; stroke-dasharray:340; animation:ecg-sweep 2s linear infinite; }
   @keyframes ecg-sweep{ from{stroke-dashoffset:340;} to{stroke-dashoffset:0;} }
 
@@ -929,11 +929,13 @@
             </label>
         </section>
 
-        <section class="glow-wrap flex-[1.6] flex flex-col justify-center">
+        <!-- BALANCE CARD (REORDERED: BIG BALANCE AT TOP, OTHERS BELOW) -->
+        <section class="glow-wrap flex-[1.8] flex flex-col justify-center">
           <div class="glow-halo" id="glowHalo"></div>
           <div class="balance-card">
-            <p class="text-[11px] font-bold tracking-wide text-slate-300">יתרה בעו״ש | <span id="freeCashSubText" class="text-emerald-400">פנוי: ₪0</span></p>
-            <h1 class="tabular text-[34px] sm:text-[40px] font-black mt-0.5 leading-none tracking-tight" id="balanceValue">0</h1>
+            <span class="text-[10px] font-bold tracking-wider text-slate-400 uppercase block">יתרה בעו״ש</span>
+            <h1 class="tabular text-[36px] sm:text-[44px] font-black my-0.5 leading-none tracking-tight" id="balanceValue">0</h1>
+            <div id="freeCashSubText" class="text-[11px] font-bold text-emerald-400 mb-1.5">פנוי: ₪0</div>
             <svg class="ecg-line" viewBox="0 0 340 24" preserveAspectRatio="none"><path d="M0,12 L60,12 L72,2 L84,22 L96,12 L150,12 L162,4 L174,12 L340,12" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
         </section>

@@ -758,6 +758,26 @@
     </div>
 </div>
 
+<!-- REASSIGN SUBCATEGORY MODAL -->
+<div id="reassignSubcatModal" class="modal-overlay hidden">
+    <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl text-right">
+        <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
+            <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-arrows-split-up-and-left ml-1"></i> שיוך מחדש לתת-קטגוריה</h3>
+        </div>
+        <p id="reassignModalDesc" class="text-[11px] text-slate-300 leading-relaxed"></p>
+        <div class="space-y-1">
+            <label class="text-[10px] font-semibold text-slate-400 block">בחר קטגוריה ראשית חדשה:</label>
+            <div class="field-shell px-3 py-1.5">
+                <select id="reassignCategorySelect" class="w-full bg-transparent outline-none font-bold text-[11px]" style="color:var(--text)"></select>
+            </div>
+        </div>
+        <div class="flex gap-2 pt-1">
+            <button onclick="confirmReassignKeyword()" class="save-btn flex-1 py-2 rounded-xl font-bold text-xs">שייך לקטגוריה החדשה</button>
+            <button onclick="skipReassignKeyword()" class="px-3 py-2 rounded-xl bg-[var(--card-2)] border border-[var(--border)] text-rose-400 text-xs font-bold">מחק סופית</button>
+        </div>
+    </div>
+</div>
+
 <div id="menuModal" class="modal-overlay hidden" onclick="if(event.target === this) closeMenuModal()">
     <div class="menu-sidebar-panel space-y-3 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2.5">
@@ -2224,7 +2244,6 @@ function renderAnalytics() {
         const travelBudget = state.travelBudget || 5000;
         const remainingBudget = travelBudget - travelSpentTotal;
 
-        // חישוב ימים נותרים ו-Burn Rate יומי
         const today = new Date();
         today.setHours(0,0,0,0);
         const endDate = state.travelEndDate ? new Date(state.travelEndDate) : new Date(today.getTime() + 7*86400000);
@@ -2232,7 +2251,6 @@ function renderAnalytics() {
         const remainingDays = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
         const recommendedDaily = Math.round(Math.max(0, remainingBudget) / remainingDays);
 
-        // חישוב מזומן נותר בארנק
         const cashAvailable = state.travelCashAvailable || 0;
         const cashRemaining = cashAvailable - travelCashSpent;
 
@@ -2985,14 +3003,63 @@ function deleteMainCategory(name, type) {
   }
 }
 
+// --- NEW REASSIGN SUBCATEGORY LOGIC ---
+let pendingReassignKeyword = null;
+
 function deleteLearnedKeyword(kw) {
-  if(state.learnedKeywords && state.learnedKeywords[kw]) {
-    delete state.learnedKeywords[kw];
-    persist();
-    renderModalCategoryList();
-    showToast(`התג "${kw}" נמחק מהזיכרון`);
+  if (state.learnedKeywords && state.learnedKeywords[kw]) {
+    pendingReassignKeyword = kw;
+    openReassignModal(kw);
   }
 }
+
+function openReassignModal(kw) {
+  const desc = document.getElementById('reassignModalDesc');
+  if (desc) {
+    desc.textContent = `מחקת את תת-הקטגוריה / מילה "${kw}". האם תרצה לשייך אותה לקטגוריה ראשית חדשה, או למחוק אותה סופית מהזיכרון?`;
+  }
+  const sel = document.getElementById('reassignCategorySelect');
+  if (sel) {
+    sel.innerHTML = '';
+    if (state.expenseCats) {
+      state.expenseCats.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.name;
+        opt.textContent = c.name;
+        sel.appendChild(opt);
+      });
+    }
+  }
+  document.getElementById('reassignSubcatModal').classList.remove('hidden');
+}
+
+function confirmReassignKeyword() {
+  if (!pendingReassignKeyword) return;
+  const sel = document.getElementById('reassignCategorySelect');
+  const newCat = sel ? sel.value : null;
+  if (newCat) {
+    state.learnedKeywords[pendingReassignKeyword] = newCat;
+    persist();
+    renderModalCategoryList();
+    showToast(`התג "${pendingReassignKeyword}" שויך בהצלחה לקטגוריה "${newCat}"`);
+  }
+  closeReassignModal();
+}
+
+function skipReassignKeyword() {
+  if (!pendingReassignKeyword) return;
+  delete state.learnedKeywords[pendingReassignKeyword];
+  persist();
+  renderModalCategoryList();
+  showToast(`התג "${pendingReassignKeyword}" נמחק סופית`);
+  closeReassignModal();
+}
+
+function closeReassignModal() {
+  pendingReassignKeyword = null;
+  document.getElementById('reassignSubcatModal').classList.add('hidden');
+}
+// --------------------------------------
 
 function addNewCustomCategory() {
   const newCatInput = document.getElementById('newCatInput');

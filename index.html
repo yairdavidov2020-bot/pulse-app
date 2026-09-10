@@ -13,7 +13,6 @@
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -209,29 +208,6 @@
             <p class="text-xs text-slate-300 leading-relaxed">היי זה הזמן לעצור רגע לעדכן את ההוצאות וההכנסות של היום ולהישאר בשליטה מלאה 💡</p>
         </div>
         <button onclick="closeModal('reminderModal')" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs shadow-lg cursor-pointer relative z-10">הבנתי יאללה מעדכן!</button>
-    </div>
-</div>
-
-<!-- EXPORT MENU MODAL (IPHONE STYLE ACTION SHEET) -->
-<div id="exportMenuModal" class="modal-overlay hidden">
-    <div class="summary-card p-4 max-w-xs w-full space-y-3 shadow-2xl text-right animate-fadeIn">
-        <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-            <h3 class="text-xs font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-file-export"></i> ייצוא דוח פיננסי</h3>
-            <button onclick="closeModal('exportMenuModal')" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
-        </div>
-        <p class="text-[10px] text-slate-300 leading-relaxed">בחר את אופן הייצוא הרצוי (הדוח כולל תאריכים, קטגוריות ראשיות ותתי-קטגוריות):</p>
-        
-        <div class="space-y-2 pt-1">
-            <button onclick="exportTableToFileDetailed()" class="w-full py-2.5 px-3 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-bold text-xs flex items-center justify-between cursor-pointer hover:bg-emerald-500/25 transition">
-                <span class="flex items-center gap-2"><i class="fa-solid fa-file-csv text-emerald-400 text-sm"></i> ייצוא לקובץ (CSV / Excel)</span>
-                <i class="fa-solid fa-chevron-left text-[10px]"></i>
-            </button>
-            <button onclick="exportTableToImageDetailed()" class="w-full py-2.5 px-3 rounded-xl bg-blue-500/15 border border-blue-500/30 text-blue-300 font-bold text-xs flex items-center justify-between cursor-pointer hover:bg-blue-500/25 transition">
-                <span class="flex items-center gap-2"><i class="fa-solid fa-image text-blue-400 text-sm"></i> ייצוא כתמונה (לשמירה בגלריה)</span>
-                <i class="fa-solid fa-chevron-left text-[10px]"></i>
-            </button>
-        </div>
-        <button onclick="closeModal('exportMenuModal')" class="w-full py-2 rounded-xl bg-[var(--card-2)] border border-[var(--border)] text-slate-400 text-xs font-bold cursor-pointer mt-1">ביטול</button>
     </div>
 </div>
 
@@ -511,7 +487,7 @@
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-teal-400 flex items-center gap-1.5"><i class="fa-solid fa-table"></i> 5. טבלה חודשית (אקסל פיננסי)</p>
-                    <p class="leading-relaxed">פירוט מלא של כל הקטגוריות, תתי-הקטגוריות והתקציבים החודשיים עם מעקב מדויק והתרעות אוטומטיות לחריגות מהתקציב, כולל כפתור ייצוא דוחות מפורטים לקובץ ולתמונה.</p>
+                    <p class="leading-relaxed">פירוט מלא של כל הקטגוריות, תתי-הקטגוריות והתקציבים החודשיים עם מעקב מדויק והתרעות אוטומטיות לחריגות מהתקציב, כולל כפתור ייצוא דוחות ישירות לקובץ.</p>
                 </div>
             </div>
         </div>
@@ -1188,12 +1164,12 @@
     <section id="screen-table" class="screen">
       <div class="flex items-center justify-between px-4 pt-3 pb-2 flex-shrink-0 border-b border-[var(--border)]">
         <div>
-          <h2 class="text-sm font-bold gradient-text">טבלה חודשית (אקסל פיננסי)</h2>
+          <h2 class="text-sm font-bold gradient-text">דוח חודשי (טבלת עסקאות)</h2>
           <p id="tableDateRangeSub" class="text-[10px] text-emerald-400 font-bold mt-0.5">תקופה: טוען...</p>
         </div>
         <div class="flex items-center gap-1.5">
-          <button onclick="openModal('exportMenuModal')" class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded-xl cursor-pointer flex items-center gap-1.5 shadow-sm hover:bg-emerald-500/30 transition">
-            <i class="fa-solid fa-arrow-up-from-bracket"></i> ייצוא דוח
+          <button onclick="exportTableToFileDetailed()" class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded-xl cursor-pointer flex items-center gap-1.5 shadow-sm hover:bg-emerald-500/30 transition">
+            <i class="fa-solid fa-file-excel"></i> ייצוא לקובץ
           </button>
           <div class="field-shell px-2 py-1">
             <select id="tableMonthSelect" onchange="renderTableScreen()" class="bg-transparent text-[10px] font-bold outline-none cursor-pointer" style="color:var(--text)"></select>
@@ -2678,7 +2654,7 @@ function editCategoryBudget(catName) {
   }
 }
 
-// Concise and comprehensive table layout per user request
+// Table rendered like a clean statement/ledger table (Date, Category, Subcategory, Amount)
 function renderTableScreen() {
   const container = document.getElementById('excelTableContainer');
   if(!container) return;
@@ -2696,126 +2672,71 @@ function renderTableScreen() {
   const rangeSub = document.getElementById('tableDateRangeSub');
   if(rangeSub) rangeSub.textContent = `תקופה: מ-${startStr} עד ${endStr}`;
 
-  let totalMonthExpense = 0;
-  let categoryDataList = [];
+  const currentTxs = state.transactions ? state.transactions.filter(t => isWithinFinancialMonth(t.date, offset)) : [];
+  const recs = getRecurringItemsForCurrentMonth(offset);
+  const allItems = [...currentTxs, ...recs];
+  allItems.sort((a, b) => b.date.localeCompare(a.date));
 
-  if(state.expenseCats) {
-    state.expenseCats.forEach(cat => {
-      const subsSet = new Set(['כללי']);
-      if (state.learnedKeywords) {
-        Object.entries(state.learnedKeywords).forEach(([kw, cName]) => {
-          if (cName === cat.name) subsSet.add(kw);
-        });
-      }
-      if(state.transactions) {
-        state.transactions.forEach(t => {
-          if (t.type === 'expense' && t.cat === cat.name && isWithinFinancialMonth(t.date, offset)) {
-            if (t.subCat) subsSet.add(t.subCat);
-          }
-        });
-      }
-
-      const subCats = Array.from(subsSet);
-      const subCatTotals = {};
-      subCats.forEach(s => subCatTotals[s] = 0);
-      let catTotal = 0;
-
-      if(state.transactions) {
-        state.transactions.forEach(t => {
-          if(t.type === 'expense' && t.cat === cat.name && isWithinFinancialMonth(t.date, offset)) {
-            const sub = t.subCat && subCats.includes(t.subCat) ? t.subCat : 'כללי';
-            subCatTotals[sub] = (subCatTotals[sub] || 0) + t.amount;
-            catTotal += t.amount;
-          }
-        });
-      }
-
-      const recs = getRecurringItemsForCurrentMonth(offset);
-      recs.forEach(r => {
-        if(r.type === 'expense' && r.cat === cat.name) {
-          const sub = 'כללי';
-          subCatTotals[sub] = (subCatTotals[sub] || 0) + r.amount;
-          catTotal += r.amount;
-        }
-      });
-
-      totalMonthExpense += catTotal;
-
-      if(catTotal > 0 || (cat.budget && cat.budget > 0)) {
-        categoryDataList.push({ cat, catTotal, subCats, subCatTotals });
-      }
-    });
-  }
-
-  categoryDataList.sort((a, b) => b.catTotal - a.catTotal);
-
-  if(categoryDataList.length === 0) {
-    container.innerHTML = '<p class="text-xs text-slate-400 text-center py-6">אין הוצאות פעילות בתקופה הנבחרת.</p>';
-    return;
-  }
+  let totalInc = 0;
+  let totalExp = 0;
+  allItems.forEach(t => {
+    if(t.type === 'income') totalInc += t.amount; else totalExp += t.amount;
+  });
 
   const summaryHeader = document.createElement('div');
-  summaryHeader.className = 'summary-card p-2.5 bg-gradient-to-l from-emerald-500/15 to-blue-500/15 border border-emerald-400/30 flex items-center justify-between mb-1';
+  summaryHeader.className = 'summary-card p-3 bg-gradient-to-l from-emerald-500/15 to-blue-500/15 border border-emerald-400/30 flex items-center justify-between mb-2';
   summaryHeader.innerHTML = `
-    <span class="text-[11px] font-bold text-slate-200">סה״כ הוצאות חודשיות:</span>
-    <span class="tabular text-xs font-black text-emerald-400">${fmt(totalMonthExpense)}</span>
+    <div class="text-[11px] font-bold">
+      <span class="text-emerald-400 ml-3">הכנסות: ${fmt(totalInc)}</span>
+      <span class="text-rose-400">הוצאות: ${fmt(totalExp)}</span>
+    </div>
+    <span class="text-[10px] text-slate-400 font-bold">${allItems.length} עסקאות בסך הכל</span>
   `;
   container.appendChild(summaryHeader);
 
-  categoryDataList.forEach(({ cat, catTotal, subCats, subCatTotals }) => {
-    const card = document.createElement('div');
-    card.className = 'summary-card p-2 space-y-1';
+  if(allItems.length === 0) {
+    const emptyBox = document.createElement('div');
+    emptyBox.className = 'summary-card p-6 text-center text-xs text-slate-400';
+    emptyBox.textContent = 'אין עסקאות או תנועות בתקופה הנבחרת.';
+    container.appendChild(emptyBox);
+    return;
+  }
 
-    let subRowsHtml = '';
-    subCats.forEach(sub => {
-      const amt = subCatTotals[sub] || 0;
-      if(amt > 0) {
-        subRowsHtml += `
-          <div class="flex items-center justify-between text-[10px] py-1 px-2 rounded bg-[var(--card-2)] border border-[var(--border)]">
-            <span class="text-slate-300 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full" style="background:${cat.color}"></span> ${sub}</span>
-            <span class="tabular font-medium text-slate-300">${fmt(amt)}</span>
-          </div>
-        `;
-      }
-    });
+  const tableWrapper = document.createElement('div');
+  tableWrapper.className = 'summary-card overflow-hidden border border-[var(--border)]';
+  
+  let tableHtml = `
+    <table style="width: 100%; border-collapse: collapse; text-align: right; font-size: 11px;">
+      <thead>
+        <tr style="background: var(--card-2); border-bottom: 1px solid var(--border); color: var(--text-dim); font-size: 10px;">
+          <th style="padding: 8px 10px;">תאריך</th>
+          <th style="padding: 8px 10px;">קטגוריה</th>
+          <th style="padding: 8px 10px;">פרטים / תת-קטגוריה</th>
+          <th style="padding: 8px 10px; text-align: left;">סכום</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
 
-    const budget = cat.budget || 0;
-    let budgetStatusHtml = '';
-    if (budget > 0) {
-      const pct = Math.round((catTotal / budget) * 100);
-      let alertText = pct >= 100 ? `🚨 חריגה (${pct}%)` : pct >= 80 ? `⚠️ מתקרב (${pct}%)` : `🟢 תקין (${pct}%)`;
-      budgetStatusHtml = `
-        <div class="flex items-center justify-between text-[9px] pt-1 border-t border-[var(--border)] text-slate-400 px-1">
-          <span>תקציב: ${fmt(budget)} | ${alertText}</span>
-          <button onclick="editCategoryBudget('${cat.name}')" class="text-violet-400 underline cursor-pointer font-bold">ערוך תקציב</button>
-        </div>
-      `;
-    } else {
-      budgetStatusHtml = `
-        <div class="flex items-center justify-between text-[9px] pt-1 border-t border-[var(--border)] text-slate-500 px-1">
-          <span>ללא תקציב</span>
-          <button onclick="editCategoryBudget('${cat.name}')" class="text-emerald-400 underline cursor-pointer font-bold">+ הגדר תקציב</button>
-        </div>
-      `;
-    }
-
-    card.innerHTML = `
-      <div class="flex items-center justify-between px-1 py-0.5">
-        <div class="flex items-center gap-2">
-          <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:${cat.color}"></span>
-          <span class="text-xs font-bold text-slate-100">${cat.name}</span>
-        </div>
-        <span class="tabular text-xs font-black text-rose-400">${fmt(catTotal)}</span>
-      </div>
-      <div class="space-y-1 pt-0.5 pl-1 pr-1">${subRowsHtml}</div>
-      ${budgetStatusHtml}
+  allItems.forEach(t => {
+    const sign = t.type === 'income' ? '+' : '−';
+    const col = t.type === 'income' ? 'var(--mint)' : 'var(--coral)';
+    tableHtml += `
+      <tr style="border-bottom: 1px solid var(--border);">
+        <td style="padding: 8px 10px; color: var(--text-dim); font-size: 10px;" class="tabular">${t.date || ''}</td>
+        <td style="padding: 8px 10px; font-weight: bold; color: var(--text);">${t.cat}</td>
+        <td style="padding: 8px 10px; color: var(--text-dim);">${t.subCat || 'כללי'}</td>
+        <td style="padding: 8px 10px; font-weight: bold; text-align: left; color: ${col};" class="tabular">${sign}${Math.round(t.amount).toLocaleString('he-IL')} ₪</td>
+      </tr>
     `;
-    container.appendChild(card);
   });
+
+  tableHtml += `</tbody></table>`;
+  tableWrapper.innerHTML = tableHtml;
+  container.appendChild(tableWrapper);
 }
 
 function exportTableToFileDetailed() {
-    closeModal('exportMenuModal');
     const select = document.getElementById('tableMonthSelect');
     const offset = select ? parseInt(select.value) || 0 : 0;
     
@@ -2837,104 +2758,7 @@ function exportTableToFileDetailed() {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    showToast("הדוח המפורט יוצא לקובץ בהצלחה!");
-}
-
-function exportTableToImageDetailed() {
-    closeModal('exportMenuModal');
-    const select = document.getElementById('tableMonthSelect');
-    const offset = select ? parseInt(select.value) || 0 : 0;
-    
-    const { startPeriod, endPeriod } = getFinancialPeriodDates(offset);
-    const startStr = `${String(startPeriod.getDate()).padStart(2,'0')}.${String(startPeriod.getMonth()+1).padStart(2,'0')}.${startPeriod.getFullYear()}`;
-    const endMinusOne = new Date(endPeriod);
-    endMinusOne.setDate(endMinusOne.getDate() - 1);
-    const endStr = `${String(endMinusOne.getDate()).padStart(2,'0')}.${String(endMinusOne.getMonth()+1).padStart(2,'0')}.${endMinusOne.getFullYear()}`;
-
-    const currentTxs = state.transactions ? state.transactions.filter(t => isWithinFinancialMonth(t.date, offset)) : [];
-    const recs = getRecurringItemsForCurrentMonth(offset);
-    const allItems = [...currentTxs, ...recs];
-    allItems.sort((a, b) => b.date.localeCompare(a.date));
-
-    const exportWrapper = document.createElement('div');
-    exportWrapper.style.position = 'fixed';
-    exportWrapper.style.top = '-9999px';
-    exportWrapper.style.left = '-9999px';
-    exportWrapper.style.width = '600px';
-    exportWrapper.style.background = '#05070B';
-    exportWrapper.style.color = '#F3F5F8';
-    exportWrapper.style.padding = '24px';
-    exportWrapper.style.fontFamily = "'Rubik', sans-serif";
-    exportWrapper.style.borderRadius = '16px';
-    exportWrapper.style.border = '1px solid rgba(255,255,255,0.15)';
-    exportWrapper.setAttribute('dir', 'rtl');
-
-    let rowsHtml = '';
-    let totalInc = 0;
-    let totalExp = 0;
-
-    allItems.forEach(t => {
-        const sign = t.type === 'income' ? '+' : '−';
-        const col = t.type === 'income' ? '#7FE8C6' : '#FF8D82';
-        if(t.type === 'income') totalInc += t.amount; else totalExp += t.amount;
-        rowsHtml += `
-            <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
-                <td style="padding: 8px 10px; font-size: 11px; color: #8C93A0; text-align: right;">${t.date || ''}</td>
-                <td style="padding: 8px 10px; font-size: 11px; font-weight: bold; color: #F3F5F8; text-align: right;">${t.cat}</td>
-                <td style="padding: 8px 10px; font-size: 11px; color: #C7A6FF; text-align: right;">${t.subCat || 'כללי'}</td>
-                <td style="padding: 8px 10px; font-size: 11px; font-weight: bold; text-align: left; color: ${col};">${sign}${Math.round(t.amount).toLocaleString('he-IL')} ₪</td>
-            </tr>
-        `;
-    });
-
-    exportWrapper.innerHTML = `
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid rgba(127,232,198,0.3); padding-bottom: 12px; margin-bottom: 16px;">
-            <div>
-                <h2 style="font-size: 18px; font-weight: 900; color: #7FE8C6; margin: 0;">Pulse - דוח פיננסי מפורט</h2>
-                <p style="font-size: 11px; color: #8C93A0; margin: 4px 0 0 0;">תקופה: מ-${startStr} עד ${endStr} | משתמש: ${state.userName || 'דוידי'}</p>
-            </div>
-            <div style="text-align: left;">
-                <p style="font-size: 10px; color: #8C93A0; margin: 0;">הכנסות: <span style="color:#7FE8C6; font-weight:bold;">${Math.round(totalInc).toLocaleString('he-IL')} ₪</span></p>
-                <p style="font-size: 10px; color: #8C93A0; margin: 2px 0 0 0;">הוצאות: <span style="color:#FF8D82; font-weight:bold;">${Math.round(totalExp).toLocaleString('he-IL')} ₪</span></p>
-            </div>
-        </div>
-        <table style="width: 100%; border-collapse: collapse;">
-            <thead>
-                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2); color: #8C93A0; font-size: 10px;">
-                    <th style="padding: 6px 10px; text-align: right;">תאריך</th>
-                    <th style="padding: 6px 10px; text-align: right;">קטגוריה ראשית</th>
-                    <th style="padding: 6px 10px; text-align: right;">תת-קטגוריה</th>
-                    <th style="padding: 6px 10px; text-align: left;">סכום</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${rowsHtml || '<tr><td colspan="4" style="text-align:center; padding: 20px; color: #8C93A0;">אין תנועות בתקופה זו</td></tr>'}
-            </tbody>
-        </table>
-        <div style="margin-top: 16px; text-align: center; font-size: 9px; color: #565E6C;">
-            הופק אוטומטית ע"י מערכת Pulse • ${new Date().toLocaleDateString('he-IL')}
-        </div>
-    `;
-
-    document.body.appendChild(exportWrapper);
-    showToast("מייצר תמונה איכותית לגלריה...");
-
-    html2canvas(exportWrapper, {
-        backgroundColor: '#05070B',
-        scale: 2,
-        useCORS: true,
-        logging: false
-    }).then(canvas => {
-        document.body.removeChild(exportWrapper);
-        const link = document.createElement('a');
-        link.download = `pulse_statement_${new Date().toISOString().slice(0,10)}.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-        showToast("התמונה הורדה בהצלחה לגלריה/הורדות!");
-    }).catch(err => {
-        if (exportWrapper.parentNode) document.body.removeChild(exportWrapper);
-        alert("שגיאה בייצוא התמונה.");
-    });
+    showToast("הדוח יוצא ישירות לקובץ בהצלחה!");
 }
 
 let activeRecognition = null;

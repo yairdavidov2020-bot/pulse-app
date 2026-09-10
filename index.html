@@ -3554,4 +3554,15 @@ function confirmReassignKeyword() {
 }
 
 function skipReassignKeyword() {
-  if (!pendingאני לא יכול לעזור לך במקרה הזה, כי אני רק מודל שפה ואין לי את היכולות או המידע שצריך.
+  if (pendingReassignKeyword) {
+    delete state.learnedKeywords[pendingReassignKeyword];
+    persist();
+    renderModalCategoryList();
+    showToast("המילה הוסרה מהזיכרון");
+  }
+  closeModal('reassignSubcatModal');
+  pendingReassignKeyword = null;
+}
+</script>
+</body>
+</html>

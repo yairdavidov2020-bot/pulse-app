@@ -13,7 +13,6 @@
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -208,7 +207,7 @@
             <h3 class="text-base font-black gradient-text">תזכורת הוצאות יומית</h3>
             <p class="text-xs text-slate-300 leading-relaxed">היי זה הזמן לעצור רגע לעדכן את ההוצאות וההכנסות של היום ולהישאר בשליטה מלאה 💡</p>
         </div>
-        <button onclick="closeModal('reminderModal')" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs shadow-lg cursor-pointer relative z-10">הבנתי יאללה מעדכן!</button>
+        <button onclick="closeReminderModal()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs shadow-lg cursor-pointer relative z-10">הבנתי יאללה מעדכן!</button>
     </div>
 </div>
 
@@ -217,7 +216,7 @@
     <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl text-right max-h-[85vh] overflow-y-auto border border-blue-400/40">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
             <h3 class="text-xs font-bold text-blue-400 flex items-center gap-1.5"><i class="fa-solid fa-plane-departure"></i> הגדרות מצב נסיעות (Travel Mode)</h3>
-            <button onclick="closeModal('travelModal')" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
+            <button onclick="closeTravelModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
         
         <div class="p-3 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-2.5">
@@ -326,10 +325,10 @@
     <div class="summary-card p-5 max-w-sm w-full space-y-4 shadow-2xl text-right border border-blue-400/40">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
             <h3 class="text-sm font-black text-blue-400 flex items-center gap-2"><i class="fa-solid fa-plane-circle-check"></i> סיכום נסיעות וטיול</h3>
-            <button onclick="closeModal('travelSummaryModal')" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
+            <button onclick="closeTravelSummaryModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
         <div id="travelSummaryContent" class="space-y-2.5 text-[11px] text-slate-300"></div>
-        <button onclick="closeModal('travelSummaryModal')" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs shadow-xl cursor-pointer">סגור סיכום וחזור למצב רגיל</button>
+        <button onclick="closeTravelSummaryModal()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs shadow-xl cursor-pointer">סגור סיכום וחזור למצב רגיל</button>
     </div>
 </div>
 
@@ -338,7 +337,7 @@
     <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl max-h-[85vh] overflow-y-auto text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
             <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-rotate ml-1"></i> הוראות קבע ומנויים</h3>
-            <button onclick="closeModal('recurringModal')" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
+            <button onclick="closeRecurringModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
         <p class="text-[10px] text-slate-300">הוראות קבע יורדות ומחושבות אוטומטית כחלק מההוצאות וההכנסות החודשיות והיתרה שלך:</p>
         <div class="space-y-1.5 max-h-[140px] overflow-y-auto" id="recurringListContainer"></div>
@@ -379,7 +378,7 @@
     <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl max-h-[85vh] overflow-y-auto text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
             <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-piggy-bank ml-1"></i> קופות חיסכון וירטואליות</h3>
-            <button onclick="closeModal('goalBucketsModal')" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
+            <button onclick="closeGoalBucketsModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
         <p class="text-[10px] text-slate-300">שמור כסף למטרות ספציפיות באופן וירטואלי מבלי לפגוע ביתרת העו״ש הכללית:</p>
         <div class="space-y-2 max-h-[160px] overflow-y-auto" id="goalBucketsListContainer"></div>
@@ -403,7 +402,7 @@
     <div class="summary-card p-4 max-w-xs w-full space-y-3 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
             <h3 id="allocateModalTitle" class="text-xs font-bold text-emerald-400">הקצאת כסף לקופה</h3>
-            <button onclick="closeModal('allocateModal')" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
+            <button onclick="closeAllocateModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
         <p class="text-[10px] text-slate-300">הכנס סכום להוספה (או מספר שלילי להסרה) לקופה הוירטואלית:</p>
         <div class="field-shell px-3 py-2 flex items-center">
@@ -414,51 +413,6 @@
     </div>
 </div>
 
-<!-- EDIT TRANSACTION MODAL -->
-<div id="editTxModal" class="modal-overlay hidden">
-    <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl text-right">
-        <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-            <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-pen-to-square ml-1"></i> עריכת תנועה</h3>
-            <button onclick="closeModal('editTxModal')" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
-        </div>
-        <input type="hidden" id="editTxId" />
-        
-        <div class="space-y-1">
-            <label class="text-[10px] font-semibold text-slate-400 block">סוג תנועה:</label>
-            <div class="field-shell px-3 py-1.5">
-                <select id="editTxType" class="w-full bg-transparent outline-none font-bold text-[11px]" style="color:var(--text)" onchange="updateEditCategoriesDropdown(this.value)">
-                    <option value="expense">הוצאה</option>
-                    <option value="income">הכנסה</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="space-y-1">
-            <label class="text-[10px] font-semibold text-slate-400 block">קטגוריה ראשית:</label>
-            <div class="field-shell px-3 py-1.5">
-                <select id="editTxCategory" class="w-full bg-transparent outline-none font-bold text-[11px]" style="color:var(--text)"></select>
-            </div>
-        </div>
-
-        <div class="space-y-1">
-            <label class="text-[10px] font-semibold text-slate-400 block">תת-קטגוריה / תיאור:</label>
-            <div class="field-shell px-3 py-2">
-                <input id="editTxSubCat" type="text" placeholder="תת-קטגוריה..." class="w-full bg-transparent outline-none font-bold text-[11px]" style="color:var(--text)" />
-            </div>
-        </div>
-
-        <div class="space-y-1">
-            <label class="text-[10px] font-semibold text-slate-400 block">סכום:</label>
-            <div class="field-shell px-3 py-2 flex items-center">
-                <span class="text-xs font-bold ml-1 text-emerald-400">₪</span>
-                <input id="editTxAmount" type="tel" inputmode="decimal" placeholder="סכום..." class="w-full bg-transparent outline-none font-bold text-[11px]" style="color:var(--text)" />
-            </div>
-        </div>
-
-        <button onclick="saveEditedTransaction()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs">שמור שינויים</button>
-    </div>
-</div>
-
 <!-- COMPREHENSIVE APP GUIDE & TUTORIAL MODAL -->
 <div id="tutorialModal" class="modal-overlay hidden">
     <div class="summary-card p-5 max-w-md w-full space-y-4 shadow-2xl text-right relative overflow-hidden border border-emerald-400/50 max-h-[90vh] overflow-y-auto">
@@ -466,7 +420,7 @@
         <div class="relative z-10 space-y-3">
             <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
                 <h3 class="text-sm font-black gradient-text flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles"></i> מדריך שימוש מקיף - Pulse</h3>
-                <button onclick="closeModal('tutorialModal')" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
+                <button onclick="closeTutorialModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
             </div>
             
             <div class="space-y-2.5 text-[11px] text-slate-300">
@@ -488,11 +442,11 @@
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-teal-400 flex items-center gap-1.5"><i class="fa-solid fa-table"></i> 5. טבלה חודשית (אקסל פיננסי)</p>
-                    <p class="leading-relaxed">פירוט מלא של כל הקטגוריות, תתי-הקטגוריות והתקציבים החודשיים עם מעקב מדויק והתרעות אוטומטיות לחריגות מהתקציב, כולל אפשרויות ייצוא לקובץ ותמונה.</p>
+                    <p class="leading-relaxed">פירוט מלא של כל הקטגוריות, תתי-הקטגוריות והתקציבים החודשיים עם מעקב מדויק והתרעות אוטומטיות לחריגות מהתקציב.</p>
                 </div>
             </div>
         </div>
-        <button onclick="closeModal('tutorialModal')" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs shadow-xl cursor-pointer relative z-10">הבנתי לגמרי, יאללה מתחילים!</button>
+        <button onclick="closeTutorialModal()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs shadow-xl cursor-pointer relative z-10">הבנתי לגמרי, יאללה מתחילים!</button>
     </div>
 </div>
 
@@ -686,10 +640,10 @@
     <div class="summary-card p-4 max-w-xs w-full space-y-3 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
             <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-microphone ml-1"></i> העוזר הקולי והצ׳אט החכם</h3>
-            <button onclick="closeModal('chatHelpModal')" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
+            <button onclick="closeChatHelpModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
         <p class="text-[11px] text-slate-300 leading-relaxed">העוזר הקולי מזהה סכומים, מטבעות ומילים. במצב נסיעות ניתן לציין אמצעי תשלום כמו "במזומן" או "באשראי" כדי לעדכן את ארנק המזומן הפיזי.</p>
-        <button onclick="closeModal('chatHelpModal')" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי</button>
+        <button onclick="closeChatHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי</button>
     </div>
 </div>
 
@@ -697,11 +651,11 @@
     <div class="summary-card p-4 max-w-xs w-full space-y-2.5 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
             <h3 class="text-xs font-bold text-emerald-400">הכתבה חכמה</h3>
-            <button onclick="closeModal('voiceHelpModal')" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
+            <button onclick="closeVoiceHelpModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
         <p class="text-[11px] text-slate-300 leading-relaxed">אמור או הקלד משפט חופשי. במצב נסיעות, המערכת ממירה לבד למטבע היעד הנבחר:</p>
         <p class="text-[11px] font-bold text-emerald-300 bg-[var(--card-2)] p-2 rounded-lg border border-[var(--border)]" id="voiceExampleBox">"שילמתי 50 פלאפל ב-18.8"</p>
-        <button onclick="closeModal('voiceHelpModal')" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי</button>
+        <button onclick="closeVoiceHelpModal()" class="save-btn w-full py-2 rounded-xl font-bold text-xs">הבנתי</button>
     </div>
 </div>
 
@@ -743,7 +697,7 @@
     <div class="summary-card p-4 max-w-sm w-full space-y-3 shadow-2xl max-h-[85vh] overflow-y-auto text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
             <h3 class="text-xs font-bold text-violet-400"><i class="fa-solid fa-tags ml-1"></i> ניהול קטגוריות ומילים נלמדות</h3>
-            <button onclick="closeModal('categoriesModal')" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
+            <button onclick="closeCategoriesModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
         
         <div class="flex gap-2 p-1 bg-[var(--card-2)] rounded-xl border border-[var(--border)]">
@@ -805,11 +759,11 @@
     </div>
 </div>
 
-<div id="menuModal" class="modal-overlay hidden" onclick="if(event.target === this) closeModal('menuModal')">
+<div id="menuModal" class="modal-overlay hidden" onclick="if(event.target === this) closeMenuModal()">
     <div class="menu-sidebar-panel space-y-3 shadow-2xl text-right">
         <div class="flex items-center justify-between border-b border-[var(--border)] pb-2.5">
             <h3 class="text-sm font-bold gradient-text flex items-center gap-2"><i class="fa-solid fa-bars"></i> תפריט והגדרות</h3>
-            <button onclick="closeModal('menuModal')" class="icon-btn" style="width:28px;height:28px;"><i class="fa-solid fa-xmark text-sm"></i></button>
+            <button onclick="closeMenuModal()" class="icon-btn" style="width:28px;height:28px;"><i class="fa-solid fa-xmark text-sm"></i></button>
         </div>
 
         <div class="summary-card p-3 flex items-center gap-3 bg-[var(--card-2)] border border-[var(--border)] rounded-xl">
@@ -821,25 +775,25 @@
         </div>
         
         <div class="space-y-1.5 pt-1">
-            <button onclick="showScreen('home'); closeModal('menuModal')" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-emerald-400 transition text-[12px] font-bold cursor-pointer">
+            <button onclick="menuGoHome()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-emerald-400 transition text-[12px] font-bold cursor-pointer">
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-house text-emerald-400 w-4"></i> בית</span>
             </button>
-            <button onclick="showScreen('analytics'); closeModal('menuModal')" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-blue-400 transition text-[12px] font-bold cursor-pointer">
+            <button onclick="menuGoAnalytics()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-blue-400 transition text-[12px] font-bold cursor-pointer">
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-chart-pie text-blue-400 w-4"></i> תמונת מצב (תרשימים)</span>
             </button>
-            <button onclick="showScreen('table'); closeModal('menuModal')" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-violet-400 transition text-[12px] font-bold cursor-pointer">
+            <button onclick="menuGoTable()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-violet-400 transition text-[12px] font-bold cursor-pointer">
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-table text-violet-400 w-4"></i> טבלה חודשית (אקסל)</span>
             </button>
-            <button onclick="closeModal('menuModal'); openModal('goalBucketsModal'); renderGoalBucketsList();" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-emerald-400 transition text-[12px] font-bold cursor-pointer">
+            <button onclick="menuOpenGoalBuckets()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-emerald-400 transition text-[12px] font-bold cursor-pointer">
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-piggy-bank text-emerald-400 w-4"></i> קופות חיסכון וירטואליות</span>
             </button>
-            <button onclick="openTravelModal()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-blue-400 transition text-[12px] font-bold cursor-pointer">
+            <button onclick="menuOpenTravelModal()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-blue-400 transition text-[12px] font-bold cursor-pointer">
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-plane-departure text-blue-400 w-4"></i> הגדרות מצב נסיעות</span>
             </button>
-            <button onclick="closeModal('menuModal'); openCategoriesModal();" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-violet-400 transition text-[12px] font-bold cursor-pointer">
+            <button onclick="menuOpenCategories()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-violet-400 transition text-[12px] font-bold cursor-pointer">
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-tags text-violet-400 w-4"></i> ניהול קטגוריות ומילים נלמדות</span>
             </button>
-            <button onclick="closeModal('menuModal'); document.getElementById('recurringModal').classList.remove('hidden'); renderRecurringList(); updateRecCategories(document.getElementById('recType').value);" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-emerald-400 transition text-[12px] font-bold cursor-pointer">
+            <button onclick="menuOpenRecurring()" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] hover:border-emerald-400 transition text-[12px] font-bold cursor-pointer">
                 <span class="flex items-center gap-2.5"><i class="fa-solid fa-rotate text-emerald-400 w-4"></i> הוראות קבע ומנויים</span>
             </button>
 
@@ -937,7 +891,7 @@
       <span class="text-[14px] font-bold tracking-tight gradient-text">Pulse</span>
     </div>
     <div class="flex items-center gap-1.5">
-      <button onclick="openModal('menuModal'); const {balance, freeCash} = totals(); document.getElementById('sidebarUserName').textContent = state.userName || 'אורח'; document.getElementById('sidebarUserBalance').textContent = `פנוי: ${fmt(freeCash)}`; document.getElementById('sidebarUserInitial').textContent = state.userName ? state.userName.charAt(0) : '?';" class="icon-btn" title="תפריט ראשי"><i class="fa-solid fa-bars text-xs"></i></button>
+      <button onclick="openMenuModal()" class="icon-btn" title="תפריט ראשי"><i class="fa-solid fa-bars text-xs"></i></button>
       <button onclick="document.documentElement.classList.toggle('light')" class="icon-btn" title="מצב תצוגה"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg></button>
     </div>
   </div>
@@ -949,7 +903,7 @@
       <main class="px-3 pb-1 pt-1 flex-1 flex flex-col justify-between h-full overflow-hidden gap-1">
         <section class="flex flex-col justify-center flex-1">
           <div class="flex gap-2 mr-auto w-fit mb-0.5">
-            <button onclick="openModal('tutorialModal')" class="text-[9px] font-medium px-2.5 py-1 rounded-lg bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-between gap-1 shadow-sm cursor-pointer">
+            <button onclick="openTutorialModal()" class="text-[9px] font-medium px-2.5 py-1 rounded-lg bg-[var(--card)] border border-[var(--border)] text-violet-400 hover:text-white transition flex items-center justify-between gap-1 shadow-sm cursor-pointer">
               <span><i class="fa-solid fa-lightbulb ml-1"></i> שימוש יעיל</span>
             </button>
           </div>
@@ -1019,7 +973,7 @@
           <div class="flex items-center justify-between mb-1">
             <div class="flex items-center gap-1.5">
               <h2 class="text-[10px] font-semibold">הכתבה חכמה ותנועות</h2>
-              <button onclick="openModal('chatHelpModal')" class="w-3.5 h-3.5 rounded-full bg-[var(--card)] border border-[var(--border)] text-[8px] font-bold flex items-center justify-center text-emerald-400 cursor-pointer">?</button>
+              <button onclick="openChatHelpModal()" class="w-3.5 h-3.5 rounded-full bg-[var(--card)] border border-[var(--border)] text-[8px] font-bold flex items-center justify-center text-emerald-400 cursor-pointer">?</button>
             </div>
           </div>
 
@@ -1034,7 +988,7 @@
                   <span>עוזר קולי דיגיטלי</span>
                   <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                 </h4>
-                <button onclick="openModal('voiceHelpModal')" class="w-3.5 h-3.5 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[8px] font-bold flex items-center justify-center text-emerald-400 cursor-pointer">?</button>
+                <button onclick="openVoiceHelpModal()" class="w-3.5 h-3.5 rounded-full bg-[var(--card-2)] border border-[var(--border)] text-[8px] font-bold flex items-center justify-center text-emerald-400 cursor-pointer">?</button>
               </div>
               <p id="micStatus" class="text-[9px] mt-0.5 leading-tight truncate" style="color:var(--text-dim)">למשל: "שילמתי 50 שקל פלאפל ב-18.8"</p>
             </div>
@@ -1121,7 +1075,7 @@
             </div>
             <div class="flex items-center gap-2">
               <span class="text-[10px] font-bold text-slate-300 tabular" id="bucketsSummaryTotal">₪0 / ₪0</span>
-              <button onclick="event.stopPropagation(); openModal('goalBucketsModal'); renderGoalBucketsList();" class="text-[10px] font-bold text-emerald-400 bg-[var(--card-2)] px-2 py-0.5 rounded-lg border border-[var(--border)] cursor-pointer" title="ניהול קופות">+ ניהול</button>
+              <button onclick="event.stopPropagation(); menuOpenGoalBuckets();" class="text-[10px] font-bold text-emerald-400 bg-[var(--card-2)] px-2 py-0.5 rounded-lg border border-[var(--border)] cursor-pointer" title="ניהול קופות">+ ניהול</button>
               <i id="bucketsArrowIcon" class="fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform"></i>
             </div>
           </div>
@@ -1175,12 +1129,8 @@
           <h2 class="text-sm font-bold gradient-text">טבלה חודשית (אקסל פיננסי)</h2>
           <p id="tableDateRangeSub" class="text-[10px] text-emerald-400 font-bold mt-0.5">תקופה: טוען...</p>
         </div>
-        <div class="flex items-center gap-1.5">
-          <button onclick="exportTableToFile()" class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2.5 py-1 rounded-lg cursor-pointer flex items-center gap-1 shadow-sm" title="ייצוא לקובץ CSV"><i class="fa-solid fa-file-arrow-down"></i> קובץ</button>
-          <button onclick="exportTableToImage()" class="text-[10px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30 px-2.5 py-1 rounded-lg cursor-pointer flex items-center gap-1 shadow-sm" title="ייצוא כתמונה"><i class="fa-solid fa-image"></i> תמונה</button>
-          <div class="field-shell px-2 py-1">
-            <select id="tableMonthSelect" onchange="renderTableScreen()" class="bg-transparent text-[10px] font-bold outline-none cursor-pointer" style="color:var(--text)"></select>
-          </div>
+        <div class="field-shell px-2 py-1">
+          <select id="tableMonthSelect" onchange="renderTableScreen()" class="bg-transparent text-[10px] font-bold outline-none cursor-pointer" style="color:var(--text)"></select>
         </div>
       </div>
       <main class="px-3 pb-2 pt-2 space-y-2.5 flex-1 overflow-y-auto">
@@ -1235,10 +1185,6 @@ if ('serviceWorker' in navigator) {
     console.error("SW registration failed:", err);
   });
 }
-
-// ==================== GENERIC MODAL CONTROLLER ====================
-function openModal(id) { const el = document.getElementById(id); if(el) el.classList.remove('hidden'); }
-function closeModal(id) { const el = document.getElementById(id); if(el) el.classList.add('hidden'); }
 
 async function loadDataFromSupabase() {
   if (!supabaseClient) return null;
@@ -1644,6 +1590,17 @@ async function toggleNotificationsPermission(checked) {
   }
 }
 
+function closeReminderModal() { document.getElementById('reminderModal').classList.add('hidden'); }
+function openTutorialModal() { document.getElementById('tutorialModal').classList.remove('hidden'); }
+function closeTutorialModal() { document.getElementById('tutorialModal').classList.add('hidden'); }
+
+function menuOpenGoalBuckets() {
+  closeMenuModal();
+  document.getElementById('goalBucketsModal').classList.remove('hidden');
+  renderGoalBucketsList();
+}
+function closeGoalBucketsModal() { document.getElementById('goalBucketsModal').classList.add('hidden'); }
+
 function renderGoalBucketsList() {
   const container = document.getElementById('goalBucketsListContainer');
   if(!container) return;
@@ -1695,8 +1652,9 @@ function openAllocateModal(id) {
   if(!bucket) return;
   document.getElementById('allocateModalTitle').textContent = `הקצאה לקופה: ${bucket.title}`;
   document.getElementById('allocateAmountInput').value = '';
-  openModal('allocateModal');
+  document.getElementById('allocateModal').classList.remove('hidden');
 }
+function closeAllocateModal() { document.getElementById('allocateModal').classList.add('hidden'); activeAllocateBucketId = null; }
 
 function confirmAllocate() {
   if(!activeAllocateBucketId) return;
@@ -1712,8 +1670,7 @@ function confirmAllocate() {
     renderAnalytics();
     showToast("הקופות עודכנו בהצלחה!");
   }
-  closeModal('allocateModal');
-  activeAllocateBucketId = null;
+  closeAllocateModal();
 }
 
 function deleteGoalBucket(id) {
@@ -1728,15 +1685,21 @@ function deleteGoalBucket(id) {
 }
 
 function openTravelModal() {
-  closeModal('menuModal');
+  closeMenuModal();
   document.getElementById('travelToggleCheckbox').checked = state.isTravelMode;
   document.getElementById('travelCountrySelect').value = state.travelCountry || 'תאילנד';
   document.getElementById('travelBudgetInput').value = state.travelBudget || 5000;
   document.getElementById('travelStartDateInput').value = state.travelStartDate || '';
   document.getElementById('travelEndDateInput').value = state.travelEndDate || '';
   document.getElementById('travelCashInput').value = state.travelCashAvailable || 0;
-  openModal('travelModal');
+  document.getElementById('travelModal').classList.remove('hidden');
 }
+
+function menuOpenTravelModal() {
+  openTravelModal();
+}
+
+function closeTravelModal() { document.getElementById('travelModal').classList.add('hidden'); }
 
 const countryCurrencyMap = {
   'איטליה': 'יורו', 'צרפת': 'יורו', 'ספרד': 'יורו', 'גרמניה': 'יורו', 'יוון': 'יורו', 
@@ -1789,7 +1752,7 @@ function saveTravelSettings() {
   const wasOn = state.isTravelMode;
   state.isTravelMode = document.getElementById('travelToggleCheckbox').checked;
   persist();
-  closeModal('travelModal');
+  closeTravelModal();
   renderHome();
   renderAnalytics();
   
@@ -1833,8 +1796,20 @@ function triggerEndTravelMode() {
   renderHome();
   renderAnalytics();
 
-  openModal('travelSummaryModal');
+  document.getElementById('travelSummaryModal').classList.remove('hidden');
 }
+
+function closeTravelSummaryModal() {
+  document.getElementById('travelSummaryModal').classList.add('hidden');
+}
+
+function menuOpenRecurring() {
+  closeMenuModal();
+  document.getElementById('recurringModal').classList.remove('hidden');
+  renderRecurringList();
+  updateRecCategories(document.getElementById('recType').value);
+}
+function closeRecurringModal() { document.getElementById('recurringModal').classList.add('hidden'); }
 
 function updateRecCategories(type) {
   const sel = document.getElementById('recCategory');
@@ -1857,7 +1832,7 @@ function quickAddRecCategory() {
     alert("הקטגוריה כבר קיימת.");
     return;
   }
-  const color = '#7FE8C6';
+  const color = availableColors[list.length % availableColors.length];
   list.push({ name: cleanName, color, budget: 0, custom: true });
   persist();
   updateRecCategories(type);
@@ -1920,6 +1895,7 @@ function deleteRecurringItem(id) {
   showToast("הוראת קבע הוסרה");
 }
 
+// Guaranteed Splash Screen Removal & Safe App Boot
 window.onload = function() {
   setTimeout(() => {
     const splash = document.getElementById('appSplashScreen');
@@ -2054,7 +2030,8 @@ async function startCinematicBuild() {
   persist();
   await new Promise(r => setTimeout(r, 3000));
   if(step6) step6.classList.add('hidden');
-  openModal('tutorialModal');
+  const tutorial = document.getElementById('tutorialModal');
+  if(tutorial) tutorial.classList.remove('hidden');
   setDynamicGreeting();
   buildFinancialDayDropdowns();
   loadDailyTip();
@@ -2073,6 +2050,24 @@ function loadDailyTip() {
     if(tipEl) tipEl.textContent = tipsList[dayIndex % tipsList.length];
   } catch(e) {}
 }
+
+function openChatHelpModal() { document.getElementById('chatHelpModal').classList.remove('hidden'); }
+function closeChatHelpModal() { document.getElementById('chatHelpModal').classList.add('hidden'); }
+function openVoiceHelpModal() { document.getElementById('voiceHelpModal').classList.remove('hidden'); }
+function closeVoiceHelpModal() { document.getElementById('voiceHelpModal').classList.add('hidden'); }
+
+function openMenuModal() {
+  document.getElementById('menuModal').classList.remove('hidden');
+  const { balance, freeCash } = totals();
+  document.getElementById('sidebarUserName').textContent = state.userName || 'אורח';
+  document.getElementById('sidebarUserBalance').textContent = `פנוי: ${fmt(freeCash)}`;
+  document.getElementById('sidebarUserInitial').textContent = state.userName ? state.userName.charAt(0) : '?';
+}
+function closeMenuModal() { document.getElementById('menuModal').classList.add('hidden'); }
+function menuGoHome() { showScreen('home'); closeMenuModal(); }
+function menuGoAnalytics() { showScreen('analytics'); closeMenuModal(); }
+function menuGoTable() { showScreen('table'); closeMenuModal(); }
+function menuOpenCategories() { closeMenuModal(); openCategoriesModal(); }
 
 function setDynamicGreeting() {
   const title = document.getElementById('greetingTitle');
@@ -2523,7 +2518,7 @@ function renderAnalytics() {
         }
         const tBudg = document.getElementById('travelBudgetTarget');
         if(tBudg) {
-          tBudg.innerHTML = `ארנק מזומן נותר: <span class="${cashRemaining >= 0 ? 'text-amber-300' : 'text-rose-400'} font-bold">${fmt(cashRemaining)}</span>`;
+          tBudg.innerHTML = `מזומן בארנק נותר: <span class="${cashRemaining >= 0 ? 'text-amber-300' : 'text-rose-400'} font-bold">${fmt(cashRemaining)}</span>`;
         }
 
         const aFlag = document.getElementById('analyticsTravelFlag');
@@ -2625,9 +2620,7 @@ function renderAnalytics() {
           const travelBadge = t.isTravel ? ` <span class="text-[8px] bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded">טיול</span>` : '';
           const paymentBadge = t.paymentMethod === 'cash' ? ` <span class="text-[8px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded">מזומן</span>` : '';
           const recBadge = t.isRecurring ? ` <span class="text-[8px] bg-violet-500/20 text-violet-300 px-1.5 py-0.5 rounded">קבע</span>` : '';
-          
-          const editBtn = !t.isRecurring ? `<button onclick="openEditTransaction(${t.id})" class="text-[10px] text-blue-400 cursor-pointer p-1 hover:text-blue-300" title="ערוך"><i class="fa-solid fa-pen-to-square"></i></button>` : '';
-          const deleteBtn = !t.isRecurring ? `<button onclick="deleteTransaction(${t.id})" class="text-[10px] text-rose-400 cursor-pointer p-1 hover:text-rose-300" title="מחק"><i class="fa-solid fa-trash-can"></i></button>` : '';
+          const deleteBtn = !t.isRecurring ? `<button onclick="deleteTransaction(${t.id})" class="text-[10px] text-rose-400 cursor-pointer p-1" title="מחק"><i class="fa-solid fa-trash-can"></i></button>` : '';
 
           row.innerHTML = `
             <div class="flex items-center gap-2.5">
@@ -2637,9 +2630,8 @@ function renderAnalytics() {
                 <p class="text-[9px] text-slate-400">${t.subCat || 'כללי'} • ${t.date || 'היום'}</p>
               </div>
             </div>
-            <div class="flex items-center gap-1">
+            <div class="flex items-center gap-2">
               <span class="tabular text-[11px] font-bold" style="color:${col}">${sign}${fmt(t.amount)}</span>
-              ${editBtn}
               ${deleteBtn}
             </div>
           `;
@@ -2660,65 +2652,6 @@ function toggleTxExpand() {
     if(txExpanded) { content.classList.remove('hidden'); arrow.style.transform = 'rotate(180deg)'; }
     else { content.classList.add('hidden'); arrow.style.transform = 'rotate(0deg)'; }
   }
-}
-
-// --- Edit Transaction Logic ---
-function openEditTransaction(id) {
-    const tx = state.transactions.find(t => t.id === id);
-    if (!tx) return;
-    document.getElementById('editTxId').value = tx.id;
-    document.getElementById('editTxType').value = tx.type || 'expense';
-    updateEditCategoriesDropdown(tx.type || 'expense');
-    document.getElementById('editTxCategory').value = tx.cat;
-    document.getElementById('editTxSubCat').value = tx.subCat || '';
-    document.getElementById('editTxAmount').value = tx.amount;
-    openModal('editTxModal');
-}
-
-function updateEditCategoriesDropdown(type) {
-    const sel = document.getElementById('editTxCategory');
-    if (!sel) return;
-    sel.innerHTML = '';
-    const list = type === 'income' ? state.incomeCats : state.expenseCats;
-    if (list) {
-        list.forEach(c => {
-            const opt = document.createElement('option');
-            opt.value = c.name;
-            opt.textContent = c.name;
-            sel.appendChild(opt);
-        });
-    }
-}
-
-function saveEditedTransaction() {
-    const id = parseInt(document.getElementById('editTxId').value);
-    const type = document.getElementById('editTxType').value;
-    const cat = document.getElementById('editTxCategory').value;
-    const subCat = document.getElementById('editTxSubCat').value.trim() || (type === 'income' ? 'משכורת' : 'כללי');
-    const amount = parseFloat(document.getElementById('editTxAmount').value);
-
-    if (isNaN(amount) || amount <= 0) {
-        alert("נא להזין סכום תקין.");
-        return;
-    }
-
-    const tx = state.transactions.find(t => t.id === id);
-    if (tx) {
-        tx.type = type;
-        tx.cat = cat;
-        tx.subCat = subCat;
-        tx.amount = amount;
-        const list = type === 'income' ? state.incomeCats : state.expenseCats;
-        const catObj = list ? list.find(c => c.name === cat) : null;
-        tx.color = catObj ? catObj.color : '#7FE8C6';
-        
-        persist();
-        renderHome();
-        renderAnalytics();
-        renderTableScreen();
-        showToast("התנועה עודכנה בהצלחה!");
-    }
-    closeModal('editTxModal');
 }
 
 function deleteTransaction(id) {
@@ -2885,51 +2818,6 @@ function renderTableScreen() {
     `;
     container.appendChild(card);
   });
-}
-
-// --- Export Functions for Monthly Table ---
-function exportTableToFile() {
-    const select = document.getElementById('tableMonthSelect');
-    const offset = select ? parseInt(select.value) || 0 : 0;
-    
-    let csvContent = "\uFEFFסוג,קטגוריה ראשית,תת-קטגוריה,סכום\n";
-    
-    if(state.transactions) {
-        state.transactions.forEach(t => {
-            if(isWithinFinancialMonth(t.date, offset)) {
-                csvContent += `"${t.type === 'income' ? 'הכנסה' : 'הוצאה'}","${t.cat}","${t.subCat || 'כללי'}",${t.amount}\n`;
-            }
-        });
-    }
-
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `pulse_report_${new Date().toISOString().slice(0,10)}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    showToast("הדוח יוצא לקובץ בהצלחה!");
-}
-
-function exportTableToImage() {
-    const container = document.getElementById('excelTableContainer');
-    if (!container) return;
-    
-    showToast("מייצר תמונה של הטבלה...");
-    html2canvas(container, {
-        backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#05070B',
-        scale: 2
-    }).then(canvas => {
-        const link = document.createElement('a');
-        link.download = `pulse_table_${new Date().toISOString().slice(0,10)}.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-        showToast("התמונה הורדה בהצלחה!");
-    }).catch(err => {
-        alert("שגיאה בייצוא התמונה.");
-    });
 }
 
 let activeRecognition = null;
@@ -3140,7 +3028,8 @@ async function processVoiceCommandDirectly(text){
     if(subInput) subInput.value = cleanSub || '';
     const parseInfo = document.getElementById('voiceParsedInfo');
     if(parseInfo) parseInfo.innerHTML = `סכום: <span class="text-emerald-400 font-bold">${fmt(convertedAmount)}</span> (${originalStr}) | תאריך: <span class="text-blue-400 font-bold">${parsedDate}</span>`;
-    openModal('voiceDescModal');
+    const vModal = document.getElementById('voiceDescModal');
+    if(vModal) vModal.classList.remove('hidden');
   } else {
     const type = isIncome ? 'income' : 'expense';
     const catObj = validTargetCatList.find(c => c.name === matchedCat);
@@ -3192,7 +3081,8 @@ function confirmVoiceTransaction() {
   state.transactions.push({ id: Date.now(), ...pendingSmartTx });
   persist();
   renderHome(); renderAnalytics();
-  closeModal('voiceDescModal');
+  const vModal = document.getElementById('voiceDescModal');
+  if(vModal) vModal.classList.add('hidden');
   const savedAmt = pendingSmartTx.amount;
   pendingSmartTx = null; resetVoiceUI();
   showToast(`✅ נלמד ונשמר בהצלחה: ${fmt(savedAmt)} (${chosenMainCat})`);
@@ -3200,7 +3090,8 @@ function confirmVoiceTransaction() {
 
 function cancelVoiceTransaction() {
   pendingSmartTx = null;
-  closeModal('voiceDescModal');
+  const vModal = document.getElementById('voiceDescModal');
+  if(vModal) vModal.classList.add('hidden');
   resetVoiceUI();
 }
 
@@ -3224,8 +3115,13 @@ function switchCategoryTab(tab) {
 }
 
 function openCategoriesModal() { 
-  openModal('categoriesModal'); 
+  const cModal = document.getElementById('categoriesModal');
+  if(cModal) cModal.classList.remove('hidden'); 
   renderModalCategoryList(); 
+}
+function closeCategoriesModal() { 
+  const cModal = document.getElementById('categoriesModal');
+  if(cModal) cModal.classList.add('hidden'); 
 }
 
 function renderModalCategoryList() {
@@ -3365,7 +3261,7 @@ function openOrphanedModalStartup(count) {
       });
     }
   }
-  openModal('orphanedSubcatsModal');
+  document.getElementById('orphanedSubcatsModal').classList.remove('hidden');
 }
 
 function openOrphanedModal(catName, count) {
@@ -3386,7 +3282,7 @@ function openOrphanedModal(catName, count) {
       });
     }
   }
-  openModal('orphanedSubcatsModal');
+  document.getElementById('orphanedSubcatsModal').classList.remove('hidden');
 }
 
 function confirmOrphanedReassign() {
@@ -3400,8 +3296,7 @@ function confirmOrphanedReassign() {
     renderModalCategoryList();
     showToast(`${pendingOrphanedKeywords.length} תתי-קטגוריות שויכו בהצלחה לקטגוריה "${newCat}"`);
   }
-  closeModal('orphanedSubcatsModal');
-  pendingOrphanedKeywords = [];
+  closeOrphanedModal();
 }
 
 function skipOrphanedReassign() {
@@ -3413,8 +3308,12 @@ function skipOrphanedReassign() {
     renderModalCategoryList();
     showToast("תתי-הקטגוריות שלא שויכו נמחקה מהמערכת");
   }
-  closeModal('orphanedSubcatsModal');
+  closeOrphanedModal();
+}
+
+function closeOrphanedModal() {
   pendingOrphanedKeywords = [];
+  document.getElementById('orphanedSubcatsModal').classList.add('hidden');
 }
 
 let pendingReassignKeyword = null;
@@ -3443,7 +3342,7 @@ function openReassignModal(kw) {
       });
     }
   }
-  openModal('reassignSubcatModal');
+  document.getElementById('reassignSubcatModal').classList.remove('hidden');
 }
 
 function confirmReassignKeyword() {
@@ -3456,8 +3355,7 @@ function confirmReassignKeyword() {
     renderModalCategoryList();
     showToast(`התג "${pendingReassignKeyword}" שויך בהצלחה לקטגוריה "${newCat}"`);
   }
-  closeModal('reassignSubcatModal');
-  pendingReassignKeyword = null;
+  closeReassignModal();
 }
 
 function skipReassignKeyword() {
@@ -3466,8 +3364,12 @@ function skipReassignKeyword() {
   persist();
   renderModalCategoryList();
   showToast(`התג "${pendingReassignKeyword}" נמחק סופית`);
-  closeModal('reassignSubcatModal');
+  closeReassignModal();
+}
+
+function closeReassignModal() {
   pendingReassignKeyword = null;
+  document.getElementById('reassignSubcatModal').classList.add('hidden');
 }
 
 function addNewCustomCategory() {

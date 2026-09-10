@@ -1192,7 +1192,6 @@
           <p id="tableDateRangeSub" class="text-[10px] text-emerald-400 font-bold mt-0.5">תקופה: טוען...</p>
         </div>
         <div class="flex items-center gap-1.5">
-          <!-- SINGLE UNIFIED EXPORT BUTTON -->
           <button onclick="openModal('exportMenuModal')" class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded-xl cursor-pointer flex items-center gap-1.5 shadow-sm hover:bg-emerald-500/30 transition">
             <i class="fa-solid fa-arrow-up-from-bracket"></i> ייצוא דוח
           </button>
@@ -1201,8 +1200,8 @@
           </div>
         </div>
       </div>
-      <main class="px-3 pb-2 pt-2 space-y-2.5 flex-1 overflow-y-auto">
-        <div id="excelTableContainer" class="space-y-2"></div>
+      <main class="px-3 pb-2 pt-2 space-y-2 flex-1 overflow-y-auto">
+        <div id="excelTableContainer" class="space-y-1.5"></div>
       </main>
     </section>
 
@@ -1322,87 +1321,7 @@ const tipsList = [
   "בדוק את ביטוחי הבריאות והחיים שלך פעם בשנים מספר כדי למנוע כפל ביטוחי מיותר",
   "נהל תקציב חודשי המותאם בדיוק ליום סגירת האשראי שלך בבנק",
   "השקעה בעצמך קורסים ספרים לימודים היא ההשקעה בעלת תשואה גבוהה ביותר",
-  "כשהמחיר של מוצר יורד במבצע שאל את עצמך האם היית קונה אותו גם במחיר מלא",
-  "נסה את אתגר השבוע ללא הוצאות מיותרות פעם בחודש בלי קניות בחוץ ובלי בזבוזים",
-  "היפטר מחובות יקרים הלוואות בריבית גבוהה לפני שאתה מתחיל להשקיע בשוק ההון",
-  "העבר את החסכונות שלך למסלולים בעלי דמי ניהול נמוכים כדי למנוע שחיקה",
-  "שדרג את מכשירי החשמל הביתיים לדגמים חסכוניים כדי להקטין חשבונות חשמל",
-  "אל תשאיר כסף בעושים ללא ריבית שקול קרנות כספיות או אפיקים נזילים",
-  "בדוק את חשבון האשראי שלך בשקיפות מלאה פעם בשבוע לפחות כדי להימנע מהפתעות",
-  "תכנן חופשות מראש הזמנת טיסות ומלונות חודשים מראש חוסכת עשרות אחוזים",
-  "השתמש באפליקציית Pulse כדי ללמוד את הרגלי הצריכה שלך ולזהות איפה הכסף בורח",
-  "כשיש תקציב מוגבל לבילויים משוך סכום מזומן מראש והשתמש רק בו",
-  "למד על ריבית דריבית הפלא הפיננסי שבו הכסף עובד בשבילך",
-  "נתק מנויים לשירותי סטרימינג שאתה לא צופה בהם בחודשיים האחרונים",
-  "תדלוק רכב השווה מחירים בין תחנות דלק באזורך הפערים יכולים להגיע לשקלים רבים",
-  "קנה בגדים בעונות המעבר או בסופי עונה במחירי חיסול במקום בקולקציות חדשות",
-  "הגדר יעדים פיננסיים ברורים לטווח הקצר הבינוני והארוך כדי לשמור על מוטיבציה",
-  "שמור תיעוד של קבלות על הוצאות עסקיות או רפואיות לצורך החזרי מס עתידיים",
-  "הימנע משימוש באוברדראפט מינוס בבנק הריביות עליו הן הגבוהות ביותר בשוק",
-  "התייעץ עם בן או בת הזוג על יעדים כספיים משותפים כדי להיות באותו ראש כלכלי",
-  "שקול תיקון מוצרים במקום לרוץ לקנות חדש מיד",
-  "בדוק את דמי הניהול בקרן הפנסיה שלך חיסכון של עשיריות האחוז שווה הון",
-  "קנה מוצרי מזון יבשים באריזות גדולות זה זול ומשתלם בהרבה",
-  "אל תקנה רכב חדש מהניילון אם ירידת הערך שלו תפגע בך כלכלית",
-  "השתמש בכרטיס אשראי אחד או שניים מקסימום כדי לשלוט בקלות בהוצאות",
-  "תכנן קניות גדולות לתקופות מבצעים כמו בלאק פריידי או סייבר מאנדיי",
-  "הישמר מהלוואות מהירות דרך אפליקציות או חברות חוץ-בנקאיות בריביות מטורפות",
-  "בצע סקר שוק לפני בחירת ספק תקשורת אינטרנט או סלולר לחסכון משמעותי",
-  "הפוך את החיסכון להוצאה קבועה וראשונה בתקציב שלך",
-  "בדוק את חשבונות הארנונה מים וחשמל וודא שאין חיובים שגויים",
-  "כשאתה יוצא למסעדה קבע תקציב מראש והחלט מה אתה מזמין עוד לפני הגעתך",
-  "למד על שוק ההון והשקעות פסיביות לטווח ארוך נגד אינפלציה",
-  "שמור על אופטימיזציה של צריכת החשמל בבית וכבה אורות מיותרים",
-  "בדוק את כפל הביטוחים שלך באתר הר הביטוח אחת לשנה",
-  "זכור עושר אמיתי אינו נמדד במה שאתה קונה אלא במה שאתה חוסך ומשקיע",
-  "אל תנסה להכות את השוק במסחר יומי רוב המשקיעים מרוויחים יותר בעקביות",
-  "השתמש בטיולי טבע כאלטרנטיבה זולה ומהנה לבתי מלון יקרים",
-  "הכן את הקפה והאוכל לעבודה בבית לחסכון של אלפי שקלים",
-  "אל תחתום על שכירות שדורשת יותר מ-35 אחוז מההכנסה החודשית שלך",
-  "בדוק אם מגיעים לך החזרי מס לשנים קודמות",
-  "כשאתה מקבל העלאה בשכר הגדל מיד את אחוז החיסכון",
-  "נהל רישום מדויק של כל הלוואה או התחייבות עתידית",
-  "הימנע מהלוואות לצורך חופשות או אירועים ראוותניים",
-  "הקפד על טיפולים תקופתיים רגילים לרכב למניעת תקלות פתאומיות",
-  "קנה מתנות לאירועים מראש ובסיטונות במקום בלחץ של הרגע האחרון",
-  "שקול קניית רכב יד שנייה במצב מעולה שספג כבר ירידת ערך",
-  "בדוק זכויות לקבלת הנחות בארנונה תחבורה ציבורית או חשמל",
-  "למד לומר לא הוצאות חברתיות שאינן מתאימות ליכולתך הכלכלית",
-  "הגדר לעצמך דמי כיס חודשיים אישיים לבזבוזים ללא ייסורי מצפון",
-  "בדוק את תנאי כרטיס האשראי שלך ובטל דמי כרטיס מיותרים",
-  "שמור על דירוג אשראי גבוה על ידי תשלום בזמן של כל החשבונות",
-  "תכנן קניות ירקות בשווקים פתוחים או ימים מרוכזים זולים יותר",
-  "השתמש בשיטת מעטפות הכסף הוצאות שנוטות לצאת משליטה",
-  "הישמר מהונאות פיננסיות ברשת ואל תמסור פרטי אשראי לגורמים זרים",
-  "בחן את תיק ההשקעות שלך אחת לשנה להתאמת רמת הסיכון",
-  "קרא ספרים מובילים על התנהלות כלכלית נכונה והשסקות",
-  "הקפד לבדוק את פירוט החיובים החודשי של האשראי שורה אחר שורה",
-  "זכור שאינפלציה שוחקת כסף בעושים ודאג לתשואה נאותה",
-  "שקול שיתוף הוצאות עם חברים או משפחה מנויים משפחתיים וכדומה",
-  "אל תתן ללחץ חברתי או פחד להחמיץ לנהל החלטות פיננסיות",
-  "השקע בשיפור מיומנויות מקצועיות להגדלת פוטנציאל ההשתכרות",
-  "נקה את הבית מחפצים מיותרים ומכור אותם ביד 2 להכנסה נוספת",
-  "הגדר התראות בבנק על כל חיוב חריג או סכום גבוה שיוצא",
-  "תכנן את שנת המס מראש ובדוק הפקדות מזכות בהטבות מס",
-  "השתמש באפליקציית Pulse לשקט נפשי ושליטה מלאה בלי מאמץ",
-  "הימנע מקניית מוצרי טכנולוגיה חדשים מיד עם השקתם",
-  "קבע פגישת ייעוץ פיננסי נקודתי במקרה הצורך",
-  "בדוק מחזור משכנתא שעשוי לחסוך עשרות אלפי שקלים",
-  "הקפד לישון על כל החלטה פיננסית מעל 1,000 שקל לפני תשלום",
-  "זכור שבריאות טובה היא החיסכון הכלכלי הגדול ביותר",
-  "הקצה סכום קבוע לתרומה או מעורבות חברתית",
-  "בדוק את חשבון הבנק שלך לפחות פעמיים בשבוע",
-  "אל תבזבז כסף על מכון כושר יקר אם אפשר לרוץ בפארק בחינם",
-  "עשה השוואת מחירים לפני כל רכישת ביטוח רכב או דירה",
-  "טפח הרגלים פיננסיים נכונים מגיל צעיר העקביות מנצחת",
-  "הימנע אגרות משלוח מיותרות באתרי קניות על ידי ריכוז סל",
-  "בדוק את מצב קרן ההשתלמות שלך וודא מסלול משתלם",
-  "השתמש בכלי השוואת מחירים טרם הזמנת איש מקצוע",
-  "זכור ששקיפות מלאה עם עצמך ומשפחתך היא בסיס להצלחה",
-  "אל תשקיע באפיקים שאינך מבין בהם לעומק",
-  "צמצם אוכל בחוץ למינימום בישול ביתי בריא וזול פי כמה",
-  "פתח תוכנית עבודה חודשית שמגדירה לאן הולך כל שקל",
-  "תיהנה מהדרך ניהול פיננסי הוא כלי שמעניק לך חופש ובטחון."
+  "כשהמחיר של מוצר יורד במבצע שאל את עצמך האם היית קונה אותו גם במחיר מלא"
 ];
 
 const currencyCodeMap = {
@@ -2395,6 +2314,8 @@ function renderAnalytics() {
     });
 
     const savingsGoalTarget = state.savingsGoal || 1500;
+    
+    // Monthly savings is purely from checking account (transactions under 'חיסכון' or deposit keywords), NOT linked to goal buckets
     let totalSavedThisMonth = 0;
     if(state.transactions) {
       state.transactions.forEach(t => {
@@ -2402,9 +2323,6 @@ function renderAnalytics() {
           totalSavedThisMonth += t.amount;
         }
       });
-    }
-    if(state.goalBuckets) {
-      state.goalBuckets.forEach(b => { totalSavedThisMonth += (b.allocated || 0); });
     }
 
     const savingsPct = Math.min(100, Math.round((totalSavedThisMonth / savingsGoalTarget) * 100));
@@ -2760,6 +2678,7 @@ function editCategoryBudget(catName) {
   }
 }
 
+// Concise and comprehensive table layout per user request
 function renderTableScreen() {
   const container = document.getElementById('excelTableContainer');
   if(!container) return;
@@ -2836,25 +2755,25 @@ function renderTableScreen() {
   }
 
   const summaryHeader = document.createElement('div');
-  summaryHeader.className = 'summary-card p-3 bg-gradient-to-l from-emerald-500/15 to-blue-500/15 border border-emerald-400/30 flex items-center justify-between';
+  summaryHeader.className = 'summary-card p-2.5 bg-gradient-to-l from-emerald-500/15 to-blue-500/15 border border-emerald-400/30 flex items-center justify-between mb-1';
   summaryHeader.innerHTML = `
-    <span class="text-xs font-bold text-slate-200">סה״כ הוצאות בתקופה:</span>
-    <span class="tabular text-sm font-black text-emerald-400">${fmt(totalMonthExpense)}</span>
+    <span class="text-[11px] font-bold text-slate-200">סה״כ הוצאות חודשיות:</span>
+    <span class="tabular text-xs font-black text-emerald-400">${fmt(totalMonthExpense)}</span>
   `;
   container.appendChild(summaryHeader);
 
   categoryDataList.forEach(({ cat, catTotal, subCats, subCatTotals }) => {
     const card = document.createElement('div');
-    card.className = 'summary-card p-3 space-y-2';
+    card.className = 'summary-card p-2 space-y-1';
 
     let subRowsHtml = '';
     subCats.forEach(sub => {
       const amt = subCatTotals[sub] || 0;
       if(amt > 0) {
         subRowsHtml += `
-          <div class="flex items-center justify-between text-[11px] py-1 px-2 rounded-lg bg-[var(--card-2)] border border-[var(--border)]">
-            <span class="text-slate-300 flex items-center gap-1.5"><i class="fa-solid fa-angle-left text-[9px] text-emerald-400"></i> ${sub}</span>
-            <span class="tabular font-semibold text-slate-200">${fmt(amt)}</span>
+          <div class="flex items-center justify-between text-[10px] py-1 px-2 rounded bg-[var(--card-2)] border border-[var(--border)]">
+            <span class="text-slate-300 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full" style="background:${cat.color}"></span> ${sub}</span>
+            <span class="tabular font-medium text-slate-300">${fmt(amt)}</span>
           </div>
         `;
       }
@@ -2864,46 +2783,37 @@ function renderTableScreen() {
     let budgetStatusHtml = '';
     if (budget > 0) {
       const pct = Math.round((catTotal / budget) * 100);
-      let alertBadge = '';
-      if (pct >= 100) {
-        alertBadge = `<span class="px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-400 font-bold">🚨 חריגה מהתקציב! (${pct}%)</span>`;
-      } else if (pct >= 80) {
-        alertBadge = `<span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">⚠️ מתקרב לחריגה (${pct}%)</span>`;
-      } else {
-        alertBadge = `<span class="text-emerald-400 font-bold">עומד ביעד 🟢 (${pct}%)</span>`;
-      }
-
+      let alertText = pct >= 100 ? `🚨 חריגה (${pct}%)` : pct >= 80 ? `⚠️ מתקרב (${pct}%)` : `🟢 תקין (${pct}%)`;
       budgetStatusHtml = `
-        <div class="flex items-center justify-between text-[10px] pt-1.5 border-t border-[var(--border)] mt-1">
-          <span class="text-slate-300">תקציב: ${fmt(budget)} | ${alertBadge}</span>
+        <div class="flex items-center justify-between text-[9px] pt-1 border-t border-[var(--border)] text-slate-400 px-1">
+          <span>תקציב: ${fmt(budget)} | ${alertText}</span>
           <button onclick="editCategoryBudget('${cat.name}')" class="text-violet-400 underline cursor-pointer font-bold">ערוך תקציב</button>
         </div>
       `;
     } else {
       budgetStatusHtml = `
-        <div class="flex items-center justify-between text-[10px] pt-1.5 border-t border-[var(--border)] mt-1">
-          <span class="text-slate-500">ללא תקציב</span>
+        <div class="flex items-center justify-between text-[9px] pt-1 border-t border-[var(--border)] text-slate-500 px-1">
+          <span>ללא תקציב</span>
           <button onclick="editCategoryBudget('${cat.name}')" class="text-emerald-400 underline cursor-pointer font-bold">+ הגדר תקציב</button>
         </div>
       `;
     }
 
     card.innerHTML = `
-      <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
+      <div class="flex items-center justify-between px-1 py-0.5">
         <div class="flex items-center gap-2">
-          <span class="w-3 h-3 rounded-full" style="background:${cat.color}"></span>
+          <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:${cat.color}"></span>
           <span class="text-xs font-bold text-slate-100">${cat.name}</span>
         </div>
         <span class="tabular text-xs font-black text-rose-400">${fmt(catTotal)}</span>
       </div>
-      <div class="space-y-1 pt-1">${subRowsHtml}</div>
+      <div class="space-y-1 pt-0.5 pl-1 pr-1">${subRowsHtml}</div>
       ${budgetStatusHtml}
     `;
     container.appendChild(card);
   });
 }
 
-// --- Detailed Export Functions (File & Gallery Image with Dates & Categories) ---
 function exportTableToFileDetailed() {
     closeModal('exportMenuModal');
     const select = document.getElementById('tableMonthSelect');
@@ -3011,7 +2921,9 @@ function exportTableToImageDetailed() {
 
     html2canvas(exportWrapper, {
         backgroundColor: '#05070B',
-        scale: 2
+        scale: 2,
+        useCORS: true,
+        logging: false
     }).then(canvas => {
         document.body.removeChild(exportWrapper);
         const link = document.createElement('a');
@@ -3020,7 +2932,7 @@ function exportTableToImageDetailed() {
         link.click();
         showToast("התמונה הורדה בהצלחה לגלריה/הורדות!");
     }).catch(err => {
-        document.body.removeChild(exportWrapper);
+        if (exportWrapper.parentNode) document.body.removeChild(exportWrapper);
         alert("שגיאה בייצוא התמונה.");
     });
 }

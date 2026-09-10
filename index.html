@@ -889,7 +889,6 @@
                                 <option value="לארי">לארי גאורגי (GEL)</option>
                                 <option value="דינר סרבי">דינר סרבי (RSD)</option>
                                 <option value="זלוטי">זלוטי פולני (PLN)</option>
-                                <option value="קרונה צ׳כית">קרונה צ׳כית (CZK)</option>
                                 <option value="פורינט">פורינט הונגרי (HUF)</option>
                                 <option value="קרונה שוודית">קרונה שוודית (SEK)</option>
                                 <option value="קרונה נורווגית">קרונה נורווגית (NOK)</option>
@@ -1072,7 +1071,7 @@
             <div id="savingsProgressBar" class="bg-emerald-400 h-full transition-all duration-500" style="width: 0%"></div>
           </div>
           <div class="flex justify-between text-[10px]" style="color:var(--text-dim)">
-            <span id="savingsCurrentStatus">חיסכון החודש (יתרת נטו): ₪0</span>
+            <span id="savingsCurrentStatus">כסף בעו״ש וחיסכון: ₪0</span>
             <span id="savingsGoalTarget">יעד: 1,500 ₪</span>
           </div>
         </section>
@@ -2336,32 +2335,26 @@ function toggleGoalBucketsExpand() {
 
 function renderAnalytics() {
   try {
-    let currentExpense = 0, currentIncome = 0;
+    const { income: currentIncome, expense: currentExpense, balance, freeCash } = totals();
     const spend = {};
     
     if(state.transactions) {
       state.transactions.forEach(t => {
         if(isWithinFinancialMonth(t.date, 0)) {
-          if(t.type === 'expense') { currentExpense += t.amount; spend[t.cat] = (spend[t.cat] || 0) + t.amount; }
-          else currentIncome += t.amount;
+          if(t.type === 'expense') { spend[t.cat] = (spend[t.cat] || 0) + t.amount; }
         }
       });
     }
 
-    const recs = getRecurringItemsForCurrentMonth(0);
-    recs.forEach(r => {
-      if(r.type === 'expense') { currentExpense += r.amount; spend[r.cat] = (spend[r.cat] || 0) + r.amount; }
-      else currentIncome += r.amount;
-    });
-
     const savingsGoalTarget = state.savingsGoal || 1500;
-    let totalSavedThisMonth = currentIncome - currentExpense;
+    // החיסכון והכסף בעו״ש כוללים את היתרה הפנויה בעו״ש (freeCash)
+    let totalSavedThisMonth = freeCash;
 
     const savingsPct = Math.min(100, Math.max(0, Math.round((totalSavedThisMonth / savingsGoalTarget) * 100)));
     const sBar = document.getElementById('savingsProgressBar');
     if(sBar) sBar.style.width = savingsPct + '%';
     const sCurr = document.getElementById('savingsCurrentStatus');
-    if(sCurr) sCurr.textContent = `חיסכון החודש (נטו): ${fmt(totalSavedThisMonth)} (${savingsPct}%)`;
+    if(sCurr) sCurr.textContent = `כסף בעו״ש וחיסכון: ${fmt(totalSavedThisMonth)} (${savingsPct}%)`;
     const sTarget = document.getElementById('savingsGoalTarget');
     if(sTarget) sTarget.textContent = `יעד: ${fmt(savingsGoalTarget)}`;
 

@@ -425,7 +425,7 @@
             <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-piggy-bank ml-1"></i> קופות חיסכון וירטואליות</h3>
             <button onclick="closeGoalBucketsModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
-        <p class="text-[10px] text-slate-300">שמור כסף למטרות ספציפיות באופן וירטואלי מבלי לפגוע ביתרת העו״ש הכללית:</p>
+        <p class="text-[10px] text-slate-300">שמור כסף למטרות ספציפיות באופן וירטואלי (הצבירה נשמרת לאורך זמן, אך ההקצאות מתאפסות במעבר חודש פיננסי):</p>
         <div class="space-y-2 max-h-[160px] overflow-y-auto" id="goalBucketsListContainer"></div>
         
         <div class="border-t border-[var(--border)] pt-2 space-y-2">
@@ -483,7 +483,7 @@
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-amber-400 flex items-center gap-1.5"><i class="fa-solid fa-piggy-bank"></i> 4. קופות חיסכון ומצב נסיעות</p>
-                    <p class="leading-relaxed">שמור כסף בצד לקופות וירטואליות והפעל מצב נסיעות (עם המרה אוטומטית, ניהול מזומן בארנק וחישוב תקציב יומי Burn Rate) لניהול הוצאות בחו"ל.</p>
+                    <p class="leading-relaxed">שמור כסף בצד לקופות וירטואליות (הקצאות החודש מתאפסות בסיום חודש פיננסי בעוד הצבירה נשמרת) והפעל מצב נסיעות.</p>
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-teal-400 flex items-center gap-1.5"><i class="fa-solid fa-table"></i> 5. טבלה חודשית (אקסל פיננסי)</p>
@@ -904,7 +904,7 @@
                                 <option value="ראנד">ראנד דרום אפריקאי (ZAR)</option>
                                 <option value="דירהם מרוקאי">דירהם מרוקאי (MAD)</option>
                                 <option value="רופי סיישל">רופי סיישל (SCR)</option>
-                                <option value="רופי מאוריציאני">רופי מאוריציאני (MUR)</option>
+                                <option value="רופי מאוריציוס">רופי מאוריציאני (MUR)</option>
                             </optgroup>
                         </select>
                     </div>
@@ -1263,7 +1263,7 @@ async function quickLogin() {
     const { data } = await supabaseClient.from('app_data').select('payload').eq('id', cleanHandle).single();
     if (data && data.payload) {
       state = data.payload;
-      localStorage.setItem('pulse_state_v66', JSON.stringify(state));
+      localStorage.setItem('pulse_state_v67', JSON.stringify(state));
       showToast("התחברת בהצלחה!");
       setTimeout(() => location.reload(), 800);
     } else {
@@ -1405,6 +1405,7 @@ let state = {
   incomeCats: [{name:'משכורת', color:'#7FE8C6', budget:0}], 
   transactions: [],
   goalBuckets: [], 
+  lastCheckedFinancialPeriodKey: '',
   isTravelMode: false,
   travelCountry: 'תאילנד',
   travelCurrency: 'באט',
@@ -1424,7 +1425,7 @@ function getLocalDateString(d) {
 function persist() {
   try {
     sortTransactions();
-    localStorage.setItem('pulse_state_v66', JSON.stringify(state));
+    localStorage.setItem('pulse_state_v67', JSON.stringify(state));
     saveDataToSupabase(state);
   } catch(e) {}
 }
@@ -1448,7 +1449,7 @@ async function factoryReset() {
         await supabaseClient.from('app_data').delete().eq('id', state.handle);
       }
     } catch(e) {}
-    localStorage.removeItem('pulse_state_v66');
+    localStorage.removeItem('pulse_state_v67');
     location.reload();
   }
 }
@@ -1565,13 +1566,15 @@ function renderGoalBucketsList() {
   }
   state.goalBuckets.forEach(b => {
     const pct = b.target > 0 ? Math.min(100, Math.round((b.allocated / b.target) * 100)) : 0;
+    const currentMonthAlloc = b.monthlyAllocated || 0;
     const row = document.createElement('div');
     row.className = 'p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1.5';
     row.innerHTML = `
       <div class="flex items-center justify-between text-xs font-bold text-slate-100">
         <span>${b.title}</span>
-        <span class="tabular text-emerald-400">${fmt(b.allocated)} / ${fmt(b.target)}</span>
+        <span class="tabular text-emerald-400">סה״כ: ${fmt(b.allocated)} / ${fmt(b.target)}</span>
       </div>
+      <p class="text-[10px] text-slate-400">הוקצה החודש: <span class="text-blue-400 font-bold">${fmt(currentMonthAlloc)}</span> (מתאפס בסיום חודש)</p>
       <div class="w-full bg-[var(--bg)] h-2 rounded-full overflow-hidden border border-[var(--border)]">
         <div class="bg-emerald-400 h-full transition-all duration-300" style="width:${pct}%"></div>
       </div>
@@ -1589,7 +1592,7 @@ function addNewBucket() {
   const target = parseFloat(document.getElementById('bucketTarget').value);
   if(!title || isNaN(target) || target <= 0) { alert("נא למלא שם קופה ויעד תקין."); return; }
   if(!state.goalBuckets) state.goalBuckets = [];
-  state.goalBuckets.push({ id: Date.now(), title, target, allocated: 0 });
+  state.goalBuckets.push({ id: Date.now(), title, target, allocated: 0, monthlyAllocated: 0 });
   persist();
   renderGoalBucketsList();
   renderHome();
@@ -1618,6 +1621,7 @@ function confirmAllocate() {
   const bucket = state.goalBuckets.find(b => b.id === activeAllocateBucketId);
   if(bucket) {
     bucket.allocated = Math.max(0, bucket.allocated + amt);
+    bucket.monthlyAllocated = (bucket.monthlyAllocated || 0) + amt;
     persist();
     renderGoalBucketsList();
     renderHome();
@@ -1865,15 +1869,15 @@ async function initApp() {
   try {
     updateLiveExchangeRates();
 
-    let saved = localStorage.getItem('pulse_state_v66');
+    let saved = localStorage.getItem('pulse_state_v67');
     if(saved) {
-      try { state = JSON.parse(saved); } catch(e) { localStorage.removeItem('pulse_state_v66'); }
+      try { state = JSON.parse(saved); } catch(e) { localStorage.removeItem('pulse_state_v67'); }
     }
 
     if (state.handle && supabaseClient) {
       try {
         const cloudData = await loadDataFromSupabase();
-        if (cloudData && cloudData.userName) { state = cloudData; localStorage.setItem('pulse_state_v66', JSON.stringify(state)); }
+        if (cloudData && cloudData.userName) { state = cloudData; localStorage.setItem('pulse_state_v67', JSON.stringify(state)); }
       } catch(e) {}
     }
 
@@ -1899,6 +1903,9 @@ async function initApp() {
     if(!state.learnedKeywords) {
       state.learnedKeywords = {};
     }
+
+    // בדיקה ומעקב אחר מעבר חודש פיננסי לאיפוס הקצאות קופות החיסכון החודשיות
+    checkAndResetMonthlyBuckets();
 
     sortTransactions();
     
@@ -1928,6 +1935,30 @@ async function initApp() {
     loadDailyTip();
     renderHome();
   } catch (err) {}
+}
+
+function checkAndResetMonthlyBuckets() {
+  const currentFm = getFinancialPeriodDates(0);
+  const currentPeriodKey = currentFm.startPeriod.toISOString();
+  
+  if (!state.lastCheckedFinancialPeriodKey) {
+    state.lastCheckedFinancialPeriodKey = currentPeriodKey;
+    if (state.goalBuckets) {
+      state.goalBuckets.forEach(b => {
+        if (b.monthlyAllocated === undefined) b.monthlyAllocated = b.allocated || 0;
+      });
+    }
+    persist();
+  } else if (state.lastCheckedFinancialPeriodKey !== currentPeriodKey) {
+    // התחלף חודש פיננסי! איפוס ההקצאה החודשית שמורדת מן הפנוי, בעוד סך הצבירה הכללית (allocated) בקופה נשמר
+    if (state.goalBuckets) {
+      state.goalBuckets.forEach(b => {
+        b.monthlyAllocated = 0;
+      });
+    }
+    state.lastCheckedFinancialPeriodKey = currentPeriodKey;
+    persist();
+  }
 }
 
 function sortTransactions() {
@@ -2151,8 +2182,9 @@ function getRecurringItemsForCurrentMonth(offsetMonths = 0) {
   return recList;
 }
 
-// פונקציית ה-totals המדויקת שמאפסת את ההכנסות וההוצאות בדיוק לפי תחילת וסיום המחזור הפיננסי
 function totals(){
+  checkAndResetMonthlyBuckets();
+
   let income = 0, expense = 0;
   
   if(state.transactions) {
@@ -2201,9 +2233,10 @@ function totals(){
 
   const balance = (state.baseline || 0) + allInc - allExp;
   
+  // ניכוי פנוי לפי ההקצאות שהוכנסו החודש בלבד (monthlyAllocated), כך שהצבירה נשמרת בקופה אך אינה גורעת פעמיים מהפנוי עם התחלפות המחזור
   let totalAllocatedBuckets = 0;
   if(state.goalBuckets) {
-    state.goalBuckets.forEach(b => totalAllocatedBuckets += (b.allocated || 0));
+    state.goalBuckets.forEach(b => totalAllocatedBuckets += (b.monthlyAllocated || 0));
   }
   const freeCash = balance - totalAllocatedBuckets;
 
@@ -2265,7 +2298,7 @@ function renderHome(){
 
     const freeSub = document.getElementById('freeCashSubText');
     if(freeSub) {
-      const bucketsLabel = totalAllocatedBuckets > 0 ? ' (אחרי ניכוי קופות)' : '';
+      const bucketsLabel = totalAllocatedBuckets > 0 ? ' (אחרי ניכוי הקצאות החודש)' : '';
       freeSub.textContent = `פנוי${bucketsLabel}: ${fmt(freeCash)} | 🎯 ${fmt(dailyBudget)} ליום (${daysLeft} ימים)`;
     }
     

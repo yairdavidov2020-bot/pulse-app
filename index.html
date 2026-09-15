@@ -475,7 +475,7 @@
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-blue-400 flex items-center gap-1.5"><i class="fa-solid fa-calendar-days"></i> 2. תקופת תקציב אישית</p>
-                    <p class="leading-relaxed">הגדר את היום בחודש שבו נסגרת תקופת האשראי שלך. כל החישובים, ההוצאות וההכנסות בטבלה ובתמונת המצב מתעדכנים לפי טווח התאריכים המדויק הזה.</p>
+                    <p class="leading-relaxed">הגדר את היום בחודש שבו נסגרת תקופת האשראי שלך. כל החישובים, ההוצאות וההכנסות בטבלה ובתמונת המצב מתעדכנים לפי טווח התאריכים המדויק הזה וממלכדים את האיפוס החודשי האוטומטי.</p>
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-violet-400 flex items-center gap-1.5"><i class="fa-solid fa-chart-pie"></i> 3. תמונת מצב ופילוח תקציב מתקדם</p>
@@ -591,7 +591,7 @@
             <span class="text-[10px] text-emerald-400 font-bold">שלב 3 מתוך 5</span>
             <h2 class="text-base font-black gradient-text">תקופת תקציב מותאמת אישית</h2>
             <p class="text-xs text-slate-300 leading-relaxed">
-                באיזה יום בחודש נקבעת הורדת האשראי שלך?
+                באיזה יום בחודש נקבעת הורדת האשראי שלך? (זהו יום איפוס ההכנסות וההוצאות החודשיות)
             </p>
         </div>
         <div class="space-y-3">
@@ -956,7 +956,7 @@
           </div>
           <div class="px-0.5">
             <h2 id="greetingTitle" class="text-[12px] font-bold tracking-tight leading-tight">שלום</h2>
-            <p class="text-[9px] text-slate-400">תמונת המצב הפיננסית שלך להיום</p>
+            <p class="text-[9px] text-slate-400">תמונת המצב הפיננסית שלך להיום (הכנסות והוצאות מתאפסות אוטומטית לפי החודש הפיננסי)</p>
           </div>
         </section>
 
@@ -1054,7 +1054,7 @@
     <!-- SCREEN 2: STATUS (ANALYTICS) -->
     <section id="screen-analytics" class="screen">
       <div class="flex items-center justify-between px-5 pt-3 pb-2 flex-shrink-0">
-        <span class="text-base font-bold">תמונת מצב</span>
+        <span class="text-base font-bold">תמונת מצב חודשית</span>
       </div>
       <main class="px-4 pb-3 pt-0.5 space-y-2.5 flex-1 overflow-y-auto">
         
@@ -1081,7 +1081,7 @@
           <div class="flex items-center justify-between cursor-pointer" onclick="toggleDonutChartExpand()">
             <div class="flex items-center gap-2">
               <span class="text-sm">🥧</span>
-              <span class="text-[12px] font-semibold">פילוח הוצאות (תרשים עוגה)</span>
+              <span class="text-[12px] font-semibold">פילוח הוצאות החודש (תרשים עוגה)</span>
             </div>
             <div class="flex items-center gap-2">
               <span class="tabular text-[12px] font-bold text-rose-400" id="donutTotalExpense">0</span>
@@ -1092,7 +1092,7 @@
           <div class="flex items-center justify-center py-2">
             <div id="donutChartVisual" class="relative w-32 h-32 rounded-full flex items-center justify-center shadow-lg border border-[var(--border)]" style="background: conic-gradient(#334155 0% 100%);">
               <div class="absolute inset-4 rounded-full bg-[var(--card-2)] flex flex-col items-center justify-center text-center p-1 border border-[var(--border)]">
-                <span class="text-[9px] text-slate-400 font-medium">סך הוצאות</span>
+                <span class="text-[9px] text-slate-400 font-medium">הוצאות החודש</span>
                 <span id="donutCenterAmount" class="text-xs font-black tabular text-slate-100 mt-0.5">0</span>
               </div>
             </div>
@@ -1172,7 +1172,7 @@
       <div class="flex items-center justify-between px-4 pt-3 pb-2 flex-shrink-0 border-b border-[var(--border)]">
         <div>
           <h2 class="text-sm font-bold gradient-text">כל התנועות במערכת</h2>
-          <p class="text-[10px] text-slate-400 mt-0.5">מסודר אוטומטית לפי מחזורי חודש פיננסי</p>
+          <p class="text-[10px] text-slate-400 mt-0.5">מסודר אוטומטית לפי מחזורי חודש פיננסי (חודשים קודמים נסגרים אוטומטית בארכיון)</p>
         </div>
       </div>
       <main class="px-3 pb-3 pt-2 space-y-2 flex-1 overflow-y-auto">
@@ -1849,7 +1849,6 @@ function deleteRecurringItem(id) {
   showToast("הוראת קבע הוסרה");
 }
 
-// Guaranteed Splash Screen Removal & Safe App Boot
 window.onload = function() {
   setTimeout(() => {
     const splash = document.getElementById('appSplashScreen');
@@ -2152,12 +2151,13 @@ function getRecurringItemsForCurrentMonth(offsetMonths = 0) {
   return recList;
 }
 
+// פונקציית totals - מכנסת את ההכנסות וההוצאות אך ורק למחזור הנוכחי (מתאפסות אוטומטית בכל חודש פיננסי)
 function totals(){
-  let income=0, expense=0;
+  let income = 0, expense = 0;
   if(state.transactions) {
     state.transactions.forEach(t => {
       if(isWithinFinancialMonth(t.date, 0)) {
-        if(t.type==='income') income+=t.amount; else expense+=t.amount;
+        if(t.type === 'income') income += t.amount; else expense += t.amount;
       }
     });
   }
@@ -2168,7 +2168,7 @@ function totals(){
 
   let allInc = 0, allExp = 0;
   if(state.transactions) {
-    state.transactions.forEach(t => t.type==='income' ? allInc+=t.amount : allExp+=t.amount);
+    state.transactions.forEach(t => t.type === 'income' ? allInc += t.amount : allExp += t.amount);
   }
   
   const todayStr = getLocalDateString(new Date());
@@ -2347,7 +2347,6 @@ function renderAnalytics() {
     }
 
     const savingsGoalTarget = state.savingsGoal || 1500;
-    // החיסכון והכסף בעו״ש כוללים את היתרה הפנויה בעו״ש (freeCash)
     let totalSavedThisMonth = freeCash;
 
     const savingsPct = Math.min(100, Math.max(0, Math.round((totalSavedThisMonth / savingsGoalTarget) * 100)));
@@ -2483,7 +2482,7 @@ function renderAnalytics() {
         }
         const tBudg = document.getElementById('travelBudgetTarget');
         if(tBudg) {
-          tBudg.innerHTML = `מזומן בארנק נותר: <span class="${cashRemaining >= 0 ? 'text-amber-300' : 'text-rose-400'} font-bold">${fmt(cashRemaining)}</span>`;
+          tBudg.innerHTML = `ארנק מזומן נותר: <span class="${cashRemaining >= 0 ? 'text-amber-300' : 'text-rose-400'} font-bold">${fmt(cashRemaining)}</span>`;
         }
 
         const aFlag = document.getElementById('analyticsTravelFlag');

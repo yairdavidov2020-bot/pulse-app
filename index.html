@@ -483,7 +483,7 @@
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-amber-400 flex items-center gap-1.5"><i class="fa-solid fa-piggy-bank"></i> 4. קופות חיסכון ומצב נסיעות</p>
-                    <p class="leading-relaxed">שמור כסף בצד לקופות וירטואליות והפעל מצב נסיעות (עם המרה אוטומטית, ניהול מזומן בארנק וחישוב תקציב יומי Burn Rate) לניהול הוצאות בחו"ל.</p>
+                    <p class="leading-relaxed">שמור כסף בצד לקופות וירטואליות והפעל מצב נסיעות (עם המרה אוטומטית, ניהול מזומן בארנק וחישוב תקציב יומי Burn Rate) لניהול הוצאות בחו"ל.</p>
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-teal-400 flex items-center gap-1.5"><i class="fa-solid fa-table"></i> 5. טבלה חודשית (אקסל פיננסי)</p>
@@ -2151,7 +2151,7 @@ function getRecurringItemsForCurrentMonth(offsetMonths = 0) {
   return recList;
 }
 
-// פונקציית totals המעודכנת – מבטיחה איפוס מלא של הכנסות והוצאות בסיום החודש הפיננסי
+// פונקציית ה-totals המדויקת שמאפסת את ההכנסות וההוצאות בדיוק לפי תחילת וסיום המחזור הפיננסי
 function totals(){
   let income = 0, expense = 0;
   
@@ -2167,12 +2167,15 @@ function totals(){
     });
   }
   
+  const todayStr = getLocalDateString(new Date());
   const recs = getRecurringItemsForCurrentMonth(0);
   recs.forEach(r => {
-    if(r.type === 'income') {
-      income += r.amount; 
-    } else {
-      expense += r.amount;
+    if(r.date <= todayStr) {
+      if(r.type === 'income') {
+        income += r.amount; 
+      } else {
+        expense += r.amount;
+      }
     }
   });
 
@@ -2181,7 +2184,6 @@ function totals(){
     state.transactions.forEach(t => t.type === 'income' ? allInc += t.amount : allExp += t.amount);
   }
   
-  const todayStr = getLocalDateString(new Date());
   for (let m = -12; m <= 0; m++) {
     const monthRecs = getRecurringItemsForCurrentMonth(m);
     monthRecs.forEach(r => {
@@ -3426,7 +3428,7 @@ function skipReassignKeyword() {
   if (!pendingReassignKeyword) return;
   delete state.learnedKeywords[pendingReassignKeyword];
   persist();
-  renderModalCategoryList();
+    renderModalCategoryList();
   showToast(`התג "${pendingReassignKeyword}" נמחק סופית`);
   closeReassignModal();
 }

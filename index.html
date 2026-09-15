@@ -202,7 +202,7 @@
                 <i class="fa-solid fa-wallet"></i>
             </div>
             <h3 class="text-base font-black gradient-text">תזכורת הוצאות יומית</h3>
-            <p class="text-xs text-slate-300 leading-relaxed">היי זה הזמן לעצור רגע לעדכן את ההוצאות וההכנסות של היום ולהישאר בשליטה מלאה 💡</p>
+            <p class="text-xs text-slate-300 leading-relaxed">היי דוידי, זה הזמן לעצור רגע לעדכן את ההוצאות וההכנסות של היום ולהישאר בשליטה מלאה 💡</p>
         </div>
         <button onclick="closeReminderModal()" class="save-btn w-full py-2.5 rounded-xl font-bold text-xs shadow-lg cursor-pointer relative z-10">הבנתי יאללה מעדכן!</button>
     </div>
@@ -621,7 +621,7 @@
             </div>
         </div>
         <button onclick="wizardNextStep(5)" class="w-full py-3 rounded-2xl font-bold text-xs shadow-xl cursor-pointer bg-gradient-to-l from-emerald-500 to-teal-600 text-white hover:opacity-95 transition flex items-center justify-between px-5">
-            <span>המשך להרשאות ומטרה מרכזית</span>
+            <span>המשך ליעד ואישורים</span>
             <i class="fa-solid fa-arrow-left text-xs"></i>
         </button>
     </div>
@@ -2026,7 +2026,7 @@ function setDynamicGreeting() {
   if(!title) return;
   const hour = new Date().getHours();
   let timeGreeting = hour >= 6 && hour < 12 ? "בוקר טוב" : hour >= 12 && hour < 19 ? "צהריים טובים" : hour >= 19 && hour < 24 ? "ערב טוב" : "לילה טוב";
-  title.textContent = `${timeGreeting}, ${state.userName || 'שלום'} 👋`;
+  title.textContent = `${timeGreeting}, ${state.userName || 'דוידי'} 👋`;
 }
 
 function buildFinancialDayDropdowns() {
@@ -2151,19 +2151,29 @@ function getRecurringItemsForCurrentMonth(offsetMonths = 0) {
   return recList;
 }
 
-// פונקציית totals - מכנסת את ההכנסות וההוצאות אך ורק למחזור הנוכחי (מתאפסות אוטומטית בכל חודש פיננסי)
+// פונקציית totals המעודכנת – מבטיחה איפוס מלא של הכנסות והוצאות בסיום החודש הפיננסי
 function totals(){
   let income = 0, expense = 0;
+  
   if(state.transactions) {
     state.transactions.forEach(t => {
       if(isWithinFinancialMonth(t.date, 0)) {
-        if(t.type === 'income') income += t.amount; else expense += t.amount;
+        if(t.type === 'income') {
+          income += t.amount; 
+        } else {
+          expense += t.amount;
+        }
       }
     });
   }
+  
   const recs = getRecurringItemsForCurrentMonth(0);
   recs.forEach(r => {
-    if(r.type === 'income') income += r.amount; else expense += r.amount;
+    if(r.type === 'income') {
+      income += r.amount; 
+    } else {
+      expense += r.amount;
+    }
   });
 
   let allInc = 0, allExp = 0;

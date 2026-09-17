@@ -425,7 +425,7 @@
             <h3 class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-piggy-bank ml-1"></i> קופות חיסכון וירטואליות</h3>
             <button onclick="closeGoalBucketsModal()" class="icon-btn" style="width:26px;height:26px;"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
-        <p class="text-[10px] text-slate-300">שמור כסף למטרות ספציפיות באופן וירטואלי (הצבירה נשמרת לאורך זמן, אך הניכוי מהפנוי מתאפס חודש בחודשו):</p>
+        <p class="text-[10px] text-slate-300">שמור כסף למטרות ספציפיות באופן וירטואלי (הצבירה נשמרת לאורך זמן, אך הניכוי מהפנוי מתאפס בחודש חדש):</p>
         <div class="space-y-2 max-h-[160px] overflow-y-auto" id="goalBucketsListContainer"></div>
         
         <div class="border-t border-[var(--border)] pt-2 space-y-2">
@@ -483,7 +483,7 @@
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-amber-400 flex items-center gap-1.5"><i class="fa-solid fa-piggy-bank"></i> 4. קופות חיסכון ומצב נסיעות</p>
-                    <p class="leading-relaxed">שמור כסף בצד לקופות וירטואליות (הניכוי מהפנוי במסך הבית מתאפס אוטומטית חודש בחודשו) והפעל מצב נסיעות.</p>
+                    <p class="leading-relaxed">שמור כסף בצד לקופות וירטואליות (הניכוי מהפנוי מתאפס חודש בחודשו) והפעל מצב נסיעות.</p>
                 </div>
                 <div class="p-2.5 rounded-xl bg-[var(--card-2)] border border-[var(--border)] space-y-1">
                     <p class="font-bold text-teal-400 flex items-center gap-1.5"><i class="fa-solid fa-table"></i> 5. טבלה חודשית (אקסל פיננסי)</p>
@@ -1904,7 +1904,7 @@ async function initApp() {
       state.learnedKeywords = {};
     }
 
-    // בדיקה ומעקב אחר מעבר חודש פיננסי לאיפוס הניכוי מהפנוי במסך הבית
+    // בדיקה ומעקב אחר מעבר חודש פיננסי לאיפוס ההקצאה החודשית בניכוי הפנוי
     checkAndResetMonthlyBuckets();
 
     sortTransactions();
@@ -1950,7 +1950,7 @@ function checkAndResetMonthlyBuckets() {
     }
     persist();
   } else if (state.lastCheckedFinancialPeriodKey !== currentPeriodKey) {
-    // התחלף חודש פיננסי! איפוס מוחלט של ההקצאות החודשיות (monthlyAllocated) כך שהניכוי במסך הבית יתאפס ויתחיל מחדש
+    // התחלף חודש פיננסי! איפוס ההקצאה החודשית שמורדת מהפנוי במסך הבית, בעוד סך הצבירה הכללית (allocated) בקופה נשמר במלואו
     if (state.goalBuckets) {
       state.goalBuckets.forEach(b => {
         b.monthlyAllocated = 0;
@@ -2233,14 +2233,14 @@ function totals(){
 
   const balance = (state.baseline || 0) + allInc - allExp;
   
-  // כאן הדגש: ניכוי הפנוי במסך הבית נעשה אך ורק לפי ההקצאות שבוצעו בחודש הנוכחי (monthlyAllocated). עם תחילת חודש חדש, monthlyAllocated מתאפס אוטומטית כך שהניכוי במסך הבית מתאפס בחודש חדש!
-  let totalMonthlyAllocated = 0;
+  // ניכוי פנוי לפי ההקצאות שהוכנסו החודש בלבד (monthlyAllocated), כך שהצבירה נשמרת בקופה אך אינה גורעת פעמיים מהפנוי עם התחלפות המחזור
+  let totalAllocatedBuckets = 0;
   if(state.goalBuckets) {
-    state.goalBuckets.forEach(b => totalMonthlyAllocated += (b.monthlyAllocated || 0));
+    state.goalBuckets.forEach(b => totalAllocatedBuckets += (b.monthlyAllocated || 0));
   }
-  const freeCash = balance - totalMonthlyAllocated;
+  const freeCash = balance - totalAllocatedBuckets;
 
-  return { income, expense, balance, freeCash, totalMonthlyAllocated };
+  return { income, expense, balance, freeCash, totalAllocatedBuckets };
 }
 
 function fmt(n){ return Math.round(n || 0).toLocaleString('he-IL') + ' ' + (state.currency || '₪'); }
@@ -2286,7 +2286,7 @@ function getCountryFlag(country) {
 
 function renderHome(){
   try {
-    const { income, expense, balance, freeCash, totalMonthlyAllocated } = totals();
+    const { income, expense, balance, freeCash, totalAllocatedBuckets } = totals();
     const balanceEl = document.getElementById('balanceValue');
     if(balanceEl) balanceEl.textContent = fmt(balance);
     
@@ -2298,7 +2298,7 @@ function renderHome(){
 
     const freeSub = document.getElementById('freeCashSubText');
     if(freeSub) {
-      const bucketsLabel = totalMonthlyAllocated > 0 ? ' (אחרי ניכוי הקצאות החודש)' : '';
+      const bucketsLabel = totalAllocatedBuckets > 0 ? ' (אחרי ניכוי הקצאות החודש)' : '';
       freeSub.textContent = `פנוי${bucketsLabel}: ${fmt(freeCash)} | 🎯 ${fmt(dailyBudget)} ליום (${daysLeft} ימים)`;
     }
     
